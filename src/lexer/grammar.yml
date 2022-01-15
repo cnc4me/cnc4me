@@ -1,0 +1,15 @@
+Var:
+  name: Var
+  pattern: /#/
+
+Equals:
+  name: Equals
+  pattern: /=/
+
+Percent:
+  name: Percent
+  pattern: /%/
+
+Address:
+  name: Address
+  pattern: /[A-Z]/

@@ -1,0 +1,50 @@
+{
+  "name": "fanuc-macro-b",
+  "version": "0.1.0",
+  "description": "A Lexer, Parser, and Interpreter for Fanuc Macro B gcode files",
+  "author": "Kevin Hill <kevinkhill@pm.me> (https://github.com/kevinkhill)",
+  "license": "MIT",
+  "private": true,
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/kevinkhill/FanucMacroB.git"
+  },
+  "scripts": {
+    "demo": "yarn tsnd --respawn ./example.ts",
+    "test": "jest",
+    "lint": "eslint './src/**/*.ts'",
+    "fix": "yarn lint --fix"
+  },
+  "lint-staged": {
+    "*.ts": "eslint --cache --fix './src/**/*.ts'"
+  },
+  "husky": {
+    "hooks": {
+      "pre-commit": "lint-staged"
+    }
+  },
+  "dependencies": {
+    "chevrotain": "^9.1.0",
+    "debug": "^4.1.1",
+    "yaml": "^2.0.0-10"
+  },
+  "devDependencies": {
+    "@types/jest": "^26.0.23",
+    "@typescript-eslint/eslint-plugin": "^5.9.1",
+    "@typescript-eslint/parser": "^5.9.1",
+    "eslint": "^8.6.0",
+    "eslint-config-prettier": "^6.15.0",
+    "eslint-import-resolver-typescript": "^2.3.0",
+    "eslint-plugin-import": "^2.22.1",
+    "eslint-plugin-jest": "^25.3.4",
+    "eslint-plugin-jest-formatting": "^3.0.0",
+    "eslint-plugin-prettier": "^3.1.4",
+    "eslint-plugin-simple-import-sort": "^6.0.0",
+    "jest": "^27.4.7",
+    "prettier": "^2.5.1",
+    "ts-jest": "^27.1.2",
+    "ts-node": "^9.0.0",
+    "ts-node-dev": "^1.1.8",
+    "typescript": "^4.5.4"
+  }
+}

@@ -1,0 +1,29 @@
+{
+  "compilerOptions": {
+    "strict": true,
+    "baseUrl": ".",
+    "rootDir": ".",
+    "outDir": "build",
+    "target": "es2015",
+    "module": "commonjs",
+    "lib": ["dom", "es2020"],
+    "sourceMap": true,
+    "declaration": true,
+    "declarationMap": true,
+    /* Additional Checks */
+    // "noUnusedLocals": true,
+    // "noUnusedParameters": true,
+    "noImplicitAny": false,
+    "noImplicitThis": true,
+    "noImplicitReturns": true,
+    "noFallthroughCasesInSwitch": true,
+    /* Module Resolution Options */
+    "moduleResolution": "node",
+    "esModuleInterop": true,
+    "resolveJsonModule": true,
+    "keyofStringsOnly": true,
+    "types": ["jest", "node"]
+  },
+  "include": ["src/**/*.ts", "src/example.ts"],
+  "exclude": ["node_modules"]
+}
