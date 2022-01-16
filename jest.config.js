@@ -15,8 +15,7 @@ module.exports = {
   testPathIgnorePatterns: [
     "demo",
     "build",
-    "node_modules",
-    "helpers.ts"
+    "node_modules"
   ],
   testEnvironment: "node",
   transform: {

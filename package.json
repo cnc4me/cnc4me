@@ -10,9 +10,9 @@
     "url": "https://github.com/kevinkhill/fanuc-macro-b.git"
   },
   "scripts": {
-    "demo:lexer": "yarn tsnd --respawn ./src/demo/lexer.demo.ts",
-    "demo:parser": "yarn tsnd --respawn ./src/demo/parser.demo.ts",
-    "demo:interpreter": "yarn tsnd --respawn ./src/demo/interpret.demo.ts",
+    "demo:lexer": "yarn tsnd --respawn ./demo/lexer.demo.ts",
+    "demo:parser": "yarn tsnd --respawn ./demo/parser.demo.ts",
+    "demo:interpreter": "yarn tsnd --respawn ./demo/interpret.demo.ts",
     "test": "jest",
     "lint": "eslint './src/**/*.ts'",
     "fix": "yarn lint --fix"
