@@ -1,18 +1,14 @@
-import { IToken, tokenMatcher, TokenType } from "chevrotain";
+import lex from "../lexer/lex";
+import {
+  Address,
+  Dot,
+  Gcode,
+  Minus,
+  NumberLiteral
+} from "../lexer/tokens/tokens";
+import { toMatchToken } from "../testing/matchers";
 
-import lex from "../lex";
-import { Address, Dot, Gcode, Minus, NumberLiteral } from "../tokens/tokens";
-
-expect.extend({
-  toMatchToken(received: IToken, tokType: TokenType) {
-    const pass = tokenMatcher(received, tokType);
-    return {
-      message: () =>
-        `expected ${received.tokenType.name} to be ${tokType.name}`,
-      pass
-    };
-  }
-});
+expect.extend({ toMatchToken });
 
 describe("Fanuc Macro B Lexer", () => {
   it("Can lex/tokenize a simple input", () => {
