@@ -6,7 +6,7 @@ export function createCategory(name: string) {
   return createToken({ name, pattern: Lexer.NA });
 }
 
-export function basicToken(name: string, pattern: RegExp) {
+export function basicToken(name: string, pattern: string | RegExp) {
   return createToken({ name, pattern });
 }
 

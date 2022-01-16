@@ -1,21 +1,22 @@
 import { CstParser } from "chevrotain";
 
+import { allTokens } from "../lexer/tokens/allTokens";
+import { CloseParen, OpenParen } from "../lexer/tokens/brackets";
 import {
   AdditionOperator,
   Address,
-  allTokens,
-  CloseParen,
   Comma,
+  Comment,
   Equals,
   Minus,
   MultiplicationOperator,
   Newline,
   NumberLiteral,
-  OpenParen,
   Percent,
   PowerFunc,
+  ProgramNumber,
   Var
-} from "../lexer/MacroLexer";
+} from "../lexer/tokens/tokens";
 
 export default class MacroParser extends CstParser {
   constructor() {
@@ -23,9 +24,19 @@ export default class MacroParser extends CstParser {
     this.performSelfAnalysis();
   }
 
-  public startOfProgram = this.RULE("startOfProgram", () => {
+  public Program = this.RULE("Program", () => {
     this.CONSUME1(Percent);
     this.CONSUME2(Newline);
+    // this.SUBRULE(this.startOfProgram);
+    this.CONSUME3(ProgramNumber);
+    this.CONSUME4(Newline);
+    this.MANY(() => {
+      this.OR([
+        { ALT: () => this.SUBRULE(this.block) },
+        { ALT: () => this.CONSUME(Comment) }
+      ]);
+    });
+    this.CONSUME3(Percent);
   });
 
   public block = this.RULE("block", () => {
@@ -35,26 +46,13 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Newline);
   });
 
-  public program = this.RULE("program", () => {
-    // this.SUBRULE(this.startOfProgram);
-    this.CONSUME1(Percent);
-    // this.CONSUME(ProgramNumber);
-    this.MANY(() => {
-      this.SUBRULE(this.block);
-    });
-    this.CONSUME2(Percent);
+  public commentBlock = this.RULE("commentBlock", () => {
+    this.CONSUME(Comment);
+    this.CONSUME(Newline);
   });
 
   public expression = this.RULE("expression", () => {
     this.SUBRULE(this.additionExpression);
-  });
-
-  public valueAddress = this.RULE("valueAddress", () => {
-    this.CONSUME1(Address);
-    this.OPTION(() => {
-      this.CONSUME2(Minus);
-    });
-    this.CONSUME3(NumberLiteral);
   });
 
   public variableStatement = this.RULE("variableStatement", () => {
@@ -64,6 +62,14 @@ export default class MacroParser extends CstParser {
       this.CONSUME3(Equals);
       this.CONSUME4(NumberLiteral);
     });
+  });
+
+  public valueAddress = this.RULE("valueAddress", () => {
+    this.CONSUME(Address);
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.CONSUME(NumberLiteral);
   });
 
   // Lowest precedence thus it is first in the rule chain
@@ -117,5 +123,3 @@ export default class MacroParser extends CstParser {
     this.CONSUME(CloseParen);
   });
 }
-
-export const parser = new MacroParser();

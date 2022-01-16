@@ -1,7 +1,7 @@
 import { tokenMatcher } from "chevrotain";
 
-import { Plus, Product } from "../lexer/MacroLexer";
-import { parser } from "../parser/MacroParser";
+import { Plus, Product } from "../lexer/tokens/tokens";
+import parser from "../parser/parser";
 
 // ----------------- Interpreter -----------------
 // Obtains the default CstVisitor constructor to extend.

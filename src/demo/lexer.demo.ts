@@ -1,5 +1,5 @@
-import { lex } from "./MacroLexer";
-import { sample1 } from "../samples";
+import lex from "../lexer/lex";
+import { sample1 } from "./samples";
 
 const result = lex(sample1);
 const tokens = result.tokens.map(t => [t.image, t.tokenType.name]);

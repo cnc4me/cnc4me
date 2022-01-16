@@ -10,6 +10,7 @@
   "parser": "@typescript-eslint/parser",
   "parserOptions": {
     "ecmaVersion": 2020,
+    "tsconfigRootDir": "./",
     "sourceType": "module",
     "project": "./tsconfig.eslint.json"
   },
@@ -17,7 +18,6 @@
     "jest",
     "import",
     "prettier",
-    "lodash-fp",
     "jest-formatting",
     "simple-import-sort",
     "@typescript-eslint"
@@ -28,7 +28,6 @@
     "plugin:import/errors",
     "plugin:import/typescript",
     "plugin:jest-formatting/strict",
-    "plugin:lodash-fp/recommended",
     "plugin:@typescript-eslint/recommended",
     "prettier",
     "prettier/@typescript-eslint",
@@ -49,18 +48,5 @@
     "import/newline-after-import": "error",
     "import/no-duplicates": "error",
     "import/no-unresolved": "off"
-  },
-  "overrides": [
-    {
-      "files": [
-        "demo.js"
-      ],
-      "env": {
-        "node": true
-      },
-      "rules": {
-        "@typesctipt-eslint/no-var-requires": "off"
-      }
-    }
-  ]
+  }
 }

@@ -7,10 +7,12 @@
   "private": true,
   "repository": {
     "type": "git",
-    "url": "https://github.com/kevinkhill/FanucMacroB.git"
+    "url": "https://github.com/kevinkhill/fanuc-macro-b.git"
   },
   "scripts": {
-    "demo": "yarn tsnd --respawn ./example.ts",
+    "demo:lexer": "yarn tsnd --respawn ./src/demo/lex.demo.ts",
+    "demo:parser": "yarn tsnd --respawn ./src/demo/parse.demo.ts",
+    "demo:interpreter": "yarn tsnd --respawn ./src/demo/interpret.demo.ts",
     "test": "jest",
     "lint": "eslint './src/**/*.ts'",
     "fix": "yarn lint --fix"
@@ -25,7 +27,6 @@
   },
   "dependencies": {
     "chevrotain": "^9.1.0",
-    "debug": "^4.1.1",
     "yaml": "^2.0.0-10"
   },
   "devDependencies": {
@@ -34,8 +35,8 @@
     "@typescript-eslint/parser": "^5.9.1",
     "eslint": "^8.6.0",
     "eslint-config-prettier": "^6.15.0",
-    "eslint-import-resolver-typescript": "^2.3.0",
-    "eslint-plugin-import": "^2.22.1",
+    "eslint-import-resolver-typescript": "^2.5.0",
+    "eslint-plugin-import": "^2.25.4",
     "eslint-plugin-jest": "^25.3.4",
     "eslint-plugin-jest-formatting": "^3.0.0",
     "eslint-plugin-prettier": "^3.1.4",
