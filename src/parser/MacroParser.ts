@@ -4,16 +4,18 @@ import { allTokens } from "../lexer/tokens/allTokens";
 import { CloseParen, OpenParen } from "../lexer/tokens/brackets";
 import {
   AdditionOperator,
+  MultiplicationOperator
+} from "../lexer/tokens/categories";
+import {
   Address,
   Comma,
   Comment,
+  Dot,
   Equals,
-  ExtendedOffset,
   Gcode,
   LineNumber,
   Mcode,
   Minus,
-  MultiplicationOperator,
   Newline,
   NumberLiteral,
   Percent,
@@ -29,75 +31,83 @@ export default class MacroParser extends CstParser {
   }
 
   public Program = this.RULE("Program", () => {
-    this.SUBRULE(this.programDelim);
-    // this.SUBRULE(this.startOfProgram);
+    this.SUBRULE(this.startOfFile);
+    this.SUBRULE(this.programHeading);
+    this.MANY(() => {
+      this.SUBRULE(this.Line);
+    });
+    this.CONSUME(Percent);
+  });
+
+  public Line = this.RULE("Line", () => {
+    this.SUBRULE(this.manyNcTokens);
+    this.CONSUME(Newline);
+  });
+
+  public startOfFile = this.RULE("startOfFile", () => {
+    this.CONSUME(Percent);
+    this.CONSUME(Newline);
+  });
+
+  public programHeading = this.RULE("programHeading", () => {
     this.CONSUME(ProgramNumber);
     this.OPTION(() => {
       this.CONSUME(Comment);
     });
     this.CONSUME(Newline);
-    this.MANY(() => {
-      this.SUBRULE(this.block);
-    });
-    this.CONSUME(Percent);
-  });
-
-  public programDelim = this.RULE("programDelim", () => {
-    this.CONSUME(Percent);
-    this.CONSUME(Newline);
-  });
-
-  public variable = this.RULE("variable", () => {
-    this.CONSUME(Address);
-    this.CONSUME(Var);
-    this.CONSUME(NumberLiteral);
   });
 
   public valueAddress = this.RULE("valueAddress", () => {
     this.CONSUME(Address);
-    // this.OPTION(() => {
-    //   this.CONSUME(Minus);
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.CONSUME(NumberLiteral);
+    // this.OPTION1(() => {
+    //   this.CONSUME(Dot);
     // });
+  });
+
+  public variableAddress = this.RULE("variableAddress", () => {
+    this.CONSUME(Address);
+    this.CONSUME(Var);
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
     this.CONSUME(NumberLiteral);
   });
 
-  public identifier = this.RULE("identifier", () => {
+  public variableIdent = this.RULE("variableIdent", () => {
+    this.CONSUME(Var);
+    this.CONSUME(NumberLiteral);
+  });
+
+  public variableAssignment = this.RULE("variableAssignment", () => {
+    this.SUBRULE(this.variableIdent);
+    this.CONSUME(Equals);
+    this.CONSUME(NumberLiteral);
+  });
+
+  public ncToken = this.RULE("ncToken", () => {
     this.OR([
-      { ALT: () => this.CONSUME1(LineNumber) },
-      { ALT: () => this.CONSUME1(Gcode) },
-      { ALT: () => this.CONSUME1(ExtendedOffset) },
-      { ALT: () => this.CONSUME1(Mcode) },
-      { ALT: () => this.SUBRULE(this.variable) },
-      { ALT: () => this.SUBRULE(this.valueAddress) }
+      { ALT: () => this.CONSUME(Gcode) },
+      { ALT: () => this.CONSUME(Mcode) },
+      { ALT: () => this.CONSUME(Comment) },
+      { ALT: () => this.CONSUME(LineNumber) },
+      { ALT: () => this.SUBRULE(this.valueAddress) },
+      { ALT: () => this.SUBRULE(this.variableIdent) },
+      { ALT: () => this.SUBRULE(this.variableAddress) }
     ]);
   });
 
-  public block = this.RULE("block", () => {
+  public manyNcTokens = this.RULE("manyNcTokens", () => {
     this.MANY(() => {
-      this.SUBRULE(this.identifier);
-      this.OPTION(() => {
-        this.CONSUME(Comment);
-      });
+      this.SUBRULE(this.ncToken);
     });
-    this.CONSUME(Newline);
-  });
-
-  public commentBlock = this.RULE("commentBlock", () => {
-    this.CONSUME(Comment);
-    this.CONSUME(Newline);
   });
 
   public expression = this.RULE("expression", () => {
     this.SUBRULE(this.additionExpression);
-  });
-
-  public variableStatement = this.RULE("variableStatement", () => {
-    this.CONSUME1(Var);
-    this.CONSUME2(NumberLiteral);
-    this.OPTION(() => {
-      this.CONSUME3(Equals);
-      this.CONSUME4(NumberLiteral);
-    });
   });
 
   // Lowest precedence thus it is first in the rule chain

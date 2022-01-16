@@ -1,9 +1,6 @@
 import { createToken, Lexer } from "chevrotain";
 
-import { AltTokenFactory, createCategory } from "../utils";
-
-export const AdditionOperator = createCategory("AdditionOperator");
-export const MultiplicationOperator = createCategory("MultiplicationOperator");
+import { AdditionOperator, MultiplicationOperator } from "./categories";
 
 export const Plus = createToken({
   name: "Plus",
@@ -44,16 +41,6 @@ export const Percent = createToken({
   pattern: "%"
 });
 
-export const Address = createToken({
-  name: "Address",
-  pattern: /[A-Z]/
-});
-
-export const NumberLiteral = createToken({
-  name: "NumberLiteral",
-  pattern: /[-]?(?:[0-9]*[.])?[0-9]+/
-});
-
 export const Dot = createToken({
   name: "Dot",
   pattern: "."
@@ -69,25 +56,73 @@ export const Newline = createToken({
   pattern: "\n"
 });
 
-export const Gcode = createToken({
-  name: "G_Code",
-  pattern: /G\d+/,
-  longer_alt: Address,
-  group: "gcodes"
+export const NumberLiteral = createToken({
+  name: "NumberLiteral",
+  // pattern: /(\d*[.])?\d+/
+  pattern: /(\d*\.?\d+|\d+\.?\d*|\d+\.)/
 });
 
-const AddressToken = AltTokenFactory(Address);
+/**
+ * Address Alts
+ */
+export const Address = createToken({
+  name: "Address",
+  pattern: /[A-Z]/
+});
 
-export const Mcode = AddressToken("M_Code", /M\d+(\.)?/);
-export const LineNumber = AddressToken("LineNumber", /N\d+/);
-export const ProgramNumber = AddressToken("ProgramNumber", /[O|:]\d+/);
-export const ExtendedOffset = AddressToken("ExtendedOffset", /G54\.\d/);
+export const Gcode = createToken({
+  name: "G_Code",
+  pattern: /G\d+(\.\d)?/,
+  longer_alt: Address
+});
 
-export const Goto = AddressToken("Goto", /GOTO/);
-export const If = AddressToken("ControlFlow_If", /IF/);
-export const Then = AddressToken("ControlFlow_Then", /THEN/);
-export const Do = AddressToken("ControlFlow_Do", /DO/);
-export const While = AddressToken("ControlFlow_While", /WHILE/);
+export const Mcode = createToken({
+  name: "M_Code",
+  pattern: /M\d+(\.)?/,
+  longer_alt: Address
+});
+
+export const LineNumber = createToken({
+  name: "LineNumber",
+  pattern: /N\d+/,
+  longer_alt: Address
+});
+
+export const ProgramNumber = createToken({
+  name: "ProgramNumber",
+  pattern: /[O|:]\d+/,
+  longer_alt: Address
+});
+
+export const Goto = createToken({
+  name: "Goto",
+  pattern: /GOTO/,
+  longer_alt: Address
+});
+
+export const If = createToken({
+  name: "If",
+  pattern: /IF/,
+  longer_alt: Address
+});
+
+export const Then = createToken({
+  name: "Then",
+  pattern: /THEN/,
+  longer_alt: Address
+});
+
+export const Do = createToken({
+  name: "Do",
+  pattern: /DO/,
+  longer_alt: Address
+});
+
+export const While = createToken({
+  name: "While",
+  pattern: /WHILE/,
+  longer_alt: Address
+});
 
 export const PowerFunc = createToken({
   name: "PowerFunc",

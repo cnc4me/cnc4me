@@ -1,5 +1,3 @@
-import { TokenType } from "chevrotain";
-
 import {
   Equal,
   GreaterThan,
@@ -9,8 +7,8 @@ import {
   NotEqual
 } from "./boolean";
 import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
+import { AdditionOperator, MultiplicationOperator } from "./categories";
 import {
-  AdditionOperator,
   Address,
   BuiltinFn,
   Comma,
@@ -19,14 +17,12 @@ import {
   Do,
   Dot,
   Equals,
-  ExtendedOffset,
   Gcode,
   Goto,
   If,
   LineNumber,
   Mcode,
   Minus,
-  MultiplicationOperator,
   Newline,
   NumberLiteral,
   Percent,
@@ -47,6 +43,10 @@ import {
 export const allTokens = [
   Newline,
   WhiteSpace,
+  Gcode,
+  Mcode,
+  ProgramNumber,
+  LineNumber,
   Equal,
   NotEqual,
   GreaterThan,
@@ -58,15 +58,9 @@ export const allTokens = [
   Then,
   Goto,
   While,
-  ExtendedOffset,
   BuiltinFn,
   PowerFunc,
-  Gcode,
-  Mcode,
-  ProgramNumber,
-  LineNumber,
   Comment,
-  // The Address must appear after the keywords because all keywords are valid identifiers.
   Percent,
   Var,
   Dot,
@@ -76,8 +70,8 @@ export const allTokens = [
   Product,
   Minus,
   Plus,
-  Address,
   NumberLiteral,
+  Address,
   OpenParen,
   CloseParen,
   OpenBracket,
