@@ -8,6 +8,10 @@ import {
   Comma,
   Comment,
   Equals,
+  ExtendedOffset,
+  Gcode,
+  LineNumber,
+  Mcode,
   Minus,
   MultiplicationOperator,
   Newline,
@@ -25,23 +29,55 @@ export default class MacroParser extends CstParser {
   }
 
   public Program = this.RULE("Program", () => {
-    this.CONSUME1(Percent);
-    this.CONSUME2(Newline);
+    this.SUBRULE(this.programDelim);
     // this.SUBRULE(this.startOfProgram);
-    this.CONSUME3(ProgramNumber);
-    this.CONSUME4(Newline);
-    this.MANY(() => {
-      this.OR([
-        { ALT: () => this.SUBRULE(this.block) },
-        { ALT: () => this.CONSUME(Comment) }
-      ]);
+    this.CONSUME(ProgramNumber);
+    this.OPTION(() => {
+      this.CONSUME(Comment);
     });
-    this.CONSUME3(Percent);
+    this.CONSUME(Newline);
+    this.MANY(() => {
+      this.SUBRULE(this.block);
+    });
+    this.CONSUME(Percent);
+  });
+
+  public programDelim = this.RULE("programDelim", () => {
+    this.CONSUME(Percent);
+    this.CONSUME(Newline);
+  });
+
+  public variable = this.RULE("variable", () => {
+    this.CONSUME(Address);
+    this.CONSUME(Var);
+    this.CONSUME(NumberLiteral);
+  });
+
+  public valueAddress = this.RULE("valueAddress", () => {
+    this.CONSUME(Address);
+    // this.OPTION(() => {
+    //   this.CONSUME(Minus);
+    // });
+    this.CONSUME(NumberLiteral);
+  });
+
+  public identifier = this.RULE("identifier", () => {
+    this.OR([
+      { ALT: () => this.CONSUME1(LineNumber) },
+      { ALT: () => this.CONSUME1(Gcode) },
+      { ALT: () => this.CONSUME1(ExtendedOffset) },
+      { ALT: () => this.CONSUME1(Mcode) },
+      { ALT: () => this.SUBRULE(this.variable) },
+      { ALT: () => this.SUBRULE(this.valueAddress) }
+    ]);
   });
 
   public block = this.RULE("block", () => {
     this.MANY(() => {
-      this.SUBRULE(this.valueAddress);
+      this.SUBRULE(this.identifier);
+      this.OPTION(() => {
+        this.CONSUME(Comment);
+      });
     });
     this.CONSUME(Newline);
   });
@@ -62,14 +98,6 @@ export default class MacroParser extends CstParser {
       this.CONSUME3(Equals);
       this.CONSUME4(NumberLiteral);
     });
-  });
-
-  public valueAddress = this.RULE("valueAddress", () => {
-    this.CONSUME(Address);
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
-    this.CONSUME(NumberLiteral);
   });
 
   // Lowest precedence thus it is first in the rule chain

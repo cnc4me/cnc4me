@@ -1,6 +1,6 @@
 import { createToken, Lexer } from "chevrotain";
 
-import { AltTokenFactory, basicToken, createCategory } from "../utils";
+import { AltTokenFactory, createCategory } from "../utils";
 
 export const AdditionOperator = createCategory("AdditionOperator");
 export const MultiplicationOperator = createCategory("MultiplicationOperator");
