@@ -2,21 +2,19 @@ import { CstParser } from "chevrotain";
 
 import { allTokens } from "../tokens/allTokens";
 import { CloseParen, OpenParen } from "../tokens/brackets";
-import { AdditionOperator, MultiplicationOperator } from "../tokens/categories";
+import {
+  AdditionOperator,
+  MultiplicationOperator,
+  NumericValue
+} from "../tokens/categories";
 import {
   Address,
   Comma,
   Comment,
-  Decimal,
-  Dot,
-  Equals,
-  Gcode,
   Integer,
   LineNumber,
-  Mcode,
   Minus,
   Newline,
-  NumberLiteral,
   Percent,
   PowerFunc,
   ProgramNumber,
@@ -31,7 +29,7 @@ export default class MacroParser extends CstParser {
 
   public Program = this.RULE("Program", () => {
     this.SUBRULE(this.startOfFile);
-    this.SUBRULE(this.programHeading);
+    this.SUBRULE(this.Heading);
     this.MANY(() => {
       this.SUBRULE(this.Line);
     });
@@ -47,65 +45,15 @@ export default class MacroParser extends CstParser {
   });
 
   /**
-   * Start of file is delineated by a `%`
-   */
-  public startOfFile = this.RULE("startOfFile", () => {
-    this.CONSUME(Percent);
-    this.CONSUME(Newline);
-  });
-
-  /**
    * A line with a program number and an optional comment
    * to serve as the program title
    */
-  public programHeading = this.RULE("programHeading", () => {
+  public Heading = this.RULE("Heading", () => {
     this.CONSUME(ProgramNumber);
     this.OPTION(() => {
       this.CONSUME(Comment);
     });
     this.CONSUME(Newline);
-  });
-
-  /**
-   * A representation of a number, either Integer or Decimal
-   *
-   * @example Integer [ 1 | 30 | 103 ]
-   * @example Decimal [ .005 | -12.4562 | 1. ]
-   */
-  public numberLiteral = this.RULE("numberLiteral", () => {
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
-    this.OR([
-      { ALT: () => this.CONSUME(Integer) },
-      { ALT: () => this.CONSUME(Decimal) }
-    ]);
-  });
-
-  /**
-   * Pound sign `#` followed by an integer for a variable register
-   *
-   * @example "#518" or "#152"
-   */
-  public macroVariable = this.RULE("macroVariable", () => {
-    this.CONSUME(Var);
-    this.CONSUME(Integer);
-  });
-
-  /**
-   * A single letter followed by a numeric value
-   */
-  public valueAddress = this.RULE("valueAddress", () => {
-    this.CONSUME(Address);
-    this.SUBRULE(this.numberLiteral);
-  });
-
-  public variableAddress = this.RULE("variableAddress", () => {
-    this.CONSUME(Address);
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
-    this.SUBRULE(this.macroVariable);
   });
 
   // public variableAssignment = this.RULE("variableAssignment", () => {
@@ -114,10 +62,49 @@ export default class MacroParser extends CstParser {
   //   this.CONSUME(NumberLiteral);
   // });
 
+  /**
+   * Start of file is delineated by a `%`
+   */
+  private startOfFile = this.RULE("startOfFile", () => {
+    this.CONSUME(Percent);
+    this.CONSUME(Newline);
+  });
+
+  /**
+   * Pound sign `#` followed by an integer representing a variable register
+   *
+   * @TODO variable expressions!
+   * @example "#518" or "#152"
+   */
+  private macroVariable = this.RULE("macroVariable", () => {
+    this.CONSUME(Var);
+    this.CONSUME(Integer);
+  });
+
+  /**
+   * A single, capital letter followed by a numeric value
+   */
+  private valueAddress = this.RULE("valueAddress", () => {
+    this.CONSUME(Address);
+    this.CONSUME(NumericValue);
+    // this.SUBRULE(this.numberLiteral);
+  });
+
+  /**
+   * A single, capital letter followed by a macro variable
+   */
+  private variableAddress = this.RULE("variableAddress", () => {
+    this.CONSUME(Address);
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.SUBRULE(this.macroVariable);
+  });
+
   public ncToken = this.RULE("ncToken", () => {
     this.OR([
-      { ALT: () => this.CONSUME(Gcode) },
-      { ALT: () => this.CONSUME(Mcode) },
+      // { ALT: () => this.CONSUME(Gcode) },
+      // { ALT: () => this.CONSUME(Mcode) },
       { ALT: () => this.CONSUME(Comment) },
       { ALT: () => this.CONSUME(LineNumber) },
       { ALT: () => this.SUBRULE(this.valueAddress) },
@@ -167,7 +154,7 @@ export default class MacroParser extends CstParser {
       // parenthesisExpression has the highest precedence and thus it appears
       // in the "lowest" leaf in the expression ParseTree.
       { ALT: () => this.SUBRULE(this.parenthesisExpression) },
-      { ALT: () => this.CONSUME(NumberLiteral) },
+      { ALT: () => this.CONSUME(NumericValue) },
       { ALT: () => this.SUBRULE(this.powerFunction) }
     ]);
   });
@@ -187,3 +174,5 @@ export default class MacroParser extends CstParser {
     this.CONSUME(CloseParen);
   });
 }
+
+export const parser = new MacroParser();

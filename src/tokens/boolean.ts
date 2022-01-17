@@ -7,14 +7,14 @@ export const BooleanOperator = createToken({
   pattern: Lexer.NA
 });
 
-export const Equal = createToken({
-  name: "Equal",
+export const EqualTo = createToken({
+  name: "EqualTo",
   pattern: /EQ/,
   categories: BooleanOperator
 });
 
-export const NotEqual = createToken({
-  name: "NotEqual",
+export const NotEqualTo = createToken({
+  name: "NotEqualTo",
   pattern: /NE/,
   categories: BooleanOperator
 });

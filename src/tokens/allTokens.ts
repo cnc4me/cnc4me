@@ -1,10 +1,11 @@
 import {
-  Equal,
+  BooleanOperator,
+  EqualTo,
   GreaterThan,
   GreaterThanOrEq,
   LessThan,
   LessThanOrEq,
-  NotEqual
+  NotEqualTo
 } from "./boolean";
 import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
 import { AdditionOperator, MultiplicationOperator } from "./categories";
@@ -18,15 +19,12 @@ import {
   Do,
   Dot,
   Equals,
-  Gcode,
   Goto,
   If,
   Integer,
   LineNumber,
-  Mcode,
   Minus,
   Newline,
-  NumberLiteral,
   Percent,
   Plus,
   PowerFunc,
@@ -40,7 +38,7 @@ import {
 
 /**
  * The order of tokens is important because token
- *  matches are applied down like a waterfall
+ *  matches are applied sequentially
  */
 export const allTokens = [
   Newline,
@@ -49,8 +47,8 @@ export const allTokens = [
   // Mcode,
   ProgramNumber,
   LineNumber,
-  Equal,
-  NotEqual,
+  EqualTo,
+  NotEqualTo,
   GreaterThan,
   GreaterThanOrEq,
   LessThan,
@@ -80,6 +78,7 @@ export const allTokens = [
   CloseParen,
   OpenBracket,
   CloseBracket,
+  BooleanOperator,
   AdditionOperator,
   MultiplicationOperator
 ];

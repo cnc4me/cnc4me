@@ -1,6 +1,6 @@
 import { tokenMatcher } from "chevrotain";
 
-import parser from "../parser/parser";
+import { parser } from "../parser/MacroParser";
 import { Plus, Product } from "../tokens/tokens";
 
 // ----------------- Interpreter -----------------
@@ -97,3 +97,5 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return Math.pow(base, exponent);
   }
 }
+
+export const interpreter = new MacroInterpreter();

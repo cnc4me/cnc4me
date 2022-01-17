@@ -3,9 +3,8 @@ import { toMatchToken } from "../testing/matchers";
 import {
   Address,
   Decimal,
-  Gcode,
+  Equals,
   Integer,
-  Mcode,
   Minus,
   Newline,
   Var
@@ -109,5 +108,23 @@ describe("Fanuc Macro B Lexer", () => {
     expect(tokens[4]).toMatchToken(Integer);
     expect(tokens[5]).toMatchToken(Address);
     expect(tokens[6]).toMatchToken(Decimal);
+  });
+
+  it("Can lex a line with a variable assignment", () => {
+    const inputText = "#500=2.5";
+
+    const { tokens, errors } = lex(inputText);
+
+    expect(errors).toHaveLength(0);
+    expect(tokens).toHaveLength(4);
+    expect(tokens[0].image).toEqual("#");
+    expect(tokens[1].image).toEqual("500");
+    expect(tokens[2].image).toEqual("=");
+    expect(tokens[3].image).toEqual("2.5");
+
+    expect(tokens[0]).toMatchToken(Var);
+    expect(tokens[1]).toMatchToken(Integer);
+    expect(tokens[2]).toMatchToken(Equals);
+    expect(tokens[3]).toMatchToken(Decimal);
   });
 });

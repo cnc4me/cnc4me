@@ -1,6 +1,6 @@
 import MacroLexer from "../lexer/MacroLexer";
-import parser from "../parser/parser";
-import interpreter from "./interpreter";
+import { parser } from "../parser/MacroParser";
+import { interpreter } from "./MacroInterpreter";
 
 export default function interpret(text: string) {
   // 1. Tokenize the input.
