@@ -13,6 +13,7 @@ import {
   BuiltinFn,
   Comma,
   Comment,
+  Decimal,
   Divide,
   Do,
   Dot,
@@ -20,6 +21,7 @@ import {
   Gcode,
   Goto,
   If,
+  Integer,
   LineNumber,
   Mcode,
   Minus,
@@ -43,8 +45,8 @@ import {
 export const allTokens = [
   Newline,
   WhiteSpace,
-  Gcode,
-  Mcode,
+  // Gcode,
+  // Mcode,
   ProgramNumber,
   LineNumber,
   Equal,
@@ -70,8 +72,10 @@ export const allTokens = [
   Product,
   Minus,
   Plus,
-  NumberLiteral,
+  // NumberLiteral,
   Address,
+  Decimal,
+  Integer,
   OpenParen,
   CloseParen,
   OpenBracket,
@@ -79,8 +83,3 @@ export const allTokens = [
   AdditionOperator,
   MultiplicationOperator
 ];
-
-// export const tokenVocab = allTokens.reduce((vocab, token) => {
-//   vocab[token.name] = token;
-//   return vocab;
-// }, {} as Record<string, TokenType>);

@@ -1,6 +1,10 @@
 import { createToken, Lexer } from "chevrotain";
 
-import { AdditionOperator, MultiplicationOperator } from "./categories";
+import {
+  AdditionOperator,
+  MultiplicationOperator,
+  NumericValue
+} from "./categories";
 
 export const Plus = createToken({
   name: "Plus",
@@ -24,6 +28,19 @@ export const Product = createToken({
   name: "Product",
   pattern: "*",
   categories: MultiplicationOperator
+});
+
+export const Integer = createToken({
+  name: "Integer",
+  pattern: /\d+/,
+  categories: NumericValue
+});
+
+export const Decimal = createToken({
+  name: "Decimal",
+  pattern: /\d+\.\d*/,
+  longer_alt: Integer,
+  categories: NumericValue
 });
 
 export const Var = createToken({
@@ -136,12 +153,18 @@ export const BuiltinFn = createToken({
   longer_alt: Address
 });
 
+/**
+ * Skipped tokens
+ */
 export const WhiteSpace = createToken({
   name: "WhiteSpace",
   pattern: /[\s\t\r]+/,
   group: Lexer.SKIPPED
 });
 
+/**
+ * Comments as a whole token
+ */
 export const Comment = createToken({
   name: "Comment",
   pattern: /\(\s*(.+?)\s*\)/,

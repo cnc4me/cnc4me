@@ -1,18 +1,17 @@
 import { CstParser } from "chevrotain";
 
-import { allTokens } from "../lexer/tokens/allTokens";
-import { CloseParen, OpenParen } from "../lexer/tokens/brackets";
-import {
-  AdditionOperator,
-  MultiplicationOperator
-} from "../lexer/tokens/categories";
+import { allTokens } from "../tokens/allTokens";
+import { CloseParen, OpenParen } from "../tokens/brackets";
+import { AdditionOperator, MultiplicationOperator } from "../tokens/categories";
 import {
   Address,
   Comma,
   Comment,
+  Decimal,
   Dot,
   Equals,
   Gcode,
+  Integer,
   LineNumber,
   Mcode,
   Minus,
@@ -22,7 +21,7 @@ import {
   PowerFunc,
   ProgramNumber,
   Var
-} from "../lexer/tokens/tokens";
+} from "../tokens/tokens";
 
 export default class MacroParser extends CstParser {
   constructor() {
@@ -57,12 +56,22 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Newline);
   });
 
+  public numberLiteral = this.RULE("numberLiteral", () => {
+    this.OR([
+      { ALT: () => this.CONSUME(Integer) },
+      { ALT: () => this.CONSUME(Decimal) }
+    ]);
+  });
+
+  public negativeNumberLiteral = this.RULE("negativeNumberLiteral", () => {
+    this.CONSUME(Minus);
+    this.SUBRULE(this.numberLiteral);
+  });
+
   public valueAddress = this.RULE("valueAddress", () => {
     this.CONSUME(Address);
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
-    this.CONSUME(NumberLiteral);
+
+    this.SUBRULE(this.numberLiteral);
     // this.OPTION1(() => {
     //   this.CONSUME(Dot);
     // });
@@ -70,23 +79,23 @@ export default class MacroParser extends CstParser {
 
   public variableAddress = this.RULE("variableAddress", () => {
     this.CONSUME(Address);
-    this.CONSUME(Var);
     this.OPTION(() => {
       this.CONSUME(Minus);
     });
-    this.CONSUME(NumberLiteral);
-  });
-
-  public variableIdent = this.RULE("variableIdent", () => {
     this.CONSUME(Var);
-    this.CONSUME(NumberLiteral);
+    this.CONSUME(Integer);
   });
 
-  public variableAssignment = this.RULE("variableAssignment", () => {
-    this.SUBRULE(this.variableIdent);
-    this.CONSUME(Equals);
-    this.CONSUME(NumberLiteral);
+  public macroVariable = this.RULE("macroVariable", () => {
+    this.CONSUME(Var);
+    this.CONSUME(Integer);
   });
+
+  // public variableAssignment = this.RULE("variableAssignment", () => {
+  //   this.SUBRULE(this.macroVariable);
+  //   this.CONSUME(Equals);
+  //   this.CONSUME(NumberLiteral);
+  // });
 
   public ncToken = this.RULE("ncToken", () => {
     this.OR([
@@ -95,7 +104,7 @@ export default class MacroParser extends CstParser {
       { ALT: () => this.CONSUME(Comment) },
       { ALT: () => this.CONSUME(LineNumber) },
       { ALT: () => this.SUBRULE(this.valueAddress) },
-      { ALT: () => this.SUBRULE(this.variableIdent) },
+      { ALT: () => this.SUBRULE(this.macroVariable) },
       { ALT: () => this.SUBRULE(this.variableAddress) }
     ]);
   });

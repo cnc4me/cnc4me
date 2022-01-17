@@ -5,3 +5,10 @@ A Lexer, Parser, and Interpreter for Fanuc Macro B nc files, powered by [Chevrot
 
 ![Jest Status](https://github.com/kevinkhill/fanuc-macro-b/actions/workflows/main.yml/badge.svg)
 
+# Lexer
+Lex a portion of gcode to get a list of tokens
+
+
+# Parser
+
+# Interpreter
