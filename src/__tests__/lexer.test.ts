@@ -65,25 +65,26 @@ describe("Fanuc Macro B Lexer", () => {
     const { tokens, errors } = lex(inputText);
 
     expect(errors).toHaveLength(0);
-    expect(tokens).toHaveLength(7);
-    expect(tokens[0].image).toEqual("M22");
-    expect(tokens[1].image).toEqual("\n");
-    expect(tokens[2].image).toEqual("B");
-    /**
-     * @TODO FIX THIS, include dot with number
-     */
-    expect(tokens[3].image).toEqual("-");
-    expect(tokens[4].image).toEqual("34.2");
-    expect(tokens[5].image).toEqual("\n");
-    expect(tokens[6].image).toEqual("M21");
+    expect(tokens).toHaveLength(9);
+    expect(tokens[0].image).toEqual("M");
+    expect(tokens[1].image).toEqual("22");
+    expect(tokens[2].image).toEqual("\n");
+    expect(tokens[3].image).toEqual("B");
+    expect(tokens[4].image).toEqual("-");
+    expect(tokens[5].image).toEqual("34.2");
+    expect(tokens[6].image).toEqual("\n");
+    expect(tokens[7].image).toEqual("M");
+    expect(tokens[8].image).toEqual("21");
 
-    expect(tokens[0]).toMatchToken(Mcode);
-    expect(tokens[1]).toMatchToken(Newline);
-    expect(tokens[2]).toMatchToken(Address);
-    expect(tokens[3]).toMatchToken(Minus);
-    expect(tokens[4]).toMatchToken(Decimal);
-    expect(tokens[5]).toMatchToken(Newline);
-    expect(tokens[6]).toMatchToken(Mcode);
+    expect(tokens[0]).toMatchToken(Address);
+    expect(tokens[1]).toMatchToken(Integer);
+    expect(tokens[2]).toMatchToken(Newline);
+    expect(tokens[3]).toMatchToken(Address);
+    expect(tokens[4]).toMatchToken(Minus);
+    expect(tokens[5]).toMatchToken(Decimal);
+    expect(tokens[6]).toMatchToken(Newline);
+    expect(tokens[7]).toMatchToken(Address);
+    expect(tokens[8]).toMatchToken(Integer);
   });
 
   it("Can lex a line with variables", () => {
@@ -92,19 +93,21 @@ describe("Fanuc Macro B Lexer", () => {
     const { tokens, errors } = lex(inputText);
 
     expect(errors).toHaveLength(0);
-    expect(tokens).toHaveLength(6);
-    expect(tokens[0].image).toEqual("G43");
-    expect(tokens[1].image).toEqual("H");
-    expect(tokens[2].image).toEqual("#");
-    expect(tokens[3].image).toEqual("518");
-    expect(tokens[4].image).toEqual("Z");
-    expect(tokens[5].image).toEqual("1.0");
+    expect(tokens).toHaveLength(7);
+    expect(tokens[0].image).toEqual("G");
+    expect(tokens[1].image).toEqual("43");
+    expect(tokens[2].image).toEqual("H");
+    expect(tokens[3].image).toEqual("#");
+    expect(tokens[4].image).toEqual("518");
+    expect(tokens[5].image).toEqual("Z");
+    expect(tokens[6].image).toEqual("1.0");
 
-    expect(tokens[0]).toMatchToken(Gcode);
-    expect(tokens[1]).toMatchToken(Address);
-    expect(tokens[2]).toMatchToken(Var);
-    expect(tokens[3]).toMatchToken(Integer);
-    expect(tokens[4]).toMatchToken(Address);
-    expect(tokens[5]).toMatchToken(Decimal);
+    expect(tokens[0]).toMatchToken(Address);
+    expect(tokens[1]).toMatchToken(Integer);
+    expect(tokens[2]).toMatchToken(Address);
+    expect(tokens[3]).toMatchToken(Var);
+    expect(tokens[4]).toMatchToken(Integer);
+    expect(tokens[5]).toMatchToken(Address);
+    expect(tokens[6]).toMatchToken(Decimal);
   });
 });
