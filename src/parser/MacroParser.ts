@@ -38,16 +38,26 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Percent);
   });
 
+  /**
+   * Any number of valid addresses, comments, and/or expressions
+   */
   public Line = this.RULE("Line", () => {
     this.SUBRULE(this.manyNcTokens);
     this.CONSUME(Newline);
   });
 
+  /**
+   * Start of file is delineated by a `%`
+   */
   public startOfFile = this.RULE("startOfFile", () => {
     this.CONSUME(Percent);
     this.CONSUME(Newline);
   });
 
+  /**
+   * A line with a program number and an optional comment
+   * to serve as the program title
+   */
   public programHeading = this.RULE("programHeading", () => {
     this.CONSUME(ProgramNumber);
     this.OPTION(() => {
@@ -56,25 +66,38 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Newline);
   });
 
+  /**
+   * A representation of a number, either Integer or Decimal
+   *
+   * @example Integer [ 1 | 30 | 103 ]
+   * @example Decimal [ .005 | -12.4562 | 1. ]
+   */
   public numberLiteral = this.RULE("numberLiteral", () => {
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
     this.OR([
       { ALT: () => this.CONSUME(Integer) },
       { ALT: () => this.CONSUME(Decimal) }
     ]);
   });
 
-  public negativeNumberLiteral = this.RULE("negativeNumberLiteral", () => {
-    this.CONSUME(Minus);
-    this.SUBRULE(this.numberLiteral);
+  /**
+   * Pound sign `#` followed by an integer for a variable register
+   *
+   * @example "#518" or "#152"
+   */
+  public macroVariable = this.RULE("macroVariable", () => {
+    this.CONSUME(Var);
+    this.CONSUME(Integer);
   });
 
+  /**
+   * A single letter followed by a numeric value
+   */
   public valueAddress = this.RULE("valueAddress", () => {
     this.CONSUME(Address);
-
     this.SUBRULE(this.numberLiteral);
-    // this.OPTION1(() => {
-    //   this.CONSUME(Dot);
-    // });
   });
 
   public variableAddress = this.RULE("variableAddress", () => {
@@ -82,13 +105,7 @@ export default class MacroParser extends CstParser {
     this.OPTION(() => {
       this.CONSUME(Minus);
     });
-    this.CONSUME(Var);
-    this.CONSUME(Integer);
-  });
-
-  public macroVariable = this.RULE("macroVariable", () => {
-    this.CONSUME(Var);
-    this.CONSUME(Integer);
+    this.SUBRULE(this.macroVariable);
   });
 
   // public variableAssignment = this.RULE("variableAssignment", () => {
