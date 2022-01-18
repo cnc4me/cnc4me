@@ -1,4 +1,3 @@
-import lex from "../lexer/lex";
 import { toMatchToken } from "../testing/matchers";
 import {
   Address,
@@ -9,6 +8,7 @@ import {
   Newline,
   Var
 } from "../tokens/tokens";
+import { lex } from "../utils";
 
 expect.extend({ toMatchToken });
 

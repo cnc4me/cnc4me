@@ -1,17 +1,17 @@
 import { CstParser } from "chevrotain";
 
-import { allTokens } from "../tokens/allTokens";
+import { allTokens } from "./tokens/allTokens";
 import {
   CloseBracket,
   CloseParen,
   OpenBracket,
   OpenParen
-} from "../tokens/brackets";
+} from "./tokens/brackets";
 import {
   AdditionOperator,
   MultiplicationOperator,
   NumericValue
-} from "../tokens/categories";
+} from "./tokens/categories";
 import {
   Address,
   Comma,
@@ -24,7 +24,7 @@ import {
   PowerFunc,
   ProgramNumber,
   Var
-} from "../tokens/tokens";
+} from "./tokens/tokens";
 
 export default class MacroParser extends CstParser {
   constructor() {

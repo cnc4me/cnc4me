@@ -25,6 +25,6 @@
     "keyofStringsOnly": true,
     "types": ["jest", "node"]
   },
-  "include": ["src/**/*.ts", "demo/**/*.ts", "types/**/*.ts"],
+  "include": ["src/**/*.ts", "demo/**/*.ts", "types/**/*.ts", "gcode/*.ts"],
   "exclude": ["node_modules"]
 }

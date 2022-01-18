@@ -1,4 +1,4 @@
-import interpret from "../src/interpreter/interpret";
+import interpret from "../src/interpret";
 import { sample1 } from "./samples";
 
 const result = interpret(sample1);
