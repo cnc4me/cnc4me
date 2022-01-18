@@ -1,7 +1,12 @@
 import { CstParser } from "chevrotain";
 
 import { allTokens } from "../tokens/allTokens";
-import { CloseParen, OpenParen } from "../tokens/brackets";
+import {
+  CloseBracket,
+  CloseParen,
+  OpenBracket,
+  OpenParen
+} from "../tokens/brackets";
 import {
   AdditionOperator,
   MultiplicationOperator,
@@ -151,18 +156,18 @@ export default class MacroParser extends CstParser {
 
   public atomicExpression = this.RULE("atomicExpression", () => {
     this.OR([
-      // parenthesisExpression has the highest precedence and thus it appears
+      // bracketExpression has the highest precedence and thus it appears
       // in the "lowest" leaf in the expression ParseTree.
-      { ALT: () => this.SUBRULE(this.parenthesisExpression) },
+      { ALT: () => this.SUBRULE(this.bracketExpression) },
       { ALT: () => this.CONSUME(NumericValue) },
       { ALT: () => this.SUBRULE(this.powerFunction) }
     ]);
   });
 
-  public parenthesisExpression = this.RULE("parenthesisExpression", () => {
-    this.CONSUME(OpenParen);
+  public bracketExpression = this.RULE("bracketExpression", () => {
+    this.CONSUME(OpenBracket);
     this.SUBRULE(this.expression);
-    this.CONSUME(CloseParen);
+    this.CONSUME(CloseBracket);
   });
 
   public powerFunction = this.RULE("powerFunction", () => {

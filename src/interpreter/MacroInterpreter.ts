@@ -13,21 +13,12 @@ const BaseCstVisitorWithDefaults =
 export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   constructor() {
     super();
-    // This helper will detect any missing or redundant methods on this visitor
     this.validateVisitor();
   }
 
   expression(ctx) {
     // visiting an array is equivalent to visiting its first element.
     return this.visit(ctx.additionExpression);
-  }
-
-  // valueAddress(ctx) {
-  //   console.log(ctx);
-  // }
-
-  programStart(ctx) {
-    // return ctx.identifier[0].image;
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.
