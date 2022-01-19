@@ -33,4 +33,39 @@ describe("Fanuc Macro B Interpreter", () => {
     expect(groups.comments[1].image).toEqual("(PRELOAD OFFSETS)");
     expect(groups.comments[2].image).toEqual("(SPINDLE SAFETY)");
   });
+
+  it("can assign a variable a value", () => {
+    const { value } = interpret("#518=123");
+
+    expect(value).toEqual(3);
+  });
+
+  it.skip("can fetch a variable value for an address", () => {
+    const { value } = interpret("H#518");
+
+    expect(value).toEqual(3);
+  });
+
+  it.skip("can calculate an expression", () => {
+    const { value } = interpret("X[1.25 + 2.5]");
+
+    expect(value).toEqual(3);
+  });
+
+  it.skip("can calculate an expression with operator precedence", () => {
+    // if it was evaluated left to right without taking into account precedence the result would have been 9
+    expect(interpret("1 + 2 * 3").value).toEqual(7);
+  });
+
+  it.skip("can calculate an expression with operator precedence #2", () => {
+    expect(interpret("(1 + 2) * 3").value).toEqual(9);
+  });
+
+  it.skip("can calculate an expression with many parenthesis", () => {
+    expect(interpret("((((666))))").value).toEqual(6);
+  });
+
+  it.skip("can calculate an expression with power function", () => {
+    expect(interpret("1 + power(2,2)").value).toEqual(5);
+  });
 });

@@ -21,6 +21,10 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return this.visit(ctx.additionExpression);
   }
 
+  variableAssignment(ctx) {
+    return ctx;
+  }
+
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.
   additionExpression(ctx) {
     let result = this.visit(ctx.lhs);
@@ -67,8 +71,8 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   atomicExpression(ctx) {
-    if (ctx.parenthesisExpression) {
-      return this.visit(ctx.parenthesisExpression);
+    if (ctx.bracketExpression) {
+      return this.visit(ctx.bracketExpression);
     } else if (ctx.NumberLiteral) {
       return parseInt(ctx.NumberLiteral[0].image, 10);
     } else if (ctx.powerFunction) {
@@ -76,8 +80,8 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     }
   }
 
-  parenthesisExpression(ctx) {
-    // The ctx will also contain the parenthesis tokens, but we don't care about those
+  bracketExpression(ctx) {
+    // The ctx will also contain the bracket tokens, but we don't care about those
     // in the context of calculating the result.
     return this.visit(ctx.expression);
   }

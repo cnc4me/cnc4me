@@ -13,6 +13,7 @@
     "test": "jest",
     "lint": "eslint --ext \".ts\" ./src ./demo",
     "fix": "yarn lint --fix",
+    "gen-dts": "yarn tsnd ./scripts/gen_dts_signatures.ts",
     "demo:lexer": "yarn tsnd --respawn ./demo/lexer.demo.ts",
     "demo:parser": "yarn tsnd --respawn ./demo/parser.demo.ts",
     "demo:interpreter": "yarn tsnd --respawn ./demo/interpret.demo.ts"
@@ -26,7 +27,7 @@
     }
   },
   "dependencies": {
-    "chevrotain": "^9.1.0",
+    "chevrotain": "^10.0.0",
     "yaml": "^2.0.0-10"
   },
   "devDependencies": {

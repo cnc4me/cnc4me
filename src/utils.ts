@@ -1,4 +1,4 @@
-import { ILexingResult, IToken, tokenMatcher } from "chevrotain";
+import { ILexingResult, IToken, Rule, tokenMatcher } from "chevrotain";
 
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
@@ -9,6 +9,10 @@ export function unwrapComment(token: IToken) {
   if (tokenMatcher(token, Comment)) {
     //
   }
+}
+
+export function getGAstProductions(): Record<string, Rule> {
+  return parser.getGAstProductions();
 }
 
 export function lex(inputText: string): ILexingResult {

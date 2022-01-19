@@ -16,10 +16,12 @@ import {
   Address,
   Comma,
   Comment,
+  Equals,
   Integer,
   LineNumber,
   Minus,
   Newline,
+  NumberLiteral,
   Percent,
   PowerFunc,
   ProgramNumber,
@@ -61,11 +63,11 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Newline);
   });
 
-  // public variableAssignment = this.RULE("variableAssignment", () => {
-  //   this.SUBRULE(this.macroVariable);
-  //   this.CONSUME(Equals);
-  //   this.CONSUME(NumberLiteral);
-  // });
+  public variableAssignment = this.RULE("variableAssignment", () => {
+    this.SUBRULE(this.macroVariable);
+    this.CONSUME(Equals);
+    this.CONSUME(NumberLiteral);
+  });
 
   /**
    * Start of file is delineated by a `%`
