@@ -1,5 +1,4 @@
 import {
-  BooleanOperator,
   EqualTo,
   GreaterThan,
   GreaterThanOrEq,
@@ -8,7 +7,15 @@ import {
   NotEqualTo
 } from "./boolean";
 import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
-import { AdditionOperator, MultiplicationOperator } from "./categories";
+import {
+  AdditionOperator,
+  BooleanOperator,
+  Brackets,
+  ControlFlowKeyword,
+  MultiplicationOperator,
+  NumericValue
+} from "./categories";
+import { Do, GotoLine, If, Then, While } from "./controlFlow";
 import {
   Address,
   BuiltinFn,
@@ -16,13 +23,9 @@ import {
   Comment,
   Decimal,
   Divide,
-  Do,
-  Dot,
   Equals,
-  Goto,
-  If,
   Integer,
-  LineNumber,
+  // LineNumber,
   Minus,
   Newline,
   Percent,
@@ -30,9 +33,7 @@ import {
   PowerFunc,
   Product,
   ProgramNumber,
-  Then,
   Var,
-  While,
   WhiteSpace
 } from "./tokens";
 
@@ -46,7 +47,7 @@ export const allTokens = [
   // Gcode,
   // Mcode,
   ProgramNumber,
-  LineNumber,
+  // LineNumber,
   EqualTo,
   NotEqualTo,
   GreaterThan,
@@ -56,16 +57,16 @@ export const allTokens = [
   If,
   Do,
   Then,
-  Goto,
+  GotoLine,
   While,
   BuiltinFn,
   PowerFunc,
   Comment,
   Percent,
   Var,
-  Dot,
-  Comma,
   Equals,
+  // Dot,
+  Comma,
   Divide,
   Product,
   Minus,
@@ -78,6 +79,11 @@ export const allTokens = [
   CloseParen,
   OpenBracket,
   CloseBracket,
+
+  // Categories
+  ControlFlowKeyword,
+  Brackets,
+  NumericValue,
   BooleanOperator,
   AdditionOperator,
   MultiplicationOperator

@@ -1,11 +1,6 @@
-import * as chevrotain from "chevrotain";
+import { createToken } from "chevrotain";
 
-const { Lexer, createToken } = chevrotain;
-
-export const BooleanOperator = createToken({
-  name: "BooleanOperator",
-  pattern: Lexer.NA
-});
+import { BooleanOperator } from "./categories";
 
 export const EqualTo = createToken({
   name: "EqualTo",

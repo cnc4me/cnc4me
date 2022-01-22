@@ -38,7 +38,8 @@ export const Integer = createToken({
 
 export const Decimal = createToken({
   name: "Decimal",
-  pattern: /\d+\.\d*/,
+  // Borrowed this regex https://stackoverflow.com/a/13252134
+  pattern: /(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,
   longer_alt: Integer,
   categories: NumericValue
 });
@@ -73,71 +74,32 @@ export const Newline = createToken({
   pattern: "\n"
 });
 
-export const NumberLiteral = createToken({
-  name: "NumberLiteral",
-  // pattern: /(\d*[.])?\d+/
-  pattern: /(\d*\.?\d+|\d+\.?\d*|\d+\.)/
-});
-
-/**
- * Address Alts
- */
 export const Address = createToken({
   name: "Address",
   pattern: /[A-Z]/
 });
 
-export const Gcode = createToken({
-  name: "G_Code",
-  pattern: /G\d+(\.\d)?/,
-  longer_alt: Address
-});
+// export const Gcode = createToken({
+//   name: "G_Code",
+//   pattern: /G\d+(\.\d)?/,
+//   longer_alt: Address
+// });
 
-export const Mcode = createToken({
-  name: "M_Code",
-  pattern: /M\d+(\.)?/,
-  longer_alt: Address
-});
+// export const Mcode = createToken({
+//   name: "M_Code",
+//   pattern: /M\d+(\.)?/,
+//   longer_alt: Address
+// });
 
-export const LineNumber = createToken({
-  name: "LineNumber",
-  pattern: /N\d+/,
-  longer_alt: Address
-});
+// export const LineNumber = createToken({
+//   name: "LineNumber",
+//   pattern: /N\d+/,
+//   longer_alt: Address
+// });
 
 export const ProgramNumber = createToken({
   name: "ProgramNumber",
   pattern: /[O|:]\d+/,
-  longer_alt: Address
-});
-
-export const Goto = createToken({
-  name: "Goto",
-  pattern: /GOTO/,
-  longer_alt: Address
-});
-
-export const If = createToken({
-  name: "If",
-  pattern: /IF/,
-  longer_alt: Address
-});
-
-export const Then = createToken({
-  name: "Then",
-  pattern: /THEN/,
-  longer_alt: Address
-});
-
-export const Do = createToken({
-  name: "Do",
-  pattern: /DO/,
-  longer_alt: Address
-});
-
-export const While = createToken({
-  name: "While",
-  pattern: /WHILE/,
   longer_alt: Address
 });
 

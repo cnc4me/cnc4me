@@ -1,12 +1,32 @@
-import interpret from "../src/interpret";
-import { sample1 } from "./samples";
+import { interpret, interpretCst } from "../src/utils";
 
-const result = interpret(sample1);
+const cst = interpretCst(`%
+O7999 (MATERIAL VERIFICATION V5)
 
-if (result.parseErrors.length == 0) {
-  const programTitle = result.lexResult.groups.comments[0].image;
+G10 G90 L2 P1 X1.2 Y3.4 Z5.6 B7.8
 
-  console.log(`Program Title ${programTitle}`);
-} else {
-  result.parseErrors.forEach(e => console.log(e));
+N1
+T47M6
+S5000M3
+G0G90G54.1X1.2Y2.3
+
+#2=14
+#1=0.005
+#26=-.2 ( PROBE DEPTH )
+#9=100. ( PROTECTED POSITIONING FEEDRATE )
+
+G65 P9811 Z#18
+IF[#142 GT #3] GOTO914
+
+G65 P9810 X[#24 + #21] F#9 M1.
+%`);
+
+try {
+  const result = cst("Program");
+
+  if (result.parseErrors.length > 0) {
+    result.parseErrors.forEach(e => console.log(e));
+  }
+} catch (e) {
+  console.error(e);
 }

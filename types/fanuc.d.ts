@@ -18,7 +18,7 @@ export interface LineCstNode extends CstNode {
 }
 
 export type LineCstChildren = {
-  manyNcTokens: ManyNcTokensCstNode[];
+  validToken?: ValidTokenCstNode[];
   Newline: IToken[];
 };
 
@@ -31,17 +31,6 @@ export type HeadingCstChildren = {
   ProgramNumber: IToken[];
   Comment?: IToken[];
   Newline: IToken[];
-};
-
-export interface VariableAssignmentCstNode extends CstNode {
-  name: "variableAssignment";
-  children: VariableAssignmentCstChildren;
-}
-
-export type VariableAssignmentCstChildren = {
-  macroVariable: MacroVariableCstNode[];
-  Equals: IToken[];
-  NumberLiteral: IToken[];
 };
 
 export interface StartOfFileCstNode extends CstNode {
@@ -62,6 +51,17 @@ export interface MacroVariableCstNode extends CstNode {
 export type MacroVariableCstChildren = {
   Var: IToken[];
   Integer: IToken[];
+};
+
+export interface VariableAssignmentCstNode extends CstNode {
+  name: "variableAssignment";
+  children: VariableAssignmentCstChildren;
+}
+
+export type VariableAssignmentCstChildren = {
+  macroVariable: MacroVariableCstNode[];
+  Equals: IToken[];
+  NumericValue: IToken[];
 };
 
 export interface ValueAddressCstNode extends CstNode {
@@ -85,26 +85,53 @@ export type VariableAddressCstChildren = {
   macroVariable: MacroVariableCstNode[];
 };
 
-export interface NcTokenCstNode extends CstNode {
-  name: "ncToken";
-  children: NcTokenCstChildren;
+export interface ValueExpressionCstNode extends CstNode {
+  name: "valueExpression";
+  children: ValueExpressionCstChildren;
 }
 
-export type NcTokenCstChildren = {
-  Comment?: IToken[];
-  LineNumber?: IToken[];
-  valueAddress?: ValueAddressCstNode[];
+export type ValueExpressionCstChildren = {
+  OpenBracket: IToken[];
   macroVariable?: MacroVariableCstNode[];
-  variableAddress?: VariableAddressCstNode[];
+  Comment?: IToken[];
+  NumericValue?: IToken[];
+  AdditionOperator?: IToken[];
+  MultiplicationOperator?: IToken[];
+  CloseBracket: IToken[];
 };
 
-export interface ManyNcTokensCstNode extends CstNode {
-  name: "manyNcTokens";
-  children: ManyNcTokensCstChildren;
+export interface BooleanExpressionCstNode extends CstNode {
+  name: "booleanExpression";
+  children: BooleanExpressionCstChildren;
 }
 
-export type ManyNcTokensCstChildren = {
-  ncToken?: NcTokenCstNode[];
+export type BooleanExpressionCstChildren = {
+  OpenBracket: IToken[];
+  valueExpression: ValueExpressionCstNode[];
+  BooleanOperator: IToken[];
+  CloseBracket: IToken[];
+};
+
+export interface ValidTokenCstNode extends CstNode {
+  name: "validToken";
+  children: ValidTokenCstChildren;
+}
+
+export type ValidTokenCstChildren = {
+  macroVariable?: MacroVariableCstNode[];
+  valueAddress?: ValueAddressCstNode[];
+  valueExpression?: ValueExpressionCstNode[];
+  booleanExpression?: BooleanExpressionCstNode[];
+  variableAddress?: VariableAddressCstNode[];
+  Comment?: IToken[];
+  LineNumber?: IToken[];
+  NumericValue?: IToken[];
+  Equals?: IToken[];
+  AdditionOperator?: IToken[];
+  MultiplicationOperator?: IToken[];
+  Brackets?: IToken[];
+  BooleanOperator?: IToken[];
+  ControlFlowKeyword?: IToken[];
 };
 
 export interface ExpressionCstNode extends CstNode {
@@ -178,13 +205,14 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   Program(children: ProgramCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
   Heading(children: HeadingCstChildren, param?: IN): OUT;
-  variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   startOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
   macroVariable(children: MacroVariableCstChildren, param?: IN): OUT;
+  variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   valueAddress(children: ValueAddressCstChildren, param?: IN): OUT;
   variableAddress(children: VariableAddressCstChildren, param?: IN): OUT;
-  ncToken(children: NcTokenCstChildren, param?: IN): OUT;
-  manyNcTokens(children: ManyNcTokensCstChildren, param?: IN): OUT;
+  valueExpression(children: ValueExpressionCstChildren, param?: IN): OUT;
+  booleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
+  validToken(children: ValidTokenCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   multiplicationExpression(
