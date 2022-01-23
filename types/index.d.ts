@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
-import { IToken, TokenType } from "chevrotain";
+import { TokenType } from "chevrotain";
 
 declare global {
   namespace jest {

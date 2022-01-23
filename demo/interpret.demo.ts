@@ -1,6 +1,6 @@
 import { interpret } from "../src/utils";
 
-const { lexingResult, parseErrors, value } = interpret(`%
+const { parseErrors, value } = interpret(`%
 O7999 (MATERIAL VERIFICATION V5)
 
 G10 G90 L2 P1 X1.2 Y3.4 Z5.6 B7.8

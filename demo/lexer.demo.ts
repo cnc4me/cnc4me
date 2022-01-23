@@ -1,4 +1,4 @@
-import lex from "../lexer/lex";
+import { lex } from "../src/utils";
 import { sample1 } from "./samples";
 
 const result = lex(sample1);

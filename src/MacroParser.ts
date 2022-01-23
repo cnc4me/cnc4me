@@ -1,32 +1,22 @@
 import { CstParser } from "chevrotain";
 
 import { allTokens } from "./tokens/allTokens";
-import {
-  CloseBracket,
-  CloseParen,
-  OpenBracket,
-  OpenParen
-} from "./tokens/brackets";
+import { CloseBracket, OpenBracket } from "./tokens/brackets";
 import {
   AdditionOperator,
   BooleanOperator,
-  Brackets,
-  ControlFlowKeyword,
   MultiplicationOperator,
   NumericValue
 } from "./tokens/categories";
 import { GotoLine, If, Then } from "./tokens/controlFlow";
 import {
   Address,
-  Comma,
   Comment,
-  Decimal,
   Equals,
   Integer,
   Minus,
   Newline,
   Percent,
-  PowerFunc,
   ProgramNumber,
   Var
 } from "./tokens/tokens";
@@ -41,15 +31,20 @@ export default class MacroParser extends CstParser {
    * Defining a valid NC program
    */
   public program = this.RULE("program", () => {
-    this.SUBRULE(this.PercentLine);
-    this.SUBRULE(this.ProgramNumberLine);
+    this.CONSUME1(Percent);
+    this.CONSUME1(Newline);
+    this.CONSUME(ProgramNumber);
+    this.OPTION(() => {
+      this.CONSUME(Comment);
+    });
+    this.CONSUME2(Newline);
     this.MANY_SEP({
       SEP: Newline,
       DEF: () => {
-        this.SUBRULE(this.line);
+        this.SUBRULE(this.line, { LABEL: "lines" });
       }
     });
-    this.CONSUME(Percent);
+    this.CONSUME2(Percent);
   });
 
   /**
@@ -57,18 +52,11 @@ export default class MacroParser extends CstParser {
    */
   public line = this.RULE("line", () => {
     this.OR([
-      // { ALT: () => this.SUBRULE(this.gotoExpression) },
-      // { ALT: () => this.SUBRULE(this.bracketValueExpression) },
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
-      // { ALT: () => this.SUBRULE(this.PercentLine) },
-      // { ALT: () => this.CONSUME(Comment) }
+      // { ALT: () => this.CONSUME(Percent) }
     ]);
-    // this.CONSUME(Newline);
-    // this.MANY(() => {
-    //   this.SUBRULE(this.validToken);
-    // });
   });
 
   /**
@@ -147,25 +135,11 @@ export default class MacroParser extends CstParser {
   });
 
   /**
-   * A line with a single `%` followed by a `\n`
-   */
-  private PercentLine = this.RULE("PercentLine", () => {
-    this.CONSUME(Percent);
-    this.CONSUME(Newline);
-  });
-
-  /**
    * A line with an `O` or `:` followed by an integer
    *
    * Optional comment can be consumed as the title
    */
-  private ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
-    this.CONSUME(ProgramNumber);
-    this.OPTION(() => {
-      this.CONSUME(Comment);
-    });
-    this.CONSUME(Newline);
-  });
+  private ProgramHeading = this.RULE("ProgramHeading", () => {});
 
   /**
    * Pound sign `#` followed by an integer representing a variable register
@@ -178,6 +152,9 @@ export default class MacroParser extends CstParser {
     this.CONSUME(Integer);
   });
 
+  /**
+   * Number or Macro variable
+   */
   public ValueLiteral = this.RULE("ValueLiteral", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.VariableLiteral) },

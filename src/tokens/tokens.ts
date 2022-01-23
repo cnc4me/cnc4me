@@ -5,6 +5,7 @@ import {
   MultiplicationOperator,
   NumericValue
 } from "./categories";
+import { matchProgramNumber } from "./tokenMatchers";
 
 export const Plus = createToken({
   name: "Plus",
@@ -91,15 +92,16 @@ export const Address = createToken({
 //   longer_alt: Address
 // });
 
-// export const LineNumber = createToken({
-//   name: "LineNumber",
-//   pattern: /N\d+/,
-//   longer_alt: Address
-// });
+export const LineNumber = createToken({
+  name: "LineNumber",
+  pattern: /N\d+/,
+  longer_alt: Address
+});
 
 export const ProgramNumber = createToken({
   name: "ProgramNumber",
-  pattern: /[O|:]\d+/,
+  // pattern: /[O|:](\d+)/,
+  pattern: matchProgramNumber,
   longer_alt: Address
 });
 
