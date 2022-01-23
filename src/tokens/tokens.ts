@@ -102,7 +102,8 @@ export const ProgramNumber = createToken({
   name: "ProgramNumber",
   // pattern: /[O|:](\d+)/,
   pattern: matchProgramNumber,
-  longer_alt: Address
+  longer_alt: Address,
+  line_breaks: true
 });
 
 export const PowerFunc = createToken({

@@ -41,7 +41,7 @@ export default class MacroParser extends CstParser {
     this.MANY_SEP({
       SEP: Newline,
       DEF: () => {
-        this.SUBRULE(this.line, { LABEL: "lines" });
+        this.SUBRULE(this.line, { LABEL: "Blocks" });
       }
     });
     this.CONSUME2(Percent);

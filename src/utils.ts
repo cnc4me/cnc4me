@@ -1,43 +1,38 @@
-import { ILexingResult, Rule } from "chevrotain";
+import { ILexingError, ILexingResult, Rule } from "chevrotain";
 
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
 import MacroParser, { parser } from "./MacroParser";
 
+type WithLexingErrors<T> = T & {
+  lexErrors: ILexingError[];
+};
+
 interface IParsingResult {
   parser: MacroParser;
-  lexingResult: ILexingResult;
+  lexResult: ILexingResult;
 }
 
+/**
+ * Call `getGAstProductions()` from our MacroParser
+ */
 export function getGAstProductions(): Record<string, Rule> {
   return parser.getGAstProductions();
 }
 
-/**
- * Tokenization
- */
 export function lex(inputText: string): ILexingResult {
-  const lexingResult = MacroLexer.tokenize(inputText);
-
-  // if (lexingResult.errors.length > 0) {
-  //   throw Error("Sad Sad Panda, lexing errors detected");
-  // }
-
-  return lexingResult;
+  return MacroLexer.tokenize(inputText);
 }
 
-/**
- * Using the MacroParser, tokenizes a string and get back
- * an instance of the parser
- */
-export function parse(text: string): IParsingResult {
-  const lexingResult = lex(text);
+export function parse(text: string): WithLexingErrors<IParsingResult> {
+  const lexResult = lex(text);
 
-  parser.input = lexingResult.tokens;
+  parser.input = lexResult.tokens;
 
   return {
     parser,
-    lexingResult
+    lexResult,
+    lexErrors: lexResult.errors
   };
 }
 
@@ -45,7 +40,7 @@ export function parse(text: string): IParsingResult {
  * Running the full interpreter and generate CST
  */
 export function interpret(text: string) {
-  const { parser, lexingResult } = parse(text);
+  const { parser, lexResult, lexErrors } = parse(text);
 
   const cst = parser.program();
 
@@ -53,7 +48,7 @@ export function interpret(text: string) {
 
   return {
     value,
-    lexingResult,
+    lexResult,
     parseErrors: parser.errors
   };
 }

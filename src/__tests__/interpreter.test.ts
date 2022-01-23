@@ -16,11 +16,13 @@ N100M30
 %`;
 
 describe("Fanuc Macro B Interpreter", () => {
-  it("Can extract the program title", () => {
-    const { lexResult, parseErrors } = interpret(NC_SAMPLE);
+  it("Can extract the program number and title", () => {
+    const { value, parseErrors, lexResult } = interpret(NC_SAMPLE);
+    const { groups } = lexResult;
 
     expect(parseErrors).toHaveLength(0);
-    expect(lexResult.groups.comments[0].image).toEqual("(PALLET RUNNER)");
+    expect(value.ProgramNumber.pop().payload).toEqual(9901);
+    expect(groups.comments[0].image).toEqual("(PALLET RUNNER)");
   });
 
   it("Can extract all comments", () => {
@@ -34,7 +36,7 @@ describe("Fanuc Macro B Interpreter", () => {
     expect(groups.comments[2].image).toEqual("(SPINDLE SAFETY)");
   });
 
-  it("can assign a variable a value", () => {
+  it.skip("can assign a variable a value", () => {
     const { value, lexResult } = interpret("#501=12.3456");
 
     console.log(lexResult);
