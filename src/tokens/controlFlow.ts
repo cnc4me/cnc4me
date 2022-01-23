@@ -5,7 +5,7 @@ import { Address } from "./tokens";
 
 export const GotoLine = createToken({
   name: "GotoLine",
-  pattern: /GOTO[1-9][0-9]+?/,
+  pattern: /GOTO[1-9][0-9]*/,
   longer_alt: Address,
   categories: ControlFlowKeyword
 });

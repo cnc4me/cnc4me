@@ -16,6 +16,10 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
+  program(ctx) {
+    return ctx;
+  }
+
   expression(ctx) {
     // visiting an array is equivalent to visiting its first element.
     return this.visit(ctx.additionExpression);

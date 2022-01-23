@@ -1,26 +1,27 @@
-import { ILexingResult, IToken, Rule, tokenMatcher } from "chevrotain";
+import { ILexingResult, Rule } from "chevrotain";
 
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
 import MacroParser, { parser } from "./MacroParser";
-import { Comment } from "./tokens/tokens";
 
-export function unwrapComment(token: IToken) {
-  if (tokenMatcher(token, Comment)) {
-    //
-  }
+interface IParsingResult {
+  parser: MacroParser;
+  lexingResult: ILexingResult;
 }
 
 export function getGAstProductions(): Record<string, Rule> {
   return parser.getGAstProductions();
 }
 
+/**
+ * Tokenization
+ */
 export function lex(inputText: string): ILexingResult {
   const lexingResult = MacroLexer.tokenize(inputText);
 
-  if (lexingResult.errors.length > 0) {
-    throw Error("Sad Sad Panda, lexing errors detected");
-  }
+  // if (lexingResult.errors.length > 0) {
+  //   throw Error("Sad Sad Panda, lexing errors detected");
+  // }
 
   return lexingResult;
 }
@@ -29,50 +30,30 @@ export function lex(inputText: string): ILexingResult {
  * Using the MacroParser, tokenizes a string and get back
  * an instance of the parser
  */
-export function parse(text: string): MacroParser {
-  const { tokens } = MacroLexer.tokenize(text);
+export function parse(text: string): IParsingResult {
+  const lexingResult = lex(text);
 
-  parser.input = tokens;
+  parser.input = lexingResult.tokens;
 
-  return parser;
+  return {
+    parser,
+    lexingResult
+  };
 }
 
+/**
+ * Running the full interpreter and generate CST
+ */
 export function interpret(text: string) {
-  // 1. Tokenize the input.
-  const lexResult = MacroLexer.tokenize(text);
+  const { parser, lexingResult } = parse(text);
 
-  // 2. Parse the Tokens vector.
-  parser.input = lexResult.tokens;
-  const cst = parser.Program();
+  const cst = parser.program();
 
-  // 3. Perform semantics using a CstVisitor.
-  // Note that separation of concerns between the syntactic analysis (parsing) and the semantics.
   const value = interpreter.visit(cst);
 
   return {
     value,
-    lexResult,
+    lexingResult,
     parseErrors: parser.errors
-  };
-}
-
-export function interpretCst(text: string) {
-  return (fn: string) => {
-    // 1. Tokenize the input.
-    const lexResult = MacroLexer.tokenize(text);
-
-    // 2. Parse the Tokens vector.
-    parser.input = lexResult.tokens;
-    const cst = parser[fn]();
-
-    // 3. Perform semantics using a CstVisitor.
-    // Note that separation of concerns between the syntactic analysis (parsing) and the semantics.
-    const value = interpreter.visit(cst);
-
-    return {
-      value,
-      lexResult,
-      parseErrors: parser.errors
-    };
   };
 }

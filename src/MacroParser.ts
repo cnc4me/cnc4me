@@ -40,7 +40,7 @@ export default class MacroParser extends CstParser {
   /**
    * Defining a valid NC program
    */
-  public Program = this.RULE("Program", () => {
+  public program = this.RULE("program", () => {
     this.SUBRULE(this.PercentLine);
     this.SUBRULE(this.ProgramNumberLine);
     this.MANY_SEP({
@@ -49,7 +49,7 @@ export default class MacroParser extends CstParser {
         this.SUBRULE(this.line);
       }
     });
-    // this.CONSUME(Percent);
+    this.CONSUME(Percent);
   });
 
   /**
@@ -57,10 +57,11 @@ export default class MacroParser extends CstParser {
    */
   public line = this.RULE("line", () => {
     this.OR([
-      { ALT: () => this.SUBRULE(this.ifThenExpression) },
+      // { ALT: () => this.SUBRULE(this.gotoExpression) },
+      // { ALT: () => this.SUBRULE(this.bracketValueExpression) },
+      { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
-      // { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
       // { ALT: () => this.SUBRULE(this.PercentLine) },
       // { ALT: () => this.CONSUME(Comment) }
     ]);
@@ -68,27 +69,6 @@ export default class MacroParser extends CstParser {
     // this.MANY(() => {
     //   this.SUBRULE(this.validToken);
     // });
-  });
-
-  /**
-   * Any valid piece of code that can be found in a file
-   */
-  public validToken = this.RULE("validToken", () => {
-    this.OR([
-      { ALT: () => this.CONSUME(Comment) },
-      { ALT: () => this.CONSUME(Equals) },
-      { ALT: () => this.CONSUME(Percent) },
-      { ALT: () => this.CONSUME(Brackets) },
-      { ALT: () => this.CONSUME(BooleanOperator) },
-      { ALT: () => this.CONSUME(AdditionOperator) },
-      { ALT: () => this.CONSUME(MultiplicationOperator) },
-      // { ALT: () => this.CONSUME(Newline) },
-      { ALT: () => this.SUBRULE(this.AddressedValue) }
-
-      // { ALT: () => this.SUBRULE(this.valueExpression) },
-      // { ALT: () => this.SUBRULE(this.gotoExpression) },
-      // { ALT: () => this.SUBRULE(this.booleanExpression) },
-    ]);
   });
 
   /**
@@ -102,80 +82,53 @@ export default class MacroParser extends CstParser {
   public variableAssignment = this.RULE("variableAssignment", () => {
     this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
     this.CONSUME(Equals);
-    this.SUBRULE(this.SignedNumericLiteral, { LABEL: "rhs" });
-    //OR NumericExpression
-  });
-
-  // public valueExpression = this.RULE("valueExpression", () => {
-  //   this.SUBRULE1(this.VarOrNumber);
-  //   this.OR([
-  //     { ALT: () => this.CONSUME(AdditionOperator) },
-  //     { ALT: () => this.CONSUME(MultiplicationOperator) }
-  //   ]);
-  //   this.SUBRULE2(this.VarOrNumber);
-  // });
-
-  // public bracketExpression = this.RULE("bracketExpression", () => {
-  //   this.CONSUME(OpenBracket);
-  //   this.SUBRULE(this.expression);
-  //   this.CONSUME(CloseBracket);
-  // });
-  public booleanExpression = this.RULE("booleanExpression", () => {
-    this.CONSUME(OpenBracket);
-    this.SUBRULE1(this.SignedNumericLiteral);
-    this.CONSUME(BooleanOperator);
-    this.SUBRULE2(this.SignedNumericLiteral);
-    this.CONSUME(CloseBracket);
-  });
-
-  public ifThenExpression = this.RULE("ifThenExpression", () => {
-    this.CONSUME(If);
-    this.CONSUME(OpenBracket);
-    this.SUBRULE1(this.SignedNumericLiteral);
-    this.CONSUME(BooleanOperator);
-    this.SUBRULE2(this.SignedNumericLiteral);
-    this.CONSUME(CloseBracket);
-    this.CONSUME(Then);
-  });
-
-  /**
-   * If/Goto Expression
-   */
-  public gotoExpression = this.RULE("gotoExpression", () => {
-    this.CONSUME(If);
-    this.SUBRULE(this.booleanExpression);
-    this.CONSUME(GotoLine);
-  });
-
-  /**
-   * A single, capital letter followed by a macro variable
-   *
-   * @example H#518, X1.2345, Z1., M1, G90
-   */
-  private AddressedValue = this.RULE("AddressedValue", () => {
-    this.CONSUME(Address);
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
     this.OR([
-      { ALT: () => this.CONSUME(Integer) },
-      { ALT: () => this.CONSUME(Decimal) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+      { ALT: () => this.SUBRULE(this.valueExpression, { LABEL: "rhs" }) },
+      { ALT: () => this.SUBRULE(this.ValueLiteral, { LABEL: "rhs" }) }
     ]);
   });
 
   /**
-   * A single, capital letter followed by a macro variable
-   *
-   * @example H#518, X1.2345, Z1., M1, G90
+   * Wrapping an expression in brackets
    */
-  private SignedNumericLiteral = this.RULE("SignedNumericLiteral", () => {
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
+  public bracketValueExpression = this.RULE("bracketValueExpression", () => {
+    this.CONSUME(OpenBracket);
+    this.SUBRULE(this.valueExpression);
+    this.CONSUME(CloseBracket);
+  });
+
+  /**
+   * Computing a new value with a variable with a value
+   */
+  public valueExpression = this.RULE("valueExpression", () => {
+    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
     this.OR([
-      { ALT: () => this.CONSUME(Integer) },
-      { ALT: () => this.CONSUME(Decimal) }
+      { ALT: () => this.CONSUME(AdditionOperator) },
+      { ALT: () => this.CONSUME(MultiplicationOperator) }
+    ]);
+    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+  });
+
+  /**
+   * Making a comparison between two values
+   */
+  public booleanExpression = this.RULE("booleanExpression", () => {
+    this.SUBRULE1(this.ValueLiteral);
+    this.CONSUME(BooleanOperator);
+    this.SUBRULE2(this.ValueLiteral);
+  });
+
+  /**
+   * If expression to branch control flow
+   */
+  public conditionalExpression = this.RULE("conditionalExpression", () => {
+    this.CONSUME(If);
+    this.CONSUME(OpenBracket);
+    this.SUBRULE(this.booleanExpression);
+    this.CONSUME(CloseBracket);
+    this.OR([
+      { ALT: () => this.CONSUME(Then) },
+      { ALT: () => this.CONSUME(GotoLine) }
     ]);
   });
 
@@ -193,11 +146,19 @@ export default class MacroParser extends CstParser {
     });
   });
 
+  /**
+   * A line with a single `%` followed by a `\n`
+   */
   private PercentLine = this.RULE("PercentLine", () => {
     this.CONSUME(Percent);
     this.CONSUME(Newline);
   });
 
+  /**
+   * A line with an `O` or `:` followed by an integer
+   *
+   * Optional comment can be consumed as the title
+   */
   private ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
     this.CONSUME(ProgramNumber);
     this.OPTION(() => {
@@ -215,6 +176,52 @@ export default class MacroParser extends CstParser {
   private VariableLiteral = this.RULE("VariableLiteral", () => {
     this.CONSUME(Var);
     this.CONSUME(Integer);
+  });
+
+  public ValueLiteral = this.RULE("ValueLiteral", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+    ]);
+  });
+
+  /**
+   * A single, capital letter followed by a macro variable
+   *
+   * @example H#518, X1.2345, Z1., M1, G90
+   */
+  private AddressLiteral = this.RULE("AddressLiteral", () => {
+    this.CONSUME(Address);
+    this.SUBRULE(this.NumericLiteral);
+  });
+
+  /**
+   * A singned, decimal or integer
+   *
+   * @example 5, 1.2345, -1., 3000
+   */
+  private NumericLiteral = this.RULE("NumericLiteral", () => {
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.CONSUME(NumericValue);
+  });
+
+  /**
+   * A single, capital letter followed by a macro variable
+   *
+   * @example H#518, X1.2345, Z1., M1, G90
+   */
+  private AddressedValue = this.RULE("AddressedValue", () => {
+    this.CONSUME(Address);
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.OR([
+      { ALT: () => this.SUBRULE(this.bracketValueExpression) },
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
+      { ALT: () => this.CONSUME(NumericValue) }
+    ]);
   });
 }
 

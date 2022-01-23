@@ -1,6 +1,6 @@
-import { interpret, interpretCst } from "../src/utils";
+import { interpret } from "../src/utils";
 
-const cst = interpretCst(`%
+const { lexingResult, parseErrors, value } = interpret(`%
 O7999 (MATERIAL VERIFICATION V5)
 
 G10 G90 L2 P1 X1.2 Y3.4 Z5.6 B7.8
@@ -19,14 +19,12 @@ G65 P9811 Z#18
 IF[#142 GT #3] GOTO914
 
 G65 P9810 X[#24 + #21] F#9 M1.
+N914
+M30
 %`);
 
-try {
-  const result = cst("Program");
-
-  if (result.parseErrors.length > 0) {
-    result.parseErrors.forEach(e => console.log(e));
-  }
-} catch (e) {
-  console.error(e);
+if (parseErrors.length > 0) {
+  parseErrors.forEach(e => console.log(e));
 }
+
+console.log(value);
