@@ -5,7 +5,7 @@ import {
   MultiplicationOperator,
   NumericValue
 } from "./categories";
-import { matchProgramNumber } from "./tokenMatchers";
+import { matchProgramNumber } from "./matchers";
 
 export const Plus = createToken({
   name: "Plus",

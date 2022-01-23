@@ -1,4 +1,4 @@
-import { toMatchToken } from "../testing/matchers";
+import { toMatchToken } from "../testing/toMatchToken";
 import {
   Address,
   Decimal,
