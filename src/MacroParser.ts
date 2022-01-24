@@ -127,19 +127,13 @@ export default class MacroParser extends CstParser {
    *
    * @example
    * - G43 H12 Z1.0
+   * - X1. Y2. B90.
    */
   private addresses = this.RULE("addresses", () => {
     this.MANY(() => {
       this.SUBRULE(this.AddressedValue);
     });
   });
-
-  /**
-   * A line with an `O` or `:` followed by an integer
-   *
-   * Optional comment can be consumed as the title
-   */
-  private ProgramHeading = this.RULE("ProgramHeading", () => {});
 
   /**
    * Pound sign `#` followed by an integer representing a variable register

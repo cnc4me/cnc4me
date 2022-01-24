@@ -1,7 +1,13 @@
 import { tokenMatcher } from "chevrotain";
 
+import {
+  VariableAssignmentCstChildren,
+  VariableAssignmentCstNode,
+  VariableLiteralCstNode
+} from "../types/fanuc";
 import { parser } from "./MacroParser";
 import { Plus, Product } from "./tokens/tokens";
+import { getImage } from "./utils";
 
 // ----------------- Interpreter -----------------
 // Obtains the default CstVisitor constructor to extend.
@@ -27,8 +33,14 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return this.visit(ctx.additionExpression);
   }
 
-  variableAssignment(ctx) {
+  variableLiteral(ctx: VariableLiteralCstNode) {
+    return parseInt(getImage(ctx.children.Integer));
+  }
+
+  variableAssignment(ctx: VariableAssignmentCstNode) {
     return ctx;
+
+    // return parseInt(getImage(ctx.children.Integer));
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.

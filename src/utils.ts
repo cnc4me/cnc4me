@@ -1,30 +1,22 @@
-import { ILexingError, ILexingResult, Rule } from "chevrotain";
+import { ILexingResult, IToken } from "chevrotain";
 
+import { ParsingResultWithLexingErrors } from "../types/core";
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
-import MacroParser, { parser } from "./MacroParser";
-
-type WithLexingErrors<T> = T & {
-  lexErrors: ILexingError[];
-};
-
-interface IParsingResult {
-  parser: MacroParser;
-  lexResult: ILexingResult;
-}
+import { parser } from "./MacroParser";
+import { Integer } from "./tokens/tokens";
 
 /**
- * Call `getGAstProductions()` from our MacroParser
+ * Tokenize a block of text
  */
-export function getGAstProductions(): Record<string, Rule> {
-  return parser.getGAstProductions();
-}
-
 export function lex(inputText: string): ILexingResult {
   return MacroLexer.tokenize(inputText);
 }
 
-export function parse(text: string): WithLexingErrors<IParsingResult> {
+/**
+ * Parse a given block of text
+ */
+export function parse(text: string): ParsingResultWithLexingErrors {
   const lexResult = lex(text);
 
   parser.input = lexResult.tokens;
@@ -40,7 +32,7 @@ export function parse(text: string): WithLexingErrors<IParsingResult> {
  * Running the full interpreter and generate CST
  */
 export function interpret(text: string) {
-  const { parser, lexResult, lexErrors } = parse(text);
+  const { parser, lexResult } = parse(text);
 
   const cst = parser.program();
 
@@ -51,4 +43,12 @@ export function interpret(text: string) {
     lexResult,
     parseErrors: parser.errors
   };
+}
+
+export function unboxToken(token: IToken | IToken[]) {
+  return Array.isArray(token) ? token[0] : token;
+}
+
+export function getImage(token: IToken | IToken[]) {
+  return unboxToken(token).image;
 }
