@@ -1,27 +1,16 @@
 module.exports = {
   rootDir: ".",
   preset: "ts-jest",
-  // setupFiles: ["<rootDir>/testing/test-helpers.ts"],
-  globals: {
-    parseSource: true // test-helpers.ts
-  },
+  testEnvironment: "node",
   coverageDirectory: "<rootDir>/coverage/",
   collectCoverageFrom: ["<rootDir>/src/**/*.ts"],
   modulePathIgnorePatterns: ["/build"],
   moduleNameMapper: {
     "@/(.*)$": "<rootDir>/src/$1"
   },
-  testEnvironment: "node",
-  testPathIgnorePatterns: [
-    "demo",
-    "build",
-    "node_modules"
-  ],
-  testEnvironment: "node",
+  testPathIgnorePatterns: ["demo", "build", "node_modules"],
   transform: {
     "^.+\\.tsx?$": "ts-jest"
     // "^.+\\.jsx?$": "babel-jest"
   },
-  coverageDirectory: "coverage",
-  collectCoverageFrom: ["src/**/*.{ts,js}", "!src/**/*.d.ts"]
 };

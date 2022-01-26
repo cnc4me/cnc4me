@@ -1,30 +1,31 @@
 import { interpret } from "../src/utils";
 
-const { parseErrors, value } = interpret(`%
-O7999 (MATERIAL VERIFICATION V5)
+const code = `#2=14`;
 
-G10 G90 L2 P1 X1.2 Y3.4 Z5.6 B7.8
-
-N1
-T47M6
-S5000M3
-G0G90G54.1X1.2Y2.3
-
-#2=14
-#1=0.005
-#26=-.2 ( PROBE DEPTH )
-#9=100. ( PROTECTED POSITIONING FEEDRATE )
-
-G65 P9811 Z#18
-IF[#142 GT #3] GOTO914
-
-G65 P9810 X[#24 + #21] F#9 M1.
-N914
-M30
-%`);
+const { result, parseErrors } = interpret(code, "variableAssignment");
 
 if (parseErrors.length > 0) {
   parseErrors.forEach(e => console.log(e));
 }
 
-console.log(value);
+console.log(result);
+
+// for (const line of lines) {
+//   if (line.children?.variableAssignment) {
+//     const va = line.children.variableAssignment[0];
+//     const left = va.children.lhs;
+//     const right = va.children.rhs;
+
+//     const macroVar = left[0].children.Integer[0].image;
+
+//     if (right) {
+//       const { children } = right[0];
+//       if (children) {
+//         const value = children["NumericLiteral"][0].children?.NumericValue;
+//         const num = parseFloat(value[0].image);
+
+//         console.log("#", macroVar, "=", num);
+//       }
+//     }
+//   }
+// }

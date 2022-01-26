@@ -17,11 +17,11 @@ N100M30
 
 describe("Fanuc Macro B Interpreter", () => {
   it("Can extract the program number and title", () => {
-    const { value, parseErrors, lexResult } = interpret(NC_SAMPLE);
+    const { result, parseErrors, lexResult } = interpret(NC_SAMPLE);
     const { groups } = lexResult;
 
     expect(parseErrors).toHaveLength(0);
-    expect(value.ProgramNumber.pop().payload).toEqual(9901);
+    expect(result.ProgramNumber[0].payload).toEqual(9901);
     expect(groups.comments[0].image).toEqual("(PALLET RUNNER)");
   });
 
@@ -37,39 +37,20 @@ describe("Fanuc Macro B Interpreter", () => {
   });
 
   it.skip("can assign a variable a value", () => {
-    const { value, lexResult } = interpret("#501=12.3456");
+    const { result } = interpret("#501=12.3456");
 
-    console.log(lexResult);
-
-    expect(value).toEqual(3);
+    expect(result).toEqual(3);
   });
 
   it.skip("can fetch a variable value for an address", () => {
-    const { value } = interpret("H#518");
+    const { result } = interpret("H#518");
 
-    expect(value).toEqual(3);
+    expect(result).toEqual(3);
   });
 
   it.skip("can calculate an expression", () => {
-    const { value } = interpret("X[1.25 + 2.5]");
+    const { result } = interpret("X[1.25 + 2.5]");
 
-    expect(value).toEqual(3);
-  });
-
-  it.skip("can calculate an expression with operator precedence", () => {
-    // if it was evaluated left to right without taking into account precedence the result would have been 9
-    expect(interpret("1 + 2 * 3").value).toEqual(7);
-  });
-
-  it.skip("can calculate an expression with operator precedence #2", () => {
-    expect(interpret("(1 + 2) * 3").value).toEqual(9);
-  });
-
-  it.skip("can calculate an expression with many parenthesis", () => {
-    expect(interpret("((((666))))").value).toEqual(6);
-  });
-
-  it.skip("can calculate an expression with power function", () => {
-    expect(interpret("1 + power(2,2)").value).toEqual(5);
+    expect(result).toEqual(3);
   });
 });

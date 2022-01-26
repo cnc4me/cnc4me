@@ -1,10 +1,21 @@
-import { ILexingResult, IToken } from "chevrotain";
+import { CstElement, CstNode, ILexingResult, IToken } from "chevrotain";
 
 import { ParsingResultWithLexingErrors } from "../types/core";
+import { ProgramCstNode } from "../types/fanuc";
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
 import { parser } from "./MacroParser";
-import { Integer } from "./tokens/tokens";
+
+export function unbox<T>(arr: T | T[]) {
+  return Array.isArray(arr) ? arr[0] : arr;
+}
+
+/**
+ * Return the image property from a possible token
+ */
+export function getImage(token: IToken | IToken[]) {
+  return unbox(token).image;
+}
 
 /**
  * Tokenize a block of text
@@ -29,26 +40,35 @@ export function parse(text: string): ParsingResultWithLexingErrors {
 }
 
 /**
- * Running the full interpreter and generate CST
+ * Running the full interpreter searching for a valid program
  */
-export function interpret(text: string) {
+export function validate(text: string) {
   const { parser, lexResult } = parse(text);
 
   const cst = parser.program();
 
-  const value = interpreter.visit(cst);
+  const result = interpreter.visit(cst);
 
   return {
-    value,
+    result,
     lexResult,
     parseErrors: parser.errors
   };
 }
 
-export function unboxToken(token: IToken | IToken[]) {
-  return Array.isArray(token) ? token[0] : token;
-}
+/**
+ * Running the full interpreter and generate CST
+ */
+export function interpret(text: string, rule: string) {
+  const { parser, lexResult } = parse(text);
 
-export function getImage(token: IToken | IToken[]) {
-  return unboxToken(token).image;
+  const cst = parser[rule]();
+
+  const result = interpreter.visit(cst);
+
+  return {
+    result,
+    lexResult,
+    parseErrors: parser.errors
+  };
 }

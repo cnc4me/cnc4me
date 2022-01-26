@@ -1,9 +1,11 @@
 import { tokenMatcher } from "chevrotain";
 
 import {
+  NumericLiteralCstChildren,
+  ProgramCstNode,
+  ValueLiteralCstChildren,
   VariableAssignmentCstChildren,
-  VariableAssignmentCstNode,
-  VariableLiteralCstNode
+  VariableLiteralCstChildren
 } from "../types/fanuc";
 import { parser } from "./MacroParser";
 import { Plus, Product } from "./tokens/tokens";
@@ -22,25 +24,59 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
-  program(ctx) {
+  program(ctx: ProgramCstNode) {
     return ctx;
   }
-
-  // ProgramNumber() {}
 
   expression(ctx) {
     // visiting an array is equivalent to visiting its first element.
     return this.visit(ctx.additionExpression);
   }
 
-  variableLiteral(ctx: VariableLiteralCstNode) {
-    return parseInt(getImage(ctx.children.Integer));
+  NumericLiteral(ctx: NumericLiteralCstChildren) {
+    const isNegative = ctx.Minus ? true : false;
+    const image = getImage(ctx.NumericValue[0]);
+
+    /**
+     * @TODO parse int or float here?
+     */
+    return parseFloat(`${isNegative ? "-" : ""}${image}`);
   }
 
-  variableAssignment(ctx: VariableAssignmentCstNode) {
-    return ctx;
+  VariableLiteral(ctx: VariableLiteralCstChildren) {
+    return parseInt(getImage(ctx.Integer));
+  }
 
-    // return parseInt(getImage(ctx.children.Integer));
+  ValueLiteral(ctx: ValueLiteralCstChildren) {
+    // const v = ctx;
+
+    if (ctx.VariableLiteral) {
+      console.log(ctx.VariableLiteral);
+    }
+
+    if (ctx.NumericLiteral) {
+      const value = this.visit(ctx.NumericLiteral);
+
+      return value;
+    }
+
+    // return parseInt(getImage(ctx));
+  }
+
+  variableAssignment(ctx: VariableAssignmentCstChildren) {
+    const result: { macroVar: number; macroVal: number }[] = [];
+    const macroVar = this.visit(ctx.lhs);
+
+    // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
+    if (ctx.rhs) {
+      const macroVal = this.visit(ctx.rhs[0]);
+      const assignment = { macroVar, macroVal };
+
+      // console.log(assignment);
+      result.push(assignment);
+    }
+
+    return result;
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.

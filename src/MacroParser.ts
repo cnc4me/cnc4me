@@ -1,5 +1,6 @@
 import { CstParser } from "chevrotain";
 
+import { ProgramCstNode, VariableAssignmentCstNode } from "../types/fanuc";
 import { allTokens } from "./tokens/allTokens";
 import { CloseBracket, OpenBracket } from "./tokens/brackets";
 import {
@@ -38,13 +39,17 @@ export default class MacroParser extends CstParser {
       this.CONSUME(Comment);
     });
     this.CONSUME2(Newline);
+    this.SUBRULE(this.lines);
+    this.CONSUME2(Percent);
+  });
+
+  public lines = this.RULE("lines", () => {
     this.MANY_SEP({
       SEP: Newline,
       DEF: () => {
-        this.SUBRULE(this.line, { LABEL: "Blocks" });
+        this.SUBRULE(this.line);
       }
     });
-    this.CONSUME2(Percent);
   });
 
   /**
@@ -55,6 +60,7 @@ export default class MacroParser extends CstParser {
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
+      // { ALT: () => this.CONSUME(Comment) }
       // { ALT: () => this.CONSUME(Percent) }
     ]);
   });
@@ -136,17 +142,6 @@ export default class MacroParser extends CstParser {
   });
 
   /**
-   * Pound sign `#` followed by an integer representing a variable register
-   *
-   * @TODO variable expressions!
-   * @example "#518" or "#152"
-   */
-  private VariableLiteral = this.RULE("VariableLiteral", () => {
-    this.CONSUME(Var);
-    this.CONSUME(Integer);
-  });
-
-  /**
    * Number or Macro variable
    */
   public ValueLiteral = this.RULE("ValueLiteral", () => {
@@ -157,13 +152,14 @@ export default class MacroParser extends CstParser {
   });
 
   /**
-   * A single, capital letter followed by a macro variable
+   * Pound sign `#` followed by an integer representing a variable register
    *
-   * @example H#518, X1.2345, Z1., M1, G90
+   * @TODO variable expressions!
+   * @example "#518" or "#152"
    */
-  private AddressLiteral = this.RULE("AddressLiteral", () => {
-    this.CONSUME(Address);
-    this.SUBRULE(this.NumericLiteral);
+  private VariableLiteral = this.RULE("VariableLiteral", () => {
+    this.CONSUME(Var);
+    this.CONSUME(Integer);
   });
 
   /**

@@ -10,7 +10,7 @@ export type ProgramCstChildren = {
   Newline: IToken[];
   ProgramNumber: IToken[];
   Comment?: IToken[];
-  Blocks?: LineCstNode[];
+  Lines?: LineCstNode[];
 };
 
 export interface LineCstNode extends CstNode {
@@ -148,10 +148,16 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   program(children: ProgramCstChildren, param?: IN): OUT;
   line(children: LineCstChildren, param?: IN): OUT;
   variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
-  bracketValueExpression(children: BracketValueExpressionCstChildren, param?: IN): OUT;
+  bracketValueExpression(
+    children: BracketValueExpressionCstChildren,
+    param?: IN
+  ): OUT;
   valueExpression(children: ValueExpressionCstChildren, param?: IN): OUT;
   booleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
-  conditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
+  conditionalExpression(
+    children: ConditionalExpressionCstChildren,
+    param?: IN
+  ): OUT;
   addresses(children: AddressesCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
   ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;

@@ -13,7 +13,9 @@
     "test": "jest",
     "lint": "eslint --ext \".ts\" ./src ./demo",
     "fix": "yarn lint --fix",
+    "types": "yarn gen-dts && yarn fix-dts",
     "gen-dts": "yarn tsnd ./scripts/gen_dts_signatures.ts",
+    "fix-dts": "yarn prettier --write ./types/fanuc.ts",
     "demo:lexer": "yarn tsnd --respawn ./demo/lexer.demo.ts",
     "demo:parser": "yarn tsnd --respawn ./demo/parser.demo.ts",
     "demo:interpreter": "yarn tsnd --respawn ./demo/interpret.demo.ts"
