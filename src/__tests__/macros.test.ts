@@ -1,28 +1,31 @@
-import { parse } from "../utils";
+import { interpret } from "../utils";
 
-describe.skip("Fanuc Macro B Parser", () => {
-  it("Can parse a variable assignment", () => {
-    const { parser } = parse(`#500 = 12.5423`);
-    const node = parser.variableAssignment();
+const code = `#1=10
+#2=0.0025
+#3=4.2345
+#4=-7.349
+#5=#1
+#6=#4+#3
+#7=#1-#2
+#8=#1+#1
+#9=#1*#5
+#10=#3/#2`;
 
-    expect(parser.errors).toHaveLength(0);
+describe("Fanuc Macro B Interpreter", () => {
+  const { interpreter, parseErrors } = interpret(code, "lines");
+  const result = interpreter.getMacros();
 
-    expect(node.name).toEqual("variableAssignment");
-    expect(node.children).toHaveLength(3);
-    expect(node.children).toMatchObject({
-      children: {
-        macroVariable: expect.anything(),
-        Equals: expect.anything(),
-        NumericValue: expect.anything()
-      }
-    });
+  it("can run with no errors", () => {
+    expect(parseErrors).toHaveLength(0);
   });
 
-  it.skip("Can will error with a bad variable assignment", () => {
-    const { parser } = parse(`#500 = #`);
-
-    const node = parser.variableAssignment();
-
-    expect(parser.errors).toHaveLength(1);
+  it("can interpret variable assignments", () => {
+    expect(result.get(1)).toBe(10);
+    expect(result.get(2)).toBe(0.0025);
+    expect(result.get(3)).toBe(4.2345);
+    expect(result.get(4)).toBe(-7.349);
+    expect(result.get(5)).toBe(10);
   });
+
+  it("Can interpret basic variable expressions", () => {});
 });

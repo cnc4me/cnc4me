@@ -36,7 +36,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
-  public getMacros() {
+  public getMacros(): Map<number, number> {
     return this.vars._vars;
   }
 
