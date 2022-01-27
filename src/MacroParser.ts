@@ -57,11 +57,11 @@ export default class MacroParser extends CstParser {
    */
   public line = this.RULE("line", () => {
     this.OR([
+      { ALT: () => this.CONSUME(Percent) },
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
       // { ALT: () => this.CONSUME(Comment) }
-      // { ALT: () => this.CONSUME(Percent) }
     ]);
   });
 

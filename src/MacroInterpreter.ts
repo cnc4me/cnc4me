@@ -4,12 +4,24 @@ import {
   NumericLiteralCstChildren,
   ProgramCstNode,
   ValueLiteralCstChildren,
+  ValueLiteralCstNode,
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
 import { parser } from "./MacroParser";
+import MacroVariables from "./MacroVariables";
 import { Plus, Product } from "./tokens/tokens";
 import { getImage } from "./utils";
+
+interface MacroVariableAssignmentValue {
+  macroVar: number;
+  macroVal: number;
+}
+
+interface VariableLookup {
+  register: number;
+  value?: number;
+}
 
 // ----------------- Interpreter -----------------
 // Obtains the default CstVisitor constructor to extend.
@@ -19,10 +31,19 @@ const BaseCstVisitorWithDefaults =
 
 // All our semantics go into the visitor, completly separated from the grammar.
 export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
+  vars: MacroVariables;
+  varStack: MacroVariables[];
+
   constructor() {
     super();
+    this.vars = new MacroVariables(1, 999);
+    this.varStack = [MacroVariables.LocalSet()];
     this.validateVisitor();
   }
+
+  // public getSetVars() {
+  //   const entries = this.vars._vars.entries();
+  // }
 
   program(ctx: ProgramCstNode) {
     return ctx;
@@ -43,15 +64,20 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return parseFloat(`${isNegative ? "-" : ""}${image}`);
   }
 
-  VariableLiteral(ctx: VariableLiteralCstChildren) {
-    return parseInt(getImage(ctx.Integer));
+  VariableLiteral(ctx: VariableLiteralCstChildren): VariableLookup {
+    const register = parseInt(getImage(ctx.Integer));
+
+    return {
+      register,
+      value: this.vars.read(register)
+    };
   }
 
   ValueLiteral(ctx: ValueLiteralCstChildren) {
-    // const v = ctx;
-
     if (ctx.VariableLiteral) {
-      console.log(ctx.VariableLiteral);
+      const macro: VariableLookup = this.visit(ctx.VariableLiteral);
+
+      return macro.value;
     }
 
     if (ctx.NumericLiteral) {
@@ -59,24 +85,17 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
 
       return value;
     }
-
-    // return parseInt(getImage(ctx));
   }
 
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const result: { macroVar: number; macroVal: number }[] = [];
-    const macroVar = this.visit(ctx.lhs);
+    const macroVar: VariableLookup = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
     if (ctx.rhs) {
-      const macroVal = this.visit(ctx.rhs[0]);
-      const assignment = { macroVar, macroVal };
+      const value = this.visit(ctx.rhs);
 
-      // console.log(assignment);
-      result.push(assignment);
+      this.vars.write(macroVar.register, value);
     }
-
-    return result;
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.

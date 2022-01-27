@@ -1,7 +1,7 @@
 import { F } from "../src/MacroConstants";
-import MacroVariableStore from "../src/memory/MacroVariables";
+import MacroVariableStore from "../src/MacroVariables";
 
-const locals = MacroVariableStore.createLocalSet();
+const locals = MacroVariableStore.LocalSet();
 const probing = new MacroVariableStore(100, 199);
 
 locals.write(2, 1.2314);

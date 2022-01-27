@@ -68,6 +68,8 @@ export function interpret(text: string, rule: string) {
 
   return {
     result,
+    parser,
+    interpreter,
     lexResult,
     parseErrors: parser.errors
   };
