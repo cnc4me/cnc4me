@@ -77,19 +77,45 @@ export default class MacroParser extends CstParser {
     this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
     this.CONSUME(Equals);
     this.OR([
-      { ALT: () => this.SUBRULE(this.valueExpression, { LABEL: "rhs" }) },
+      // This was the working rule
+      // { ALT: () => this.SUBRULE(this.valueExpression, { LABEL: "rhs" }) },
+      // Testing this out...
+      { ALT: () => this.SUBRULE(this.expression, { LABEL: "rhs" }) },
       { ALT: () => this.SUBRULE(this.ValueLiteral, { LABEL: "rhs" }) }
     ]);
   });
 
   /**
-   * Wrapping an expression in brackets
+   * Computing a new value with a variable with a value
    */
-  public bracketValueExpression = this.RULE("bracketValueExpression", () => {
+  public expression = this.RULE("expression", () => {
+    this.OR([
+      // { ALT: () => this.SUBRULE(this.valueExpression) },
+      { ALT: () => this.SUBRULE(this.additionExpression) },
+      { ALT: () => this.SUBRULE(this.multiplicationExpression) }
+    ]);
+  });
+
+  public bracketExpression = this.RULE("bracketExpression", () => {
     this.CONSUME(OpenBracket);
-    this.SUBRULE(this.valueExpression);
+    this.SUBRULE(this.expression);
     this.CONSUME(CloseBracket);
   });
+
+  public additionExpression = this.RULE("additionExpression", () => {
+    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
+    this.CONSUME(AdditionOperator);
+    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+  });
+
+  public multiplicationExpression = this.RULE(
+    "multiplicationExpression",
+    () => {
+      this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
+      this.CONSUME(MultiplicationOperator);
+      this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+    }
+  );
 
   /**
    * Computing a new value with a variable with a value
@@ -185,7 +211,7 @@ export default class MacroParser extends CstParser {
       this.CONSUME(Minus);
     });
     this.OR([
-      { ALT: () => this.SUBRULE(this.bracketValueExpression) },
+      { ALT: () => this.SUBRULE(this.bracketExpression) },
       { ALT: () => this.SUBRULE(this.VariableLiteral) },
       { ALT: () => this.CONSUME(NumericValue) }
     ]);

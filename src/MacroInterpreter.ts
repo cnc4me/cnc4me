@@ -3,8 +3,8 @@ import { tokenMatcher } from "chevrotain";
 import {
   NumericLiteralCstChildren,
   ProgramCstNode,
+  ValueExpressionCstChildren,
   ValueLiteralCstChildren,
-  ValueLiteralCstNode,
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
@@ -12,11 +12,6 @@ import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
 import { Plus, Product } from "./tokens/tokens";
 import { getImage } from "./utils";
-
-interface MacroVariableAssignmentValue {
-  macroVar: number;
-  macroVal: number;
-}
 
 interface VariableLookup {
   register: number;
@@ -36,9 +31,13 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
 
   constructor() {
     super();
-    this.vars = new MacroVariables(1, 999);
-    this.varStack = [MacroVariables.LocalSet()];
+    this.vars = new MacroVariables(1, 10);
+    this.varStack = [];
     this.validateVisitor();
+  }
+
+  public getMacros() {
+    return this.vars._vars;
   }
 
   // public getSetVars() {
@@ -51,7 +50,13 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
 
   expression(ctx) {
     // visiting an array is equivalent to visiting its first element.
-    return this.visit(ctx.additionExpression);
+    if (ctx.additionExpression) {
+      return this.visit(ctx.additionExpression);
+    }
+
+    if (ctx.multiplicationExpression) {
+      return this.visit(ctx.multiplicationExpression);
+    }
   }
 
   NumericLiteral(ctx: NumericLiteralCstChildren) {
