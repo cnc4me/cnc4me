@@ -15,15 +15,15 @@ N90G91G28Z0.1
 N100M30
 %`;
 
-describe.skip("Fanuc Macro B Interpreter", () => {
+describe("Program Validator", () => {
   const { result, parseErrors, lexResult } = validate(NC_SAMPLE);
   const { groups } = lexResult;
 
-  it("will validate a program with no errors", () => {
+  it.skip("will validate a program with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 
-  it("Can extract the program number and title", () => {
+  it.skip("Can extract the program number and title", () => {
     expect(result.ProgramNumber[0].payload).toEqual(9901);
     expect(groups.comments[0].image).toEqual("(PALLET RUNNER)");
   });
