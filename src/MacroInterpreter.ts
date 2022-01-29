@@ -66,11 +66,15 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     const rads = degreeToRadian(value);
 
     const result = match(func)
+      .with("LN", () => Math.log(value))
       .with("SIN", () => Math.sin(rads))
       .with("COS", () => Math.cos(rads))
       .with("TAN", () => Math.tan(rads))
       .with("ABS", () => Math.abs(value))
+      .with("FUP", () => Math.ceil(value))
       .with("SQRT", () => Math.sqrt(value))
+      .with("FIX", () => Math.floor(value))
+      .with("ROUND", () => Math.round(value))
       .otherwise(() => NaN);
 
     return round(result);

@@ -1,0 +1,21 @@
+{
+  "rootDir": ".",
+  "preset": "ts-jest",
+  "testEnvironment": "node",
+  "coverageDirectory": "<rootDir>/coverage/",
+  "collectCoverageFrom": [
+    "<rootDir>/src/**/*.ts"
+  ],
+  "coverageReporters": [
+    "text-summary",
+    "html"
+  ],
+  "modulePathIgnorePatterns": [
+    "/build"
+  ],
+  "testPathIgnorePatterns": [
+    "demo",
+    "build",
+    "node_modules"
+  ]
+}
