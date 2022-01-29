@@ -4,7 +4,7 @@ function range(start, stop) {
 }
 
 export class MacroVariables {
-  _vars: Map<number, number | typeof NaN>;
+  private _vars: Map<number, number | typeof NaN>;
 
   static LocalSet() {
     return new MacroVariables(1, 33);
@@ -14,6 +14,10 @@ export class MacroVariables {
     this._vars = new Map();
 
     range(start, end).forEach(i => this.init(i));
+  }
+
+  getMap() {
+    return this._vars;
   }
 
   read(key: number) {
@@ -30,10 +34,6 @@ export class MacroVariables {
 
   private init(key: number) {
     return this.write(key, NaN);
-  }
-
-  private isNumber(n: unknown): boolean {
-    return typeof n === "number" && !isNaN(n) && isFinite(n);
   }
 }
 

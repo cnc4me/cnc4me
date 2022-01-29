@@ -14,6 +14,7 @@ import {
   Address,
   Comment,
   Equals,
+  Functions,
   Integer,
   Minus,
   Newline,
@@ -77,29 +78,17 @@ export default class MacroParser extends CstParser {
     this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
     this.CONSUME(Equals);
     this.OR([
-      // This was the working rule
-      // { ALT: () => this.SUBRULE(this.valueExpression, { LABEL: "rhs" }) },
-      // Testing this out...
       { ALT: () => this.SUBRULE(this.expression, { LABEL: "rhs" }) },
       { ALT: () => this.SUBRULE(this.ValueLiteral, { LABEL: "rhs" }) }
     ]);
   });
 
-  /**
-   * Computing a new value with a variable with a value
-   */
   public expression = this.RULE("expression", () => {
     this.OR([
-      // { ALT: () => this.SUBRULE(this.valueExpression) },
-      { ALT: () => this.SUBRULE(this.additionExpression) },
-      { ALT: () => this.SUBRULE(this.multiplicationExpression) }
+      { ALT: () => this.SUBRULE(this.functionExpression) },
+      { ALT: () => this.SUBRULE(this.multiplicationExpression) },
+      { ALT: () => this.SUBRULE(this.additionExpression) }
     ]);
-  });
-
-  public bracketExpression = this.RULE("bracketExpression", () => {
-    this.CONSUME(OpenBracket);
-    this.SUBRULE(this.expression);
-    this.CONSUME(CloseBracket);
   });
 
   public additionExpression = this.RULE("additionExpression", () => {
@@ -117,18 +106,18 @@ export default class MacroParser extends CstParser {
     }
   );
 
-  /**
-   * Computing a new value with a variable with a value
-   */
-  public valueExpression = this.RULE("valueExpression", () => {
-    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
-    this.OR([
-      { ALT: () => this.CONSUME(AdditionOperator) },
-      { ALT: () => this.CONSUME(MultiplicationOperator) }
-    ]);
-    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+  public functionExpression = this.RULE("functionExpression", () => {
+    this.CONSUME(Functions);
+    this.CONSUME(OpenBracket);
+    this.SUBRULE(this.ValueLiteral);
+    this.CONSUME(CloseBracket);
   });
 
+  public bracketExpression = this.RULE("bracketExpression", () => {
+    this.CONSUME(OpenBracket);
+    this.SUBRULE(this.expression);
+    this.CONSUME(CloseBracket);
+  });
   /**
    * Making a comparison between two values
    */
@@ -153,6 +142,18 @@ export default class MacroParser extends CstParser {
   });
 
   /**
+   * Computing a new value with a variable with a value
+   */
+  public valueExpression = this.RULE("valueExpression", () => {
+    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
+    this.OR([
+      { ALT: () => this.CONSUME(AdditionOperator) },
+      { ALT: () => this.CONSUME(MultiplicationOperator) }
+    ]);
+    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+  });
+
+  /**
    * A repeated sequence of addressed values
    *
    * Any typical block of NC code would satisfy this rule
@@ -165,39 +166,6 @@ export default class MacroParser extends CstParser {
     this.MANY(() => {
       this.SUBRULE(this.AddressedValue);
     });
-  });
-
-  /**
-   * Number or Macro variable
-   */
-  public ValueLiteral = this.RULE("ValueLiteral", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.VariableLiteral) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) }
-    ]);
-  });
-
-  /**
-   * Pound sign `#` followed by an integer representing a variable register
-   *
-   * @TODO variable expressions!
-   * @example "#518" or "#152"
-   */
-  private VariableLiteral = this.RULE("VariableLiteral", () => {
-    this.CONSUME(Var);
-    this.CONSUME(Integer);
-  });
-
-  /**
-   * A singned, decimal or integer
-   *
-   * @example 5, 1.2345, -1., 3000
-   */
-  private NumericLiteral = this.RULE("NumericLiteral", () => {
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
-    this.CONSUME(NumericValue);
   });
 
   /**
@@ -215,6 +183,39 @@ export default class MacroParser extends CstParser {
       { ALT: () => this.SUBRULE(this.VariableLiteral) },
       { ALT: () => this.CONSUME(NumericValue) }
     ]);
+  });
+
+  /**
+   * Number or Macro variable
+   */
+  public ValueLiteral = this.RULE("ValueLiteral", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+    ]);
+  });
+
+  /**
+   * A signed, decimal or integer
+   *
+   * @example 5, 1.2345, -1., 3000
+   */
+  private NumericLiteral = this.RULE("NumericLiteral", () => {
+    this.OPTION(() => {
+      this.CONSUME(Minus);
+    });
+    this.CONSUME(NumericValue);
+  });
+
+  /**
+   * Pound sign `#` followed by an integer representing a variable register
+   *
+   * @TODO variable expressions!
+   * @example "#518" or "#152"
+   */
+  private VariableLiteral = this.RULE("VariableLiteral", () => {
+    this.CONSUME(Var);
+    this.CONSUME(Integer);
   });
 }
 

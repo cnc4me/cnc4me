@@ -106,14 +106,8 @@ export const ProgramNumber = createToken({
   line_breaks: true
 });
 
-export const PowerFunc = createToken({
-  name: "PowerFunc",
-  pattern: /POW/,
-  longer_alt: Address
-});
-
-export const BuiltinFn = createToken({
-  name: "BuiltInFunction",
+export const Functions = createToken({
+  name: "Functions",
   pattern: /SIN|ASIN|COS|ACOS|TAN|ATAN|SQRT|ABS|BIN|BCD|ROUND|FIX|FUP|LN|EXP/,
   longer_alt: Address
 });

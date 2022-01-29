@@ -1,12 +1,21 @@
-import { CstElement, CstNode, ILexingResult, IToken } from "chevrotain";
+import { ILexingResult, IToken } from "chevrotain";
 
 import { ParsingResultWithLexingErrors } from "../types/core";
-import { ProgramCstNode } from "../types/fanuc";
 import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
 import { parser } from "./MacroParser";
 
-export function unbox<T>(arr: T | T[]) {
+export function round(num: number, decimals = 5): number {
+  const factorOfTen = Math.pow(10, decimals);
+
+  return Math.round(num * factorOfTen) / factorOfTen;
+}
+
+export function degreeToRadian(degree: number) {
+  return (degree * Math.PI) / 180;
+}
+
+export function unbox<T>(arr: T | T[]): T {
   return Array.isArray(arr) ? arr[0] : arr;
 }
 

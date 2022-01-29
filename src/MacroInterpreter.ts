@@ -1,9 +1,15 @@
 import { tokenMatcher } from "chevrotain";
+import { match } from "ts-pattern";
 
+import { VariableLookup } from "../types/core";
 import {
+  AdditionExpressionCstChildren,
+  BracketExpressionCstChildren,
+  ExpressionCstChildren,
+  FunctionExpressionCstChildren,
+  MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
   ProgramCstNode,
-  ValueExpressionCstChildren,
   ValueLiteralCstChildren,
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
@@ -11,12 +17,7 @@ import {
 import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
 import { Plus, Product } from "./tokens/tokens";
-import { getImage } from "./utils";
-
-interface VariableLookup {
-  register: number;
-  value?: number;
-}
+import { degreeToRadian, getImage, round } from "./utils";
 
 // ----------------- Interpreter -----------------
 // Obtains the default CstVisitor constructor to extend.
@@ -36,19 +37,15 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
-  public getMacros(): Map<number, number> {
-    return this.vars._vars;
+  getMacros() {
+    return this.vars.getMap();
   }
-
-  // public getSetVars() {
-  //   const entries = this.vars._vars.entries();
-  // }
 
   program(ctx: ProgramCstNode) {
     return ctx;
   }
 
-  expression(ctx) {
+  expression(ctx: ExpressionCstChildren) {
     // visiting an array is equivalent to visiting its first element.
     if (ctx.additionExpression) {
       return this.visit(ctx.additionExpression);
@@ -57,16 +54,31 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     if (ctx.multiplicationExpression) {
       return this.visit(ctx.multiplicationExpression);
     }
+
+    if (ctx.functionExpression) {
+      return this.visit(ctx.functionExpression);
+    }
   }
 
-  NumericLiteral(ctx: NumericLiteralCstChildren) {
-    const isNegative = ctx.Minus ? true : false;
-    const image = getImage(ctx.NumericValue[0]);
+  functionExpression(ctx: FunctionExpressionCstChildren) {
+    const func = getImage(ctx.Functions);
+    const value = this.visit(ctx.ValueLiteral);
+    const rads = degreeToRadian(value);
 
-    /**
-     * @TODO parse int or float here?
-     */
-    return parseFloat(`${isNegative ? "-" : ""}${image}`);
+    const result = match(func)
+      .with("SIN", () => Math.sin(rads))
+      .with("COS", () => Math.cos(rads))
+      .with("TAN", () => Math.tan(rads))
+      .otherwise(() => NaN);
+
+    return round(result);
+  }
+
+  NumericLiteral(ctx: NumericLiteralCstChildren): number {
+    const image = getImage(ctx.NumericValue);
+    const value = `${ctx.Minus ? "-" : ""}${image}`;
+
+    return image.includes(".") ? round(parseFloat(value)) : parseInt(value);
   }
 
   VariableLiteral(ctx: VariableLiteralCstChildren): VariableLookup {
@@ -104,7 +116,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.
-  additionExpression(ctx) {
+  additionExpression(ctx: AdditionExpressionCstChildren) {
     let result = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
@@ -123,10 +135,10 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
       });
     }
 
-    return result;
+    return round(result);
   }
 
-  multiplicationExpression(ctx) {
+  multiplicationExpression(ctx: MultiplicationExpressionCstChildren) {
     let result = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
@@ -139,13 +151,12 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
         if (tokenMatcher(operator, Product)) {
           result *= rhsValue;
         } else {
-          // Division
           result /= rhsValue;
         }
       });
     }
 
-    return result;
+    return round(result);
   }
 
   atomicExpression(ctx) {
@@ -158,7 +169,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     }
   }
 
-  bracketExpression(ctx) {
+  bracketExpression(ctx: BracketExpressionCstChildren) {
     // The ctx will also contain the bracket tokens, but we don't care about those
     // in the context of calculating the result.
     return this.visit(ctx.expression);
@@ -168,6 +179,11 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     const base = this.visit(ctx.base);
     const exponent = this.visit(ctx.exponent);
     return Math.pow(base, exponent);
+  }
+
+  sinFunction(ctx) {
+    const value = this.visit(ctx.ValueLiteral);
+    return Math.sin(value);
   }
 }
 

@@ -10,3 +10,8 @@ export interface IParsingResult {
   parser: MacroParser;
   lexResult: ILexingResult;
 }
+
+export interface VariableLookup {
+  register: number;
+  value?: number;
+}
