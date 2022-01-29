@@ -11,11 +11,11 @@ const code = `#1=10
 #9=#1*#5
 #10=#3/#2`;
 
-describe("Fanuc Macro B Interpreter", () => {
+describe("Interpreter", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

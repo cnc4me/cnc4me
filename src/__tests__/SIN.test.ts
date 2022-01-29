@@ -8,11 +8,11 @@ const code = `
 #5=SIN[60]
 #6=SIN[90]`;
 
-describe("Interpreting SIN[] function calls", () => {
+describe("Function: SIN[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

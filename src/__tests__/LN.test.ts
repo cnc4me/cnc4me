@@ -6,11 +6,11 @@ const code = `
 #3=LN[49]
 #4=LN[144]`;
 
-describe("Interpreting LN[] function calls", () => {
+describe("Function: LN[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

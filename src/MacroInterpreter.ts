@@ -1,5 +1,5 @@
 import { tokenMatcher } from "chevrotain";
-import { match } from "ts-pattern";
+import { __, match } from "ts-pattern";
 
 import { VariableLookup } from "../types/core";
 import {
@@ -17,7 +17,7 @@ import {
 import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
 import { Plus, Product } from "./tokens/tokens";
-import { degreeToRadian, getImage, round } from "./utils";
+import { degreeToRadian, getImage, radianToDegree, round } from "./utils";
 
 // ----------------- Interpreter -----------------
 // Obtains the default CstVisitor constructor to extend.
@@ -46,7 +46,6 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   expression(ctx: ExpressionCstChildren) {
-    // visiting an array is equivalent to visiting its first element.
     if (ctx.additionExpression) {
       return this.visit(ctx.additionExpression);
     }
@@ -61,20 +60,23 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   functionExpression(ctx: FunctionExpressionCstChildren) {
-    const func = getImage(ctx.Functions);
+    const func = getImage(ctx.BuiltinFunctions);
     const value = this.visit(ctx.ValueLiteral);
-    const rads = degreeToRadian(value);
 
+    // prettier-ignore
     const result = match(func)
-      .with("LN", () => Math.log(value))
-      .with("SIN", () => Math.sin(rads))
-      .with("COS", () => Math.cos(rads))
-      .with("TAN", () => Math.tan(rads))
-      .with("ABS", () => Math.abs(value))
-      .with("FUP", () => Math.ceil(value))
-      .with("SQRT", () => Math.sqrt(value))
-      .with("FIX", () => Math.floor(value))
+      .with("LN",    () => Math.log(value))
+      .with("ABS",   () => Math.abs(value))
+      .with("FUP",   () => Math.ceil(value))
+      .with("SQRT",  () => Math.sqrt(value))
+      .with("FIX",   () => Math.floor(value))
       .with("ROUND", () => Math.round(value))
+      .with("SIN",   () => Math.sin(degreeToRadian(value)))
+      .with("COS",   () => Math.cos(degreeToRadian(value)))
+      .with("TAN",   () => Math.tan(degreeToRadian(value)))
+      .with("ASIN",  () => radianToDegree(Math.asin(value)))
+      .with("ACOS",  () => radianToDegree(Math.acos(value)))
+      .with("ATAN",  () => radianToDegree(Math.atan(value)))
       .otherwise(() => NaN);
 
     return round(result);

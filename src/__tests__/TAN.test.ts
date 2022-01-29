@@ -8,11 +8,11 @@ const code = `
 #5=TAN[60]
 #6=TAN[135]`;
 
-describe("Interpreting TAN[] function calls", () => {
+describe("Function: TAN[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

@@ -11,8 +11,12 @@ export function round(num: number, decimals = 5): number {
   return Math.round(num * factorOfTen) / factorOfTen;
 }
 
-export function degreeToRadian(degree: number) {
-  return (degree * Math.PI) / 180;
+export function degreeToRadian(degrees: number) {
+  return (degrees * Math.PI) / 180;
+}
+
+export function radianToDegree(radians: number) {
+  return (180 / Math.PI) * radians;
 }
 
 export function unbox<T>(arr: T | T[]): T {

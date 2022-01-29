@@ -4,11 +4,11 @@ const code = `
 #1=ABS[5]
 #2=ABS[-5]`;
 
-describe("Interpreting ABS[] function calls", () => {
+describe("Function: ABS[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

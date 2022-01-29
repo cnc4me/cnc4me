@@ -6,11 +6,11 @@ const code = `
 #3=FUP[0.001]
 #4=FUP[9.004]`;
 
-describe("Interpreting FUP[] function calls", () => {
+describe("Function: FUP[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

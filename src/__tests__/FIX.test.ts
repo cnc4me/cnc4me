@@ -6,11 +6,11 @@ const code = `
 #3=FIX[0.001]
 #4=FIX[100]`;
 
-describe("Interpreting FIX[] function calls", () => {
+describe("Function: FIX[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

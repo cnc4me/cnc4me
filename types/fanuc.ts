@@ -85,7 +85,7 @@ export interface FunctionExpressionCstNode extends CstNode {
 }
 
 export type FunctionExpressionCstChildren = {
-  Functions: IToken[];
+  BuiltinFunctions: IToken[];
   OpenBracket: IToken[];
   ValueLiteral: ValueLiteralCstNode[];
   CloseBracket: IToken[];

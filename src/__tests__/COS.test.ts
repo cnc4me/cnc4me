@@ -8,11 +8,11 @@ const code = `
 #5=COS[60]
 #6=COS[90]`;
 
-describe("Interpreting COS[] function calls", () => {
+describe("Function: COS[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

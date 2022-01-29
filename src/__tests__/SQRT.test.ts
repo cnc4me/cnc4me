@@ -7,11 +7,11 @@ const code = `
 #4=SQRT[144]
 #5=SQRT[3173]`;
 
-describe("Interpreting SQRT[] function calls", () => {
+describe("Function: SQRT[]", () => {
   const { interpreter, parseErrors } = interpret(code, "lines");
   const result = interpreter.getMacros();
 
-  it("can run with no errors", () => {
+  it("parses with no errors", () => {
     expect(parseErrors).toHaveLength(0);
   });
 

@@ -12,9 +12,9 @@ import {
 import { GotoLine, If, Then } from "./tokens/controlFlow";
 import {
   Address,
+  BuiltinFunctions,
   Comment,
   Equals,
-  Functions,
   Integer,
   Minus,
   Newline,
@@ -59,10 +59,10 @@ export default class MacroParser extends CstParser {
   public line = this.RULE("line", () => {
     this.OR([
       { ALT: () => this.CONSUME(Percent) },
+      { ALT: () => this.CONSUME(Comment) },
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
-      // { ALT: () => this.CONSUME(Comment) }
     ]);
   });
 
@@ -107,7 +107,7 @@ export default class MacroParser extends CstParser {
   );
 
   public functionExpression = this.RULE("functionExpression", () => {
-    this.CONSUME(Functions);
+    this.CONSUME(BuiltinFunctions);
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.ValueLiteral);
     this.CONSUME(CloseBracket);

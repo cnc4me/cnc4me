@@ -18,12 +18,12 @@ import {
 import { Do, GotoLine, If, Then, While } from "./controlFlow";
 import {
   Address,
+  BuiltinFunctions,
   Comma,
   Comment,
   Decimal,
   Divide,
   Equals,
-  Functions,
   Integer,
   // LineNumber,
   Minus,
@@ -56,20 +56,18 @@ export const allTokens = [
   If,
   Do,
   Then,
-  GotoLine,
   While,
-  Functions,
+  GotoLine,
+  BuiltinFunctions,
   Comment,
-  Percent,
   Var,
   Equals,
-  // Dot,
   Comma,
   Divide,
   Product,
   Minus,
   Plus,
-  // NumberLiteral,
+  Percent,
   Address,
   Decimal,
   Integer,
@@ -78,7 +76,9 @@ export const allTokens = [
   OpenBracket,
   CloseBracket,
 
-  // Categories
+  /**
+   * Categories
+   */
   ControlFlowKeyword,
   Brackets,
   NumericValue,

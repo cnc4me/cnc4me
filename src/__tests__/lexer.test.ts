@@ -12,7 +12,7 @@ import { lex } from "../utils";
 
 expect.extend({ toMatchToken });
 
-describe("Fanuc Macro B Lexer", () => {
+describe("Lexer", () => {
   it("Can lex a G10 line", () => {
     const inputText = `G10 G90 L2 P1 X1.2 Y3.4 Z-5.6 B90.`;
     const { tokens, errors } = lex(inputText);
