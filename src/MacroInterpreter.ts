@@ -69,6 +69,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
       .with("SIN", () => Math.sin(rads))
       .with("COS", () => Math.cos(rads))
       .with("TAN", () => Math.tan(rads))
+      .with("ABS", () => Math.abs(value))
       .with("SQRT", () => Math.sqrt(value))
       .otherwise(() => NaN);
 
