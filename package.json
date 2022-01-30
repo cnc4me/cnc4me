@@ -5,6 +5,9 @@
   "author": "Kevin Hill <kevinkhill@pm.me> (https://github.com/kevinkhill)",
   "license": "MIT",
   "private": true,
+  "main": "./src/index.ts",
+  "module": "./src/index.ts",
+  "types": "./src/types/index.ts",
   "repository": {
     "type": "git",
     "url": "https://github.com/kevinkhill/fanuc-macro-b.git"

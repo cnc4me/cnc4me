@@ -1,4 +1,4 @@
-import { interpret } from "../src/utils";
+import { evaluate } from "../src/utils";
 
 const code = `
 #1=100*[5/25]
@@ -12,12 +12,19 @@ const code = `
 #9=[1+[2*[3]]]+[[6*2]+2]
 #10=5+2*3+5*[2+2]*2+4`;
 
-const { interpreter, parseErrors } = interpret(code, "lines");
+const { macros } = evaluate(code);
 
-if (parseErrors.length > 0) {
-  parseErrors.forEach(e => console.log(e));
-}
+console.log(macros);
 
-const result = interpreter.getMacros();
-
-console.log(result);
+// Map(10) {
+//   1 => 20,
+//   2 => 8,
+//   3 => 2,
+//   4 => 15,
+//   5 => 30,
+//   6 => 10,
+//   7 => 16,
+//   8 => 32,
+//   9 => 21,
+//   10 => 55
+// }

@@ -28,7 +28,7 @@ export class MacroVariables {
     return this._vars.set(key, value);
   }
 
-  isSet(key: number): boolean {
+  has(key: number): boolean {
     return this._vars.has(key);
   }
 
