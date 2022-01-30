@@ -38,6 +38,13 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
+  getMacro(register: number): VariableLookup {
+    return {
+      register,
+      value: this.vars.getMap().get(register) ?? NaN
+    };
+  }
+
   getMacros() {
     return this.vars.getMap();
   }
@@ -83,10 +90,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   VariableLiteral(ctx: VariableLiteralCstChildren): VariableLookup {
     const register = parseInt(getImage(ctx.Integer));
 
-    return {
-      register,
-      value: this.vars.read(register)
-    };
+    return this.getMacro(register);
   }
 
   ValueLiteral(ctx: ValueLiteralCstChildren) {
@@ -176,8 +180,6 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   bracketExpression(ctx: BracketExpressionCstChildren) {
-    // The ctx will also contain the bracket tokens, but we don't care about those
-    // in the context of calculating the result.
     return this.visit(ctx.expression);
   }
 }

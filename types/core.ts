@@ -13,5 +13,5 @@ export interface IParsingResult {
 
 export interface VariableLookup {
   register: number;
-  value?: number;
+  value: number;
 }

@@ -53,24 +53,7 @@ export function parse(text: string): ParsingResultWithLexingErrors {
 }
 
 /**
- * Running the full interpreter searching for a valid program
- */
-export function validate(text: string) {
-  const { parser, lexResult } = parse(text);
-
-  const cst = parser.program();
-
-  const result = interpreter.visit(cst);
-
-  return {
-    result,
-    lexResult,
-    parseErrors: parser.errors
-  };
-}
-
-/**
- * Running the full interpreter and generate CST
+ * Run the full interpreter and generate CST
  */
 export function interpret(text: string, rule: string) {
   const { parser, lexResult } = parse(text);
@@ -82,8 +65,27 @@ export function interpret(text: string, rule: string) {
   return {
     result,
     parser,
-    interpreter,
     lexResult,
-    parseErrors: parser.errors
+    interpreter,
+    parseErrors: parser.errors,
+    macros: interpreter.getMacros()
   };
+}
+
+/**
+ * Sugar method to search for valid gcode lines
+ */
+export function evaluate(text: string) {
+  return interpret(text, "lines");
+}
+
+/**
+ * Sugar method to search for a valid program.
+ *
+ * A valid program is any valid lines, wrapped with `%`
+ * as the first and last lines. A program number is
+ * required as well as the second line.
+ */
+export function validate(text: string) {
+  return interpret(text, "program");
 }
