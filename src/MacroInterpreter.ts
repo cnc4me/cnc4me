@@ -4,6 +4,7 @@ import { __, match } from "ts-pattern";
 import { VariableLookup } from "../types/core";
 import {
   AdditionExpressionCstChildren,
+  AtomicExpressionCstChildren,
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
@@ -46,22 +47,12 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   expression(ctx: ExpressionCstChildren) {
-    if (ctx.additionExpression) {
-      return this.visit(ctx.additionExpression);
-    }
-
-    if (ctx.multiplicationExpression) {
-      return this.visit(ctx.multiplicationExpression);
-    }
-
-    if (ctx.functionExpression) {
-      return this.visit(ctx.functionExpression);
-    }
+    return this.visit(ctx.additionExpression);
   }
 
   functionExpression(ctx: FunctionExpressionCstChildren) {
     const func = getImage(ctx.BuiltinFunctions);
-    const value = this.visit(ctx.ValueLiteral);
+    const value = this.visit(ctx.atomicExpression);
 
     // prettier-ignore
     const result = match(func)
@@ -132,13 +123,15 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
       ctx.rhs.forEach((rhsOperand, idx) => {
         // there will be one operator for each rhs operand
         const rhsValue = this.visit(rhsOperand);
-        const operator = ctx.AdditionOperator[idx];
+        if (ctx?.AdditionOperator) {
+          const operator = ctx.AdditionOperator[idx];
 
-        if (tokenMatcher(operator, Plus)) {
-          result += rhsValue;
-        } else {
-          // Minus
-          result -= rhsValue;
+          if (tokenMatcher(operator, Plus)) {
+            result += rhsValue;
+          } else {
+            // Minus
+            result -= rhsValue;
+          }
         }
       });
     }
@@ -154,12 +147,15 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
       ctx.rhs.forEach((rhsOperand, idx) => {
         // there will be one operator for each rhs operand
         const rhsValue = this.visit(rhsOperand);
-        const operator = ctx.MultiplicationOperator[idx];
 
-        if (tokenMatcher(operator, Product)) {
-          result *= rhsValue;
-        } else {
-          result /= rhsValue;
+        if (ctx?.MultiplicationOperator) {
+          const operator = ctx.MultiplicationOperator[idx];
+
+          if (tokenMatcher(operator, Product)) {
+            result *= rhsValue;
+          } else {
+            result /= rhsValue;
+          }
         }
       });
     }
@@ -167,13 +163,15 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return round(result);
   }
 
-  atomicExpression(ctx) {
+  atomicExpression(ctx: AtomicExpressionCstChildren) {
     if (ctx.bracketExpression) {
       return this.visit(ctx.bracketExpression);
-    } else if (ctx.NumberLiteral) {
-      return parseInt(ctx.NumberLiteral[0].image, 10);
-    } else if (ctx.powerFunction) {
-      return this.visit(ctx.powerFunction);
+    } else if (ctx.NumericLiteral) {
+      return this.visit(ctx.NumericLiteral);
+    } else if (ctx.VariableLiteral) {
+      return this.visit(ctx.VariableLiteral);
+    } else if (ctx.functionExpression) {
+      return this.visit(ctx.functionExpression);
     }
   }
 
@@ -181,17 +179,6 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     // The ctx will also contain the bracket tokens, but we don't care about those
     // in the context of calculating the result.
     return this.visit(ctx.expression);
-  }
-
-  powerFunction(ctx) {
-    const base = this.visit(ctx.base);
-    const exponent = this.visit(ctx.exponent);
-    return Math.pow(base, exponent);
-  }
-
-  sinFunction(ctx) {
-    const value = this.visit(ctx.ValueLiteral);
-    return Math.sin(value);
   }
 }
 

@@ -66,65 +66,53 @@ export default class MacroParser extends CstParser {
     ]);
   });
 
-  /**
-   * Assigning a variable with a value
-   *
-   * @example
-   *   #500 = 12.3456
-   *   #501 = [2 + 0.5]
-   *   #502 = [#501 / 2]
-   */
-  public variableAssignment = this.RULE("variableAssignment", () => {
-    this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
-    this.CONSUME(Equals);
-    this.OR([
-      { ALT: () => this.SUBRULE(this.expression, { LABEL: "rhs" }) },
-      { ALT: () => this.SUBRULE(this.ValueLiteral, { LABEL: "rhs" }) }
-    ]);
-  });
-
   public expression = this.RULE("expression", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.functionExpression) },
-      { ALT: () => this.SUBRULE(this.multiplicationExpression) },
-      { ALT: () => this.SUBRULE(this.additionExpression) }
-    ]);
+    this.SUBRULE(this.additionExpression);
   });
 
   public additionExpression = this.RULE("additionExpression", () => {
-    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
-    this.CONSUME(AdditionOperator);
-    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+    this.SUBRULE(this.multiplicationExpression, { LABEL: "lhs" });
+    this.MANY(() => {
+      this.CONSUME(AdditionOperator);
+      this.SUBRULE2(this.multiplicationExpression, { LABEL: "rhs" });
+    });
   });
 
   public multiplicationExpression = this.RULE(
     "multiplicationExpression",
     () => {
-      this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
-      this.CONSUME(MultiplicationOperator);
-      this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+      this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
+      this.MANY(() => {
+        this.CONSUME(MultiplicationOperator);
+        this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
+      });
     }
   );
 
+  /**
+   * Calling a Built-In function
+   */
   public functionExpression = this.RULE("functionExpression", () => {
     this.CONSUME(BuiltinFunctions);
     this.CONSUME(OpenBracket);
-    this.SUBRULE(this.ValueLiteral);
+    // this.SUBRULE(this.ValueLiteral);
+    this.SUBRULE(this.atomicExpression);
+    // this.OR([
+    //   { ALT: () => this.SUBRULE(this.expression) },
+    //   { ALT: () => this.SUBRULE2(this.ValueLiteral) }
+    // ]);
     this.CONSUME(CloseBracket);
   });
 
-  public bracketExpression = this.RULE("bracketExpression", () => {
-    this.CONSUME(OpenBracket);
-    this.SUBRULE(this.expression);
-    this.CONSUME(CloseBracket);
-  });
   /**
    * Making a comparison between two values
    */
   public booleanExpression = this.RULE("booleanExpression", () => {
-    this.SUBRULE1(this.ValueLiteral);
+    // this.SUBRULE1(this.ValueLiteral);
+    this.SUBRULE(this.atomicExpression);
     this.CONSUME(BooleanOperator);
-    this.SUBRULE2(this.ValueLiteral);
+    // this.SUBRULE2(this.ValueLiteral);
+    this.SUBRULE2(this.atomicExpression);
   });
 
   /**
@@ -141,16 +129,44 @@ export default class MacroParser extends CstParser {
     ]);
   });
 
-  /**
-   * Computing a new value with a variable with a value
-   */
-  public valueExpression = this.RULE("valueExpression", () => {
-    this.SUBRULE1(this.ValueLiteral, { LABEL: "lhs" });
+  public atomicExpression = this.RULE("atomicExpression", () => {
     this.OR([
-      { ALT: () => this.CONSUME(AdditionOperator) },
-      { ALT: () => this.CONSUME(MultiplicationOperator) }
+      // parenthesisExpression has the highest precedence and thus it appears
+      // in the "lowest" leaf in the expression ParseTree.
+      { ALT: () => this.SUBRULE(this.bracketExpression) },
+      { ALT: () => this.SUBRULE(this.functionExpression) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) },
+      { ALT: () => this.SUBRULE(this.VariableLiteral) }
     ]);
-    this.SUBRULE2(this.ValueLiteral, { LABEL: "rhs" });
+  });
+
+  /**
+   * Any expression wrapped in brackets
+   *
+   * @example [#3 + 4.5]
+   */
+  private bracketExpression = this.RULE("bracketExpression", () => {
+    this.CONSUME(OpenBracket);
+    this.SUBRULE(this.expression);
+    this.CONSUME(CloseBracket);
+  });
+
+  /**
+   * Assigning a variable with a value
+   *
+   * @example
+   *   #500 = 12.3456
+   *   #501 = [2 + 0.5]
+   *   #502 = [#501 / 2]
+   */
+  private variableAssignment = this.RULE("variableAssignment", () => {
+    this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
+    this.CONSUME(Equals);
+    this.SUBRULE(this.expression, { LABEL: "rhs" });
+    // this.OR([
+    //   { ALT: () => this.SUBRULE(this.expression, { LABEL: "rhs" }) },
+    //   { ALT: () => this.SUBRULE(this.bracketExpression, { LABEL: "rhs" }) }
+    // ]);
   });
 
   /**
@@ -180,18 +196,7 @@ export default class MacroParser extends CstParser {
     });
     this.OR([
       { ALT: () => this.SUBRULE(this.bracketExpression) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) },
-      { ALT: () => this.CONSUME(NumericValue) }
-    ]);
-  });
-
-  /**
-   * Number or Macro variable
-   */
-  public ValueLiteral = this.RULE("ValueLiteral", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.VariableLiteral) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+      { ALT: () => this.SUBRULE(this.VariableLiteral) }
     ]);
   });
 
@@ -216,6 +221,16 @@ export default class MacroParser extends CstParser {
   private VariableLiteral = this.RULE("VariableLiteral", () => {
     this.CONSUME(Var);
     this.CONSUME(Integer);
+  });
+
+  /**
+   * Number or Macro variable
+   */
+  public ValueLiteral = this.RULE("ValueLiteral", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+    ]);
   });
 }
 

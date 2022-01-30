@@ -30,20 +30,10 @@ export interface LineCstNode extends CstNode {
 
 export type LineCstChildren = {
   Percent?: IToken[];
+  Comment?: IToken[];
   conditionalExpression?: ConditionalExpressionCstNode[];
   variableAssignment?: VariableAssignmentCstNode[];
   addresses?: AddressesCstNode[];
-};
-
-export interface VariableAssignmentCstNode extends CstNode {
-  name: "variableAssignment";
-  children: VariableAssignmentCstChildren;
-}
-
-export type VariableAssignmentCstChildren = {
-  lhs: VariableLiteralCstNode[];
-  Equals: IToken[];
-  rhs?: ExpressionCstNode[];
 };
 
 export interface ExpressionCstNode extends CstNode {
@@ -52,9 +42,7 @@ export interface ExpressionCstNode extends CstNode {
 }
 
 export type ExpressionCstChildren = {
-  functionExpression?: FunctionExpressionCstNode[];
-  multiplicationExpression?: MultiplicationExpressionCstNode[];
-  additionExpression?: AdditionExpressionCstNode[];
+  additionExpression: AdditionExpressionCstNode[];
 };
 
 export interface AdditionExpressionCstNode extends CstNode {
@@ -63,9 +51,9 @@ export interface AdditionExpressionCstNode extends CstNode {
 }
 
 export type AdditionExpressionCstChildren = {
-  lhs: ValueLiteralCstNode[];
-  AdditionOperator: IToken[];
-  rhs: ValueLiteralCstNode[];
+  lhs: MultiplicationExpressionCstNode[];
+  AdditionOperator?: IToken[];
+  rhs?: MultiplicationExpressionCstNode[];
 };
 
 export interface MultiplicationExpressionCstNode extends CstNode {
@@ -74,9 +62,9 @@ export interface MultiplicationExpressionCstNode extends CstNode {
 }
 
 export type MultiplicationExpressionCstChildren = {
-  lhs: ValueLiteralCstNode[];
-  MultiplicationOperator: IToken[];
-  rhs: ValueLiteralCstNode[];
+  lhs: AtomicExpressionCstNode[];
+  MultiplicationOperator?: IToken[];
+  rhs?: AtomicExpressionCstNode[];
 };
 
 export interface FunctionExpressionCstNode extends CstNode {
@@ -87,18 +75,7 @@ export interface FunctionExpressionCstNode extends CstNode {
 export type FunctionExpressionCstChildren = {
   BuiltinFunctions: IToken[];
   OpenBracket: IToken[];
-  ValueLiteral: ValueLiteralCstNode[];
-  CloseBracket: IToken[];
-};
-
-export interface BracketExpressionCstNode extends CstNode {
-  name: "bracketExpression";
-  children: BracketExpressionCstChildren;
-}
-
-export type BracketExpressionCstChildren = {
-  OpenBracket: IToken[];
-  expression: ExpressionCstNode[];
+  atomicExpression: AtomicExpressionCstNode[];
   CloseBracket: IToken[];
 };
 
@@ -108,7 +85,7 @@ export interface BooleanExpressionCstNode extends CstNode {
 }
 
 export type BooleanExpressionCstChildren = {
-  ValueLiteral: ValueLiteralCstNode[];
+  atomicExpression: AtomicExpressionCstNode[];
   BooleanOperator: IToken[];
 };
 
@@ -126,16 +103,38 @@ export type ConditionalExpressionCstChildren = {
   GotoLine?: IToken[];
 };
 
-export interface ValueExpressionCstNode extends CstNode {
-  name: "valueExpression";
-  children: ValueExpressionCstChildren;
+export interface AtomicExpressionCstNode extends CstNode {
+  name: "atomicExpression";
+  children: AtomicExpressionCstChildren;
 }
 
-export type ValueExpressionCstChildren = {
-  lhs: ValueLiteralCstNode[];
-  AdditionOperator?: IToken[];
-  MultiplicationOperator?: IToken[];
-  rhs: ValueLiteralCstNode[];
+export type AtomicExpressionCstChildren = {
+  bracketExpression?: BracketExpressionCstNode[];
+  functionExpression?: FunctionExpressionCstNode[];
+  NumericLiteral?: NumericLiteralCstNode[];
+  VariableLiteral?: VariableLiteralCstNode[];
+};
+
+export interface BracketExpressionCstNode extends CstNode {
+  name: "bracketExpression";
+  children: BracketExpressionCstChildren;
+}
+
+export type BracketExpressionCstChildren = {
+  OpenBracket: IToken[];
+  expression: ExpressionCstNode[];
+  CloseBracket: IToken[];
+};
+
+export interface VariableAssignmentCstNode extends CstNode {
+  name: "variableAssignment";
+  children: VariableAssignmentCstChildren;
+}
+
+export type VariableAssignmentCstChildren = {
+  lhs: VariableLiteralCstNode[];
+  Equals: IToken[];
+  rhs: ExpressionCstNode[];
 };
 
 export interface AddressesCstNode extends CstNode {
@@ -157,17 +156,6 @@ export type AddressedValueCstChildren = {
   Minus?: IToken[];
   bracketExpression?: BracketExpressionCstNode[];
   VariableLiteral?: VariableLiteralCstNode[];
-  NumericValue?: IToken[];
-};
-
-export interface ValueLiteralCstNode extends CstNode {
-  name: "ValueLiteral";
-  children: ValueLiteralCstChildren;
-}
-
-export type ValueLiteralCstChildren = {
-  VariableLiteral?: VariableLiteralCstNode[];
-  NumericLiteral?: NumericLiteralCstNode[];
 };
 
 export interface NumericLiteralCstNode extends CstNode {
@@ -190,11 +178,20 @@ export type VariableLiteralCstChildren = {
   Integer: IToken[];
 };
 
+export interface ValueLiteralCstNode extends CstNode {
+  name: "ValueLiteral";
+  children: ValueLiteralCstChildren;
+}
+
+export type ValueLiteralCstChildren = {
+  VariableLiteral?: VariableLiteralCstNode[];
+  NumericLiteral?: NumericLiteralCstNode[];
+};
+
 export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   program(children: ProgramCstChildren, param?: IN): OUT;
   lines(children: LinesCstChildren, param?: IN): OUT;
   line(children: LineCstChildren, param?: IN): OUT;
-  variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   multiplicationExpression(
@@ -202,16 +199,17 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
     param?: IN
   ): OUT;
   functionExpression(children: FunctionExpressionCstChildren, param?: IN): OUT;
-  bracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
   booleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
   conditionalExpression(
     children: ConditionalExpressionCstChildren,
     param?: IN
   ): OUT;
-  valueExpression(children: ValueExpressionCstChildren, param?: IN): OUT;
+  atomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
+  bracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
+  variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   addresses(children: AddressesCstChildren, param?: IN): OUT;
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
-  ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
+  ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
 }
