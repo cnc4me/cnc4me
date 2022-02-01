@@ -6,7 +6,7 @@ A Lexer, Parser, and Interpreter for Fanuc Macro B NC files
 ![Jest Status](https://github.com/kevinkhill/fanuc-macro-b/actions/workflows/main.yml/badge.svg)
 
 ## Why
-I have always wanted to be able to debug macro programs offile from a CNC machine, so therefore, we need an interpreter! I have never attempted something like this but after finding  [Chevrotain](https://chevrotain.io/docs/), I became inspired to try.
+I have always wanted to be able to debug macro programs offline from a CNC machine, so therefore, I need an interpreter! I have never attempted something like this, but after finding  [Chevrotain](https://chevrotain.io/docs/), I became inspired to try...
 
 Let's do it! :rocket:
 
