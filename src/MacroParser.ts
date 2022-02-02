@@ -63,6 +63,7 @@ export default class MacroParser extends CstParser {
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.addresses) }
+      // { ALT: () => this.SUBRULE(this.atomicExpression) }
     ]);
   });
 
