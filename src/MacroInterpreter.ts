@@ -1,7 +1,7 @@
 import { tokenMatcher } from "chevrotain";
 import { __, match } from "ts-pattern";
 
-import { VariableLookup } from "../types/core";
+import { VariableRegister } from "../types/core";
 import {
   AdditionExpressionCstChildren,
   AtomicExpressionCstChildren,
@@ -38,15 +38,25 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     this.validateVisitor();
   }
 
-  getMacro(register: number): VariableLookup {
-    return {
+  getMacro(register: number): VariableRegister {
+    const macro = {
       register,
-      value: this.vars.getMap().get(register) ?? NaN
+      value: this.vars.getMap().get(register) ?? NaN,
+      setValue: (value: number) => {
+        this.vars.write(register, value);
+        return macro;
+      }
     };
+
+    return macro;
   }
 
   getMacros() {
     return this.vars.getMap();
+  }
+
+  setMacroVar(register: number, value: number): VariableRegister {
+    return this.getMacro(register).setValue(value);
   }
 
   program(ctx: ProgramCstNode) {
@@ -95,7 +105,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
 
   ValueLiteral(ctx: ValueLiteralCstChildren) {
     if (ctx.VariableLiteral) {
-      const macro: VariableLookup = this.visit(ctx.VariableLiteral);
+      const macro: VariableRegister = this.visit(ctx.VariableLiteral);
 
       return macro.value;
     }
@@ -108,7 +118,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macroVar: VariableLookup = this.visit(ctx.VariableLiteral);
+    const macroVar: VariableRegister = this.visit(ctx.VariableLiteral);
 
     const value = this.visit(ctx.expression);
 
@@ -171,7 +181,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     } else if (ctx.NumericLiteral) {
       return this.visit(ctx.NumericLiteral);
     } else if (ctx.VariableLiteral) {
-      const macroVar: VariableLookup = this.visit(ctx.VariableLiteral);
+      const macroVar: VariableRegister = this.visit(ctx.VariableLiteral);
 
       return macroVar.value;
     } else if (ctx.functionExpression) {

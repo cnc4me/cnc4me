@@ -11,7 +11,8 @@ export interface IParsingResult {
   lexResult: ILexingResult;
 }
 
-export interface VariableLookup {
+export interface VariableRegister {
   register: number;
   value: number;
+  setValue: (value: number) => this;
 }
