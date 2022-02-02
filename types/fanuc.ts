@@ -132,9 +132,9 @@ export interface VariableAssignmentCstNode extends CstNode {
 }
 
 export type VariableAssignmentCstChildren = {
-  lhs: VariableLiteralCstNode[];
+  VariableLiteral: VariableLiteralCstNode[];
   Equals: IToken[];
-  rhs: ExpressionCstNode[];
+  expression: ExpressionCstNode[];
 };
 
 export interface AddressesCstNode extends CstNode {

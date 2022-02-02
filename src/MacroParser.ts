@@ -95,12 +95,7 @@ export default class MacroParser extends CstParser {
   public functionExpression = this.RULE("functionExpression", () => {
     this.CONSUME(BuiltinFunctions);
     this.CONSUME(OpenBracket);
-    // this.SUBRULE(this.ValueLiteral);
     this.SUBRULE(this.atomicExpression);
-    // this.OR([
-    //   { ALT: () => this.SUBRULE(this.expression) },
-    //   { ALT: () => this.SUBRULE2(this.ValueLiteral) }
-    // ]);
     this.CONSUME(CloseBracket);
   });
 
@@ -108,10 +103,8 @@ export default class MacroParser extends CstParser {
    * Making a comparison between two values
    */
   public booleanExpression = this.RULE("booleanExpression", () => {
-    // this.SUBRULE1(this.ValueLiteral);
     this.SUBRULE(this.atomicExpression);
     this.CONSUME(BooleanOperator);
-    // this.SUBRULE2(this.ValueLiteral);
     this.SUBRULE2(this.atomicExpression);
   });
 
@@ -160,13 +153,9 @@ export default class MacroParser extends CstParser {
    *   #502 = [#501 / 2]
    */
   private variableAssignment = this.RULE("variableAssignment", () => {
-    this.SUBRULE(this.VariableLiteral, { LABEL: "lhs" });
+    this.SUBRULE(this.VariableLiteral);
     this.CONSUME(Equals);
-    this.SUBRULE(this.expression, { LABEL: "rhs" });
-    // this.OR([
-    //   { ALT: () => this.SUBRULE(this.expression, { LABEL: "rhs" }) },
-    //   { ALT: () => this.SUBRULE(this.bracketExpression, { LABEL: "rhs" }) }
-    // ]);
+    this.SUBRULE(this.expression);
   });
 
   /**

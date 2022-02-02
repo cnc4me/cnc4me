@@ -87,7 +87,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return image.includes(".") ? round(parseFloat(value)) : parseInt(value);
   }
 
-  VariableLiteral(ctx: VariableLiteralCstChildren): VariableLookup {
+  VariableLiteral(ctx: VariableLiteralCstChildren) {
     const register = parseInt(getImage(ctx.Integer));
 
     return this.getMacro(register);
@@ -108,14 +108,11 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
   }
 
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macroVar: VariableLookup = this.visit(ctx.lhs);
+    const macroVar: VariableLookup = this.visit(ctx.VariableLiteral);
 
-    // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
-    if (ctx.rhs) {
-      const value = this.visit(ctx.rhs);
+    const value = this.visit(ctx.expression);
 
-      this.vars.write(macroVar.register, value);
-    }
+    this.vars.write(macroVar.register, value);
   }
 
   // Note the usage if the "rhs" and "lhs" labels to increase the readability.
@@ -125,8 +122,9 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
     if (ctx.rhs) {
       ctx.rhs.forEach((rhsOperand, idx) => {
-        // there will be one operator for each rhs operand
+        // there will be one operator for each  rhs operand
         const rhsValue = this.visit(rhsOperand);
+
         if (ctx?.AdditionOperator) {
           const operator = ctx.AdditionOperator[idx];
 
@@ -173,7 +171,9 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     } else if (ctx.NumericLiteral) {
       return this.visit(ctx.NumericLiteral);
     } else if (ctx.VariableLiteral) {
-      return this.visit(ctx.VariableLiteral);
+      const macroVar: VariableLookup = this.visit(ctx.VariableLiteral);
+
+      return macroVar.value;
     } else if (ctx.functionExpression) {
       return this.visit(ctx.functionExpression);
     }
