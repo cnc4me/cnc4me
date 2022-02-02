@@ -7,7 +7,6 @@ declare global {
       toMatchToken(expected: TokenType): CustomMatcherResult;
     }
   }
-  namespace Fanuc {}
 }
 
 export {};

@@ -59,6 +59,12 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return this.getMacro(register).setValue(value);
   }
 
+  setMacroVars(registerValues: [register: number, value: number][]) {
+    for (const [register, value] of registerValues) {
+      this.setMacroVar(register, value);
+    }
+  }
+
   program(ctx: ProgramCstNode) {
     return ctx;
   }
