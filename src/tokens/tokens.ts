@@ -77,7 +77,7 @@ export const Newline = createToken({
 
 export const Address = createToken({
   name: "Address",
-  pattern: /[A-Z]/
+  pattern: /[A-MO-Z]/
 });
 
 // export const Gcode = createToken({

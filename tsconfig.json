@@ -1,6 +1,7 @@
 {
   "compilerOptions": {
     "strict": true,
+    "jsx": "preserve",
     "baseUrl": ".",
     "rootDir": ".",
     "outDir": "build",
@@ -23,14 +24,14 @@
     "esModuleInterop": true,
     "resolveJsonModule": true,
     "keyofStringsOnly": true,
-    "types": ["jest", "node"]
+    "types": ["react", "react-dom", "jest", "node"]
   },
   "include": [
     "src/**/*.ts",
     "demo/**/*.ts",
+    "scripts/*.ts",
     "types/**/*.ts",
-    "gcode/*.ts",
-    "scripts/*.ts"
+    "playground/*.ts*"
   ],
   "exclude": ["node_modules"]
 }
