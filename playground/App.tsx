@@ -1,8 +1,7 @@
 import { useCodeMirror } from "@uiw/react-codemirror";
 import React, { useEffect, useRef, useState } from "react";
 
-import { evaluate } from "../src";
-import { interpreter } from "../src/MacroInterpreter";
+import { evaluate, interpreter } from "../src";
 
 export default function App() {
   const example = `#1=[1+2]*3` + "\n".repeat(9);

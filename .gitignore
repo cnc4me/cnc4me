@@ -1,7 +1,4 @@
 node_modules/
 coverage/
-build/
-
-.parcel-cache/
 dist/
-demo.html
+.parcel-cache/
