@@ -1,8 +1,10 @@
 # Fanuc Macro B
 A Lexer, Parser, and Interpreter for Fanuc Macro B NC files
 
-![Typescript Logo](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white) ![Eslint Logo](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white) ![Prettier Logo](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
-
+![Typescript Logo](https://img.shields.io/badge/TypeScript-007ACC?style=for-the-badge&logo=typescript&logoColor=white)
+![Eslint Logo](https://img.shields.io/badge/eslint-3A33D1?style=for-the-badge&logo=eslint&logoColor=white)
+![Prettier Logo](https://img.shields.io/badge/prettier-1A2C34?style=for-the-badge&logo=prettier&logoColor=F7BA3E)
+[![Netlify Status](https://api.netlify.com/api/v1/badges/29c5c88a-09da-42ae-96a6-e0a9592844a2/deploy-status)](https://app.netlify.com/sites/fanuc-macro-b/deploys)
 ![Jest Status](https://github.com/kevinkhill/fanuc-macro-b/actions/workflows/main.yml/badge.svg)
 
 ## Why
