@@ -4,7 +4,6 @@ import React, { useRef, useState } from "react";
 
 import { evaluate } from "../../src/utils";
 import Errors from "./Errors";
-import { zeroPad } from "./util";
 import ValueTable from "./ValueTable";
 
 const example = [
@@ -50,12 +49,18 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col overflow-y-hidden">
-      <div className="font-bold bg-violet-900 text-violet-300">
+    <div className="flex flex-col overflow-y-hidden bg-neutral-800">
+      <div className="font-bold text-purple-200 border-b border-b-purple-600 bg-violet-900">
         <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
       </div>
-      <div className="flex flex-row bg-neutral-800">
-        <div className="flex flex-col w-1/2">
+      <div className="flex flex-row">
+        <div className="flex flex-col w-1/2 border-r border-r-purple-600">
+          <p
+            className="px-6 py-3 text-sm italic border-b border-b-gray-900 text-violet-100"
+            style={{ backgroundColor: "#1E1E1E" }}
+          >
+            {`\u00BB`} Try editing some of the values!
+          </p>
           <Editor
             height="90vh"
             theme="vs-dark"
@@ -66,11 +71,14 @@ export default function App() {
           />
         </div>
         <div className="flex flex-col flex-grow bg-neutral-900">
-          <div className="flex flex-col flex-grow gap-1 pt-2 pl-2">
+          <h1 className="px-2 py-3 text-3xl shadow-neutral-800 bg-neutral-800 text-violet-500">
+            Macro Registers
+          </h1>
+          <div className="flex flex-col flex-grow gap-1 pt-2 pl-4">
             <ValueTable macros={macros} />
           </div>
           <div className="px-4 py-2 bg-neutral-800">
-            {errors.length > 0 ? <Errors errors={errors} /> : ""}
+            {errors.length > 0 ? <Errors errors={errors} /> : undefined}
           </div>
         </div>
       </div>
