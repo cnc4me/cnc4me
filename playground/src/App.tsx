@@ -7,12 +7,15 @@ import Errors from "./Errors";
 import ValueTable from "./ValueTable";
 
 const example = [
-  "#1=1.23456789",
+  "#1=3.141592654",
   "#2=[#1+2]*3",
   "#3=#2/#1",
   "#4=[4*#2]-3",
   "#5=[6+#3+#2]/[#4-#2]",
-  ""
+  "#6=ABS[-2.3512]",
+  "#7=SQRT[49]",
+  "#8=ROUND[#1]",
+  "#9=FUP[#1]"
 ].join("\n");
 
 export default function App() {
