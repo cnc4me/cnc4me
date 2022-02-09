@@ -5,10 +5,11 @@ import { interpreter } from "./MacroInterpreter";
 import MacroLexer from "./MacroLexer";
 import { parser } from "./MacroParser";
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 export function round(num: number, decimals = 5): number {
-  const factorOfTen = Math.pow(10, decimals);
-
-  return Math.round(num * factorOfTen) / factorOfTen;
+  return num;
+  // const factorOfTen = Math.pow(10, decimals);
+  // return Math.round(num * factorOfTen) / factorOfTen;
 }
 
 export function degreeToRadian(degrees: number) {

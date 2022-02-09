@@ -16,7 +16,7 @@
     "fix": "yarn lint --fix",
     "types": "yarn tsnd ./scripts/gen_dts_signatures.ts",
     "build": "yarn parcel build ./playground/index.html",
-    "play": "yarn parcel serve ./playground/index.html",
+    "play": "yarn parcel serve --port 3000 ./playground/index.html",
     "demo:vars": "yarn tsnd --respawn ./demo/variables.demo.ts",
     "demo:intr": "yarn tsnd --respawn ./demo/interpret.demo.ts"
   },
@@ -29,6 +29,7 @@
     }
   },
   "dependencies": {
+    "@monaco-editor/react": "^4.3.1",
     "chevrotain": "^10.0.0",
     "ts-pattern": "^3.3.5"
   },
@@ -49,6 +50,7 @@
     "eslint-plugin-prettier": "^3.1.4",
     "eslint-plugin-simple-import-sort": "^6.0.0",
     "jest": "^27.4.7",
+    "monaco-editor": "^0.32.1",
     "parcel": "^2.2.1",
     "postcss": "^8.4.6",
     "prettier": "^2.5.1",

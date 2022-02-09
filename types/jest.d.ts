@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-namespace */
 import { TokenType } from "chevrotain";
 
 declare global {
@@ -8,5 +9,3 @@ declare global {
     }
   }
 }
-
-export {};

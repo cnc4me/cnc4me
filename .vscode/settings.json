@@ -7,5 +7,8 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/node_modules": true
-  }
+  },
+  "liveFrame.url": "http://localhost:3000",
+  "liveFrame.title": "Local Development",
+  "liveFrame.pane": "Beside"
 }

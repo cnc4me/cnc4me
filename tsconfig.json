@@ -23,8 +23,8 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "keyofStringsOnly": true,
-    "types": ["react", "react-dom", "jest", "node"]
+    "keyofStringsOnly": true
+    // "types": ["react", "react-dom", "jest", "node"]
   },
   "include": [
     "src/**/*.ts",

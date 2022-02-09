@@ -1,6 +1,6 @@
-import { evaluate, validate } from "../src/utils";
+import { evaluate } from "../src/utils";
 
-const code = `%
+const code = `
 #850=.875
 (FIRST THRU HOLE Y LOC:)
 #851=.790
@@ -9,8 +9,7 @@ const code = `%
 (SPREAD DISTANCE:)
 #852=5.9371
 (FINISH LENGTH:)
-#853=43.3104
-%`;
+#853=43.3104`;
 
 try {
   const { macros, parseErrors } = evaluate(code);

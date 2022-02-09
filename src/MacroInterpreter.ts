@@ -1,5 +1,5 @@
 import { tokenMatcher } from "chevrotain";
-import { __, match } from "ts-pattern";
+import { match } from "ts-pattern";
 
 import { VariableRegister } from "../types/core";
 import {
@@ -117,9 +117,7 @@ export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
     }
 
     if (ctx.NumericLiteral) {
-      const value = this.visit(ctx.NumericLiteral);
-
-      return value;
+      return this.visit(ctx.NumericLiteral);
     }
   }
 
