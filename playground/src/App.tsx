@@ -1,8 +1,11 @@
 import Editor, { EditorProps } from "@monaco-editor/react";
+import { IRecognitionException } from "chevrotain";
 import React, { useRef, useState } from "react";
 
-import { evaluate, interpreter } from "../src";
+import { evaluate } from "../../src/utils";
+import Errors from "./Errors";
 import { zeroPad } from "./util";
+import ValueTable from "./ValueTable";
 
 const example = [
   "#1=1.23456789",
@@ -16,27 +19,29 @@ const example = [
 export default function App() {
   const editorRef = useRef();
   const [macros, setMacros] = useState<[number, number][]>([]);
+  const [errors, setErrors] = useState<IRecognitionException[]>([]);
 
   const [editorOptions, setEditorOptions] = useState<EditorProps["options"]>({
     minimap: { enabled: false }
   });
 
-  const process = code => {
-    evaluate(code);
-    const macros = interpreter.getMacros();
+  function parseGCode(code) {
+    const { parseErrors, macros } = evaluate(code);
+
+    setErrors(parseErrors);
     setMacros(Array.from(macros));
-  };
+  }
 
   function handleEditorDidMount(editor, monaco) {
     // here is the editor instance
     // you can store it in `useRef` for further usage
     editorRef.current = editor;
-    process(example);
+    parseGCode(example);
   }
 
   function handleEditorChange(value, event) {
     console.log("here is the current model value:", value);
-    process(value);
+    parseGCode(value);
   }
 
   function handleEditorValidation(markers) {
@@ -45,42 +50,27 @@ export default function App() {
   }
 
   return (
-    <div className="flex flex-col">
+    <div className="flex flex-col overflow-y-hidden">
       <div className="font-bold bg-violet-900 text-violet-300">
         <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
       </div>
-      <div className="flex flex-row h-100 bg-neutral-800">
+      <div className="flex flex-row bg-neutral-800">
         <div className="flex flex-col w-1/2">
           <Editor
             height="90vh"
-            // defaultLanguage="javascript"
             theme="vs-dark"
             defaultValue={example}
             options={editorOptions}
             onChange={handleEditorChange}
             onMount={handleEditorDidMount}
-            onValidate={handleEditorValidation}
           />
         </div>
-        <div className="p-5 font-mono grow bg-neutral-900">
-          <div className="flex flex-col gap-1">
-            <div className="flex flex-row ">
-              <div className="w-12 text-violet-400">NO.</div>
-              <div className="pl-1 text-violet-400">DATA</div>
-            </div>
-
-            {macros.map(macro => {
-              return (
-                !isNaN(macro[1]) && (
-                  <div key={macro[0]} className="flex flex-row gap-1 ">
-                    <div className="w-10 pl-1 text-violet-100">
-                      #{zeroPad(macro[0], 3)}
-                    </div>
-                    <div className="flex-grow pl-1 bg-gray-300">{macro[1]}</div>
-                  </div>
-                )
-              );
-            })}
+        <div className="flex flex-col flex-grow bg-neutral-900">
+          <div className="flex flex-col flex-grow gap-1 pt-2 pl-2">
+            <ValueTable macros={macros} />
+          </div>
+          <div className="px-4 py-2 bg-neutral-800">
+            {errors.length > 0 ? <Errors errors={errors} /> : ""}
           </div>
         </div>
       </div>

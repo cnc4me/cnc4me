@@ -31,7 +31,7 @@
     "demo/**/*.ts",
     "scripts/*.ts",
     "types/**/*.ts",
-    "playground/*.ts*"
+    "playground/**/*.ts*"
   ],
   "exclude": ["node_modules"]
 }
