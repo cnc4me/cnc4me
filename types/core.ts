@@ -1,4 +1,5 @@
 import { ILexingError, ILexingResult } from "chevrotain";
+import type * as MonacoNs from "monaco-editor";
 
 import MacroParser from "../src/MacroParser";
 
@@ -16,3 +17,5 @@ export interface VariableRegister {
   value: number;
   setValue: (value: number) => this;
 }
+
+export type StandaloneEditor = MonacoNs.editor.IStandaloneCodeEditor;

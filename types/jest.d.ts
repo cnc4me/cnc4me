@@ -1,4 +1,5 @@
-/* eslint-disable @typescript-eslint/no-namespace */
+import "jest-extended";
+
 import { TokenType } from "chevrotain";
 
 declare global {

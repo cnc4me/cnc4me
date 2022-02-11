@@ -1,6 +1,7 @@
 import React from "react";
 
-import { zeroPad } from "./util";
+const zeroPad = (num: number, zeroCount = 8) =>
+  String(num).padStart(zeroCount, "0");
 
 export default function Errors({ errors }) {
   return (
