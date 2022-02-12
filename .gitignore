@@ -2,3 +2,5 @@ node_modules/
 coverage/
 dist/
 .parcel-cache/
+
+playground/monarch/

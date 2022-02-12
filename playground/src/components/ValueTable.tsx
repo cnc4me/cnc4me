@@ -1,6 +1,6 @@
 import React from "react";
 
-import { zeroPad } from "./util";
+import { zeroPad } from "../helpers";
 
 export default function ValueTable({ macros }) {
   return (

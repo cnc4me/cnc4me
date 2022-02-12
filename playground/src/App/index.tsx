@@ -7,11 +7,11 @@ import Editor, {
 import { IRecognitionException } from "chevrotain";
 import React, { useRef, useState } from "react";
 
-import { evaluate } from "../../src/utils";
-import { StandaloneEditor } from "../../types/core";
-import Errors from "./Errors";
+import { evaluate } from "../../../src";
+import { StandaloneEditor } from "../../../types";
+import Errors from "../components/Errors";
+import ValueTable from "../components/ValueTable";
 import { handleEditorWillMount } from "./handleEditorWillMount";
-import ValueTable from "./ValueTable";
 
 const getCode = () =>
   [
@@ -50,7 +50,7 @@ const example = [
   ""
 ].join("\n");
 
-export default function App() {
+export function App() {
   const editorRef = useRef<StandaloneEditor>();
   const [macros, setMacros] = useState<[number, number][]>([]);
   const [errors, setErrors] = useState<IRecognitionException[]>([]);

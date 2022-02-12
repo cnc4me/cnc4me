@@ -1,17 +1,5 @@
-import type * as Monaco from "monaco-editor";
-
-import { chrysalis, createCustomLanguage } from "../../src/chrysalis";
-
-const gcodeLangDef = createCustomLanguage({
-  tokenizer: {
-    root: [
-      [/\[error.*/, "custom-error"],
-      [/\[notice.*/, "custom-notice"],
-      [/\[info.*/, "custom-info"],
-      [/\[[a-zA-Z 0-9:]+\]/, "custom-date"]
-    ]
-  }
-});
+import { chrysalis } from "../../../src";
+import { Monaco } from "../../../types";
 
 /**
  * Handler for Monaco to modify the editor before creating an instance.
@@ -23,7 +11,16 @@ export function handleEditorWillMount(monaco: typeof Monaco) {
 
   monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
 
-  registerCustomLanguage("gcode", gcodeLangDef);
+  registerCustomLanguage("gcode", {
+    tokenizer: {
+      root: [
+        [/\[error.*/, "custom-error"],
+        [/\[notice.*/, "custom-notice"],
+        [/\[info.*/, "custom-info"],
+        [/\[[a-zA-Z 0-9:]+\]/, "custom-date"]
+      ]
+    }
+  });
 
   registerCustomTheme("gcode-light", {
     base: "vs",
