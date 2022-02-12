@@ -1,9 +1,4 @@
 import { LanguageDefinition, Monaco, ThemeDefinition } from "./types";
-import {
-  defineTheme,
-  registerLanguage,
-  setMonarchTokensProvider
-} from "./wrappers";
 
 /**
  * Register a custom theme with a Monaco Editor instance
@@ -13,7 +8,18 @@ export function registerCustomTheme<T extends typeof Monaco>(
   themeName: string,
   themeData: ThemeDefinition
 ): T {
-  return defineTheme(monaco, themeName, themeData);
+  monaco.editor.defineTheme(themeName, themeData);
+  return monaco;
+}
+
+/**
+ * Helper method to create a new language for the Monaco Editor
+ */
+export function createCustomLanguage(languageDef: LanguageDefinition) {
+  /**
+   * @TODO what to do here...
+   */
+  return languageDef;
 }
 
 /**
@@ -24,19 +30,7 @@ export function registerCustomLanguage<T extends typeof Monaco>(
   languageId: string,
   languageDef: LanguageDefinition
 ): T {
-  registerLanguage(monaco, languageId);
-  setMonarchTokensProvider(monaco, languageId, languageDef);
+  monaco.languages.register({ id: languageId });
+  monaco.languages.setMonarchTokensProvider(languageId, languageDef);
   return monaco;
-}
-
-/**
- * Helper method to create a new language for the Monaco Editor
- */
-export function createCustomLanguage<T extends LanguageDefinition>(
-  languageDef: T
-): T {
-  /**
-   * @TODO what to do here...
-   */
-  return languageDef;
 }
