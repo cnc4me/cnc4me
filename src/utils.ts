@@ -1,8 +1,8 @@
 import { ILexingResult, IToken } from "chevrotain";
 
-import { ParsingResultWithLexingErrors } from "../types/core";
+import { ParsingResultWithLexingErrors } from "../types";
 import { interpreter } from "./MacroInterpreter";
-import MacroLexer from "./MacroLexer";
+import { MacroLexer } from "./MacroLexer";
 import { parser } from "./MacroParser";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars

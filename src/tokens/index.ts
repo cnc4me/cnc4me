@@ -6,7 +6,7 @@ import {
   LessThanOrEq,
   NotEqualTo
 } from "./boolean";
-import { CloseBracket, OpenBracket } from "./brackets";
+import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
 import {
   AdditionOperator,
   BooleanOperator,
@@ -43,6 +43,7 @@ export {
   Brackets,
   BuiltinFunctions,
   CloseBracket,
+  CloseParen,
   Comma,
   Comment,
   ControlFlowKeyword,
@@ -64,6 +65,7 @@ export {
   NotEqualTo,
   NumericValue,
   OpenBracket,
+  OpenParen,
   Percent,
   Plus,
   Product,

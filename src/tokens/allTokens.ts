@@ -1,40 +1,43 @@
 import {
-  EqualTo,
-  GreaterThan,
-  GreaterThanOrEq,
-  LessThan,
-  LessThanOrEq,
-  NotEqualTo
-} from "./boolean";
-import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
-import {
   AdditionOperator,
+  Address,
   BooleanOperator,
   Brackets,
-  ControlFlowKeyword,
-  MultiplicationOperator,
-  NumericValue
-} from "./categories";
-import { Do, GotoLine, If, Then, While } from "./controlFlow";
-import {
-  Address,
   BuiltinFunctions,
+  CloseBracket,
+  CloseParen,
   Comma,
   Comment,
+  ControlFlowKeyword,
   Decimal,
   Divide,
+  Do,
   Equals,
+  EqualTo,
+  GotoLine,
+  GreaterThan,
+  GreaterThanOrEq,
+  If,
   Integer,
+  LessThan,
+  LessThanOrEq,
   // LineNumber,
   Minus,
+  MultiplicationOperator,
   Newline,
+  NotEqualTo,
+  NumericValue,
+  OpenBracket,
+  OpenParen,
   Percent,
   Plus,
   Product,
   ProgramNumber,
+  Then,
   Var,
+  While,
   WhiteSpace
-} from "./tokens";
+} from ".";
 
 /**
  * The order of tokens is important because token

@@ -4,4 +4,4 @@ import { allTokens } from "./tokens/allTokens";
 
 const MacroLexer = new Lexer(allTokens);
 
-export default MacroLexer;
+export { MacroLexer };

@@ -23,8 +23,11 @@
     "moduleResolution": "node",
     "esModuleInterop": true,
     "resolveJsonModule": true,
-    "keyofStringsOnly": true
+    "keyofStringsOnly": true,
     // "types": ["react", "react-dom", "jest", "node"]
+    "paths": {
+      "@cnc4me/*": ["packages/*"]
+    }
   },
   "include": [
     "src/**/*.ts",

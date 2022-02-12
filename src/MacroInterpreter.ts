@@ -1,7 +1,7 @@
 import { tokenMatcher } from "chevrotain";
 import { match } from "ts-pattern";
 
-import { VariableRegister } from "../types/core";
+import { VariableRegister } from "../types";
 import {
   AdditionExpressionCstChildren,
   AtomicExpressionCstChildren,
@@ -27,7 +27,7 @@ const BaseCstVisitorWithDefaults =
   parser.getBaseCstVisitorConstructorWithDefaults();
 
 // All our semantics go into the visitor, completly separated from the grammar.
-export default class MacroInterpreter extends BaseCstVisitorWithDefaults {
+export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   vars: MacroVariables;
   varStack: MacroVariables[];
 

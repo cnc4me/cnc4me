@@ -23,7 +23,7 @@ import {
   Var
 } from "./tokens/tokens";
 
-export default class MacroParser extends CstParser {
+export class MacroParser extends CstParser {
   constructor() {
     super(allTokens);
     this.performSelfAnalysis();

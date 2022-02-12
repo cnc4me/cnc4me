@@ -1,8 +1,12 @@
 {
   "name": "fanuc-macro-b",
   "version": "0.1.0",
-  "description": "A Lexer, Parser, and Interpreter for Fanuc Macro B gcode files",
-  "author": "Kevin Hill <kevinkhill@pm.me> (https://github.com/kevinkhill)",
+  "description": "A Lexer, Parser, and Interpreter for Fanuc Macro B NC files.",
+  "author": {
+    "email": "kevinkhill@pm.me",
+    "name": "Kevin Hill",
+    "url": "https://github.com/kevinkhill"
+  },
   "license": "MIT",
   "private": true,
   "source": "./src/index.ts",
