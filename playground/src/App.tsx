@@ -2,31 +2,15 @@ import Editor, { EditorProps, OnChange, OnMount } from "@monaco-editor/react";
 import { IRecognitionException } from "chevrotain";
 import React, { useRef, useState } from "react";
 
-import { chrysalis, evaluate } from "../../src";
+import { chrysalis, evaluate, interpreter } from "../../src";
 import { gcodeDarkTheme } from "../../src/monaco-dev/gcode-lang/gcode-dark";
 import { gcodeLanguage } from "../../src/monaco-dev/gcode-lang/gcode-lang";
 import { gcodeLightTheme } from "../../src/monaco-dev/gcode-lang/gcode-light";
 import { Monaco, StandaloneEditor } from "../../types";
 import Errors from "./components/Errors";
 import ValueTable from "./components/ValueTable";
-
-const example = [
-  "( VARIABLE ASSIGNMENTS )",
-  "#1=3.141592654",
-  "( ALGEBRA )",
-  "#2=[1+2]*3",
-  "( VARIABLE SUBSTITUTIONS )",
-  "#3=#2/#1",
-  "#4=[4*#2]-3",
-  "#5=[6+#3+#2]/[#4-#2]",
-  "( BUILT-IN FUNCTIONS )",
-  "#6=ABS[-2.3512]",
-  "#7=SQRT[49]",
-  "#8=ROUND[#1]",
-  "#9=FUP[#1]",
-  "( ... AND MORE! ) ",
-  ""
-].join("\n");
+import { getExampleCode } from "./getExampleCode";
+import useEditorTheme from "./hooks/useEditorTheme";
 
 function handleEditorWillMount(monaco: typeof Monaco) {
   const { registerCustomLanguage, registerCustomTheme } = chrysalis(monaco);
@@ -42,6 +26,14 @@ export function App() {
   const editorRef = useRef<StandaloneEditor>();
   const [macros, setMacros] = useState<[number, number][]>([]);
   const [errors, setErrors] = useState<IRecognitionException[]>([]);
+  const { editorTheme, setEditorThemeDark, setEditorThemeLight } =
+    useEditorTheme("gcode-dark");
+
+  const [checked, setChecked] = useState(false);
+
+  const handleChange = () => {
+    setChecked(!checked);
+  };
 
   const [editorOptions, setEditorOptions] = useState<EditorProps["options"]>({
     minimap: { enabled: false }
@@ -60,13 +52,28 @@ export function App() {
 
   const handleEditorDidMount: OnMount = editor => {
     editorRef.current = editor;
-    parseGCode(example);
+    parseGCode(getExampleCode());
   };
+
+  [1, 2, 3, 4, 5, 6, 7, 8, 9].forEach(register => {
+    interpreter.watchMacroVar(register, update => {
+      console.log("macro variable updated!", update);
+    });
+  });
 
   return (
     <div className="flex flex-col overflow-y-hidden bg-neutral-800">
-      <div className="font-bold text-purple-200 border-b border-b-purple-600 bg-violet-900">
-        <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
+      <div className="flex flex-row font-bold text-purple-200 border-b border-b-purple-600 bg-violet-900">
+        <div className="grow">
+          <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
+        </div>
+        {/* <div className="flex flex-row">
+          <p className="my-auto mr-2">Editor Theme</p>
+          <label className="switch relative inline-block w-14 h-8 mr-4 mt-2">
+            <input type="checkbox" checked={checked} onChange={handleChange} />
+            <span className="slider cursor-pointer inset-0 absolute round rounded-full"></span>
+          </label>
+        </div> */}
       </div>
       <div className="flex flex-row">
         <div className="flex flex-col w-1/2 border-r border-r-purple-600">
@@ -78,10 +85,10 @@ export function App() {
           </p>
           <Editor
             height="90vh"
-            theme="gcode-dark"
+            theme={editorTheme}
             defaultLanguage="gcode"
-            defaultValue={example}
             options={editorOptions}
+            defaultValue={getExampleCode()}
             onChange={handleEditorChange}
             onMount={handleEditorDidMount}
             beforeMount={handleEditorWillMount}

@@ -1,5 +1,6 @@
 import { tokenMatcher } from "chevrotain";
 import { match } from "ts-pattern";
+import { createEmitter } from "ts-typed-events";
 
 import { VariableRegister } from "../types";
 import {
@@ -18,26 +19,32 @@ import {
 import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
 import { Plus, Product } from "./tokens/tokens";
-import { degreeToRadian, getImage, radianToDegree, round } from "./utils";
+import { degreeToRadian, getImage, radianToDegree } from "./utils";
 
-// ----------------- Interpreter -----------------
-// Obtains the default CstVisitor constructor to extend.
 // const BaseCstVisitor = parser.getBaseCstVisitorConstructor();
 const BaseCstVisitorWithDefaults =
   parser.getBaseCstVisitorConstructorWithDefaults();
 
-// All our semantics go into the visitor, completly separated from the grammar.
+interface WatcherValuePayload {
+  prev: number;
+  curr: number;
+  register: number;
+}
+
 export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   vars: MacroVariables;
-  varStack: MacroVariables[];
+  varStack: MacroVariables[] = [];
+  varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
   constructor() {
     super();
     this.vars = new MacroVariables(1, 10);
-    this.varStack = [];
     this.validateVisitor();
   }
 
+  /**
+   * Retrieve a single macro variable register
+   */
   getMacro(register: number): VariableRegister {
     const macro = {
       register,
@@ -51,20 +58,42 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
     return macro;
   }
 
+  /**
+   * Retrieve the macro variable map
+   */
   getMacros(): Map<number, number> {
     return this.vars.getMap();
   }
 
+  /**
+   * Preload a macro variable register with a value
+   */
   setMacroVar(register: number, value: number): VariableRegister {
     return this.getMacro(register).setValue(value);
   }
 
+  /**
+   * Preload multiple macro variable registers with values
+   */
   setMacroVars(registerValues: [register: number, value: number][]) {
     for (const [register, value] of registerValues) {
       this.setMacroVar(register, value);
     }
   }
 
+  /**
+   * Attach a method to observe the value changes for a macro register
+   */
+  watchMacroVar(
+    macroRegister: number,
+    handler: (payload: WatcherValuePayload) => unknown
+  ) {
+    this.varWatches[macroRegister] = handler;
+  }
+
+  /**
+   * Root Node for valid NC Programs
+   */
   program(ctx: ProgramCstNode) {
     return ctx;
   }
@@ -93,14 +122,14 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
       .with("ATAN",  () => radianToDegree(Math.atan(value)))
       .otherwise(() => NaN);
 
-    return round(result);
+    return result;
   }
 
   NumericLiteral(ctx: NumericLiteralCstChildren): number {
     const image = getImage(ctx.NumericValue);
     const value = `${ctx.Minus ? "-" : ""}${image}`;
 
-    return image.includes(".") ? round(parseFloat(value)) : parseInt(value);
+    return image.includes(".") ? parseFloat(value) : parseInt(value);
   }
 
   VariableLiteral(ctx: VariableLiteralCstChildren) {
@@ -121,15 +150,28 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
     }
   }
 
+  /**
+   * Update a macro variable regsiter with a value
+   */
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macroVar: VariableRegister = this.visit(ctx.VariableLiteral);
+    const macro: VariableRegister = this.visit(ctx.VariableLiteral);
+    const values: WatcherValuePayload = {
+      register: macro.register,
+      curr: NaN,
+      prev: macro.value
+    };
 
     const value = this.visit(ctx.expression);
 
-    this.vars.write(macroVar.register, value);
+    values.curr = value;
+
+    this.vars.write(macro.register, value);
+
+    if (this.varWatches[macro.register]) {
+      this.varWatches[macro.register](values);
+    }
   }
 
-  // Note the usage if the "rhs" and "lhs" labels to increase the readability.
   additionExpression(ctx: AdditionExpressionCstChildren) {
     let result = this.visit(ctx.lhs);
 
@@ -152,7 +194,7 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
       });
     }
 
-    return round(result);
+    return result;
   }
 
   multiplicationExpression(ctx: MultiplicationExpressionCstChildren) {
@@ -176,7 +218,7 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
       });
     }
 
-    return round(result);
+    return result;
   }
 
   atomicExpression(ctx: AtomicExpressionCstChildren) {
