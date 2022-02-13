@@ -1,4 +1,4 @@
-import lang from "../monarch-dev/javascript.lang";
+import lang from "../monaco-dev/javascript.lang";
 
 describe("Monarch definition generator", () => {
   it("creates a proper object", () => {
