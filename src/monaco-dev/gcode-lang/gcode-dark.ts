@@ -10,7 +10,5 @@ export const gcodeDarkTheme: MonacoThemeDef = {
     { token: "comment", foreground: "#C09D70", fontStyle: "italic" }
     // { token: "custom-date", foreground: "008800" }
   ],
-  colors: {
-    "editor.foreground": "#3B9B9B"
-  }
+  colors: {}
 };

@@ -1,10 +1,11 @@
+import { BaseParser } from "chevrotain";
 import * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 export type MonacoThemeDef = Monaco.editor.IStandaloneThemeData;
-
 export type MonacoLangDef =
   | Monaco.languages.IMonarchLanguage
   | Monaco.Thenable<Monaco.languages.IMonarchLanguage>;
+export type MonarchTokenizerRule = [match: RegExp, token: string];
 
 /**
  * Given a monaco instance, this method will return two bound functions,
@@ -44,4 +45,22 @@ export function registerCustomLanguage<T extends typeof Monaco>(
   monaco.languages.register({ id: languageId });
   monaco.languages.setMonarchTokensProvider(languageId, languageDef);
   return monaco;
+}
+
+/**
+ * Given a Chevrotain parser, generate a Monarch language definition
+ */
+export function generateMonarchLanguage<T extends BaseParser>(
+  parser: T,
+  brackets: Monaco.languages.IMonarchLanguageBracket[],
+  rules: MonarchTokenizerRule[]
+): MonacoLangDef {
+  console.log(parser);
+
+  return {
+    brackets,
+    tokenizer: {
+      root: rules
+    }
+  };
 }
