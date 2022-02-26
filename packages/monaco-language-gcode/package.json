@@ -1,0 +1,15 @@
+{
+  "name": "@cnc4me/monaco-language-gcode",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Custom gcode language for Monarch and the Monaco Editor",
+  "author": "Kevin Hill",
+  "license": "MIT",
+  "main": "./src/index.ts",
+  "scripts": {
+    "test": "jest"
+  },
+  "dependencies": {
+    "@cnc4me/chrysalis": "workspace:*"
+  }
+}
