@@ -1,40 +1,21 @@
 {
   "compilerOptions": {
-    "strict": true,
-    "jsx": "preserve",
-    "baseUrl": ".",
-    "rootDir": ".",
-    "outDir": "build",
-    "target": "es2015",
-    "module": "commonjs",
-    "lib": ["dom", "es2020"],
-    "sourceMap": true,
-    "declaration": true,
-    "declarationMap": true,
-    /* Additional Checks */
-    // "noUnusedLocals": true,
-    // "noUnusedParameters": true,
-    "noImplicitAny": false,
-    "noImplicitThis": true,
-    "noImplicitReturns": true,
-    "noFallthroughCasesInSwitch": true,
-    "allowSyntheticDefaultImports": true,
-    /* Module Resolution Options */
+    "target": "ESNext",
+    "module": "ESNext",
+    "jsx": "react-jsx",
     "moduleResolution": "node",
-    "esModuleInterop": true,
+    "strict": true,
+    "noEmit": true,
+    "allowJs": false,
+    "skipLibCheck": false,
+    "isolatedModules": true,
+    "esModuleInterop": false,
     "resolveJsonModule": true,
-    "keyofStringsOnly": true,
-    // "types": ["react", "react-dom", "jest", "node"]
-    "paths": {
-      "@cnc4me/*": ["packages/*"]
-    }
+    "useDefineForClassFields": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "lib": ["DOM", "DOM.Iterable", "ESNext"]
   },
-  "include": [
-    "src/**/*.ts",
-    "demo/**/*.ts",
-    "scripts/*.ts",
-    "types/**/*.ts",
-    "playground/**/*.ts*"
-  ],
-  "exclude": ["node_modules"]
+  "include": ["src"],
+  "references": [{ "path": "./tsconfig.node.json" }]
 }

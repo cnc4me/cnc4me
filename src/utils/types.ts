@@ -1,9 +1,5 @@
 import { ILexingError, ILexingResult } from "chevrotain";
-import type * as Monaco from "monaco-editor";
-
-import { MacroParser } from "../src/MacroParser";
-
-export type { Monaco };
+import { MacroParser } from "@cnc4me/fanuc-macro-b";
 
 export interface ParsingResultWithLexingErrors extends IParsingResult {
   lexErrors: ILexingError[];
@@ -19,5 +15,3 @@ export interface VariableRegister {
   value: number;
   setValue: (value: number) => this;
 }
-
-export type StandaloneEditor = Monaco.editor.IStandaloneCodeEditor;
