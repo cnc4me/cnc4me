@@ -1,0 +1,11 @@
+{
+  "extends": "../../.eslintrc.js",
+  "overrides": [
+    {
+      "files": ["./src/**/*.tsx"],
+      "rules": {
+        "jest/require-hook": "off"
+      }
+    }
+  ]
+}
