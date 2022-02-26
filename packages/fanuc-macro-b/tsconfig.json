@@ -1,0 +1,16 @@
+{
+  "extends": "../../tsconfig.base.json",
+  "compilerOptions": {
+    "module": "CommonJS",
+    "types": [
+      "node",
+      "jest",
+      "@cnc4me/jest-matchers",
+      "@cnc4me/chevrotain-jest-extension"
+    ]
+  },
+  "references": [
+    { "path": "./tsconfig.lib.json" },
+    { "path": "./tsconfig.test.json" }
+  ]
+}

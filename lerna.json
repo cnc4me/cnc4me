@@ -1,0 +1,9 @@
+{
+  "$schema": "https://json.schemastore.org/lerna",
+  "useWorkspaces": true,
+  "npmClient": "pnpm",
+  "packages": [
+    "packages/*"
+  ],
+  "version": "0.0.0"
+}

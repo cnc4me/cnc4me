@@ -1,0 +1,61 @@
+{
+  "folders": [
+    {
+      "path": "..",
+      "name": "<root>"
+    },
+    {
+      "name": "@cnc4me/macro-playground",
+      "path": "../apps/macro-playground"
+    },
+    {
+      "name": "@cnc4me/fanuc-macro-b",
+      "path": "../packages/fanuc-macro-b"
+    },
+    {
+      "name": "@cnc4me/jest-matchers",
+      "path": "../packages/jest-matchers"
+    },
+    {
+      "name": "@cnc4me/chrysalis",
+      "path": "../packages/chrysalis"
+    },
+    {
+      "name": "@cnc4me/monaco-language-gcode",
+      "path": "../packages/monaco-language-gcode"
+    },
+    {
+      "name": "@cnc4me/monaco-theme-gcode",
+      "path": "../packages/monaco-theme-gcode"
+    },
+    {
+      "name": "@cnc4me/chevrotain-jest-extension",
+      "path": "../packages/chevrotain-jest-extension"
+    },
+    {
+      "name": "@cnc4me/chevrotain-types-generator",
+      "path": "../packages/chevrotain-types-generator"
+    },
+    {
+      "name": "@cnc4me/testing-utils",
+      "path": "../tools/testing-utils"
+    }
+  ],
+  "settings": {
+    "npm.packageManager": "pnpm",
+    "liveFrame.pane": "Beside",
+    "liveFrame.title": "Local Development",
+    "liveFrame.url": "http://localhost:3000",
+    "eslint.useESLintClass": true,
+    "eslint.packageManager": "pnpm",
+    "eslint.workingDirectories": ["tools/*", "packages/*"],
+    "files.exclude": {
+      "**/.git": true,
+      "**/.swc": true,
+      "**/.DS_Store": true,
+      "**/Thumbs.db": true,
+      "**/node_modules": true,
+      "**/.parcel-cache": true
+    }
+  }
+}
