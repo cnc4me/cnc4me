@@ -1,12 +1,14 @@
 {
-  "name": "@cnc4me/monorepo",
-  "version": "0.0.0",
+  "name": "@cnc4me/cnc4me",
+  "version": "1.0.0",
   "license": "MIT",
-  "scripts": {},
   "private": true,
   "workspaces": [
     "packages/*"
   ],
+  "scripts": {
+    "start": "pnpm --filter ./apps/website dev"
+  },
   "devDependencies": {
     "@swc/core": "^1.2.144",
     "@swc/jest": "^0.2.17",
