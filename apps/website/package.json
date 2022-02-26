@@ -8,6 +8,10 @@
     "preview": "vite preview"
   },
   "dependencies": {
+    "@cnc4me/chrysalis": "workspace:*",
+    "@cnc4me/fanuc-macro-b": "workspace:*",
+    "@cnc4me/monaco-language-gcode": "workspace:*",
+    "@cnc4me/monaco-theme-gcode": "workspace:*",
     "@monaco-editor/react": "^4.3.1",
     "chevrotain": "^10.1.1",
     "monaco-editor": "^0.32.1",
