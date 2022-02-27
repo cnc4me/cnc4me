@@ -6,7 +6,7 @@
     },
     {
       "name": "@cnc4me/macro-playground",
-      "path": "../apps/macro-playground"
+      "path": "../apps/website"
     },
     {
       "name": "@cnc4me/fanuc-macro-b",

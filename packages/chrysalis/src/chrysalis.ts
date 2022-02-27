@@ -31,7 +31,8 @@ export function createMonarchLanguage(
   rules: MonarchTokenizerRule[]
 ): MonacoLangDef {
   return {
-    brackets,
+    // @todo this is gross
+    brackets: brackets as Monaco.languages.IMonarchLanguageBracket[],
     tokenizer: {
       root: rules
     }

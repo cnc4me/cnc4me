@@ -7,7 +7,8 @@
     "packages/*"
   ],
   "scripts": {
-    "start": "pnpm --filter ./apps/website dev"
+    "dev": "pnpm --filter ./apps/website dev",
+    "build:site": "pnpm --filter ./apps/website build"
   },
   "devDependencies": {
     "@swc/core": "^1.2.144",

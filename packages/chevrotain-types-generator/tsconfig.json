@@ -2,7 +2,7 @@
   "extends": "../../tsconfig.base.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../../dist/chrysalis/out-tsc",
+    "outDir": "../../dist/chevrotain-types-generator/out-tsc",
     "types": ["node"]
   },
   "include": ["./src/*.ts", "./src/**/*.ts"],

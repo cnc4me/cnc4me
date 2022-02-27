@@ -107,7 +107,8 @@ module.exports = {
     "import/no-named-default": "error",
     "import/no-self-import": "error",
     "import/no-named-export": "off", // we want everything to be a named export
-    "import/prefer-default-export": "off" // we want everything to be named
+    "import/no-default-export": "off",
+    "import/prefer-default-export": "warn" // we want everything to be named
   },
   overrides: [
     // all test files

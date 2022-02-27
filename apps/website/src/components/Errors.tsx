@@ -1,8 +1,8 @@
-import React from "react";
-
+import { ParsingErrors } from "../types";
 import { zeroPad } from "../utils/helpers";
 
-export default function Errors({ errors }) {
+// eslint-disable-next-line import/no-default-export
+export default function Errors({ errors }: { errors: ParsingErrors }) {
   return (
     <div className="">
       <h1 className="pb-1 text-xl font-bold text-violet-400">Errors:</h1>
