@@ -3,12 +3,14 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
+  "packageManager": "pnpm",
   "workspaces": [
     "packages/*"
   ],
   "scripts": {
     "dev": "pnpm --filter ./apps/website dev",
-    "build:site": "pnpm --filter ./apps/website build"
+    "site:test": "pnpm --filter ./apps/website test",
+    "site:build": "pnpm --filter ./apps/website build"
   },
   "devDependencies": {
     "@swc/core": "^1.2.144",
