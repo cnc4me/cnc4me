@@ -3,5 +3,5 @@
   "compilerOptions": {
     "declaration": true
   },
-  "exclude": ["./tests/*.ts", "./tests/**/*.ts"]
+  "exclude": ["tests/*"]
 }

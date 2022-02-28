@@ -5,7 +5,7 @@
     "outDir": "../../dist/chevrotain-types-generator/out-tsc",
     "types": ["node"]
   },
-  "include": ["./src/*.ts", "./src/**/*.ts"],
+  "include": ["src/*", "example/*", "tests/*"],
   "references": [
     {
       "path": "./tsconfig.lib.json"

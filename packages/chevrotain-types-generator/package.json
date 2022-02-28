@@ -13,7 +13,8 @@
   ],
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest"
+    "test": "jest",
+    "demo": "tsnd example/generate-types.ts"
   },
   "dependencies": {
     "chevrotain": "^10.1.1"
