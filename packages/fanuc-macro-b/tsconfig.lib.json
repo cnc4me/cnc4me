@@ -1,7 +1,6 @@
 {
   "extends": "./tsconfig.json",
   "compilerOptions": {
-    "outDir": "../../dist/fanuc-macro-b/out-tsc",
     "declaration": true,
     "types": []
   },
