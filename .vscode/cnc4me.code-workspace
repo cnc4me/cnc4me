@@ -2,42 +2,42 @@
   "folders": [
     {
       "path": "..",
-      "name": "<root>"
+      "name": "Monorepo Root"
     },
     {
-      "name": "@cnc4me/macro-playground",
+      "name": "[APP] Website",
       "path": "../apps/website"
     },
     {
-      "name": "@cnc4me/fanuc-macro-b",
+      "name": "[PKG] Fanuc Macro B",
       "path": "../packages/fanuc-macro-b"
     },
     {
-      "name": "@cnc4me/jest-matchers",
+      "name": "[PKG] Jest Matchers",
       "path": "../packages/jest-matchers"
     },
     {
-      "name": "@cnc4me/chrysalis",
+      "name": "[PKG] Chrysalis",
       "path": "../packages/chrysalis"
     },
     {
-      "name": "@cnc4me/monaco-language-gcode",
+      "name": "[PKG] Monaco Lang",
       "path": "../packages/monaco-language-gcode"
     },
     {
-      "name": "@cnc4me/monaco-theme-gcode",
+      "name": "[PKG] Monaco Theme",
       "path": "../packages/monaco-theme-gcode"
     },
     {
-      "name": "@cnc4me/chevrotain-jest-extension",
+      "name": "[PKG] Chevrotain Jest Extension",
       "path": "../packages/chevrotain-jest-extension"
     },
     {
-      "name": "@cnc4me/chevrotain-types-generator",
+      "name": "[PKG] Chevrotain Types Generator",
       "path": "../packages/chevrotain-types-generator"
     },
     {
-      "name": "@cnc4me/testing-utils",
+      "name": "[TOOL] Testing Utils",
       "path": "../tools/testing-utils"
     }
   ],
