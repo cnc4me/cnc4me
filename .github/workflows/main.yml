@@ -13,12 +13,15 @@ jobs:
     steps:
       - uses: actions/checkout@v2
         name: Checkout Source
+      - uses: pnpm/action-setup@v2.1.0
+        name: Install PNPM
+        with:
+          version: 6
       - uses: actions/setup-node@v2
-        name: Setup Node & PNPM
+        name: Setup Node for PNPM
         with:
           node-version: '14'
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
-      - run: npm -g i pnpm
       - run: pnpm install
       - run: pnpm test
