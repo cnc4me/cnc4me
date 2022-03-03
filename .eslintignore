@@ -1,0 +1,10 @@
+.vscode/
+.rush/
+
+dist/
+coverage/
+node_modules/
+
+Sapps/*/node_modules/
+tools/*/node_modules/
+pacakages/*/node_modules/

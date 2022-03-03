@@ -114,6 +114,8 @@ importers:
       '@types/node': ^17.0.21
       chevrotain: ^10.1.1
       jest: ^27.5.1
+      jest-extended: ^2.0.0
+      typescript: ^4.5.5
     dependencies:
       chevrotain: 10.1.1
     devDependencies:
@@ -122,6 +124,8 @@ importers:
       '@types/jest': 27.4.1
       '@types/node': 17.0.21
       jest: 27.5.1
+      jest-extended: 2.0.0_jest@27.5.1
+      typescript: 4.5.5
 
   packages/chrysalis:
     specifiers:

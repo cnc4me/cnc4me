@@ -56,6 +56,7 @@
       "**/Thumbs.db": true,
       "**/node_modules": true,
       "**/.parcel-cache": true
-    }
+    },
+    "eslint.format.enable": true
   }
 }

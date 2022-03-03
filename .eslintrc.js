@@ -86,14 +86,24 @@ module.exports = {
     "no-process-exit": "error",
 
     //
+    // simple-import-sort
+    //
+
+    "simple-import-sort/imports": "error",
+    "simple-import-sort/exports": "error",
+
+    //
     // eslint-plugin-import
     //
 
     "import/first": "error",
-    "import/newline-after-import": "error",
-    "import/no-absolute-path": "error",
+    "import/prefer-default-export": "warn",
+    "import/no-default-export": "off",
+    "import/no-named-export": "off",
     "import/no-amd": "error",
-    "import/no-default-export": "error",
+    "import/no-duplicates": "error",
+    "import/no-absolute-path": "error",
+    "import/newline-after-import": "error",
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -106,14 +116,14 @@ module.exports = {
     "import/no-mutable-exports": "error",
     "import/no-named-default": "error",
     "import/no-self-import": "error",
-    "import/no-named-export": "off", // we want everything to be a named export
-    "import/no-default-export": "off",
-    "import/prefer-default-export": "warn" // we want everything to be named
   },
   overrides: [
     // all test files
     {
       plugins: [
+        "jest"
+      ],
+      extends: [
         "plugin:jest/all",
       ],
       files: [
