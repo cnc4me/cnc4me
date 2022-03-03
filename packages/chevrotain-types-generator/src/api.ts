@@ -17,7 +17,7 @@ export function generateProductions(parser: CstParser) {
   return parser.getGAstProductions();
 }
 
-export function generateTypescriptNode(parser: CstParser, outFile = DEFAULT_FILENAME) {
+export function generateTsNode(parser: CstParser, outFile = DEFAULT_FILENAME) {
   return ts.createSourceFile(outFile, generateTypes(parser), ts.ScriptTarget.Latest);
 }
 

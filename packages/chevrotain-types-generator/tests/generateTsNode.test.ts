@@ -1,17 +1,15 @@
-import { SourceFile } from "typescript";
+import { parser } from "../example/parser";
+import { generateTsNode } from "../src";
 
-import { generateTypescriptNode } from "..";
-import { parser } from "../example/parser/json-parser";
-
-describe("generateTypescriptNode()", () => {
-  let result: SourceFile;
-
-  beforeAll(() => {
-    result = generateTypescriptNode(parser);
+describe("generateTsNode()", () => {
+  const result = generateTsNode(parser);
+  it("should be a declaration file", () => {
+    expect(result.isDeclarationFile).toBeTrue();
   });
 
   it("should have start and end positions", () => {
     expect(result.pos).toBeInteger();
+
     expect(result.end).toBeInteger();
   });
 

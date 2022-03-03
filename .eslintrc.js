@@ -8,7 +8,7 @@ module.exports = {
     emcaVersion: "2020",
     sourceType: "module",
     tsconfigRootDir: path.resolve(__dirname),
-    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
+    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.spec.json"]
   },
   env: {
     es6: true,
@@ -47,7 +47,23 @@ module.exports = {
   rules: {
     "prettier/prettier": "error",
 
+    //
+    // eslint-base
+    //
+
+    curly: ["error", "all"],
+    "no-mixed-operators": "error",
+    // "no-console": "error",
+    "no-process-exit": "error",
+
+
+    //
+    // typescript
+    //
+
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
     "@typescript-eslint/no-empty-function": [
@@ -77,15 +93,6 @@ module.exports = {
     ],
 
     //
-    // eslint-base
-    //
-
-    curly: ["error", "all"],
-    "no-mixed-operators": "error",
-    "no-console": "error",
-    "no-process-exit": "error",
-
-    //
     // simple-import-sort
     //
 
@@ -96,10 +103,12 @@ module.exports = {
     // eslint-plugin-import
     //
 
-    "import/first": "error",
-    "import/prefer-default-export": "warn",
-    "import/no-default-export": "off",
+    "import/namespace": "off", // SUPER DUPER SLOW, why?
+    "import/default": "off",   // ALSO SLOW, why?
     "import/no-named-export": "off",
+    "import/no-default-export": "off",
+    "import/prefer-default-export": "warn",
+    "import/first": "error",
     "import/no-amd": "error",
     "import/no-duplicates": "error",
     "import/no-absolute-path": "error",
@@ -127,7 +136,7 @@ module.exports = {
         "plugin:jest/all",
       ],
       files: [
-        "packages/*/*.config.js",
+        "packages/*/jest.config.js",
         "packages/*/tests/**/*.spec.ts",
         "packages/*/tests/**/*.test.ts",
         "packages/*/tests/**/spec.ts",

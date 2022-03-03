@@ -1,7 +1,7 @@
-import { generateTypescriptNode } from "../src";
+import { generateTsNode } from "../src";
 import output from "./output";
-import { parser } from "./parser/json-parser";
+import { parser } from "./parser";
 
-const ast = generateTypescriptNode(parser);
+const ast = generateTsNode(parser);
 
 output("ast.json", JSON.stringify(ast, null, "  "));

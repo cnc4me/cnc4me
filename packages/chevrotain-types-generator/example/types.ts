@@ -1,6 +1,6 @@
 import { DEFAULT_FILENAME, generateTypes } from "../src";
 import outputJson from "./output";
-import { parser } from "./parser/json-parser";
+import { parser } from "./parser";
 
 const types = generateTypes(parser);
 

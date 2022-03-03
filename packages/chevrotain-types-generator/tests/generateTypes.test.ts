@@ -1,6 +1,6 @@
 /* eslint-disable no-useless-escape */
 import { generateTypes } from "..";
-import { parser } from "../example/parser/json-parser";
+import { parser } from "../example/parser";
 
 describe("generateTypes()", () => {
   it("should generate a proper types file in string format", () => {
