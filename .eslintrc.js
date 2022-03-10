@@ -107,12 +107,16 @@ module.exports = {
     "import/default": "off",   // ALSO SLOW, why?
     "import/no-named-export": "off",
     "import/no-default-export": "off",
-    "import/prefer-default-export": "warn",
+    "import/prefer-default-export": "off",
     "import/first": "error",
     "import/no-amd": "error",
     "import/no-duplicates": "error",
+    "import/no-mutable-exports": "error",
+    "import/no-named-default": "error",
+    "import/no-self-import": "error",
     "import/no-absolute-path": "error",
     "import/newline-after-import": "error",
+    "import/no-unresolved": ["error", { caseSensitive: false }],
     "import/no-extraneous-dependencies": [
       "error",
       {
@@ -120,11 +124,7 @@ module.exports = {
         peerDependencies: true,
         optionalDependencies: false
       }
-    ],
-    "import/no-unresolved": ["error", { caseSensitive: false }],
-    "import/no-mutable-exports": "error",
-    "import/no-named-default": "error",
-    "import/no-self-import": "error",
+    ]
   },
   overrides: [
     // all test files

@@ -4,11 +4,11 @@ import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import { useRef, useState } from "react";
 
 import Errors from "./components/Errors";
-import { zeroPad } from "./utils/helpers";
-import { getExampleCode } from "./utils/getExampleCode";
-import { useEditorTheme } from "./hooks/useEditorTheme";
 import { configureMonaco } from "./handlers/configureMonaco";
+import { useEditorTheme } from "./hooks/useEditorTheme";
 import { EditorOptions, MonacoEditor, ParsingErrors } from "./types";
+import { getExampleCode } from "./utils/getExampleCode";
+import { zeroPad } from "./utils/helpers";
 
 // eslint-disable-next-line import/no-default-export
 export default function App() {

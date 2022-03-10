@@ -14,5 +14,5 @@ export interface IParsingResult {
 export interface VariableRegister {
   register: number;
   value: number;
-  setValue: (value: number) => this;
+  // setValue: (value: number) => this;
 }

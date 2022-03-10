@@ -11,6 +11,7 @@ import {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  // LineCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
   ProgramCstNode,
@@ -18,14 +19,11 @@ import {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
+import { degreeToRadian, getImage, radianToDegree } from "../utils";
+import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
-import { Plus, Product } from "./Tokens/tokens";
-import { degreeToRadian, getImage, radianToDegree } from "../utils";
-
-// const BaseCstVisitor = parser.getBaseCstVisitorConstructor();
-const BaseCstVisitorWithDefaults =
-  parser.getBaseCstVisitorConstructorWithDefaults();
+import { Plus, Product } from "./Tokens";
 
 interface WatcherValuePayload {
   prev: number;
@@ -33,15 +31,34 @@ interface WatcherValuePayload {
   register: number;
 }
 
+// const BaseCstVisitor = parser.getBaseCstVisitorConstructor();
+const BaseCstVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults();
+
+/**
+ * Macro Interpreter
+ */
 export class MacroInterpreter extends BaseCstVisitorWithDefaults {
+  logger: MacroLogger;
+
   vars: MacroVariables;
   varStack: MacroVariables[] = [];
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
   constructor() {
     super();
+
+    // Variable Configuration
     this.vars = new MacroVariables(1, 10);
+
+    // Logger Configuration
+    this.logger = new MacroLogger();
+
+    // Keep This Last!
     this.validateVisitor();
+  }
+
+  public onLog(listener: LoggerConfig["listener"]) {
+    this.logger.tap(listener);
   }
 
   /**
@@ -50,11 +67,7 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   getMacro(register: number): VariableRegister {
     const macro = {
       register,
-      value: this.vars.getMap().get(register) ?? NaN,
-      setValue: (value: number) => {
-        this.vars.write(register, value);
-        return macro;
-      }
+      value: this.vars.getMap().get(register) ?? NaN
     };
 
     return macro;
@@ -70,8 +83,12 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   /**
    * Preload a macro variable register with a value
    */
-  setMacroVar(register: number, value: number): VariableRegister {
-    return this.getMacro(register).setValue(value);
+  setMacroValue(register: number, value: number): VariableRegister {
+    this.vars.write(register, value);
+
+    this.logger.operation(`#${register}`, "=", value);
+
+    return this.getMacro(register);
   }
 
   /**
@@ -79,17 +96,14 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
    */
   setMacroVars(registerValues: [register: number, value: number][]) {
     for (const [register, value] of registerValues) {
-      this.setMacroVar(register, value);
+      this.setMacroValue(register, value);
     }
   }
 
   /**
    * Attach a method to observe the value changes for a macro register
    */
-  watchMacroVar(
-    macroRegister: number,
-    handler: (payload: WatcherValuePayload) => unknown
-  ) {
+  watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
     this.varWatches[macroRegister] = handler;
   }
 
@@ -99,6 +113,17 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   program(ctx: ProgramCstNode) {
     return ctx;
   }
+
+  // line(ctx: LineCstChildren) {
+  //   console.log(ctx);
+
+  //   if (ctx.variableAssignment) {
+  //     return this.visit(ctx.variableAssignment);
+  //   }
+  //   // if (ctx) {
+  //   //   return this.visit(ctx);
+  //   // }
+  // }
 
   expression(ctx: ExpressionCstChildren) {
     return this.visit(ctx.additionExpression);
@@ -167,7 +192,7 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
 
     values.curr = value;
 
-    this.vars.write(macro.register, value);
+    this.setMacroValue(macro.register, value);
 
     if (this.varWatches[macro.register]) {
       this.varWatches[macro.register](values);
@@ -177,19 +202,21 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   additionExpression(ctx: AdditionExpressionCstChildren) {
     let result = this.visit(ctx.lhs);
 
-    // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
+    // "rhs" key may be undefined as the grammar defines it as
+    // optional(MANY === zero or more).
     if (ctx.rhs) {
       ctx.rhs.forEach((rhsOperand, idx) => {
-        // there will be one operator for each  rhs operand
+        // there will be one operator for each rhs operand
         const rhsValue = this.visit(rhsOperand);
 
         if (ctx?.AdditionOperator) {
           const operator = ctx.AdditionOperator[idx];
 
           if (tokenMatcher(operator, Plus)) {
+            this.logger.operation(result, "+", rhsValue);
             result += rhsValue;
           } else {
-            // Minus
+            this.logger.operation(result, "-", rhsValue);
             result -= rhsValue;
           }
         }
@@ -212,8 +239,10 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
           const operator = ctx.MultiplicationOperator[idx];
 
           if (tokenMatcher(operator, Product)) {
+            this.logger.operation(result, "*", rhsValue);
             result *= rhsValue;
           } else {
+            this.logger.operation(result, "/", rhsValue);
             result /= rhsValue;
           }
         }

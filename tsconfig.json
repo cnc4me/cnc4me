@@ -1,4 +1,36 @@
 {
-  "extends": "./tsconfig.base.json",
-  "include": [".eslintrc.js"]
+  "compilerOptions": {
+    "composite": true,
+    "strict": true,
+    "module": "CommonJS",
+    "moduleResolution": "node",
+    "target": "es2017",
+    "lib": ["es2017"],
+    "baseUrl": ".",
+    "paths": {
+      "@cnc4me/*": ["./packages/*"]
+    },
+    "sourceMap": true,
+    "skipLibCheck": true,
+    "declaration": true,
+    "declarationMap": true,
+    "noUnusedLocals": true,
+    "esModuleInterop": true,
+    "noImplicitReturns": true,
+    "noImplicitOverride": true,
+    "noUnusedParameters": true,
+    "allowUnusedLabels": false,
+    "allowUnreachableCode": false,
+    "noFallthroughCasesInSwitch": true,
+    "allowSyntheticDefaultImports": true,
+    "forceConsistentCasingInFileNames": true,
+    "noPropertyAccessFromIndexSignature": true
+  },
+  "references": [
+    { "path": "./packages/chrysalis" },
+    { "path": "./packages/fanuc-macro-b" },
+    { "path": "./packages/monaco-theme-gcode" },
+    { "path": "./packages/monaco-language-gcode" }
+  ],
+  "include": ["**/.eslintrc.js"]
 }

@@ -1,9 +1,9 @@
 import { ILexingResult, IToken } from "chevrotain";
 
-import { ParsingResultWithLexingErrors } from "./types";
 import { interpreter } from "./lib/MacroInterpreter";
-import { MacroLexer } from "./lib/MacroLexer";
+import { lexer } from "./lib/MacroLexer";
 import { parser } from "./lib/MacroParser";
+import { ParsingResultWithLexingErrors } from "./types";
 
 export function degreeToRadian(degrees: number): number {
   return (degrees * Math.PI) / 180;
@@ -27,22 +27,22 @@ export function getImage(token: IToken | IToken[]) {
 /**
  * Tokenize a block of text
  */
-export function lex(inputText: string): ILexingResult {
-  return MacroLexer.tokenize(inputText);
+export function tokenize(inputText: string): ILexingResult {
+  return lexer(inputText);
 }
 
 /**
  * Parse a given block of text
  */
 export function parse(text: string): ParsingResultWithLexingErrors {
-  const lexResult = lex(text);
+  const lexResult = tokenize(text);
 
   parser.input = lexResult.tokens;
 
   return {
     parser,
     lexResult,
-    lexErrors: lexResult.errors,
+    lexErrors: lexResult.errors
   };
 }
 
@@ -52,7 +52,7 @@ export function parse(text: string): ParsingResultWithLexingErrors {
 export function interpret(text: string, rule: string) {
   const { parser, lexResult } = parse(text);
 
-  // @ts-expect-error The parser should be called by method but this will work...
+  // @ts-expect-error blah
   const cst = parser[rule]();
 
   const result = interpreter.visit(cst);
@@ -63,7 +63,7 @@ export function interpret(text: string, rule: string) {
     lexResult,
     interpreter,
     parseErrors: parser.errors,
-    macros: interpreter.getMacros(),
+    macros: interpreter.getMacros()
   };
 }
 

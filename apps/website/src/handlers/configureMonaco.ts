@@ -1,7 +1,6 @@
 import { chrysalis } from "@cnc4me/chrysalis";
 import { gcodeLanguage } from "@cnc4me/monaco-language-gcode";
 import { gcodeDarkTheme, gcodeLightTheme } from "@cnc4me/monaco-theme-gcode";
-
 import type * as Monaco from "monaco-editor";
 
 export function configureMonaco<T extends typeof Monaco>(monaco: T): T {

@@ -109,16 +109,13 @@ export class MacroParser extends CstParser {
   /**
    *
    */
-  public multiplicationExpression = this.RULE(
-    "multiplicationExpression",
-    () => {
-      this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
-      this.MANY(() => {
-        this.CONSUME(MultiplicationOperator);
-        this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
-      });
-    }
-  );
+  public multiplicationExpression = this.RULE("multiplicationExpression", () => {
+    this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
+    this.MANY(() => {
+      this.CONSUME(MultiplicationOperator);
+      this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
+    });
+  });
 
   /**
    * Calling a Built-In function
@@ -147,10 +144,7 @@ export class MacroParser extends CstParser {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.booleanExpression);
     this.CONSUME(CloseBracket);
-    this.OR([
-      { ALT: () => this.CONSUME(Then) },
-      { ALT: () => this.CONSUME(GotoLine) }
-    ]);
+    this.OR([{ ALT: () => this.CONSUME(Then) }, { ALT: () => this.CONSUME(GotoLine) }]);
   });
 
   /**
