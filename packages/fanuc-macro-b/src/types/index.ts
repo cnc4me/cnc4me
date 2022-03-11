@@ -2,6 +2,12 @@ import { ILexingError, ILexingResult } from "chevrotain";
 
 import { MacroParser } from "../lib/MacroParser";
 
+export type MacroVariables = Map<number, number>;
+
+export interface MacroProgram extends ILexingResult {
+  input: string;
+}
+
 export interface ParsingResultWithLexingErrors extends IParsingResult {
   lexErrors: ILexingError[];
 }

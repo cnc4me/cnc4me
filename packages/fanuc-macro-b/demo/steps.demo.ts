@@ -1,4 +1,4 @@
-import { interpreter, parser, tokenize } from "../src/";
+import { interpreter, parser, tokenize } from "../src";
 
 const result = tokenize(`
 #1=1.12345678

@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { ILexingResult, IToken } from "chevrotain";
 
 import { interpreter } from "./lib/MacroInterpreter";

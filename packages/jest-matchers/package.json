@@ -2,14 +2,14 @@
   "name": "@cnc4me/jest-matchers",
   "version": "1.0.0",
   "description": "Custom matchers for testing high-precision numbers.",
+  "keywords": [],
+  "license": "MIT",
+  "author": "Kevin Hill",
   "main": "./src/index.ts",
   "types": "./src/index.d.ts",
   "scripts": {
     "test": "cross-env DB_ENV=testing jest --watch -f --runInBand"
   },
-  "keywords": [],
-  "author": "Kevin Hill",
-  "license": "MIT",
   "devDependencies": {
     "@swc/core": "^1.2.144",
     "@swc/jest": "^0.2.17",

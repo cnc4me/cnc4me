@@ -1,4 +1,3 @@
-/* eslint-disable @typescript-eslint/no-empty-interface */
 import type { IToken } from "chevrotain";
 
 interface CustomMatchers<R = unknown> {
@@ -13,3 +12,5 @@ declare global {
     interface InverseAsymmetricMatchers extends CustomMatchers {}
   }
 }
+
+export { };

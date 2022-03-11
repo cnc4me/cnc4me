@@ -182,6 +182,7 @@ importers:
       '@types/node': ^17.0.21
       '@typescript-eslint/eslint-plugin': ^5.12.1
       '@typescript-eslint/parser': ^5.12.1
+      ansi-colors: ^4.1.1
       chevrotain: ^10.1.1
       eslint: ^8.9.0
       eslint-config-prettier: ^8.4.0
@@ -196,6 +197,7 @@ importers:
       ts-pattern: ^3.3.5
       typescript: ^4.5.5
     dependencies:
+      ansi-colors: 4.1.1
       chevrotain: 10.1.1
       ts-pattern: 3.3.5
     devDependencies:
@@ -2396,6 +2398,11 @@ packages:
       json-schema-traverse: 0.4.1
       uri-js: 4.4.1
     dev: true
+
+  /ansi-colors/4.1.1:
+    resolution: {integrity: sha512-JoX0apGbHaUJBNl6yF+p6JAFYZ666/hhCGKN5t9QFjbJQKUU/g8MNbFDbvfrgKXvI1QpZplPOnwIo99lX/AAmA==}
+    engines: {node: '>=6'}
+    dev: false
 
   /ansi-escapes/4.3.2:
     resolution: {integrity: sha512-gKXj5ALrKWQLsYG9jlTRmR/xKluxHV+Z9QEwNIgCfM1/uwPMCuzVVnh5mwTd+OuBZcwSIMbqssNWRm1lE51QaQ==}

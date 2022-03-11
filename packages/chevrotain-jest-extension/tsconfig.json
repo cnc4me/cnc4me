@@ -1,6 +1,7 @@
 {
-  "extends": "../../tsconfig.base.json",
+  "extends": "../../tsconfig.json",
   "compilerOptions": {
+    "composite": true,
     "rootDir": ".",
     "outDir": "../../dist/chevrotain-types-generator/out-tsc",
     "types": ["node"]

@@ -3,15 +3,16 @@
   "version": "1.0.0",
   "private": true,
   "description": "Custom matchers for testing Chevrotain components",
-  "author": "Kevin Hill",
-  "license": "MIT",
   "keywords": [
     "chevrotain",
     "parser",
     "jest",
     "matchers"
   ],
+  "license": "MIT",
+  "author": "Kevin Hill",
   "main": "./src/index.ts",
+  "types": "./src/index.d.ts",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1"
   },
