@@ -23,6 +23,14 @@ export class MacroRuntime {
   private _vars: MacroVariables = new Map();
   private _programs: MacroProgram[] = [];
 
+  get ProgramCount(): number {
+    return this._programs.length;
+  }
+
+  get ActiveProgram(): number {
+    return this._activeProgram;
+  }
+
   constructor() {
     // eslint-disable-next-line prettier/prettier
     const registers: number[] = [

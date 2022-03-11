@@ -8,7 +8,7 @@ module.exports = {
     emcaVersion: "2020",
     sourceType: "module",
     tsconfigRootDir: path.resolve(__dirname),
-    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.spec.json"]
+    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
   },
   env: {
     es6: true,
