@@ -9,9 +9,13 @@
   "scripts": {
     "test": "jest --runInBand",
     "repl": "tsnd ./demo/repl.demo.ts",
+    "types": "tsnd ./scripts/generateDts.ts",
+    "parser": "tsnd --respawn ./demo/parser.demo.ts",
+    "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
     "build": "tsc -b -v tsconfig.lib.json"
   },
   "dependencies": {
+    "@cnc4me/chevrotain-types-generator": "workspace:*",
     "ansi-colors": "^4.1.1",
     "bandersnatch": "^1.9.0",
     "chevrotain": "^10.1.1",

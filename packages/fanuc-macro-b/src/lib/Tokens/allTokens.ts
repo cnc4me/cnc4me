@@ -14,6 +14,7 @@ import {
   Do,
   Equals,
   EqualTo,
+  Gcode,
   GotoLine,
   GreaterThan,
   GreaterThanOrEq,
@@ -21,6 +22,7 @@ import {
   Integer,
   LessThan,
   LessThanOrEq,
+  Mcode,
   Minus,
   MultiplicationOperator,
   Newline,
@@ -35,8 +37,9 @@ import {
   Then,
   Var,
   While,
-  WhiteSpace,
+  WhiteSpace
 } from ".";
+import { Tcode } from "./tokens";
 
 /**
  * The order of tokens is important because token
@@ -67,6 +70,9 @@ export const allTokens = [
   Minus,
   Plus,
   Percent,
+  Gcode,
+  Mcode,
+  Tcode,
   Address,
   Decimal,
   Integer,
@@ -83,5 +89,5 @@ export const allTokens = [
   NumericValue,
   BooleanOperator,
   AdditionOperator,
-  MultiplicationOperator,
+  MultiplicationOperator
 ];

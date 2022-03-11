@@ -1,34 +1,43 @@
 import { createToken, Lexer } from "chevrotain";
 
-import {
-  AdditionOperator,
-  MultiplicationOperator,
-  NumericValue
-} from "./categories";
+import { NumericValue } from "./categories";
 import { matchProgramNumber } from "./matchers";
 
-export const Plus = createToken({
-  name: "Plus",
-  pattern: "+",
-  categories: AdditionOperator
+export const Address = createToken({
+  name: "Address",
+  pattern: /[A-F][H-L][O-Z]/
 });
 
-export const Minus = createToken({
-  name: "Minus",
-  pattern: "-",
-  categories: AdditionOperator
+export const Gcode = createToken({
+  name: "G_Code",
+  pattern: /G\d+(\.\d)?/,
+  longer_alt: Address
 });
 
-export const Divide = createToken({
-  name: "Divide",
-  pattern: "/",
-  categories: MultiplicationOperator
+export const Tcode = createToken({
+  name: "T_Code",
+  pattern: /T\d+/,
+  longer_alt: Address
 });
 
-export const Product = createToken({
-  name: "Product",
-  pattern: "*",
-  categories: MultiplicationOperator
+export const Mcode = createToken({
+  name: "M_Code",
+  pattern: /M\d+(\.)?/,
+  longer_alt: Address
+});
+
+export const LineNumber = createToken({
+  name: "LineNumber",
+  pattern: /N\d+/,
+  longer_alt: Address
+});
+
+export const ProgramNumber = createToken({
+  name: "ProgramNumber",
+  // pattern: /[O|:](\d+)/,
+  pattern: matchProgramNumber,
+  longer_alt: Address,
+  line_breaks: true
 });
 
 export const Integer = createToken({
@@ -43,67 +52,6 @@ export const Decimal = createToken({
   pattern: /(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,
   longer_alt: Integer,
   categories: NumericValue
-});
-
-export const Var = createToken({
-  name: "Var",
-  pattern: "#"
-});
-
-export const Equals = createToken({
-  name: "Equals",
-  pattern: "="
-});
-
-export const Percent = createToken({
-  name: "Percent",
-  pattern: "%"
-});
-
-export const Dot = createToken({
-  name: "Dot",
-  pattern: "."
-});
-
-export const Comma = createToken({
-  name: "Comma",
-  pattern: ","
-});
-
-export const Newline = createToken({
-  name: "Newline",
-  pattern: "\n"
-});
-
-export const Address = createToken({
-  name: "Address",
-  pattern: /[A-MO-Z]/
-});
-
-// export const Gcode = createToken({
-//   name: "G_Code",
-//   pattern: /G\d+(\.\d)?/,
-//   longer_alt: Address
-// });
-
-// export const Mcode = createToken({
-//   name: "M_Code",
-//   pattern: /M\d+(\.)?/,
-//   longer_alt: Address
-// });
-
-export const LineNumber = createToken({
-  name: "LineNumber",
-  pattern: /N\d+/,
-  longer_alt: Address
-});
-
-export const ProgramNumber = createToken({
-  name: "ProgramNumber",
-  // pattern: /[O|:](\d+)/,
-  pattern: matchProgramNumber,
-  longer_alt: Address,
-  line_breaks: true
 });
 
 export const BuiltinFunctions = createToken({

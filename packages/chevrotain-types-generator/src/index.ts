@@ -1,3 +1,5 @@
+import TypedCstParser from "./TypedCstParser";
+
+export { TypedCstParser };
 export * from "./api";
 export * from "./types";
-export * as TypedCstParser from "./TypedCstParser";

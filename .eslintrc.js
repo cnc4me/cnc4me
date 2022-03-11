@@ -28,13 +28,7 @@ module.exports = {
       }
     }
   },
-  plugins: [
-    "jest",
-    "import",
-    "prettier",
-    "@typescript-eslint",
-    "simple-import-sort"
-  ],
+  plugins: ["jest", "import", "prettier", "@typescript-eslint", "simple-import-sort"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -56,27 +50,24 @@ module.exports = {
     // "no-console": "error",
     "no-process-exit": "error",
 
-
     //
     // typescript
     //
 
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
-    "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/no-unsafe-argument": "off",
-    "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-empty-function": [
-      "error",
-      { allow: ["arrowFunctions"] }
-    ],
-    "@typescript-eslint/no-explicit-any": "error",
-    "@typescript-eslint/no-non-null-assertion": "off",
-    "@typescript-eslint/no-var-requires": "off",
-    "@typescript-eslint/prefer-nullish-coalescing": "error",
-    "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/no-var-requires": "off",
+    "@typescript-eslint/no-unsafe-argument": "off",
+    "@typescript-eslint/no-misused-promises": "off",
+    "@typescript-eslint/no-unsafe-assignment": "off",
+    "@typescript-eslint/no-non-null-assertion": "off",
+    "@typescript-eslint/explicit-module-boundary-types": "off",
+    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/prefer-as-const": "error",
+    "@typescript-eslint/prefer-optional-chain": "error",
+    "@typescript-eslint/prefer-nullish-coalescing": "error",
+    "@typescript-eslint/no-empty-function": ["error", { allow: ["arrowFunctions"] }],
     "@typescript-eslint/restrict-template-expressions": [
       "error",
       {
@@ -87,10 +78,10 @@ module.exports = {
         allowRegExp: true
       }
     ],
-    "@typescript-eslint/no-unused-vars": [
-      "warn",
-      { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }
-    ],
+    // "@typescript-eslint/no-unused-vars": [
+    //   "warn",
+    //   { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }
+    // ],
 
     //
     // simple-import-sort
@@ -104,7 +95,7 @@ module.exports = {
     //
 
     "import/namespace": "off", // SUPER DUPER SLOW, why?
-    "import/default": "off",   // ALSO SLOW, why?
+    "import/default": "off", // ALSO SLOW, why?
     "import/no-named-export": "off",
     "import/no-default-export": "off",
     "import/prefer-default-export": "off",
@@ -129,12 +120,8 @@ module.exports = {
   overrides: [
     // all test files
     {
-      plugins: [
-        "jest"
-      ],
-      extends: [
-        "plugin:jest/all",
-      ],
+      plugins: ["jest"],
+      extends: ["plugin:jest/all"],
       files: [
         "packages/*/jest.config.js",
         "packages/*/tests/**/*.spec.ts",

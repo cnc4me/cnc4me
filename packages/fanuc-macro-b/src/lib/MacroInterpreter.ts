@@ -1,3 +1,4 @@
+/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
@@ -11,15 +12,15 @@ import {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
-  // LineCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
-  ProgramCstNode,
+  ProgramCstChildren,
+  ProgramNumberLineCstChildren,
   ValueLiteralCstChildren,
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { degreeToRadian, getImage, radianToDegree } from "../utils";
+import { degreeToRadian, getImage, radianToDegree, unbox } from "../utils";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import MacroVariables from "./MacroVariables";
@@ -33,6 +34,11 @@ interface WatcherValuePayload {
 
 // const BaseCstVisitor = parser.getBaseCstVisitorConstructor();
 const BaseCstVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults();
+
+interface ProgramHeading {
+  programNumber: number;
+  programTitle: string;
+}
 
 /**
  * Macro Interpreter
@@ -110,10 +116,29 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
   /**
    * Root Node for valid NC Programs
    */
-  program(ctx: ProgramCstNode) {
+  program(ctx: ProgramCstChildren) {
+    // console.log(ctx);
+
+    if (ctx.ProgramNumberLine) {
+      const heading: ProgramHeading = this.visit(ctx.ProgramNumberLine);
+
+      console.log(heading);
+    }
+
     return ctx;
   }
 
+  /**
+   * Get the contents of a Program Line
+   */
+  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramHeading {
+    const node = unbox(ctx.ProgramNumber);
+
+    return {
+      programNumber: node.payload,
+      programTitle: ctx?.Comment ? getImage(ctx.Comment) : ""
+    };
+  }
   // line(ctx: LineCstChildren) {
   //   console.log(ctx);
 

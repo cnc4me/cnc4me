@@ -1,5 +1,6 @@
 import { CstParser } from "chevrotain";
 
+import { Equals, Minus, Newline, Percent, Var } from "./Tokens";
 import { allTokens } from "./Tokens/allTokens";
 import { CloseBracket, OpenBracket } from "./Tokens/brackets";
 import {
@@ -13,19 +14,22 @@ import {
   Address,
   BuiltinFunctions,
   Comment,
-  Equals,
+  Gcode,
   Integer,
   LineNumber,
-  Minus,
-  Newline,
-  Percent,
+  Mcode,
   ProgramNumber,
-  Var
+  Tcode
 } from "./Tokens/tokens";
 
 export class MacroParser extends CstParser {
+  // private _env: { programName: string };
+
   constructor() {
     super(allTokens);
+
+    // this._env = { programName: "" };
+
     this.performSelfAnalysis();
   }
 
@@ -144,7 +148,11 @@ export class MacroParser extends CstParser {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.booleanExpression);
     this.CONSUME(CloseBracket);
-    this.OR([{ ALT: () => this.CONSUME(Then) }, { ALT: () => this.CONSUME(GotoLine) }]);
+    // eslint-disable-next-line prettier/prettier
+    this.OR([
+      { ALT: () => this.CONSUME(Then) },
+      { ALT: () => this.CONSUME(GotoLine) }
+    ]);
   });
 
   /**
@@ -196,7 +204,12 @@ export class MacroParser extends CstParser {
    */
   private addresses = this.RULE("addresses", () => {
     this.MANY(() => {
-      this.SUBRULE(this.AddressedValue);
+      this.OR([
+        { ALT: () => this.CONSUME(Gcode) },
+        { ALT: () => this.CONSUME(Tcode) },
+        { ALT: () => this.CONSUME(Mcode) },
+        { ALT: () => this.SUBRULE(this.AddressedValue) }
+      ]);
     });
   });
 
@@ -234,11 +247,13 @@ export class MacroParser extends CstParser {
    */
   public program = this.RULE("program", () => {
     this.CONSUME1(Percent);
-    this.CONSUME1(Newline);
+    this.SKIP_TOKEN();
+    // this.CONSUME1(Newline);
     this.SUBRULE(this.ProgramNumberLine);
-    this.CONSUME2(Newline);
+    this.SKIP_TOKEN();
+    // this.CONSUME2(Newline);
     this.SUBRULE(this.lines);
-    this.CONSUME2(Percent);
+    // this.CONSUME2(Percent);
   });
 }
 
