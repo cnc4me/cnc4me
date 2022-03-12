@@ -1,4 +1,9 @@
-import { CstParser, generateCstDts } from "chevrotain";
+import {
+  createSyntaxDiagramsCode,
+  CstParser,
+  generateCstDts,
+  ICreateSyntaxDiagramsConfig
+} from "chevrotain";
 import { writeFileSync } from "fs";
 import path from "path";
 import ts from "typescript";
@@ -15,6 +20,10 @@ export const GENERATOR_DEFAULTS: CstDtsGeneratorOptions = {
 
 export function generateProductions(parser: CstParser) {
   return parser.getGAstProductions();
+}
+
+export function generateSerializedProductions(parser: CstParser) {
+  return parser.getSerializedGastProductions();
 }
 
 export function generateTsNode(parser: CstParser, outFile = DEFAULT_FILENAME) {
@@ -38,4 +47,13 @@ export function generateTypes(parser: CstParser, args?: CstDtsGeneratorOptions):
   }
 
   return content;
+}
+
+/**
+ * Generate HTML of a syntax diagram of a parsers' grammar
+ */
+export function generateHtml(parser: CstParser, config?: ICreateSyntaxDiagramsConfig): string {
+  const options = { ...GENERATOR_DEFAULTS, ...config };
+
+  return createSyntaxDiagramsCode(generateSerializedProductions(parser), options);
 }

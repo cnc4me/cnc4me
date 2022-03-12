@@ -1,0 +1,691 @@
+
+<!-- This is a generated file -->
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+  body {
+    background-color: hsl(30, 20%, 95%)
+  }
+</style>
+
+
+<link rel='stylesheet' href='https://unpkg.com/chevrotain@10.1.1/diagrams/diagrams.css'>
+
+<script src='https://unpkg.com/chevrotain@10.1.1/diagrams/vendor/railroad-diagrams.js'></script>
+<script src='https://unpkg.com/chevrotain@10.1.1/diagrams/src/diagrams_builder.js'></script>
+<script src='https://unpkg.com/chevrotain@10.1.1/diagrams/src/diagrams_behavior.js'></script>
+<script src='https://unpkg.com/chevrotain@10.1.1/diagrams/src/main.js'></script>
+
+<div id="diagrams" align="center"></div>    
+
+<script>
+    window.serializedGrammar = [
+  {
+    "type": "Rule",
+    "name": "AddressedValue",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "Address",
+        "label": "Address",
+        "idx": 0,
+        "pattern": "[A-F][H-L][O-Z]"
+      },
+      {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "Minus",
+            "label": "Minus",
+            "idx": 0,
+            "pattern": "-"
+          }
+        ]
+      },
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "bracketExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "NumericLiteral",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "Minus",
+            "label": "Minus",
+            "idx": 0,
+            "pattern": "-"
+          }
+        ]
+      },
+      {
+        "type": "Terminal",
+        "name": "NumericValue",
+        "label": "NumericValue",
+        "idx": 0,
+        "pattern": "NOT_APPLICABLE"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "VariableLiteral",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "Var",
+        "label": "Var",
+        "idx": 0,
+        "pattern": "#"
+      },
+      {
+        "type": "Terminal",
+        "name": "Integer",
+        "label": "Integer",
+        "idx": 0,
+        "pattern": "\\d+"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "ValueLiteral",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "NumericLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "ProgramNumberLine",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "ProgramNumber",
+        "label": "ProgramNumber",
+        "idx": 0
+      },
+      {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "Comment",
+            "label": "Comment",
+            "idx": 0,
+            "pattern": "\\(\\s*(.+?)\\s*\\)"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "expression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "additionExpression",
+        "idx": 0
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "additionExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "multiplicationExpression",
+        "idx": 0,
+        "label": "lhs"
+      },
+      {
+        "type": "Repetition",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "AdditionOperator",
+            "label": "AdditionOperator",
+            "idx": 0,
+            "pattern": "NOT_APPLICABLE"
+          },
+          {
+            "type": "NonTerminal",
+            "name": "multiplicationExpression",
+            "idx": 2,
+            "label": "rhs"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "multiplicationExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "atomicExpression",
+        "idx": 0,
+        "label": "lhs"
+      },
+      {
+        "type": "Repetition",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "MultiplicationOperator",
+            "label": "MultiplicationOperator",
+            "idx": 0,
+            "pattern": "NOT_APPLICABLE"
+          },
+          {
+            "type": "NonTerminal",
+            "name": "atomicExpression",
+            "idx": 2,
+            "label": "rhs"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "functionExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "BuiltinFunctions",
+        "label": "BuiltinFunctions",
+        "idx": 0,
+        "pattern": "SIN|ASIN|COS|ACOS|TAN|ATAN|SQRT|ABS|BIN|BCD|ROUND|FIX|FUP|LN|EXP"
+      },
+      {
+        "type": "Terminal",
+        "name": "OpenBracket",
+        "label": "OpenBracket",
+        "idx": 0,
+        "pattern": "["
+      },
+      {
+        "type": "NonTerminal",
+        "name": "atomicExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "CloseBracket",
+        "label": "CloseBracket",
+        "idx": 0,
+        "pattern": "]"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "booleanExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "atomicExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "BooleanOperator",
+        "label": "BooleanOperator",
+        "idx": 0,
+        "pattern": "NOT_APPLICABLE"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "atomicExpression",
+        "idx": 2
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "conditionalExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "If",
+        "label": "If",
+        "idx": 0,
+        "pattern": "IF"
+      },
+      {
+        "type": "Terminal",
+        "name": "OpenBracket",
+        "label": "OpenBracket",
+        "idx": 0,
+        "pattern": "["
+      },
+      {
+        "type": "NonTerminal",
+        "name": "booleanExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "CloseBracket",
+        "label": "CloseBracket",
+        "idx": 0,
+        "pattern": "]"
+      },
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "Then",
+                "label": "Then",
+                "idx": 0,
+                "pattern": "THEN"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "GotoLine",
+                "label": "GotoLine",
+                "idx": 0,
+                "pattern": "GOTO[1-9][0-9]*"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "atomicExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "bracketExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "functionExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "NumericLiteral",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "bracketExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "OpenBracket",
+        "label": "OpenBracket",
+        "idx": 0,
+        "pattern": "["
+      },
+      {
+        "type": "NonTerminal",
+        "name": "expression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "CloseBracket",
+        "label": "CloseBracket",
+        "idx": 0,
+        "pattern": "]"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "variableAssignment",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "VariableLiteral",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "Equals",
+        "label": "Equals",
+        "idx": 0,
+        "pattern": "="
+      },
+      {
+        "type": "NonTerminal",
+        "name": "expression",
+        "idx": 0
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "addresses",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Repetition",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternation",
+            "idx": 0,
+            "definition": [
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "G_Code",
+                    "label": "G_Code",
+                    "idx": 0,
+                    "pattern": "G\\d+(\\.\\d)?"
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "T_Code",
+                    "label": "T_Code",
+                    "idx": 0,
+                    "pattern": "T\\d+"
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "Terminal",
+                    "name": "M_Code",
+                    "label": "M_Code",
+                    "idx": 0,
+                    "pattern": "M\\d+(\\.)?"
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
+                    "type": "NonTerminal",
+                    "name": "AddressedValue",
+                    "idx": 0
+                  }
+                ]
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "lines",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "RepetitionWithSeparator",
+        "idx": 0,
+        "separator": {
+          "type": "Terminal",
+          "name": "Newline",
+          "label": "Newline",
+          "idx": 1,
+          "pattern": "\n"
+        },
+        "definition": [
+          {
+            "type": "NonTerminal",
+            "name": "line",
+            "idx": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "line",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "Percent",
+                "label": "Percent",
+                "idx": 0,
+                "pattern": "%"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "Comment",
+                "label": "Comment",
+                "idx": 0,
+                "pattern": "\\(\\s*(.+?)\\s*\\)"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "LineNumber",
+                "label": "LineNumber",
+                "idx": 0,
+                "pattern": "N\\d+"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "ProgramNumberLine",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "variableAssignment",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "conditionalExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "addresses",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "program",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "Percent",
+        "label": "Percent",
+        "idx": 1,
+        "pattern": "%"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "ProgramNumberLine",
+        "idx": 0
+      },
+      {
+        "type": "NonTerminal",
+        "name": "lines",
+        "idx": 0
+      }
+    ]
+  }
+];
+</script>
+
+<script>
+    var diagramsDiv = document.getElementById("diagrams");
+    main.drawDiagramsFromSerializedGrammar(serializedGrammar, diagramsDiv);
+</script>

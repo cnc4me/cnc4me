@@ -8,11 +8,12 @@
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest --runInBand",
+    "build": "tsc -b -v tsconfig.lib.json",
     "repl": "tsnd ./demo/repl.demo.ts",
     "types": "tsnd ./scripts/generateDts.ts",
+    "diagram": "tsnd ./scripts/generateDiagram.ts",
     "parser": "tsnd --respawn ./demo/parser.demo.ts",
-    "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
-    "build": "tsc -b -v tsconfig.lib.json"
+    "runtime": "tsnd --respawn ./demo/runtime.demo.ts"
   },
   "dependencies": {
     "@cnc4me/chevrotain-types-generator": "workspace:*",
