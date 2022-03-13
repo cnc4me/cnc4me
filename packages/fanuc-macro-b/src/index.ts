@@ -1,3 +1,3 @@
-export * from "./colors";
 export * from "./lib";
+export * from "./types";
 export * from "./utils";

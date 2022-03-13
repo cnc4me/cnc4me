@@ -1,11 +1,11 @@
-/* eslint-disable @typescript-eslint/no-unsafe-member-access */
 /* eslint-disable @typescript-eslint/no-unsafe-argument */
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
 import { match } from "ts-pattern";
 
-import { VariableRegister } from "../types";
+import { INTERPRETER } from "../PackageConfig";
+import { ProgramIdentifier, VariableRegister } from "../types";
 import {
   AdditionExpressionCstChildren,
   AtomicExpressionCstChildren,
@@ -20,10 +20,12 @@ import {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { degreeToRadian, getImage, radianToDegree, unbox } from "../utils";
+import { getImage } from "../utils/common";
+import { unbox } from "../utils/generics";
+import { degreeToRadian, radianToDegree } from "../utils/trig";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
-import MacroVariables from "./MacroVariables";
+import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
 
 interface WatcherValuePayload {
@@ -32,18 +34,14 @@ interface WatcherValuePayload {
   register: number;
 }
 
-// const BaseCstVisitor = parser.getBaseCstVisitorConstructor();
-const BaseCstVisitorWithDefaults = parser.getBaseCstVisitorConstructorWithDefaults();
-
-interface ProgramHeading {
-  programNumber: number;
-  programTitle: string;
-}
+const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
+  ? parser.getBaseCstVisitorConstructorWithDefaults()
+  : parser.getBaseCstVisitorConstructor();
 
 /**
  * Macro Interpreter
  */
-export class MacroInterpreter extends BaseCstVisitorWithDefaults {
+export class MacroInterpreter extends BaseCstVisitor {
   logger: MacroLogger;
 
   vars: MacroVariables;
@@ -117,38 +115,29 @@ export class MacroInterpreter extends BaseCstVisitorWithDefaults {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
-    // console.log(ctx);
+    let prgId: ProgramIdentifier = { programNumber: 0, programTitle: "" };
 
     if (ctx.ProgramNumberLine) {
-      const heading: ProgramHeading = this.visit(ctx.ProgramNumberLine);
-
-      console.log(heading);
+      prgId = this.visit(ctx.ProgramNumberLine);
     }
 
-    return ctx;
+    return { ...prgId };
   }
 
   /**
    * Get the contents of a Program Line
    */
-  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramHeading {
+  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
     const node = unbox(ctx.ProgramNumber);
+    // const comment = unbox(ctx.Comment);
+
+    console.log({ ctx });
 
     return {
       programNumber: node.payload,
       programTitle: ctx?.Comment ? getImage(ctx.Comment) : ""
     };
   }
-  // line(ctx: LineCstChildren) {
-  //   console.log(ctx);
-
-  //   if (ctx.variableAssignment) {
-  //     return this.visit(ctx.variableAssignment);
-  //   }
-  //   // if (ctx) {
-  //   //   return this.visit(ctx);
-  //   // }
-  // }
 
   expression(ctx: ExpressionCstChildren) {
     return this.visit(ctx.additionExpression);

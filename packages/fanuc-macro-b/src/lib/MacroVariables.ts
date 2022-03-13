@@ -44,6 +44,3 @@ export class MacroVariables {
     return this.write(key, NaN);
   }
 }
-
-// eslint-disable-next-line import/no-default-export
-export default MacroVariables;

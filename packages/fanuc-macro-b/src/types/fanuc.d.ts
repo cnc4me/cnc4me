@@ -166,28 +166,36 @@ export type AddressesCstChildren = {
 };
 
 export interface LinesCstNode extends CstNode {
-  name: "lines";
+  name: "Lines";
   children: LinesCstChildren;
 }
 
 export type LinesCstChildren = {
-  line?: LineCstNode[];
+  Line?: LineCstNode[];
   Newline?: IToken[];
 };
 
 export interface LineCstNode extends CstNode {
-  name: "line";
+  name: "Line";
   children: LineCstChildren;
 }
 
 export type LineCstChildren = {
-  Percent?: IToken[];
   Comment?: IToken[];
   LineNumber?: IToken[];
-  ProgramNumberLine?: ProgramNumberLineCstNode[];
   variableAssignment?: VariableAssignmentCstNode[];
   conditionalExpression?: ConditionalExpressionCstNode[];
   addresses?: AddressesCstNode[];
+};
+
+export interface StartOfFileCstNode extends CstNode {
+  name: "StartOfFile";
+  children: StartOfFileCstChildren;
+}
+
+export type StartOfFileCstChildren = {
+  Percent: IToken[];
+  Newline: IToken[];
 };
 
 export interface ProgramCstNode extends CstNode {
@@ -196,10 +204,10 @@ export interface ProgramCstNode extends CstNode {
 }
 
 export type ProgramCstChildren = {
-  Percent: IToken[];
-  Newline: (IToken)[];
+  StartOfFile: StartOfFileCstNode[];
   ProgramNumberLine: ProgramNumberLineCstNode[];
-  lines: LinesCstNode[];
+  Lines: LinesCstNode[];
+  EndOfFile: IToken[];
 };
 
 export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
@@ -218,7 +226,8 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   bracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
   variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   addresses(children: AddressesCstChildren, param?: IN): OUT;
-  lines(children: LinesCstChildren, param?: IN): OUT;
-  line(children: LineCstChildren, param?: IN): OUT;
+  Lines(children: LinesCstChildren, param?: IN): OUT;
+  Line(children: LineCstChildren, param?: IN): OUT;
+  StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
   program(children: ProgramCstChildren, param?: IN): OUT;
 }

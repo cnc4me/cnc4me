@@ -23,13 +23,8 @@ import {
 } from "./Tokens/tokens";
 
 export class MacroParser extends CstParser {
-  // private _env: { programName: string };
-
   constructor() {
     super(allTokens);
-
-    // this._env = { programName: "" };
-
     this.performSelfAnalysis();
   }
 
@@ -216,11 +211,11 @@ export class MacroParser extends CstParser {
   /**
    *
    */
-  public lines = this.RULE("lines", () => {
+  public Lines = this.RULE("Lines", () => {
     this.MANY_SEP({
       SEP: Newline,
       DEF: () => {
-        this.SUBRULE(this.line);
+        this.SUBRULE(this.Line);
       }
     });
   });
@@ -228,13 +223,12 @@ export class MacroParser extends CstParser {
   /**
    * Any number of valid addresses, comments, and/or expressions
    */
-  public line = this.RULE("line", () => {
+  public Line = this.RULE("Line", () => {
     this.OR([
-      { ALT: () => this.CONSUME(Percent) },
       // { ALT: () => this.CONSUME(Newline) },
       { ALT: () => this.CONSUME(Comment) },
       { ALT: () => this.CONSUME(LineNumber) },
-      { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
+      // { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
       { ALT: () => this.SUBRULE(this.variableAssignment) },
       { ALT: () => this.SUBRULE(this.conditionalExpression) },
       { ALT: () => this.SUBRULE(this.addresses) }
@@ -243,17 +237,23 @@ export class MacroParser extends CstParser {
   });
 
   /**
+   * Start of a valid NC File
+   */
+  public StartOfFile = this.RULE("StartOfFile", () => {
+    this.CONSUME(Percent);
+    this.CONSUME(Newline);
+  });
+
+  /**
    * Defining a valid NC program
    */
   public program = this.RULE("program", () => {
-    this.CONSUME1(Percent);
-    this.SKIP_TOKEN();
-    // this.CONSUME1(Newline);
+    this.SUBRULE(this.StartOfFile);
     this.SUBRULE(this.ProgramNumberLine);
     this.SKIP_TOKEN();
     // this.CONSUME2(Newline);
-    this.SUBRULE(this.lines);
-    // this.CONSUME2(Percent);
+    this.SUBRULE(this.Lines);
+    this.CONSUME(Percent, { LABEL: "EndOfFile" });
   });
 }
 

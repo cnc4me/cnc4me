@@ -1,6 +1,6 @@
 import { Command, command, program } from "bandersnatch";
 
-import { cyan, green } from "../colors";
+import { cyan, green } from "../utils/colors";
 import type { MacroRuntime } from "./MacroRuntime";
 
 function rng(bounds: [number, number]) {

@@ -1,10 +1,6 @@
-import { ILexingError } from "chevrotain";
-
-import { cyan, green } from "../colors";
-import { MacroProgram, MacroVariables } from "../types";
+import { MacroProgram, MacroProgramLoaded } from "../types";
 import { parse } from "../utils";
-
-type MacroProgramLoaded = (err: null | ILexingError[], program: MacroProgram) => void;
+import { cyan, green } from "../utils/colors";
 
 function range(x: number, y: number): number[] {
   return x > y ? [] : [x, ...range(x + 1, y)];
@@ -18,9 +14,12 @@ export function errorLogger(): MacroProgramLoaded {
   };
 }
 
+/**
+ * MacroRuntime Class to hold multiple programs in memory
+ */
 export class MacroRuntime {
   private _activeProgram = NaN;
-  private _vars: MacroVariables = new Map();
+  private _vars = new Map<number, number>();
   private _programs: MacroProgram[] = [];
 
   get ProgramCount(): number {
@@ -39,7 +38,7 @@ export class MacroRuntime {
       ...range(500, 699)
     ];
 
-    registers.forEach(i => this.clearVar(i));
+    registers.forEach(i => this.initVar(i));
   }
 
   /**
@@ -68,7 +67,7 @@ export class MacroRuntime {
   /**
    * Clear a macro variable register
    */
-  clearVar(key: number): this {
+  initVar(key: number): this {
     this.writeVar(key, NaN);
     return this;
   }

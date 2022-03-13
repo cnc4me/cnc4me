@@ -1,0 +1,3 @@
+export const INTERPRETER = {
+  USE_CONSTRUCTOR_WITH_DEFAULTS: true
+};

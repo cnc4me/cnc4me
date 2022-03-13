@@ -1,8 +1,6 @@
-import { ILexingError, ILexingResult } from "chevrotain";
+import type { ILexingError, ILexingResult, IRecognitionException } from "chevrotain";
 
-import { MacroParser } from "../lib/MacroParser";
-
-export type MacroVariables = Map<number, number>;
+import type { MacroParser } from "../lib/MacroParser";
 
 export interface MacroProgram extends ILexingResult {
   input: string;
@@ -22,3 +20,16 @@ export interface VariableRegister {
   value: number;
   // setValue: (value: number) => this;
 }
+
+export interface ProgramIdentifier {
+  programNumber: number;
+  programTitle: string;
+}
+
+export interface MacroProgramAnalysis extends ProgramIdentifier {
+  [K: string]: string | number;
+}
+
+export type MacroProgramLoaded = (err: null | ILexingError[], program: MacroProgram) => void;
+
+export type onParse = (err: null | IRecognitionException[], result: MacroProgramAnalysis) => void;
