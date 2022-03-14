@@ -1,0 +1,17 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "rootDir": ".",
+    "composite": true,
+    "outDir": "../../dist/out-tsc",
+    "types": ["node", "bandersnatch", "@cnc4me/fanuc-macro-b"]
+  },
+  "references": [
+    {
+      "path": "./tsconfig.lib.json"
+    },
+    {
+      "path": "./tsconfig.test.json"
+    }
+  ]
+}

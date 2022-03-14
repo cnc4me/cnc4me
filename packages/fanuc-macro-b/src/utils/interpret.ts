@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { interpreter } from "../lib/MacroInterpreter";
-import { parse } from "./common";
+import { parse } from "./parse";
 
 /**
  * Run the full interpreter and generate CST

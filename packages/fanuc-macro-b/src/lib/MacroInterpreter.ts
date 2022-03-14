@@ -20,8 +20,7 @@ import {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { getImage } from "../utils/common";
-import { unbox, unwrap } from "../utils/generics";
+import { getImage, unbox, unwrap, zeroPad } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
@@ -51,7 +50,9 @@ export class MacroInterpreter extends BaseCstVisitor {
   constructor() {
     super();
 
-    // Variable Configuration
+    /**
+     * @todo lets replace this with the new {@link MacroRuntime}
+     */
     this.vars = new MacroVariables(1, 10);
 
     // Logger Configuration
@@ -121,25 +122,27 @@ export class MacroInterpreter extends BaseCstVisitor {
       prgId = this.visit(ctx.ProgramNumberLine);
     }
 
+    /**
+     * @todo LINES!
+     */
     if (ctx.Lines) {
       // console.log(ctx.Lines[0].children);
-      // console.log(ctx.Lines);
+      // const lines = this.visit(ctx.Lines);
+      // console.log(lines);
     }
 
     return { ...prgId };
   }
 
   /**
-   * Get the contents of a Program Line
+   * Get the Program title and number
    */
   ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
     const node = unbox(ctx.ProgramNumber);
     const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
-    console.log("ProgramNumberLine", ctx);
-    // const comment = unbox(ctx.Comment);
 
     return {
-      programNumber: node.payload,
+      programNumber: zeroPad(node.payload),
       programTitle: unwrap(comment)
     };
   }

@@ -1,5 +1,6 @@
-import { MacroRepl } from "../src/lib/MacroCli";
-import { errorLogger, runtime } from "../src/lib/MacroRuntime";
+import { runtime } from "@cnc4me/fanuc-macro-b";
+
+import { errorLogger, MacroRepl } from "../src";
 
 const P1 = `%
 O0001 ( Program 1 )

@@ -9,6 +9,10 @@
       "path": "../apps/website"
     },
     {
+      "name": "[APP] CLI",
+      "path": "../apps/macro-cli"
+    },
+    {
       "name": "[PKG] Fanuc Macro B",
       "path": "../packages/fanuc-macro-b"
     },

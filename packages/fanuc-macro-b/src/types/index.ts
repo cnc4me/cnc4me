@@ -2,7 +2,12 @@ import type { ILexingError, ILexingResult, IRecognitionException, IToken } from 
 
 import type { MacroParser } from "../lib/MacroParser";
 
-export interface MacroProgram extends ILexingResult {
+export type ParseErrors = null | IRecognitionException[];
+
+export type ProgramRecords = Record<string, AnalyzedProgram>;
+
+export interface AnalyzedProgram extends ProgramIdentifier {
+  err: ParseErrors;
   input: string;
 }
 
@@ -21,19 +26,17 @@ export interface VariableRegister {
   // setValue: (value: number) => this;
 }
 
+export interface ValidationResult {
+  tokens: IToken[];
+  err: ParseErrors;
+  result: MacroProgramAnalysis;
+}
+
 export interface ProgramIdentifier {
-  programNumber: number;
+  programNumber: string | number;
   programTitle: string;
 }
 
 export interface MacroProgramAnalysis extends ProgramIdentifier {
   [K: string]: string | number;
-}
-
-export type MacroProgramLoaded = (err: null | ILexingError[], program: MacroProgram) => void;
-
-export interface ValidationResult {
-  tokens: IToken[];
-  err: null | IRecognitionException[];
-  result: MacroProgramAnalysis;
 }

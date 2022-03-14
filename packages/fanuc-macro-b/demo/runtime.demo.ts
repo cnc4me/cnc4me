@@ -1,4 +1,4 @@
-import { errorLogger, runtime } from "../src/lib/MacroRuntime";
+import { runtime } from "../src/lib/MacroRuntime";
 
 const P1 = `%
 O0001 ( Program 1 )
@@ -21,7 +21,9 @@ G0 G90 G56
 M30
 %`;
 
-runtime.loadProgram(P1, errorLogger());
-runtime.loadProgram(P2, errorLogger());
-runtime.loadProgram(P3, errorLogger());
-runtime.run();
+runtime.loadPrograms([P1, P2, P3]);
+
+const programs = runtime.getPrograms();
+
+console.log(programs);
+// runtime.run();

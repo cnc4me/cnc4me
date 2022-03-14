@@ -1,34 +1,17 @@
-import { MacroProgram, MacroProgramLoaded } from "../types";
-import { parse } from "../utils";
-import { cyan, green } from "../utils/colors";
+import { AnalyzedProgram, ProgramRecords } from "../types";
+import { analyze, zeroPad } from "../utils";
 
 function range(x: number, y: number): number[] {
   return x > y ? [] : [x, ...range(x + 1, y)];
-}
-
-export function errorLogger(): MacroProgramLoaded {
-  return err => {
-    if (err) {
-      console.log(err);
-    }
-  };
 }
 
 /**
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime {
-  private _activeProgram = NaN;
+  private _activeProgram!: number;
+  private _programs: ProgramRecords = {};
   private _vars = new Map<number, number>();
-  private _programs: MacroProgram[] = [];
-
-  get ProgramCount(): number {
-    return this._programs.length;
-  }
-
-  get ActiveProgram(): number {
-    return this._activeProgram;
-  }
 
   constructor() {
     // eslint-disable-next-line prettier/prettier
@@ -45,8 +28,27 @@ export class MacroRuntime {
    * Main entry point to the runtime
    */
   run(): void {
-    console.log(`Programs Loaded: ${green(this._programs.length)}`);
-    console.log(`Active Program: ${cyan(this._activeProgram)}`);
+    //
+  }
+
+  getPrograms(): ProgramRecords {
+    return this._programs;
+  }
+
+  getProgramCount(): number {
+    return Object.keys(this._programs).length;
+  }
+
+  getActiveProgram(): AnalyzedProgram {
+    return this._programs[this._activeProgram];
+  }
+
+  getActiveProgramNumber(): string {
+    return zeroPad(this._activeProgram);
+  }
+
+  setActiveProgram(programNumber: number): void {
+    this._activeProgram = programNumber;
   }
 
   /**
@@ -84,32 +86,35 @@ export class MacroRuntime {
   }
 
   /**
-   * Load a MacroProgram into memory
+   * Load a AnalyzedProgram into memory
    *
    * This method can create a program if given a string
    */
-  loadProgram(input: string, onLoad?: MacroProgramLoaded) {
-    const program = this.createProgram(input);
+  loadProgram(input: string): AnalyzedProgram {
+    const analyzed = this.analyzeProgram(input);
 
-    if (program.errors.length === 0) {
-      this._programs.push(program);
+    this._programs[analyzed.programNumber] = analyzed;
 
-      if (typeof onLoad === "function") {
-        const err = program.errors.length > 0 ? program.errors : null;
-        onLoad(err, program);
-      }
-    }
+    return analyzed;
   }
 
   /**
-   * Create a MacroProgram from a string
+   * Batch load programs into memory
    */
-  private createProgram(input: string): MacroProgram {
-    const { lexResult } = parse(input);
+  loadPrograms(programs: string[]): void {
+    programs.forEach(program => this.loadProgram(program));
+  }
+
+  /**
+   * Create a an {@link AnalyzedProgram} from a string
+   */
+  private analyzeProgram(input: string): AnalyzedProgram {
+    const { err, result } = analyze(input);
 
     return {
+      err,
       input,
-      ...lexResult
+      ...result
     };
   }
 }

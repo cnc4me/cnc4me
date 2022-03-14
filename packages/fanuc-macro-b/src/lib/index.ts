@@ -1,4 +1,3 @@
-export * from "./MacroCli";
 export * from "./MacroConstants";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
