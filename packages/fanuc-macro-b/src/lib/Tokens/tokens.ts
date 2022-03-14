@@ -5,7 +5,7 @@ import { matchProgramNumber } from "./matchers";
 
 export const Address = createToken({
   name: "Address",
-  pattern: /[A-F][H-L][O-Z]/
+  pattern: /[A-F][H-L][P-Z]/
 });
 
 export const Gcode = createToken({
@@ -34,10 +34,10 @@ export const LineNumber = createToken({
 
 export const ProgramNumber = createToken({
   name: "ProgramNumber",
-  // pattern: /[O|:](\d+)/,
   pattern: matchProgramNumber,
-  longer_alt: Address,
   line_breaks: true
+  // pattern: /[O|:](\d+)/,
+  // longer_alt: Address
 });
 
 export const Integer = createToken({
@@ -46,9 +46,9 @@ export const Integer = createToken({
   categories: NumericValue
 });
 
+// Borrowed the regex from https://stackoverflow.com/a/13252134
 export const Decimal = createToken({
   name: "Decimal",
-  // Borrowed this regex https://stackoverflow.com/a/13252134
   pattern: /(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,
   longer_alt: Integer,
   categories: NumericValue
@@ -75,6 +75,5 @@ export const WhiteSpace = createToken({
 export const Comment = createToken({
   name: "Comment",
   pattern: /\(\s*(.+?)\s*\)/,
-  group: "comments",
   start_chars_hint: ["("]
 });

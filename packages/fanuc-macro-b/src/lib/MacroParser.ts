@@ -1,32 +1,76 @@
 import { CstParser } from "chevrotain";
 
-import { Equals, Minus, Newline, Percent, Var } from "./Tokens";
-import { allTokens } from "./Tokens/allTokens";
-import { CloseBracket, OpenBracket } from "./Tokens/brackets";
 import {
   AdditionOperator,
-  BooleanOperator,
-  MultiplicationOperator,
-  NumericValue
-} from "./Tokens/categories";
-import { GotoLine, If, Then } from "./Tokens/controlFlow";
-import {
   Address,
+  BooleanOperator,
   BuiltinFunctions,
+  CloseBracket,
   Comment,
+  Equals,
   Gcode,
+  GotoLine,
+  If,
   Integer,
   LineNumber,
   Mcode,
+  Minus,
+  MultiplicationOperator,
+  Newline,
+  NumericValue,
+  OpenBracket,
+  Percent,
   ProgramNumber,
-  Tcode
-} from "./Tokens/tokens";
+  Tcode,
+  Then,
+  Var
+} from "./Tokens";
+import { allTokens } from "./Tokens/allTokens";
 
 export class MacroParser extends CstParser {
   constructor() {
     super(allTokens);
     this.performSelfAnalysis();
   }
+
+  /**
+   * Defining a valid NC program
+   */
+  public program = this.RULE("program", () => {
+    this.SUBRULE(this.StartOfFile);
+    this.SUBRULE(this.ProgramNumberLine);
+    // this.CONSUME(Newline);
+    this.SUBRULE(this.Lines);
+    this.SUBRULE(this.EndOfFile);
+    // this.CONSUME(Percent, { LABEL: "EndOfFile" });
+  });
+
+  /**
+   *
+   */
+  public Lines = this.RULE("Lines", () => {
+    this.MANY_SEP({
+      SEP: Newline,
+      DEF: () => {
+        this.SUBRULE(this.Line);
+      }
+    });
+  });
+
+  /**
+   * Any number of valid addresses, comments, and/or expressions
+   */
+  public Line = this.RULE("Line", () => {
+    this.OR([
+      // { ALT: () => this.CONSUME(Newline) },
+      { ALT: () => this.CONSUME(Comment) },
+      // { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
+      { ALT: () => this.SUBRULE(this.variableAssignment) },
+      { ALT: () => this.SUBRULE(this.conditionalExpression) },
+      { ALT: () => this.SUBRULE(this.addresses) }
+      // { ALT: () => this.SUBRULE(this.atomicExpression) }
+    ]);
+  });
 
   /**
    * A single, capital letter followed by a macro variable
@@ -82,9 +126,10 @@ export class MacroParser extends CstParser {
    */
   public ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
     this.CONSUME(ProgramNumber);
-    this.OPTION(() => {
-      this.CONSUME(Comment);
-    });
+    // this.OPTION(() => {
+    this.CONSUME(Comment);
+    // });
+    this.CONSUME(Newline);
   });
 
   /**
@@ -201,59 +246,30 @@ export class MacroParser extends CstParser {
     this.MANY(() => {
       this.OR([
         { ALT: () => this.CONSUME(Gcode) },
-        { ALT: () => this.CONSUME(Tcode) },
         { ALT: () => this.CONSUME(Mcode) },
+        { ALT: () => this.CONSUME(Tcode) },
+        { ALT: () => this.CONSUME(LineNumber) },
         { ALT: () => this.SUBRULE(this.AddressedValue) }
       ]);
     });
   });
 
   /**
-   *
-   */
-  public Lines = this.RULE("Lines", () => {
-    this.MANY_SEP({
-      SEP: Newline,
-      DEF: () => {
-        this.SUBRULE(this.Line);
-      }
-    });
-  });
-
-  /**
-   * Any number of valid addresses, comments, and/or expressions
-   */
-  public Line = this.RULE("Line", () => {
-    this.OR([
-      // { ALT: () => this.CONSUME(Newline) },
-      { ALT: () => this.CONSUME(Comment) },
-      { ALT: () => this.CONSUME(LineNumber) },
-      // { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
-      { ALT: () => this.SUBRULE(this.variableAssignment) },
-      { ALT: () => this.SUBRULE(this.conditionalExpression) },
-      { ALT: () => this.SUBRULE(this.addresses) }
-      // { ALT: () => this.SUBRULE(this.atomicExpression) }
-    ]);
-  });
-
-  /**
    * Start of a valid NC File
    */
-  public StartOfFile = this.RULE("StartOfFile", () => {
+  private StartOfFile = this.RULE("StartOfFile", () => {
     this.CONSUME(Percent);
     this.CONSUME(Newline);
   });
 
   /**
-   * Defining a valid NC program
+   * End of a valid NC File
    */
-  public program = this.RULE("program", () => {
-    this.SUBRULE(this.StartOfFile);
-    this.SUBRULE(this.ProgramNumberLine);
-    this.SKIP_TOKEN();
-    // this.CONSUME2(Newline);
-    this.SUBRULE(this.Lines);
-    this.CONSUME(Percent, { LABEL: "EndOfFile" });
+  private EndOfFile = this.RULE("EndOfFile", () => {
+    this.CONSUME(Percent);
+    this.OPTION(() => {
+      this.CONSUME(Newline);
+    });
   });
 }
 

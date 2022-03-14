@@ -34,12 +34,12 @@ import {
   Plus,
   Product,
   ProgramNumber,
+  Tcode,
   Then,
   Var,
   While,
   WhiteSpace
 } from ".";
-import { Tcode } from "./tokens";
 
 /**
  * The order of tokens is important because token
@@ -48,6 +48,8 @@ import { Tcode } from "./tokens";
 export const allTokens = [
   Newline,
   WhiteSpace,
+  Percent,
+  Comment,
   ProgramNumber,
   EqualTo,
   NotEqualTo,
@@ -61,7 +63,6 @@ export const allTokens = [
   While,
   GotoLine,
   BuiltinFunctions,
-  Comment,
   Var,
   Equals,
   Comma,
@@ -69,7 +70,6 @@ export const allTokens = [
   Product,
   Minus,
   Plus,
-  Percent,
   Gcode,
   Mcode,
   Tcode,

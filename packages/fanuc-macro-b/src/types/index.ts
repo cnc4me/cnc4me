@@ -1,4 +1,4 @@
-import type { ILexingError, ILexingResult, IRecognitionException } from "chevrotain";
+import type { ILexingError, ILexingResult, IRecognitionException, IToken } from "chevrotain";
 
 import type { MacroParser } from "../lib/MacroParser";
 
@@ -32,4 +32,8 @@ export interface MacroProgramAnalysis extends ProgramIdentifier {
 
 export type MacroProgramLoaded = (err: null | ILexingError[], program: MacroProgram) => void;
 
-export type onParse = (err: null | IRecognitionException[], result: MacroProgramAnalysis) => void;
+export interface ValidationResult {
+  tokens: IToken[];
+  err: null | IRecognitionException[];
+  result: MacroProgramAnalysis;
+}

@@ -13,7 +13,7 @@
     "types": "tsnd ./scripts/generateDts.ts",
     "diagram": "tsnd ./scripts/generateDiagram.ts",
     "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
-    "validate": "tsnd --respawn ./demo/validate.demo.ts"
+    "validate": "tsnd --inspect --respawn ./demo/validate.demo.ts"
   },
   "dependencies": {
     "@cnc4me/chevrotain-types-generator": "workspace:*",

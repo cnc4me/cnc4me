@@ -21,7 +21,7 @@ import {
   VariableLiteralCstChildren
 } from "../types/fanuc";
 import { getImage } from "../utils/common";
-import { unbox } from "../utils/generics";
+import { unbox, unwrap } from "../utils/generics";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
@@ -121,6 +121,11 @@ export class MacroInterpreter extends BaseCstVisitor {
       prgId = this.visit(ctx.ProgramNumberLine);
     }
 
+    if (ctx.Lines) {
+      // console.log(ctx.Lines[0].children);
+      // console.log(ctx.Lines);
+    }
+
     return { ...prgId };
   }
 
@@ -129,13 +134,13 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
     const node = unbox(ctx.ProgramNumber);
+    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
+    console.log("ProgramNumberLine", ctx);
     // const comment = unbox(ctx.Comment);
-
-    console.log({ ctx });
 
     return {
       programNumber: node.payload,
-      programTitle: ctx?.Comment ? getImage(ctx.Comment) : ""
+      programTitle: unwrap(comment)
     };
   }
 
