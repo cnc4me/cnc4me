@@ -12,6 +12,7 @@ import {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
   ProgramCstChildren,
@@ -62,54 +63,8 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.validateVisitor();
   }
 
-  public onLog(listener: LoggerConfig["listener"]) {
+  onLog(listener: LoggerConfig["listener"]) {
     this.logger.tap(listener);
-  }
-
-  /**
-   * Retrieve a single macro variable register
-   */
-  getMacro(register: number): VariableRegister {
-    const macro = {
-      register,
-      value: this.vars.getMap().get(register) ?? NaN
-    };
-
-    return macro;
-  }
-
-  /**
-   * Retrieve the macro variable map
-   */
-  getMacros(): Map<number, number> {
-    return this.vars.getMap();
-  }
-
-  /**
-   * Preload a macro variable register with a value
-   */
-  setMacroValue(register: number, value: number): VariableRegister {
-    this.vars.write(register, value);
-
-    this.logger.operation(`#${register}`, "=", value);
-
-    return this.getMacro(register);
-  }
-
-  /**
-   * Preload multiple macro variable registers with values
-   */
-  setMacroVars(registerValues: [register: number, value: number][]) {
-    for (const [register, value] of registerValues) {
-      this.setMacroValue(register, value);
-    }
-  }
-
-  /**
-   * Attach a method to observe the value changes for a macro register
-   */
-  watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
-    this.varWatches[macroRegister] = handler;
   }
 
   /**
@@ -122,16 +77,18 @@ export class MacroInterpreter extends BaseCstVisitor {
       prgId = this.visit(ctx.ProgramNumberLine);
     }
 
-    /**
-     * @todo LINES!
-     */
     if (ctx.Lines) {
-      // console.log(ctx.Lines[0].children);
-      // const lines = this.visit(ctx.Lines);
-      // console.log(lines);
+      const lines = this.visit(ctx.Lines);
+      return { ...prgId, ...lines };
     }
 
     return { ...prgId };
+  }
+
+  Lines(ctx: LinesCstChildren) {
+    console.log(ctx);
+
+    return ctx;
   }
 
   expression(ctx: ExpressionCstChildren) {
@@ -296,6 +253,56 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   bracketExpression(ctx: BracketExpressionCstChildren) {
     return this.visit(ctx.expression);
+  }
+
+  /**
+   * Macro Variable Methods
+   */
+
+  /**
+   * Retrieve a single macro variable register
+   */
+  getMacro(register: number): VariableRegister {
+    const macro = {
+      register,
+      value: this.vars.getMap().get(register) ?? NaN
+    };
+
+    return macro;
+  }
+
+  /**
+   * Retrieve the macro variable map
+   */
+  getMacros(): Map<number, number> {
+    return this.vars.getMap();
+  }
+
+  /**
+   * Preload a macro variable register with a value
+   */
+  setMacroValue(register: number, value: number): VariableRegister {
+    this.vars.write(register, value);
+
+    this.logger.operation(`#${register}`, "=", value);
+
+    return this.getMacro(register);
+  }
+
+  /**
+   * Preload multiple macro variable registers with values
+   */
+  setMacroVars(registerValues: [register: number, value: number][]) {
+    for (const [register, value] of registerValues) {
+      this.setMacroValue(register, value);
+    }
+  }
+
+  /**
+   * Attach a method to observe the value changes for a macro register
+   */
+  watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
+    this.varWatches[macroRegister] = handler;
   }
 }
 

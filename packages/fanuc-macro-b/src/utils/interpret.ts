@@ -15,10 +15,10 @@ export function interpret<T>(text: string, rule: string) {
 
   return {
     result,
-    parser,
-    lexResult,
-    interpreter,
-    parseErrors: parser.errors,
-    macros: interpreter.getMacros()
+    tokens: lexResult.tokens,
+    errors: {
+      parser: parser.errors,
+      lexer: lexResult.errors
+    }
   };
 }

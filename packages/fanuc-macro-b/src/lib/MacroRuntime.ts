@@ -1,5 +1,10 @@
+import { Lexer } from "chevrotain";
+
 import { AnalyzedProgram, ProgramRecords } from "../types";
-import { analyze, zeroPad } from "../utils";
+import { analyze } from "../utils";
+import { MacroInterpreter } from "./MacroInterpreter";
+import { MacroLexer } from "./MacroLexer";
+import { MacroParser } from "./MacroParser";
 
 function range(x: number, y: number): number[] {
   return x > y ? [] : [x, ...range(x + 1, y)];
@@ -9,10 +14,18 @@ interface ProgramLoadOptions {
   activateOnLoad: boolean;
 }
 
+// eslint-disable-next-line @typescript-eslint/no-empty-interface
+interface RuntimeOutput {
+  //
+}
+
 /**
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime {
+  private _lexer: Lexer;
+  private _parser: MacroParser;
+  private _interpreter: MacroInterpreter;
   private _activeProgram!: number;
   private _programs: ProgramRecords = {};
   private _vars = new Map<number, number>();
@@ -28,21 +41,30 @@ export class MacroRuntime {
 
     registers.forEach(i => this.initVar(i));
 
+    this._lexer = new MacroLexer();
+    this._parser = new MacroParser();
+    this._interpreter = new MacroInterpreter();
     this._errorHandler = () => {};
   }
 
   /**
    * Main entry point to the runtime.
    */
-  run(): void {
-    throw Error("Not Yet Implemented.");
+  run(): RuntimeOutput {
+    const { input } = this.getActiveProgram();
+    const { tokens } = this._lexer.tokenize(input);
+
+    this._parser.input = tokens;
+    const cst = this._parser.program();
+
+    return this._interpreter.visit(cst) as RuntimeOutput;
   }
 
   /**
    * Reset the runtime.
    */
   reset(): void {
-    throw Error("Not Yet Implemented.");
+    this._activeProgram = NaN;
   }
 
   /**
@@ -95,6 +117,19 @@ export class MacroRuntime {
   }
 
   /**
+   * Create a an {@link AnalyzedProgram} from a string
+   */
+  analyzeProgram(input: string): AnalyzedProgram {
+    const { err, result } = analyze(input);
+
+    return {
+      err,
+      input,
+      ...result
+    };
+  }
+
+  /**
    * Read the value of a macro variable register
    */
   readVar(key: number): number {
@@ -126,19 +161,6 @@ export class MacroRuntime {
       return isNaN(value) === false;
     }
     return false;
-  }
-
-  /**
-   * Create a an {@link AnalyzedProgram} from a string
-   */
-  analyzeProgram(input: string): AnalyzedProgram {
-    const { err, result } = analyze(input);
-
-    return {
-      err,
-      input,
-      ...result
-    };
   }
 
   /**

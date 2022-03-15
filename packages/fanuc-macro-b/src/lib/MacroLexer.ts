@@ -2,6 +2,12 @@ import { Lexer } from "chevrotain";
 
 import { allTokens } from "./Tokens/allTokens";
 
-export const MacroLexer = new Lexer(allTokens);
+export class MacroLexer extends Lexer {
+  static ALL_TOKENS = allTokens;
 
-export const lexer = (code: string) => MacroLexer.tokenize(code);
+  constructor() {
+    super(MacroLexer.ALL_TOKENS);
+  }
+}
+
+export const lexer = new MacroLexer();

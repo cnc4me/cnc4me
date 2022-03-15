@@ -1,14 +1,9 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IToken } from "chevrotain";
 
-import { interpret } from "./interpret";
+import { lexer } from "../lib";
 
-/**
- * Sugar method to search for valid gcode lines
- */
-export function evaluate(text: string) {
-  return interpret(text, "lines");
-}
+export const tokenize = (code: string) => lexer.tokenize(code);
 
 /**
  * Get a single value from a possible array with one element

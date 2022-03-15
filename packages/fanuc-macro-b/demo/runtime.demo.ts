@@ -1,4 +1,4 @@
-import { runtime } from "../src/lib/MacroRuntime";
+import { runtime } from "../src/lib";
 
 const P1 = `%
 O0001 ( Program 1 )
@@ -28,4 +28,6 @@ const program = runtime.getActiveProgram();
 
 console.log(program.input);
 
-// runtime.run();
+const result = runtime.run();
+
+console.log(result);
