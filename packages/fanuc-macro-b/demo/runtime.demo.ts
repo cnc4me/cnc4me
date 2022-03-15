@@ -26,4 +26,15 @@ runtime.loadPrograms([P1, P2, P3]);
 const programs = runtime.getPrograms();
 
 console.log(programs);
+
+runtime.setActiveProgram(2);
+
+const activePn = runtime.getActiveProgramNumber();
+
+console.log(activePn);
+
+const program = runtime.getActiveProgram();
+
+console.log(program);
+
 // runtime.run();

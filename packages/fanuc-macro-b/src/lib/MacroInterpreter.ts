@@ -20,7 +20,7 @@ import {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { getImage, unbox, unwrap, zeroPad } from "../utils";
+import { getImage, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
@@ -134,19 +134,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     return { ...prgId };
   }
 
-  /**
-   * Get the Program title and number
-   */
-  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
-    const node = unbox(ctx.ProgramNumber);
-    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
-
-    return {
-      programNumber: zeroPad(node.payload),
-      programTitle: unwrap(comment)
-    };
-  }
-
   expression(ctx: ExpressionCstChildren) {
     return this.visit(ctx.additionExpression);
   }
@@ -174,6 +161,22 @@ export class MacroInterpreter extends BaseCstVisitor {
     return result;
   }
 
+  /**
+   * Get the Program title and number
+   */
+  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
+    const node = unbox(ctx.ProgramNumber);
+    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
+
+    return {
+      programTitle: unwrap(comment),
+      programNumber: parseInt(node.payload)
+    };
+  }
+
+  /**
+   * A plain number, signed
+   */
   NumericLiteral(ctx: NumericLiteralCstChildren): number {
     const image = getImage(ctx.NumericValue);
     const value = `${ctx.Minus ? "-" : ""}${image}`;
@@ -181,6 +184,9 @@ export class MacroInterpreter extends BaseCstVisitor {
     return image.includes(".") ? parseFloat(value) : parseInt(value);
   }
 
+  /**
+   * A Macro Variable, defined as a `#` and a number
+   */
   VariableLiteral(ctx: VariableLiteralCstChildren) {
     const register = parseInt(getImage(ctx.Integer));
 

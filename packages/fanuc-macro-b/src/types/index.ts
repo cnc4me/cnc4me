@@ -33,8 +33,8 @@ export interface ValidationResult {
 }
 
 export interface ProgramIdentifier {
-  programNumber: string | number;
   programTitle: string;
+  programNumber: number;
 }
 
 export interface MacroProgramAnalysis extends ProgramIdentifier {
