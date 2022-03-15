@@ -60,13 +60,6 @@ export class MacroRuntime {
   }
 
   /**
-   * Return the currently active program.
-   */
-  getActiveProgram(): AnalyzedProgram {
-    return this.getProgram(this._activeProgram);
-  }
-
-  /**
    * Returns the loaded programs indexed by their program numbers.
    */
   getPrograms(): ProgramRecords {
@@ -81,10 +74,17 @@ export class MacroRuntime {
   }
 
   /**
+   * Return the currently active program.
+   */
+  getActiveProgram(): AnalyzedProgram {
+    return this.getProgram(this._activeProgram);
+  }
+
+  /**
    * Get the currently active program number from the runtime.
    */
-  getActiveProgramNumber(): string {
-    return zeroPad(this._activeProgram);
+  getActiveProgramNumber(): number {
+    return this._activeProgram;
   }
 
   /**

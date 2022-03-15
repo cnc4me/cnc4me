@@ -22,19 +22,10 @@ M30
 %`;
 
 runtime.loadPrograms([P1, P2, P3]);
-
-const programs = runtime.getPrograms();
-
-console.log(programs);
-
-runtime.setActiveProgram(2);
-
-const activePn = runtime.getActiveProgramNumber();
-
-console.log(activePn);
+runtime.setActiveProgram(3);
 
 const program = runtime.getActiveProgram();
 
-console.log(program);
+console.log(program.input);
 
 // runtime.run();

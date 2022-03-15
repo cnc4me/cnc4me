@@ -13,10 +13,9 @@
     "types": "tsnd ./scripts/generateDts.ts",
     "diagram": "tsnd ./scripts/generateDiagram.ts",
     "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
-    "validate": "tsnd --inspect --respawn ./demo/validate.demo.ts"
+    "validate": "tsnd --respawn ./demo/validate.demo.ts"
   },
   "dependencies": {
-    "@cnc4me/chevrotain-types-generator": "workspace:*",
     "ansi-colors": "^4.1.1",
     "bandersnatch": "^1.9.0",
     "chevrotain": "^10.1.1",
@@ -24,6 +23,7 @@
   },
   "devDependencies": {
     "@cnc4me/chevrotain-jest-extension": "workspace:*",
+    "@cnc4me/chevrotain-types-generator": "workspace:*",
     "@cnc4me/jest-matchers": "workspace:*",
     "@swc/core": "^1.2.144",
     "@swc/jest": "^0.2.17",
