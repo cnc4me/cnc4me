@@ -1,7 +1,9 @@
 import { Lexer } from "chevrotain";
+import Emittery from "emittery";
 
-import { AnalyzedProgram, ProgramRecords } from "../types";
+import type { AnalyzedProgram, MacroToolchain, ProgramRecords, RuntimeOutput } from "../types";
 import { analyze } from "../utils";
+import { createToolchain } from "../utils/toolchain";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
@@ -14,22 +16,32 @@ interface ProgramLoadOptions {
   activateOnLoad: boolean;
 }
 
-// eslint-disable-next-line @typescript-eslint/no-empty-interface
-interface RuntimeOutput {
-  //
-}
-
-/**
+/*
  * MacroRuntime Class to hold multiple programs in memory
  */
+@Emittery.mixin("emittery")
 export class MacroRuntime {
   private _lexer: Lexer;
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
+
   private _activeProgram!: number;
   private _programs: ProgramRecords = {};
   private _vars = new Map<number, number>();
+
   private _errorHandler: (err: string) => void;
+
+  get Lexer(): MacroLexer {
+    return this._lexer;
+  }
+
+  get Parser(): MacroParser {
+    return this._parser;
+  }
+
+  get Interpreter(): MacroInterpreter {
+    return this._interpreter;
+  }
 
   constructor() {
     // eslint-disable-next-line prettier/prettier
@@ -41,9 +53,12 @@ export class MacroRuntime {
 
     registers.forEach(i => this.initVar(i));
 
-    this._lexer = new MacroLexer();
-    this._parser = new MacroParser();
-    this._interpreter = new MacroInterpreter();
+    const { lexer, parser, interpreter } = createToolchain();
+
+    this._lexer = lexer;
+    this._parser = parser;
+    this._interpreter = interpreter;
+
     this._errorHandler = () => {};
   }
 
@@ -51,13 +66,22 @@ export class MacroRuntime {
    * Main entry point to the runtime.
    */
   run(): RuntimeOutput {
+    const start = Date.now();
     const { input } = this.getActiveProgram();
     const { tokens } = this._lexer.tokenize(input);
 
     this._parser.input = tokens;
     const cst = this._parser.program();
 
-    return this._interpreter.visit(cst) as RuntimeOutput;
+    this._interpreter.events.on("event", () => {
+      console.log("event!");
+    });
+
+    const result = this._interpreter.visit(cst);
+    const end = Date.now();
+    const elapsed = end - start;
+
+    return { start, end, elapsed, result } as RuntimeOutput;
   }
 
   /**

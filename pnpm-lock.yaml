@@ -237,6 +237,7 @@ importers:
       ansi-colors: ^4.1.1
       bandersnatch: ^1.9.0
       chevrotain: ^10.1.1
+      emittery: ^0.10.1
       eslint: ^8.9.0
       eslint-config-prettier: ^8.4.0
       eslint-plugin-import: ^2.25.4
@@ -250,13 +251,14 @@ importers:
       ts-pattern: ^3.3.5
       typescript: ^4.5.5
     dependencies:
-      '@cnc4me/chevrotain-types-generator': link:../chevrotain-types-generator
       ansi-colors: 4.1.1
       bandersnatch: 1.9.0
       chevrotain: 10.1.1
+      emittery: 0.10.1
       ts-pattern: 3.3.5
     devDependencies:
       '@cnc4me/chevrotain-jest-extension': link:../chevrotain-jest-extension
+      '@cnc4me/chevrotain-types-generator': link:../chevrotain-types-generator
       '@cnc4me/jest-matchers': link:../jest-matchers
       '@swc/core': 1.2.144
       '@swc/jest': 0.2.17_@swc+core@1.2.144
@@ -3447,6 +3449,11 @@ packages:
   /electron-to-chromium/1.4.72:
     resolution: {integrity: sha512-9LkRQwjW6/wnSfevR21a3k8sOJ+XWSH7kkzs9/EUenKmuDkndP3W9y1yCZpOxufwGbX3JV8glZZSDb4o95zwXQ==}
     dev: true
+
+  /emittery/0.10.1:
+    resolution: {integrity: sha512-OBSS9uVXbpgqEGq2V5VnpfCu9vSnfiR9eYVJmxFYToNIcWRHkM4BAFbJe/PWjf/pQdEL7OPxd2jOW/bJiyX7gg==}
+    engines: {node: '>=12'}
+    dev: false
 
   /emittery/0.8.1:
     resolution: {integrity: sha512-uDfvUjVrfGJJhymx/kz6prltenw1u7WrCg1oa94zYY8xxVpLLUu045LAT0dhDZdXG58/EpPL/5kA180fQ/qudg==}

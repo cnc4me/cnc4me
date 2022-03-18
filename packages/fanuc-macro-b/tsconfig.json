@@ -4,7 +4,8 @@
     "composite": true,
     "noUnusedLocals": false,
     "outDir": "../../dist/out-tsc",
-    "types": ["node"]
+    "types": ["node"],
+    "experimentalDecorators": true
   },
   "references": [
     {

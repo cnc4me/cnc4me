@@ -2,16 +2,18 @@
 /* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
+import Emittery from "emittery";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
-import { ProgramIdentifier, VariableRegister } from "../types";
-import {
+import type { ProgramIdentifier, VariableRegister } from "../types";
+import type {
   AdditionExpressionCstChildren,
   AtomicExpressionCstChildren,
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  LineCstChildren,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
@@ -23,10 +25,13 @@ import {
 } from "../types/fanuc";
 import { getImage, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
+import * as Events from "./InterpreterEvents";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
+
+export { Events };
 
 interface WatcherValuePayload {
   prev: number;
@@ -48,8 +53,12 @@ export class MacroInterpreter extends BaseCstVisitor {
   varStack: MacroVariables[] = [];
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
+  events: Emittery;
+
   constructor() {
     super();
+
+    this.events = new Emittery();
 
     /**
      * @todo lets replace this with the new {@link MacroRuntime}
@@ -78,26 +87,33 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx.Lines) {
-      const lines = this.visit(ctx.Lines);
+      const lines = this.visit(ctx.Lines) as ReturnType<this["Lines"]>;
+
+      delete lines?.Newline;
+
       return { ...prgId, ...lines };
     }
 
     return { ...prgId };
   }
 
-  Lines(ctx: LinesCstChildren) {
-    console.log(ctx);
+  Line(ctx: LineCstChildren) {
+    // console.log(ctx);
+    return ctx;
+  }
 
+  Lines(ctx: LinesCstChildren) {
+    // console.log(ctx);
     return ctx;
   }
 
   expression(ctx: ExpressionCstChildren) {
-    return this.visit(ctx.additionExpression);
+    return this.visit(ctx.additionExpression) as ReturnType<this["additionExpression"]>;
   }
 
-  functionExpression(ctx: FunctionExpressionCstChildren) {
+  functionExpression(ctx: FunctionExpressionCstChildren): number {
     const func = getImage(ctx.BuiltinFunctions);
-    const value = this.visit(ctx.atomicExpression);
+    const value = this.visit(ctx.atomicExpression) as ReturnType<this["atomicExpression"]>;
 
     // prettier-ignore
     const result = match(func)
@@ -166,7 +182,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Update a macro variable regsiter with a value
    */
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macro: VariableRegister = this.visit(ctx.VariableLiteral);
+    const macro = this.visit(ctx.VariableLiteral) as ReturnType<this["VariableLiteral"]>;
     const values: WatcherValuePayload = {
       register: macro.register,
       curr: NaN,
@@ -179,9 +195,13 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     this.setMacroValue(macro.register, value);
 
+    /**
+     * @TODO remove the watches for events
+     */
     if (this.varWatches[macro.register]) {
       this.varWatches[macro.register](values);
     }
+    void this.events.emit(Events.MACRO_REGISTER_UPDATE, { macro });
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren) {
@@ -239,20 +259,21 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   atomicExpression(ctx: AtomicExpressionCstChildren) {
     if (ctx.bracketExpression) {
-      return this.visit(ctx.bracketExpression);
+      return this.visit(ctx.bracketExpression) as ReturnType<this["bracketExpression"]>;
     } else if (ctx.NumericLiteral) {
-      return this.visit(ctx.NumericLiteral);
-    } else if (ctx.VariableLiteral) {
-      const macroVar: VariableRegister = this.visit(ctx.VariableLiteral);
-
-      return macroVar.value;
+      return this.visit(ctx.NumericLiteral) as ReturnType<this["NumericLiteral"]>;
     } else if (ctx.functionExpression) {
-      return this.visit(ctx.functionExpression);
+      return this.visit(ctx.functionExpression) as ReturnType<this["functionExpression"]>;
+    } else if (ctx.VariableLiteral) {
+      const macroVar = this.visit(ctx.VariableLiteral) as ReturnType<this["VariableLiteral"]>;
+      return macroVar.value;
+    } else {
+      return ctx;
     }
   }
 
   bracketExpression(ctx: BracketExpressionCstChildren) {
-    return this.visit(ctx.expression);
+    return this.visit(ctx.expression) as ReturnType<this["expression"]>;
   }
 
   /**

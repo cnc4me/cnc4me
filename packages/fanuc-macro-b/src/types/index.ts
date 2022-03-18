@@ -1,6 +1,6 @@
 import type { ILexingError, ILexingResult, IRecognitionException, IToken } from "chevrotain";
 
-import type { MacroParser } from "../lib/MacroParser";
+import type { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
 
 export type ParseErrors = null | IRecognitionException[];
 
@@ -39,4 +39,18 @@ export interface ProgramIdentifier {
 
 export interface MacroProgramAnalysis extends ProgramIdentifier {
   [K: string]: string | number;
+}
+
+export interface MacroToolchain {
+  lexer: MacroLexer;
+  parser: MacroParser;
+  interpreter: MacroInterpreter;
+  analyze: (input: string) => ReturnType<MacroInterpreter["program"]>;
+}
+
+export interface RuntimeOutput {
+  end: number;
+  start: number;
+  elapsed: number;
+  result: ReturnType<MacroToolchain["analyze"]>;
 }

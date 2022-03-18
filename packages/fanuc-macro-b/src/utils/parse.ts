@@ -1,11 +1,12 @@
-import { lexer, parser } from "../lib";
+import { parser } from "../lib";
 import { ParsingResultWithLexingErrors } from "../types";
+import { tokenize } from "./common";
 
 /**
  * Parse a given block of text
  */
 export function parse(text: string): ParsingResultWithLexingErrors {
-  const lexResult = lexer(text);
+  const lexResult = tokenize(text);
 
   parser.input = lexResult.tokens;
 

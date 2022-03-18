@@ -12,6 +12,7 @@
     "repl": "tsnd ./demo/repl.demo.ts",
     "types": "tsnd ./scripts/generateDts.ts",
     "diagram": "tsnd ./scripts/generateDiagram.ts",
+    "events": "tsnd --respawn ./demo/events.demo.ts",
     "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
     "validate": "tsnd --respawn ./demo/validate.demo.ts"
   },
@@ -19,6 +20,7 @@
     "ansi-colors": "^4.1.1",
     "bandersnatch": "^1.9.0",
     "chevrotain": "^10.1.1",
+    "emittery": "^0.10.1",
     "ts-pattern": "^3.3.5"
   },
   "devDependencies": {
