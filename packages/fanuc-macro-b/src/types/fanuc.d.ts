@@ -70,6 +70,16 @@ export type VariableLiteralCstChildren = {
   Integer: IToken[];
 };
 
+export interface ValueLiteralCstNode extends CstNode {
+  name: "ValueLiteral";
+  children: ValueLiteralCstChildren;
+}
+
+export type ValueLiteralCstChildren = {
+  VariableLiteral?: VariableLiteralCstNode[];
+  NumericLiteral?: NumericLiteralCstNode[];
+};
+
 export interface ProgramNumberLineCstNode extends CstNode {
   name: "ProgramNumberLine";
   children: ProgramNumberLineCstChildren;
@@ -209,6 +219,7 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
+  ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;

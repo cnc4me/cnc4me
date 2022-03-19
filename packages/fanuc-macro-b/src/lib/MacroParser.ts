@@ -114,6 +114,16 @@ export class MacroParser extends CstParser {
   });
 
   /**
+   * Number or Macro variable
+   */
+  protected ValueLiteral = this.RULE("ValueLiteral", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+    ]);
+  });
+
+  /**
    *
    */
   public ProgramNumberLine = this.RULE("ProgramNumberLine", () => {

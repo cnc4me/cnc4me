@@ -9,12 +9,12 @@ import { INTERPRETER } from "../PackageConfig";
 import type { ProgramIdentifier, VariableRegister } from "../types";
 import type {
   AdditionExpressionCstChildren,
-  AddressesCstChildren,
   AtomicExpressionCstChildren,
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
   LineCstChildren,
+  LineCstNode,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
@@ -78,6 +78,8 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
+    const lines = [];
+
     let prgId: ProgramIdentifier = { programNumber: 0, programTitle: "" };
 
     if (ctx.ProgramNumberLine) {
@@ -85,55 +87,56 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx.Lines) {
-      const lines: ReturnType<MacroInterpreter["Lines"]> = this.visit(ctx.Lines);
+      const lineNodes: ReturnType<MacroInterpreter["Lines"]> = this.visit(ctx.Lines);
 
-      const blocks = [];
-
-      delete lines?.Newline;
-
-      if (lines?.Line) {
-        for (const line of lines.Line) {
-          const block: ReturnType<MacroInterpreter["Line"]> = this.visit(line);
-          blocks.push(block);
-        }
-
-        return { ...prgId, blocks };
+      for (const line of lineNodes) {
+        const vLine: ReturnType<MacroInterpreter["Line"]> = this.visit(line);
+        lines.push(vLine);
       }
     }
 
-    return { ...prgId };
+    return { ...prgId, lines };
   }
 
-  Lines(ctx: LinesCstChildren) {
-    // console.log(ctx);
-    return ctx;
+  /**
+   * Returning the {@link LineCstNode} while ignoring the trailing `\n`
+   */
+  Lines(ctx: LinesCstChildren): LineCstNode[] {
+    return ctx.Line;
   }
 
+  /**
+   * Get the complete contents of a line of G code
+   */
   Line(ctx: LineCstChildren) {
+    const gCodes = [];
+    const mCodes = [];
     const comments = [];
+    const addresses = [];
 
     if (ctx?.Comment) {
-      const comment = unwrap(getImage(ctx.Comment));
-      comments.push(comment);
+      for (const comment of ctx.Comment) {
+        comments.push(unwrap(getImage(comment)));
+      }
     }
 
-    if (ctx?.addresses) {
-      this.visit(ctx.addresses);
+    if (ctx?.G_Code) {
+      gCodes.push(...ctx.G_Code);
     }
 
-    console.log("comments", comments);
+    if (ctx?.M_Code) {
+      mCodes.push(...ctx.M_Code);
+    }
 
-    return ctx;
-  }
-
-  addresses(ctx: AddressesCstChildren) {
     if (ctx?.LineNumber) {
-      const N = ctx.LineNumber;
-
-      console.log("Line Num", N);
+      addresses.push(...ctx.LineNumber);
     }
 
-    return ctx;
+    if (ctx?.AddressedValue) {
+      addresses.push(...ctx.AddressedValue);
+    }
+
+    return { comments, gCodes, mCodes, addresses };
   }
 
   /**
