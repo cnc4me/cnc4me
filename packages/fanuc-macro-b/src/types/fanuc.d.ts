@@ -28,10 +28,13 @@ export interface LineCstNode extends CstNode {
 }
 
 export type LineCstChildren = {
+  G_Code?: IToken[];
+  M_Code?: IToken[];
+  LineNumber?: IToken[];
   Comment?: IToken[];
+  AddressedValue?: AddressedValueCstNode[];
   variableAssignment?: VariableAssignmentCstNode[];
   conditionalExpression?: ConditionalExpressionCstNode[];
-  addresses?: AddressesCstNode[];
 };
 
 export interface AddressedValueCstNode extends CstNode {
@@ -67,16 +70,6 @@ export type VariableLiteralCstChildren = {
   Integer: IToken[];
 };
 
-export interface ValueLiteralCstNode extends CstNode {
-  name: "ValueLiteral";
-  children: ValueLiteralCstChildren;
-}
-
-export type ValueLiteralCstChildren = {
-  VariableLiteral?: VariableLiteralCstNode[];
-  NumericLiteral?: NumericLiteralCstNode[];
-};
-
 export interface ProgramNumberLineCstNode extends CstNode {
   name: "ProgramNumberLine";
   children: ProgramNumberLineCstChildren;
@@ -86,18 +79,6 @@ export type ProgramNumberLineCstChildren = {
   ProgramNumber: IToken[];
   Comment: IToken[];
   Newline: IToken[];
-};
-
-export interface AddressesCstNode extends CstNode {
-  name: "addresses";
-  children: AddressesCstChildren;
-}
-
-export type AddressesCstChildren = {
-  G_Code?: IToken[];
-  M_Code?: IToken[];
-  LineNumber?: IToken[];
-  AddressedValue?: AddressedValueCstNode[];
 };
 
 export interface ExpressionCstNode extends CstNode {
@@ -228,9 +209,7 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
-  ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;
-  addresses(children: AddressesCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   multiplicationExpression(children: MultiplicationExpressionCstChildren, param?: IN): OUT;
