@@ -58,17 +58,18 @@ export class MacroParser extends CstParser {
    * Any number of valid addresses, comments, and/or expressions
    */
   public Line = this.RULE("Line", () => {
-    this.OR([
-      // { ALT: () => this.CONSUME(Newline) },
-      { ALT: () => this.CONSUME(Comment) },
-      // { ALT: () => this.SUBRULE(this.ProgramNumberLine) },
-      { ALT: () => this.SUBRULE(this.variableAssignment) },
-      { ALT: () => this.SUBRULE(this.conditionalExpression) },
-      { ALT: () => this.SUBRULE(this.addresses) }
-      // { ALT: () => this.SUBRULE(this.atomicExpression) }
-    ]);
-    this.OPTION(() => {
-      this.CONSUME2(Comment);
+    this.MANY(() => {
+      this.OR([
+        // { ALT: () => this.CONSUME(Newline) },
+        { ALT: () => this.CONSUME(Gcode) },
+        { ALT: () => this.CONSUME(Mcode) },
+        { ALT: () => this.CONSUME(LineNumber) },
+        { ALT: () => this.CONSUME(Comment) },
+        { ALT: () => this.SUBRULE(this.AddressedValue) },
+        { ALT: () => this.SUBRULE(this.variableAssignment) },
+        { ALT: () => this.SUBRULE(this.conditionalExpression) }
+        // { ALT: () => this.SUBRULE(this.addresses) }
+      ]);
     });
   });
 
@@ -121,27 +122,6 @@ export class MacroParser extends CstParser {
     this.CONSUME(Comment);
     // });
     this.CONSUME(Newline);
-  });
-
-  /**
-   * A repeated sequence of addressed values
-   *
-   * Any typical block of NC code would satisfy this rule
-   *
-   * @example
-   * - G43 H12 Z1.0
-   * - X1. Y2. B90.
-   */
-  private addresses = this.RULE("addresses", () => {
-    this.MANY(() => {
-      this.OR([
-        // { ALT: () => this.CONSUME(Address) },
-        { ALT: () => this.CONSUME(Gcode) },
-        { ALT: () => this.CONSUME(Mcode) },
-        { ALT: () => this.CONSUME(LineNumber) },
-        { ALT: () => this.SUBRULE(this.AddressedValue) }
-      ]);
-    });
   });
 
   /**
