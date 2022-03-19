@@ -9,6 +9,7 @@ import { INTERPRETER } from "../PackageConfig";
 import type { ProgramIdentifier, VariableRegister } from "../types";
 import type {
   AdditionExpressionCstChildren,
+  AddressesCstChildren,
   AtomicExpressionCstChildren,
   BracketExpressionCstChildren,
   ExpressionCstChildren,
@@ -25,13 +26,10 @@ import type {
 } from "../types/fanuc";
 import { getImage, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
-import * as Events from "./InterpreterEvents";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
-
-export { Events };
 
 interface WatcherValuePayload {
   prev: number;
@@ -87,19 +85,23 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx.Lines) {
-      const lines = this.visit(ctx.Lines) as ReturnType<this["Lines"]>;
+      const lines: ReturnType<MacroInterpreter["Lines"]> = this.visit(ctx.Lines);
+
+      const blocks = [];
 
       delete lines?.Newline;
 
-      return { ...prgId, ...lines };
+      if (lines?.Line) {
+        for (const line of lines.Line) {
+          const block: ReturnType<MacroInterpreter["Line"]> = this.visit(line);
+          blocks.push(block);
+        }
+
+        return { ...prgId, blocks };
+      }
     }
 
     return { ...prgId };
-  }
-
-  Line(ctx: LineCstChildren) {
-    // console.log(ctx);
-    return ctx;
   }
 
   Lines(ctx: LinesCstChildren) {
@@ -107,31 +109,31 @@ export class MacroInterpreter extends BaseCstVisitor {
     return ctx;
   }
 
-  expression(ctx: ExpressionCstChildren) {
-    return this.visit(ctx.additionExpression) as ReturnType<this["additionExpression"]>;
+  Line(ctx: LineCstChildren) {
+    const comments = [];
+
+    if (ctx?.Comment) {
+      const comment = unwrap(getImage(ctx.Comment));
+      comments.push(comment);
+    }
+
+    if (ctx?.addresses) {
+      this.visit(ctx.addresses);
+    }
+
+    console.log("comments", comments);
+
+    return ctx;
   }
 
-  functionExpression(ctx: FunctionExpressionCstChildren): number {
-    const func = getImage(ctx.BuiltinFunctions);
-    const value = this.visit(ctx.atomicExpression) as ReturnType<this["atomicExpression"]>;
+  addresses(ctx: AddressesCstChildren) {
+    if (ctx?.LineNumber) {
+      const N = ctx.LineNumber;
 
-    // prettier-ignore
-    const result = match(func)
-      .with("LN",    () => Math.log(value))
-      .with("ABS",   () => Math.abs(value))
-      .with("FUP",   () => Math.ceil(value))
-      .with("SQRT",  () => Math.sqrt(value))
-      .with("FIX",   () => Math.floor(value))
-      .with("ROUND", () => Math.round(value))
-      .with("SIN",   () => Math.sin(degreeToRadian(value)))
-      .with("COS",   () => Math.cos(degreeToRadian(value)))
-      .with("TAN",   () => Math.tan(degreeToRadian(value)))
-      .with("ASIN",  () => radianToDegree(Math.asin(value)))
-      .with("ACOS",  () => radianToDegree(Math.acos(value)))
-      .with("ATAN",  () => radianToDegree(Math.atan(value)))
-      .otherwise(() => NaN);
+      console.log("Line Num", N);
+    }
 
-    return result;
+    return ctx;
   }
 
   /**
@@ -178,6 +180,33 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
   }
 
+  expression(ctx: ExpressionCstChildren) {
+    return this.visit(ctx.additionExpression) as ReturnType<this["additionExpression"]>;
+  }
+
+  functionExpression(ctx: FunctionExpressionCstChildren): number {
+    const func = getImage(ctx.BuiltinFunctions);
+    const value = this.visit(ctx.atomicExpression) as ReturnType<this["atomicExpression"]>;
+
+    // prettier-ignore
+    const result = match(func)
+      .with("LN",    () => Math.log(value))
+      .with("ABS",   () => Math.abs(value))
+      .with("FUP",   () => Math.ceil(value))
+      .with("SQRT",  () => Math.sqrt(value))
+      .with("FIX",   () => Math.floor(value))
+      .with("ROUND", () => Math.round(value))
+      .with("SIN",   () => Math.sin(degreeToRadian(value)))
+      .with("COS",   () => Math.cos(degreeToRadian(value)))
+      .with("TAN",   () => Math.tan(degreeToRadian(value)))
+      .with("ASIN",  () => radianToDegree(Math.asin(value)))
+      .with("ACOS",  () => radianToDegree(Math.acos(value)))
+      .with("ATAN",  () => radianToDegree(Math.atan(value)))
+      .otherwise(() => NaN);
+
+    return result;
+  }
+
   /**
    * Update a macro variable regsiter with a value
    */
@@ -201,7 +230,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (this.varWatches[macro.register]) {
       this.varWatches[macro.register](values);
     }
-    void this.events.emit(Events.MACRO_REGISTER_UPDATE, { macro });
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren) {

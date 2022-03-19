@@ -1,7 +1,8 @@
-import { Lexer } from "chevrotain";
+import { ILexingError, IRecognitionException, Lexer } from "chevrotain";
+import Debug from "debug";
 import Emittery from "emittery";
 
-import type { AnalyzedProgram, MacroToolchain, ProgramRecords, RuntimeOutput } from "../types";
+import type { AnalyzedProgram, ProgramRecords, RuntimeOutput } from "../types";
 import { analyze } from "../utils";
 import { createToolchain } from "../utils/toolchain";
 import { MacroInterpreter } from "./MacroInterpreter";
@@ -13,23 +14,32 @@ function range(x: number, y: number): number[] {
 }
 
 interface ProgramLoadOptions {
-  activateOnLoad: boolean;
+  setActive: boolean;
+}
+
+type PotentialError = IRecognitionException | ILexingError | string;
+
+type ErrorHandler = (eventData: PotentialError | PotentialError[]) => void | Promise<void>;
+
+interface RuntimeEvents {
+  close: undefined; // No arg event
+  error: PotentialError | PotentialError[];
 }
 
 /*
  * MacroRuntime Class to hold multiple programs in memory
  */
-@Emittery.mixin("emittery")
 export class MacroRuntime {
+  private _debug = Debug("macro:runtime");
+
   private _lexer: Lexer;
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
 
-  private _activeProgram!: number;
+  private _activeProgram = NaN;
   private _programs: ProgramRecords = {};
   private _vars = new Map<number, number>();
-
-  private _errorHandler: (err: string) => void;
+  private _events = new Emittery<RuntimeEvents>();
 
   get Lexer(): MacroLexer {
     return this._lexer;
@@ -51,6 +61,8 @@ export class MacroRuntime {
       ...range(500, 699)
     ];
 
+    this._debug(`Initializing registers (${registers.length})`);
+
     registers.forEach(i => this.initVar(i));
 
     const { lexer, parser, interpreter } = createToolchain();
@@ -58,30 +70,31 @@ export class MacroRuntime {
     this._lexer = lexer;
     this._parser = parser;
     this._interpreter = interpreter;
-
-    this._errorHandler = () => {};
   }
 
   /**
    * Main entry point to the runtime.
    */
   run(): RuntimeOutput {
-    const start = Date.now();
+    const beginExec = new Date();
+
     const { input } = this.getActiveProgram();
-    const { tokens } = this._lexer.tokenize(input);
+    const { tokens, errors } = this._lexer.tokenize(input);
+
+    if (errors.length > 0) {
+      void this._events.emit("error", errors);
+    }
 
     this._parser.input = tokens;
     const cst = this._parser.program();
 
-    this._interpreter.events.on("event", () => {
-      console.log("event!");
-    });
+    if (this._parser.errors.length > 0) {
+      void this._events.emit("error", this._parser.errors);
+    }
 
-    const result = this._interpreter.visit(cst);
-    const end = Date.now();
-    const elapsed = end - start;
+    const result = this._interpreter.visit(cst) as ReturnType<MacroInterpreter["program"]>;
 
-    return { start, end, elapsed, result } as RuntimeOutput;
+    return { beginExec, result } as RuntimeOutput;
   }
 
   /**
@@ -94,8 +107,8 @@ export class MacroRuntime {
   /**
    * Register a function to handle errors that occur in the runtime.
    */
-  onError(handler: (err: string) => void) {
-    this._errorHandler = handler;
+  onError(handler: ErrorHandler): void {
+    this._events.on("error", handler);
   }
 
   /**
@@ -123,7 +136,16 @@ export class MacroRuntime {
    * Return the currently active program.
    */
   getActiveProgram(): AnalyzedProgram {
-    return this.getProgram(this._activeProgram);
+    if (typeof this._activeProgram === "number") {
+      return this.getProgram(this._activeProgram);
+    } else {
+      return {
+        input: "",
+        programTitle: "",
+        programNumber: NaN,
+        err: ["No active program selected."]
+      };
+    }
   }
 
   /**
@@ -137,6 +159,7 @@ export class MacroRuntime {
    * Set a program number as `active` in the runtime.
    */
   setActiveProgram(programNumber: number): void {
+    this._debug(`Setting program #${programNumber} active`);
     this._activeProgram = programNumber;
   }
 
@@ -197,7 +220,7 @@ export class MacroRuntime {
 
     this._programs[analyzed.programNumber] = analyzed;
 
-    if (options?.activateOnLoad) {
+    if (options?.setActive) {
       this.setActiveProgram(analyzed.programNumber);
     }
 

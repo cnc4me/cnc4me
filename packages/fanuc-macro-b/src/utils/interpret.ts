@@ -1,11 +1,12 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
+import { MacroParser } from "../lib";
 import { interpreter } from "../lib/MacroInterpreter";
 import { parse } from "./parse";
 
 /**
  * Run the full interpreter and generate CST
  */
-export function interpret<T>(text: string, rule: string) {
+export function interpret<T>(text: string, rule: keyof MacroParser) {
   const { parser, lexResult } = parse(text);
 
   // @ts-expect-error blah

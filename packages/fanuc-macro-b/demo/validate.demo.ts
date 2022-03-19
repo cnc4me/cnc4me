@@ -4,8 +4,11 @@ const PROGRAM = `%
 O9901(example)
 (header)
 
+G10 G90 L2 P1 X0 Y0 Z0 B0 ( B WAS 5 )
+
 T43 M6
-G0 G90 G55
+G0 G90 G55 ( line comment )
+M98 P1234
 M30
 %`;
 

@@ -2,12 +2,17 @@ import type { ILexingError, ILexingResult, IRecognitionException, IToken } from 
 
 import type { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
 
-export type ParseErrors = null | IRecognitionException[];
+export type ParseErrors = IRecognitionException[];
 
 export type ProgramRecords = Record<string, AnalyzedProgram>;
 
+export interface ProgramIdentifier {
+  programTitle: string;
+  programNumber: number;
+}
+
 export interface AnalyzedProgram extends ProgramIdentifier {
-  err: ParseErrors;
+  err: ParseErrors | string[] | null;
   input: string;
 }
 
@@ -32,11 +37,6 @@ export interface ValidationResult {
   result: MacroProgramAnalysis;
 }
 
-export interface ProgramIdentifier {
-  programTitle: string;
-  programNumber: number;
-}
-
 export interface MacroProgramAnalysis extends ProgramIdentifier {
   [K: string]: string | number;
 }
@@ -49,8 +49,6 @@ export interface MacroToolchain {
 }
 
 export interface RuntimeOutput {
-  end: number;
-  start: number;
-  elapsed: number;
+  beginExec: Date;
   result: ReturnType<MacroToolchain["analyze"]>;
 }

@@ -1,5 +1,39 @@
 import type { CstNode, ICstVisitor, IToken } from "chevrotain";
 
+export interface ProgramCstNode extends CstNode {
+  name: "program";
+  children: ProgramCstChildren;
+}
+
+export type ProgramCstChildren = {
+  StartOfFile: StartOfFileCstNode[];
+  ProgramNumberLine: ProgramNumberLineCstNode[];
+  Lines: LinesCstNode[];
+  EndOfFile: EndOfFileCstNode[];
+};
+
+export interface LinesCstNode extends CstNode {
+  name: "Lines";
+  children: LinesCstChildren;
+}
+
+export type LinesCstChildren = {
+  Line: LineCstNode[];
+  Newline?: IToken[];
+};
+
+export interface LineCstNode extends CstNode {
+  name: "Line";
+  children: LineCstChildren;
+}
+
+export type LineCstChildren = {
+  Comment?: IToken[];
+  variableAssignment?: VariableAssignmentCstNode[];
+  conditionalExpression?: ConditionalExpressionCstNode[];
+  addresses?: AddressesCstNode[];
+};
+
 export interface AddressedValueCstNode extends CstNode {
   name: "AddressedValue";
   children: AddressedValueCstChildren;
@@ -8,8 +42,9 @@ export interface AddressedValueCstNode extends CstNode {
 export type AddressedValueCstChildren = {
   Address: IToken[];
   Minus?: IToken[];
-  bracketExpression?: BracketExpressionCstNode[];
+  NumericValue?: IToken[];
   VariableLiteral?: VariableLiteralCstNode[];
+  bracketExpression?: BracketExpressionCstNode[];
 };
 
 export interface NumericLiteralCstNode extends CstNode {
@@ -49,7 +84,20 @@ export interface ProgramNumberLineCstNode extends CstNode {
 
 export type ProgramNumberLineCstChildren = {
   ProgramNumber: IToken[];
-  Comment?: IToken[];
+  Comment: IToken[];
+  Newline: IToken[];
+};
+
+export interface AddressesCstNode extends CstNode {
+  name: "addresses";
+  children: AddressesCstChildren;
+}
+
+export type AddressesCstChildren = {
+  G_Code?: IToken[];
+  M_Code?: IToken[];
+  LineNumber?: IToken[];
+  AddressedValue?: AddressedValueCstNode[];
 };
 
 export interface ExpressionCstNode extends CstNode {
@@ -153,41 +201,6 @@ export type VariableAssignmentCstChildren = {
   expression: ExpressionCstNode[];
 };
 
-export interface AddressesCstNode extends CstNode {
-  name: "addresses";
-  children: AddressesCstChildren;
-}
-
-export type AddressesCstChildren = {
-  G_Code?: IToken[];
-  T_Code?: IToken[];
-  M_Code?: IToken[];
-  AddressedValue?: AddressedValueCstNode[];
-};
-
-export interface LinesCstNode extends CstNode {
-  name: "Lines";
-  children: LinesCstChildren;
-}
-
-export type LinesCstChildren = {
-  Line?: LineCstNode[];
-  Newline?: IToken[];
-};
-
-export interface LineCstNode extends CstNode {
-  name: "Line";
-  children: LineCstChildren;
-}
-
-export type LineCstChildren = {
-  Comment?: IToken[];
-  LineNumber?: IToken[];
-  variableAssignment?: VariableAssignmentCstNode[];
-  conditionalExpression?: ConditionalExpressionCstNode[];
-  addresses?: AddressesCstNode[];
-};
-
 export interface StartOfFileCstNode extends CstNode {
   name: "StartOfFile";
   children: StartOfFileCstChildren;
@@ -198,24 +211,26 @@ export type StartOfFileCstChildren = {
   Newline: IToken[];
 };
 
-export interface ProgramCstNode extends CstNode {
-  name: "program";
-  children: ProgramCstChildren;
+export interface EndOfFileCstNode extends CstNode {
+  name: "EndOfFile";
+  children: EndOfFileCstChildren;
 }
 
-export type ProgramCstChildren = {
-  StartOfFile: StartOfFileCstNode[];
-  ProgramNumberLine: ProgramNumberLineCstNode[];
-  Lines: LinesCstNode[];
-  EndOfFile: IToken[];
+export type EndOfFileCstChildren = {
+  Percent: IToken[];
+  Newline?: IToken[];
 };
 
 export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
+  program(children: ProgramCstChildren, param?: IN): OUT;
+  Lines(children: LinesCstChildren, param?: IN): OUT;
+  Line(children: LineCstChildren, param?: IN): OUT;
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
   ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;
+  addresses(children: AddressesCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   multiplicationExpression(children: MultiplicationExpressionCstChildren, param?: IN): OUT;
@@ -225,9 +240,6 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   atomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   bracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
   variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
-  addresses(children: AddressesCstChildren, param?: IN): OUT;
-  Lines(children: LinesCstChildren, param?: IN): OUT;
-  Line(children: LineCstChildren, param?: IN): OUT;
   StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
-  program(children: ProgramCstChildren, param?: IN): OUT;
+  EndOfFile(children: EndOfFileCstChildren, param?: IN): OUT;
 }

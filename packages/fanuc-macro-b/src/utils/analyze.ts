@@ -12,8 +12,9 @@ export function analyze(text: string): ValidationResult {
 
   const cst = parser.program();
 
-  const err = parser.errors.length > 0 ? parser.errors : null;
   const result = interpreter.visit(cst);
+
+  const err = parser.errors.length > 0 ? parser.errors : [];
 
   return { err, result, tokens: lexResult.tokens };
 }

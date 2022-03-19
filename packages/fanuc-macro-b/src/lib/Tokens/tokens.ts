@@ -5,18 +5,12 @@ import { matchProgramNumber } from "./matchers";
 
 export const Address = createToken({
   name: "Address",
-  pattern: /[A-F][H-L][P-Z]/
+  pattern: /[A-FH-LP-Z]/
 });
 
 export const Gcode = createToken({
   name: "G_Code",
   pattern: /G\d+(\.\d)?/,
-  longer_alt: Address
-});
-
-export const Tcode = createToken({
-  name: "T_Code",
-  pattern: /T\d+/,
   longer_alt: Address
 });
 
