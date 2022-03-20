@@ -1,20 +1,24 @@
-/* eslint-disable @typescript-eslint/no-unsafe-argument */
-/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { tokenMatcher } from "chevrotain";
+import { CstNode, tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
-import type { ProgramIdentifier, VariableRegister } from "../types";
+import type {
+  ParsedAddressData,
+  ParsedLineData,
+  ProgramIdentifier,
+  VariableRegister,
+  WatcherValuePayload
+} from "../types";
 import type {
   AdditionExpressionCstChildren,
+  AddressedValueCstChildren,
   AtomicExpressionCstChildren,
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
   LineCstChildren,
-  LineCstNode,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
@@ -24,18 +28,12 @@ import type {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { getImage, unbox, unwrap } from "../utils";
+import { getImage, parseNumber, trimLeadingChar, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
-
-interface WatcherValuePayload {
-  prev: number;
-  curr: number;
-  register: number;
-}
 
 const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
@@ -78,65 +76,89 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
-    const lines = [];
-
     let prgId: ProgramIdentifier = { programNumber: 0, programTitle: "" };
 
     if (ctx.ProgramNumberLine) {
       prgId = this.visit(ctx.ProgramNumberLine);
     }
 
-    if (ctx.Lines) {
-      const lineNodes: ReturnType<MacroInterpreter["Lines"]> = this.visit(ctx.Lines);
-
-      for (const line of lineNodes) {
-        const vLine: ReturnType<MacroInterpreter["Line"]> = this.visit(line);
-        lines.push(vLine);
-      }
-    }
+    const lines = this.tVisit(ctx.Lines) as ReturnType<MacroInterpreter["Lines"]>;
 
     return { ...prgId, lines };
   }
 
   /**
-   * Returning the {@link LineCstNode} while ignoring the trailing `\n`
+   * Itterate over the {@link LineCstChildren} to extract the contents
    */
-  Lines(ctx: LinesCstChildren): LineCstNode[] {
-    return ctx.Line;
+  Lines(ctx: LinesCstChildren): ParsedLineData[] {
+    const lines: ParsedLineData[] = [];
+
+    if (ctx.Line) {
+      for (const line of ctx.Line) {
+        const vLine = this.tVisit<MacroInterpreter["Line"]>(line);
+        lines.push(vLine);
+      }
+    }
+
+    return lines;
   }
 
   /**
    * Get the complete contents of a line of G code
    */
-  Line(ctx: LineCstChildren) {
-    const gCodes = [];
-    const mCodes = [];
-    const comments = [];
-    const addresses = [];
+  Line(ctx: LineCstChildren): ParsedLineData {
+    const parsed: ParsedLineData = {
+      gCodes: [],
+      mCodes: [],
+      addresses: [],
+      comments: [],
+      N: NaN
+    };
 
     if (ctx?.Comment) {
       for (const comment of ctx.Comment) {
-        comments.push(unwrap(getImage(comment)));
+        parsed.comments.push(unwrap(getImage(comment)));
       }
     }
 
     if (ctx?.G_Code) {
-      gCodes.push(...ctx.G_Code);
+      parsed.gCodes.push(...ctx.G_Code);
     }
 
     if (ctx?.M_Code) {
-      mCodes.push(...ctx.M_Code);
+      parsed.mCodes.push(...ctx.M_Code);
     }
 
     if (ctx?.LineNumber) {
-      addresses.push(...ctx.LineNumber);
+      parsed.N = parseInt(trimLeadingChar(getImage(ctx.LineNumber)));
     }
 
     if (ctx?.AddressedValue) {
-      addresses.push(...ctx.AddressedValue);
+      for (const address of ctx.AddressedValue) {
+        const parsedAddr = this.tVisit<MacroInterpreter["AddressedValue"]>(address);
+
+        parsed.addresses.push(parsedAddr);
+      }
     }
 
-    return { comments, gCodes, mCodes, addresses };
+    return parsed;
+  }
+
+  AddressedValue(ctx: AddressedValueCstChildren): ParsedAddressData {
+    const parsed = {
+      image: "",
+      value: NaN,
+      address: getImage(ctx.Address),
+      isNegative: Boolean(ctx?.Minus)
+    };
+
+    if (ctx?.NumericValue) {
+      parsed.value = parseNumber(getImage(ctx.NumericValue));
+    }
+
+    parsed.image = `${parsed.address}${parsed.isNegative ? "-" : ""}${parsed.value}`;
+
+    return parsed;
   }
 
   /**
@@ -173,7 +195,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   ValueLiteral(ctx: ValueLiteralCstChildren) {
     if (ctx.VariableLiteral) {
-      const macro: VariableRegister = this.visit(ctx.VariableLiteral);
+      const macro = this.visit(ctx.VariableLiteral) as VariableRegister;
 
       return macro.value;
     }
@@ -184,12 +206,12 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   expression(ctx: ExpressionCstChildren) {
-    return this.visit(ctx.additionExpression) as ReturnType<this["additionExpression"]>;
+    return this.visit(ctx.additionExpression);
   }
 
   functionExpression(ctx: FunctionExpressionCstChildren): number {
     const func = getImage(ctx.BuiltinFunctions);
-    const value = this.visit(ctx.atomicExpression) as ReturnType<this["atomicExpression"]>;
+    const value = this.visit(ctx.atomicExpression);
 
     // prettier-ignore
     const result = match(func)
@@ -290,13 +312,17 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   atomicExpression(ctx: AtomicExpressionCstChildren) {
     if (ctx.bracketExpression) {
-      return this.visit(ctx.bracketExpression) as ReturnType<this["bracketExpression"]>;
+      return this.visit(ctx.bracketExpression);
     } else if (ctx.NumericLiteral) {
-      return this.visit(ctx.NumericLiteral) as ReturnType<this["NumericLiteral"]>;
+      return this.visit(ctx.NumericLiteral) as ReturnType<MacroInterpreter["NumericLiteral"]>;
     } else if (ctx.functionExpression) {
-      return this.visit(ctx.functionExpression) as ReturnType<this["functionExpression"]>;
+      return this.visit(ctx.functionExpression) as ReturnType<
+        MacroInterpreter["functionExpression"]
+      >;
     } else if (ctx.VariableLiteral) {
-      const macroVar = this.visit(ctx.VariableLiteral) as ReturnType<this["VariableLiteral"]>;
+      const macroVar = this.visit(ctx.VariableLiteral) as ReturnType<
+        MacroInterpreter["VariableLiteral"]
+      >;
       return macroVar.value;
     } else {
       return ctx;
@@ -304,7 +330,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   bracketExpression(ctx: BracketExpressionCstChildren) {
-    return this.visit(ctx.expression) as ReturnType<this["expression"]>;
+    return this.visit(ctx.expression);
   }
 
   /**
@@ -355,6 +381,10 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
     this.varWatches[macroRegister] = handler;
+  }
+
+  private tVisit<M extends (args: never) => unknown>(node: CstNode | CstNode[], param?: unknown) {
+    return this.visit(node, param) as ReturnType<M>;
   }
 }
 

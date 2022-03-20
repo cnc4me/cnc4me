@@ -48,7 +48,7 @@ export class MacroParser extends CstParser {
    *
    */
   public Lines = this.RULE("Lines", () => {
-    this.AT_LEAST_ONE_SEP({
+    this.MANY_SEP({
       SEP: Newline,
       DEF: () => this.SUBRULE(this.Line)
     });
@@ -61,13 +61,13 @@ export class MacroParser extends CstParser {
     this.MANY(() => {
       this.OR([
         // { ALT: () => this.CONSUME(Newline) },
+        { ALT: () => this.CONSUME(LineNumber) },
         { ALT: () => this.CONSUME(Gcode) },
         { ALT: () => this.CONSUME(Mcode) },
-        { ALT: () => this.CONSUME(LineNumber) },
-        { ALT: () => this.CONSUME(Comment) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.SUBRULE(this.variableAssignment) },
-        { ALT: () => this.SUBRULE(this.conditionalExpression) }
+        { ALT: () => this.SUBRULE(this.conditionalExpression) },
+        { ALT: () => this.CONSUME(Comment) }
         // { ALT: () => this.SUBRULE(this.addresses) }
       ]);
     });

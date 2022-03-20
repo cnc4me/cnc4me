@@ -5,6 +5,6 @@ dist/
 coverage/
 node_modules/
 
-Sapps/*/node_modules/
+apps/*/node_modules/
 tools/*/node_modules/
-pacakages/*/node_modules/
+packages/*/node_modules/

@@ -18,7 +18,7 @@ export interface LinesCstNode extends CstNode {
 }
 
 export type LinesCstChildren = {
-  Line: LineCstNode[];
+  Line?: LineCstNode[];
   Newline?: IToken[];
 };
 
@@ -28,13 +28,13 @@ export interface LineCstNode extends CstNode {
 }
 
 export type LineCstChildren = {
+  LineNumber?: IToken[];
   G_Code?: IToken[];
   M_Code?: IToken[];
-  LineNumber?: IToken[];
-  Comment?: IToken[];
   AddressedValue?: AddressedValueCstNode[];
   variableAssignment?: VariableAssignmentCstNode[];
   conditionalExpression?: ConditionalExpressionCstNode[];
+  Comment?: IToken[];
 };
 
 export interface AddressedValueCstNode extends CstNode {

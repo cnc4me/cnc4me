@@ -1,9 +1,13 @@
-/* eslint-disable @typescript-eslint/no-unsafe-call */
 import { IToken } from "chevrotain";
 
 import { lexer } from "../lib";
 
-export const tokenize = (code: string) => lexer.tokenize(code);
+/**
+ * Generate an array of {@link IToken} from an input string.
+ *
+ * @param input string
+ */
+export const tokenize = (input: string) => lexer.tokenize(input);
 
 /**
  * Get a single value from a possible array with one element
@@ -36,4 +40,18 @@ export function getImage(token: IToken | IToken[]) {
  */
 export function zeroPad(input: number | string) {
   return String(input).padStart(4, "0");
+}
+
+/**
+ * Trim the first alphabetic character from a string
+ */
+export function trimLeadingChar(address: string): string {
+  return address.replace(/^[A-Z]/, "");
+}
+
+/**
+ * If a string has a `.` assume it is a float
+ */
+export function parseNumber(value: string): number {
+  return value.includes(".") ? parseFloat(value) : parseInt(value);
 }

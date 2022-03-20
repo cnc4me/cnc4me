@@ -39,6 +39,7 @@ import {
   While,
   WhiteSpace
 } from ".";
+import { LineNumber } from "./tokens";
 
 /**
  * The order of tokens is important because token
@@ -49,7 +50,6 @@ export const allTokens = [
   WhiteSpace,
   Percent,
   Comment,
-  ProgramNumber,
   EqualTo,
   NotEqualTo,
   GreaterThan,
@@ -71,6 +71,8 @@ export const allTokens = [
   Plus,
   Gcode,
   Mcode,
+  LineNumber,
+  ProgramNumber,
   Address,
   Decimal,
   Integer,
