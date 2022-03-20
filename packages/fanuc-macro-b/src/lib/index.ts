@@ -4,5 +4,6 @@ export * from "./MacroLexer";
 export * from "./MacroLogger";
 export * from "./MacroParser";
 export * from "./MacroRuntime";
+export * from "./MacroTools";
 export * from "./MacroVariables";
 export * as Tokens from "./Tokens";
