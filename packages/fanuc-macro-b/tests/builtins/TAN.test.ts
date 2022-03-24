@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { interpret } from "../../src";
 
 const code = `
 #1=TAN[5]
