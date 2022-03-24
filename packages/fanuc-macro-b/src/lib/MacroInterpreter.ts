@@ -18,6 +18,7 @@ import type {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  HeadingCstChildren,
   LineCstChildren,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
@@ -34,6 +35,8 @@ import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
+
+type MI = MacroInterpreter;
 
 const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
@@ -76,21 +79,37 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
-    let prgId: ProgramIdentifier = { programNumber: 0, programTitle: "" };
+    const prgId: ProgramIdentifier = this.tVisit<MI["heading"]>(ctx.heading);
 
-    if (ctx.ProgramNumberLine) {
-      prgId = this.visit(ctx.ProgramNumberLine);
-    }
-
-    const lines = this.tVisit(ctx.Lines) as ReturnType<MacroInterpreter["Lines"]>;
+    const lines = this.tVisit<MacroInterpreter["lines"]>(ctx.lines);
 
     return { ...prgId, lines };
   }
 
   /**
+   * We don't care about the `StartOfFile` token, so just return the `ProgramNumberLine`
+   */
+  heading(ctx: HeadingCstChildren) {
+    return this.visit(ctx.ProgramNumberLine) as ReturnType<MacroInterpreter["ProgramNumberLine"]>;
+  }
+
+  /**
+   * Get the Program title and number
+   */
+  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
+    const node = unbox(ctx.ProgramNumber);
+    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
+
+    return {
+      programTitle: unwrap(comment),
+      programNumber: parseInt(node.payload)
+    };
+  }
+
+  /**
    * Itterate over the {@link LineCstChildren} to extract the contents
    */
-  Lines(ctx: LinesCstChildren): ParsedLineData[] {
+  lines(ctx: LinesCstChildren): ParsedLineData[] {
     const lines: ParsedLineData[] = [];
 
     if (ctx.Line) {
@@ -108,11 +127,11 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   Line(ctx: LineCstChildren): ParsedLineData {
     const parsed: ParsedLineData = {
+      N: NaN,
       gCodes: [],
       mCodes: [],
       addresses: [],
-      comments: [],
-      N: NaN
+      comments: []
     };
 
     if (ctx?.Comment) {
@@ -144,6 +163,9 @@ export class MacroInterpreter extends BaseCstVisitor {
     return parsed;
   }
 
+  /**
+   * Parse all possible info out of this address
+   */
   AddressedValue(ctx: AddressedValueCstChildren): ParsedAddressData {
     const parsed = {
       image: "",
@@ -153,35 +175,23 @@ export class MacroInterpreter extends BaseCstVisitor {
     };
 
     if (ctx?.NumericValue) {
-      parsed.value = parseNumber(getImage(ctx.NumericValue));
+      const minus = parsed.isNegative ? "-" : "";
+      parsed.value = parseNumber(`${minus}${getImage(ctx.NumericValue)}`);
     }
 
-    parsed.image = `${parsed.address}${parsed.isNegative ? "-" : ""}${parsed.value}`;
+    parsed.image = `${parsed.address}${parsed.value}`;
 
     return parsed;
-  }
-
-  /**
-   * Get the Program title and number
-   */
-  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
-    const node = unbox(ctx.ProgramNumber);
-    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
-
-    return {
-      programTitle: unwrap(comment),
-      programNumber: parseInt(node.payload)
-    };
   }
 
   /**
    * A plain number, signed
    */
   NumericLiteral(ctx: NumericLiteralCstChildren): number {
-    const image = getImage(ctx.NumericValue);
-    const value = `${ctx.Minus ? "-" : ""}${image}`;
+    const value = getImage(ctx.NumericValue);
+    const minus = ctx.Minus ? "-" : "";
 
-    return image.includes(".") ? parseFloat(value) : parseInt(value);
+    return parseNumber(`${minus}${value}`);
   }
 
   /**
@@ -193,6 +203,9 @@ export class MacroInterpreter extends BaseCstVisitor {
     return this.getMacro(register);
   }
 
+  /**
+   * If a number, then
+   */
   ValueLiteral(ctx: ValueLiteralCstChildren) {
     if (ctx.VariableLiteral) {
       const macro = this.visit(ctx.VariableLiteral) as VariableRegister;

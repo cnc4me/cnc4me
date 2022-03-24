@@ -1,14 +1,5 @@
 import { IToken } from "chevrotain";
 
-import { lexer } from "../lib";
-
-/**
- * Generate an array of {@link IToken} from an input string.
- *
- * @param input string
- */
-export const tokenize = (input: string) => lexer.tokenize(input);
-
 /**
  * Get a single value from a possible array with one element
  *
@@ -31,7 +22,7 @@ export function unwrap(comment: string): string {
 /**
  * Return the image property from a possible token
  */
-export function getImage(token: IToken | IToken[]) {
+export function getImage(token: IToken | IToken[]): string {
   return unbox(token).image;
 }
 

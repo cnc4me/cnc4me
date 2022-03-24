@@ -6,14 +6,23 @@ export interface ProgramCstNode extends CstNode {
 }
 
 export type ProgramCstChildren = {
-  StartOfFile: StartOfFileCstNode[];
-  ProgramNumberLine: ProgramNumberLineCstNode[];
-  Lines: LinesCstNode[];
+  heading: HeadingCstNode[];
+  lines: LinesCstNode[];
   EndOfFile: EndOfFileCstNode[];
 };
 
+export interface HeadingCstNode extends CstNode {
+  name: "heading";
+  children: HeadingCstChildren;
+}
+
+export type HeadingCstChildren = {
+  StartOfFile: StartOfFileCstNode[];
+  ProgramNumberLine: ProgramNumberLineCstNode[];
+};
+
 export interface LinesCstNode extends CstNode {
-  name: "Lines";
+  name: "lines";
   children: LinesCstChildren;
 }
 
@@ -214,7 +223,8 @@ export type EndOfFileCstChildren = {
 
 export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   program(children: ProgramCstChildren, param?: IN): OUT;
-  Lines(children: LinesCstChildren, param?: IN): OUT;
+  heading(children: HeadingCstChildren, param?: IN): OUT;
+  lines(children: LinesCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;

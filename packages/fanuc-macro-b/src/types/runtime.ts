@@ -1,11 +1,12 @@
 import type { MacroInterpreter } from "../lib";
-import { LexingErrors, OneOrMany, ParseErrors } from ".";
+import { OneOrMany } from ".";
+import { EvalErrors } from "./core";
 
 export interface ProgramLoadOptions {
   setActive: boolean;
 }
 
-export type RuntimeErrors = OneOrMany<LexingErrors | ParseErrors | string>;
+export type RuntimeErrors = OneOrMany<EvalErrors | string>;
 
 export interface RuntimeOutput {
   beginExec: Date;

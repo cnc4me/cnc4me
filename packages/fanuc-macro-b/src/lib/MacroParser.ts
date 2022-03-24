@@ -36,18 +36,24 @@ export class MacroParser extends CstParser {
    * Defining a valid NC program
    */
   public program = this.RULE("program", () => {
+    this.SUBRULE(this.heading);
+    this.SUBRULE(this.lines);
+    this.SUBRULE(this.EndOfFile);
+  });
+
+  /**
+   * Defining a valid NC program heading to extract program number and title
+   */
+  public heading = this.RULE("heading", () => {
     this.SUBRULE(this.StartOfFile);
     this.SUBRULE(this.ProgramNumberLine);
-    // this.CONSUME(Newline);
-    this.SUBRULE(this.Lines);
-    this.SUBRULE(this.EndOfFile);
-    // this.CONSUME(Percent, { LABEL: "EndOfFile" });
+    // @todo Add more, optional comments?
   });
 
   /**
    *
    */
-  public Lines = this.RULE("Lines", () => {
+  public lines = this.RULE("lines", () => {
     this.MANY_SEP({
       SEP: Newline,
       DEF: () => this.SUBRULE(this.Line)

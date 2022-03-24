@@ -1,46 +1,36 @@
-import type { ILexingError, IRecognitionException, IToken } from "chevrotain";
+import type { ILexingError, IRecognitionException } from "chevrotain";
 
 import type { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
+import type { ParsedLineData } from "./parsed";
 
 export type OneOrMany<T> = T | T[];
-
-export type LexingErrors = ILexingError[];
-
-export type ParseErrors = IRecognitionException[];
 
 export type WithInput<T> = T & { input: string };
 
 export type ErrorHandler<E, R> = (err: E, result: R) => void;
 
-export type ProgramRecords = Record<string, ProgramAnalysis>;
+export type LexingErrors = ILexingError[];
 
-export type ProgramInterpreterReturn = ReturnType<MacroInterpreter["program"]>;
+export type ParsingErrors = IRecognitionException[];
 
-export interface MacroTools {
-  lexer: MacroLexer;
-  parser: MacroParser;
-  interpreter: MacroInterpreter;
-}
+export type EvalErrors = LexingErrors | ParsingErrors;
 
-export interface ProgramAnalysis {
-  result: ParsedProgramResult;
-  parseErrors: ParseErrors;
+export type AnalyzedProgram = WithInput<InterpretedProgram>;
+
+export type ProgramRecords = Record<string, AnalyzedProgram>;
+
+export type ProgramAnalysis = ErrorsAndResultOf<ParsedProgramResult>;
+
+export type InterpretedLines = ReturnType<MacroInterpreter["Lines"]>;
+
+export type InterpretedProgram = ReturnType<MacroInterpreter["program"]>;
+
+export type TopLevelParserRules = "program" | "lines" | "heading";
+
+export interface ErrorsAndResultOf<T> {
+  result: T;
+  parseErrors: ParsingErrors;
   lexingErrors: LexingErrors;
-}
-
-export interface ParsedLineData {
-  N: number;
-  gCodes: IToken[];
-  mCodes: IToken[];
-  comments: string[];
-  addresses: ParsedAddressData[];
-}
-
-export interface ParsedAddressData {
-  image: string;
-  value: number;
-  address: string;
-  isNegative: boolean;
 }
 
 export interface ProgramIdentifier {
@@ -63,8 +53,13 @@ export interface VariableRegister {
   value: number;
 }
 
-export interface ValidationResult {
-  tokens: IToken[];
-  err: ParseErrors;
-  result: ParsedProgramResult;
+export interface MacroToolchain {
+  lexer: MacroLexer;
+  parser: MacroParser;
+  interpreter: MacroInterpreter;
+}
+
+export interface MacroToolchainOptions {
+  autoExec: boolean;
+  preloadInput: string;
 }
