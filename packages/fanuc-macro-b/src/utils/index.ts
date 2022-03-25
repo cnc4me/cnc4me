@@ -1,6 +1,6 @@
 export * from "./common";
 export * from "./createToolchain";
-export * from "./heading";
 export * from "./lines";
+export * from "./matchProgramNumber";
 export * from "./program";
 export * from "./trig";
