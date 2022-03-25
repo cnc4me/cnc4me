@@ -6,16 +6,13 @@ import type {
   AnalyzedProgram,
   InterpretedLines,
   InterpretedProgram,
-  ProgramIdentifier,
   ProgramLoadOptions,
   ProgramRecords,
   RuntimeErrors,
   RuntimeEvents,
-  RuntimeOutput,
-  TopLevelParserRules
+  RuntimeOutput
 } from "../types";
-import { createToolchain } from "../utils";
-import { heading } from "../utils/heading";
+import { createToolchain, matchProgramNumber } from "../utils";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
@@ -56,6 +53,10 @@ export class MacroRuntime {
     return this._parser.errors;
   }
 
+  get ParserHasTokens(): boolean {
+    return this._parser.input.length > 0;
+  }
+
   get Interpreter(): MacroInterpreter {
     return this._interpreter;
   }
@@ -92,6 +93,7 @@ export class MacroRuntime {
    * Reset the runtime.
    */
   reset(): void {
+    this._parser.input = [];
     this._activeProgram = NaN;
     this._initializeMacroRegisters();
   }
@@ -133,7 +135,7 @@ export class MacroRuntime {
 
     const cst = this._parser.lines();
 
-    return this._interpreter.visit(cst);
+    return this._interpreter.lines(cst.children);
   }
 
   /**
@@ -227,22 +229,26 @@ export class MacroRuntime {
    *
    * This method can create a program if given a string
    */
-  loadProgram(input: string, options?: ProgramLoadOptions) {
-    const { programNumber } = this.extractProgramId(input);
+  loadProgram(input: string, options?: ProgramLoadOptions): void {
+    matchProgramNumber(input, {
+      NOMATCH: error => this._emitError(error),
+      MATCH: result => {
+        const programNumber = parseInt(result[1]);
+        const program = this.evalProgram(input);
 
-    const analyzed = {
-      input,
-      ...this.evalProgram(input)
-    };
+        this._programs[programNumber] = {
+          input,
+          ...program
+        };
 
-    this._programs[programNumber] = analyzed;
+        if (options?.setActive) {
+          this.setActiveProgram(programNumber);
+          this._tokenizeActiveProgram();
+        }
 
-    if (options?.setActive) {
-      this.setActiveProgram(programNumber);
-      this._tokenizeActiveProgram();
-    }
-
-    return this._programs[programNumber];
+        return this._programs[programNumber];
+      }
+    });
   }
 
   /**
@@ -253,23 +259,11 @@ export class MacroRuntime {
   }
 
   /**
-   * Create a an {@link AnalyzedProgram} from a string
-   */
-  extractProgramId(input: string): ProgramIdentifier {
-    const { result, parseErrors } = heading(input);
-
-    if (parseErrors) {
-      this._emitError(parseErrors);
-    }
-
-    return result;
-  }
-
-  /**
    * Helper to emit errors
    */
-  private _emitError(err: RuntimeErrors) {
+  private _emitError(err: RuntimeErrors): false {
     void this._events.emit("error", err);
+    return false;
   }
 
   /**

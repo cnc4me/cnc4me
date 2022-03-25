@@ -18,7 +18,6 @@ import type {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
-  HeadingCstChildren,
   LineCstChildren,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
@@ -36,8 +35,6 @@ import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { Plus, Product } from "./Tokens";
 
-type MI = MacroInterpreter;
-
 const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
@@ -46,13 +43,11 @@ const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseCstVisitor {
+  events: Emittery;
   logger: MacroLogger;
-
   vars: MacroVariables;
   varStack: MacroVariables[] = [];
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
-
-  events: Emittery;
 
   constructor() {
     super();
@@ -79,18 +74,29 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
-    const prgId: ProgramIdentifier = this.tVisit<MI["heading"]>(ctx.heading);
+    // const ProgramNumberLineChildren = this.visitChild(ctx, "ProgramNumberLine");
+    // const prgId = this.ProgramNumberLine(ProgramNumberLineChildren);
 
-    const lines = this.tVisit<MacroInterpreter["lines"]>(ctx.lines);
+    const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
+    const lines = this.lines(ctx.lines[0].children);
 
     return { ...prgId, lines };
   }
 
   /**
-   * We don't care about the `StartOfFile` token, so just return the `ProgramNumberLine`
+   * Itterate over the {@link LineCstChildren} to extract the contents
    */
-  heading(ctx: HeadingCstChildren) {
-    return this.visit(ctx.ProgramNumberLine) as ReturnType<MacroInterpreter["ProgramNumberLine"]>;
+  lines(ctx: LinesCstChildren): ParsedLineData[] {
+    const lines: ParsedLineData[] = [];
+
+    if (ctx.Line) {
+      for (const line of ctx.Line) {
+        const vLine = this.Line(line.children);
+        lines.push(vLine);
+      }
+    }
+
+    return lines;
   }
 
   /**
@@ -104,22 +110,6 @@ export class MacroInterpreter extends BaseCstVisitor {
       programTitle: unwrap(comment),
       programNumber: parseInt(node.payload)
     };
-  }
-
-  /**
-   * Itterate over the {@link LineCstChildren} to extract the contents
-   */
-  lines(ctx: LinesCstChildren): ParsedLineData[] {
-    const lines: ParsedLineData[] = [];
-
-    if (ctx.Line) {
-      for (const line of ctx.Line) {
-        const vLine = this.tVisit<MacroInterpreter["Line"]>(line);
-        lines.push(vLine);
-      }
-    }
-
-    return lines;
   }
 
   /**
@@ -228,18 +218,18 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     // prettier-ignore
     const result = match(func)
-      .with("LN",    () => Math.log(value))
-      .with("ABS",   () => Math.abs(value))
-      .with("FUP",   () => Math.ceil(value))
-      .with("SQRT",  () => Math.sqrt(value))
-      .with("FIX",   () => Math.floor(value))
+      .with("LN", () => Math.log(value))
+      .with("ABS", () => Math.abs(value))
+      .with("FUP", () => Math.ceil(value))
+      .with("SQRT", () => Math.sqrt(value))
+      .with("FIX", () => Math.floor(value))
       .with("ROUND", () => Math.round(value))
-      .with("SIN",   () => Math.sin(degreeToRadian(value)))
-      .with("COS",   () => Math.cos(degreeToRadian(value)))
-      .with("TAN",   () => Math.tan(degreeToRadian(value)))
-      .with("ASIN",  () => radianToDegree(Math.asin(value)))
-      .with("ACOS",  () => radianToDegree(Math.acos(value)))
-      .with("ATAN",  () => radianToDegree(Math.atan(value)))
+      .with("SIN", () => Math.sin(degreeToRadian(value)))
+      .with("COS", () => Math.cos(degreeToRadian(value)))
+      .with("TAN", () => Math.tan(degreeToRadian(value)))
+      .with("ASIN", () => radianToDegree(Math.asin(value)))
+      .with("ACOS", () => radianToDegree(Math.acos(value)))
+      .with("ATAN", () => radianToDegree(Math.atan(value)))
       .otherwise(() => NaN);
 
     return result;
@@ -396,9 +386,19 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.varWatches[macroRegister] = handler;
   }
 
-  private tVisit<M extends (args: never) => unknown>(node: CstNode | CstNode[], param?: unknown) {
-    return this.visit(node, param) as ReturnType<M>;
-  }
+  /**
+   * Get the children for a single array'ed node
+   */
+  // private visitChild<T extends CstChildrenDictionary, M extends string>(ctx: T, childNode: M) {
+  //   const nodeArr: CstElement[] = ctx[childNode];
+  //   const node = Array.isArray(nodeArr) ? nodeArr[0] : nodeArr;
+
+  //   if ("children" in node) {
+  //     return this[childNode](node.children);
+  //   } else {
+  //     return this[childNode](node);
+  //   }
+  // }
 }
 
 export const interpreter = new MacroInterpreter();

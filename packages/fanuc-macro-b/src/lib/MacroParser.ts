@@ -36,18 +36,10 @@ export class MacroParser extends CstParser {
    * Defining a valid NC program
    */
   public program = this.RULE("program", () => {
-    this.SUBRULE(this.heading);
-    this.SUBRULE(this.lines);
-    this.SUBRULE(this.EndOfFile);
-  });
-
-  /**
-   * Defining a valid NC program heading to extract program number and title
-   */
-  public heading = this.RULE("heading", () => {
     this.SUBRULE(this.StartOfFile);
     this.SUBRULE(this.ProgramNumberLine);
-    // @todo Add more, optional comments?
+    this.SUBRULE(this.lines);
+    this.SUBRULE(this.EndOfFile);
   });
 
   /**

@@ -1,4 +1,4 @@
-import type { ILexingError, IRecognitionException } from "chevrotain";
+import type { CstNode, ILexingError, IRecognitionException } from "chevrotain";
 
 import type { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
 import type { ParsedLineData } from "./parsed";
@@ -21,7 +21,7 @@ export type ProgramRecords = Record<string, AnalyzedProgram>;
 
 export type ProgramAnalysis = ErrorsAndResultOf<ParsedProgramResult>;
 
-export type InterpretedLines = ReturnType<MacroInterpreter["Lines"]>;
+export type InterpretedLines = ReturnType<MacroInterpreter["lines"]>;
 
 export type InterpretedProgram = ReturnType<MacroInterpreter["program"]>;
 

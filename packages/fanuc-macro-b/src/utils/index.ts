@@ -1,3 +1,4 @@
+export * from "./children";
 export * from "./common";
 export * from "./createToolchain";
 export * from "./lines";
