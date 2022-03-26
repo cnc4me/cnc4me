@@ -1,5 +1,4 @@
 import { program } from "../src/utils";
-import { heading } from "../src/utils/heading";
 
 const code = `%
 O1234 (SIMPLE)
@@ -23,16 +22,13 @@ M98 P1234
 M30
 %`;
 
-const { result: headingResult } = heading(code);
+const { parseErrors, result, insights } = program(code);
 
-console.log(headingResult);
-
-const { parseErrors, result } = program(code);
-
-if (parseErrors) {
+if (parseErrors.length > 0) {
   console.error(parseErrors);
 }
 
-console.log("\n\n================== ANALYSIS =====================");
-console.log(result.lines[8]);
-// console.log(result.lines);
+console.log("\n\n================== Analysis =====================");
+console.log(result.lines[5].addresses);
+console.log("\n\n================== Insights =====================");
+console.log(insights);

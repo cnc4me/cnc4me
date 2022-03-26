@@ -3,11 +3,9 @@ import Debug from "debug";
 import Emittery from "emittery";
 
 import type {
-  AnalyzedProgram,
   InterpretedLines,
   InterpretedProgram,
   ProgramLoadOptions,
-  ProgramRecords,
   RuntimeErrors,
   RuntimeEvents,
   RuntimeOutput
@@ -35,7 +33,7 @@ export class MacroRuntime {
 
   private _activeProgram = NaN;
   private _vars = new Map<number, number>();
-  private _programs: ProgramRecords = {};
+  private _programs: Record<number, string> = {};
 
   get Lexer(): MacroLexer {
     return this._lexer;
@@ -67,6 +65,7 @@ export class MacroRuntime {
     this._lexer = lexer;
     this._parser = parser;
     this._interpreter = interpreter;
+
     this._initializeMacroRegisters();
   }
 
@@ -141,14 +140,23 @@ export class MacroRuntime {
   /**
    * Return a program by number if loaded in memory.
    */
-  getProgram(programNumber: number | string): AnalyzedProgram {
-    return this._programs[programNumber];
+  getProgram(programNumber: number | string): string {
+    if (typeof programNumber === "string") {
+      if (programNumber.startsWith("O")) {
+        const num = programNumber.replace(/^O/, "");
+        return this._programs[parseInt(num)];
+      } else {
+        return this._programs[parseInt(programNumber)];
+      }
+    } else {
+      return this._programs[programNumber];
+    }
   }
 
   /**
    * Returns the loaded programs indexed by their program numbers.
    */
-  getPrograms(): ProgramRecords {
+  getPrograms() {
     return this._programs;
   }
 
@@ -162,16 +170,11 @@ export class MacroRuntime {
   /**
    * Return the currently active program.
    */
-  getActiveProgram() {
+  getActiveProgram(): string {
     if (typeof this._activeProgram === "number") {
       return this.getProgram(this._activeProgram);
     } else {
-      return {
-        input: "",
-        programTitle: "",
-        programNumber: NaN,
-        err: ["No active program selected."]
-      };
+      return "No active program selected.";
     }
   }
 
@@ -234,12 +237,8 @@ export class MacroRuntime {
       NOMATCH: error => this._emitError(error),
       MATCH: result => {
         const programNumber = parseInt(result[1]);
-        const program = this.evalProgram(input);
 
-        this._programs[programNumber] = {
-          input,
-          ...program
-        };
+        this._programs[programNumber] = input;
 
         if (options?.setActive) {
           this.setActiveProgram(programNumber);
@@ -286,7 +285,7 @@ export class MacroRuntime {
    * Load the {@link MacroParser} with tokens from the active program
    */
   private _tokenizeActiveProgram(): void {
-    const { input } = this.getActiveProgram();
+    const input = this.getActiveProgram();
 
     this._tokenizeForParsing(input);
   }
@@ -303,6 +302,22 @@ export class MacroRuntime {
     }
 
     this._parser.input = tokens;
+  }
+
+  /**
+   * Parse a program number from a string or number.
+   */
+  private _parseProgramNumber(programNumber: number | string): number {
+    if (typeof programNumber === "string") {
+      if (programNumber.startsWith("O")) {
+        const num = programNumber.replace(/^O/, "");
+        return parseInt(num);
+      } else {
+        return parseInt(programNumber);
+      }
+    } else {
+      return programNumber;
+    }
   }
 
   /**

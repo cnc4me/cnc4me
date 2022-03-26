@@ -1,15 +1,22 @@
 import { CstChildrenDictionary, CstElement } from "chevrotain";
 
 /**
- * Get the children for a single array'ed node
+ * Get the element from a context
  */
-export function children<T extends CstChildrenDictionary, M extends keyof T>(ctx: T, childNode: M) {
-  const nodeArr: CstElement[] = ctx[childNode];
-  const node = Array.isArray(nodeArr) ? nodeArr[0] : nodeArr;
+export function elem<T extends CstChildrenDictionary, M extends keyof T>(
+  ctx: T,
+  childNode: M
+): CstElement {
+  return ctx[childNode][0];
+}
 
-  if ("children" in node) {
-    return node.children;
-  } else {
-    return node;
+/**
+ * Get the children from a node if they are present, otherwise return the node
+ */
+export function children<T extends CstElement>(cstElem: T): CstChildrenDictionary | undefined {
+  if ("children" in cstElem) {
+    return cstElem.children;
   }
+
+  return undefined;
 }

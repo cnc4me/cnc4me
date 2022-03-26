@@ -35,7 +35,7 @@ runtime.loadProgram(P2);
 runtime.loadProgram(P3);
 
 const program = runtime.getActiveProgram();
-console.log(program.input);
+console.log(program);
 
 const result = runtime.run();
 console.log(result);

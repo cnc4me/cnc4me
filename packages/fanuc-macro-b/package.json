@@ -15,8 +15,8 @@
     "diagram": "tsnd ./scripts/generateDiagram.ts",
     "events": "tsnd --respawn ./demo/events.demo.ts",
     "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
-    "runtime:debug": "cross-env DEBUG=macro:* tsnd --respawn ./demo/runtime.demo.ts",
-    "validate": "tsnd --respawn ./demo/validate.demo.ts"
+    "validate": "cross-env DEBUG=macro:* tsnd --respawn ./demo/validate.demo.ts",
+    "runtime:debug": "cross-env DEBUG=macro:* tsnd --respawn ./demo/runtime.demo.ts"
   },
   "dependencies": {
     "chevrotain": "^10.1.2",

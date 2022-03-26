@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { CstNode, tokenMatcher } from "chevrotain";
+import { tokenMatcher } from "chevrotain";
+import Debug from "debug";
 import Emittery from "emittery";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
 import type {
-  ParsedAddressData,
   ParsedLineData,
   ProgramIdentifier,
   VariableRegister,
@@ -30,14 +30,18 @@ import type {
 } from "../types/fanuc";
 import { getImage, parseNumber, trimLeadingChar, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
+import { AddressInsight } from "./Insights";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
+import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
 const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
+
+const debug = Debug("macro:interpreter");
 
 /**
  * Macro Interpreter
@@ -48,6 +52,12 @@ export class MacroInterpreter extends BaseCstVisitor {
   vars: MacroVariables;
   varStack: MacroVariables[] = [];
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
+
+  private _insights: Record<string, AddressInsight> = {};
+
+  get Insights() {
+    return this._insights;
+  }
 
   constructor() {
     super();
@@ -74,9 +84,6 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Root Node for valid NC Programs
    */
   program(ctx: ProgramCstChildren) {
-    // const ProgramNumberLineChildren = this.visitChild(ctx, "ProgramNumberLine");
-    // const prgId = this.ProgramNumberLine(ProgramNumberLineChildren);
-
     const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
     const lines = this.lines(ctx.lines[0].children);
 
@@ -144,7 +151,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     if (ctx?.AddressedValue) {
       for (const address of ctx.AddressedValue) {
-        const parsedAddr = this.tVisit<MacroInterpreter["AddressedValue"]>(address);
+        const parsedAddr = this.AddressedValue(address.children);
 
         parsed.addresses.push(parsedAddr);
       }
@@ -156,22 +163,18 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Parse all possible info out of this address
    */
-  AddressedValue(ctx: AddressedValueCstChildren): ParsedAddressData {
-    const parsed = {
-      image: "",
-      value: NaN,
-      address: getImage(ctx.Address),
-      isNegative: Boolean(ctx?.Minus)
-    };
+  AddressedValue(ctx: AddressedValueCstChildren): NcAddress {
+    const address = new NcAddress(ctx);
 
-    if (ctx?.NumericValue) {
-      const minus = parsed.isNegative ? "-" : "";
-      parsed.value = parseNumber(`${minus}${getImage(ctx.NumericValue)}`);
+    debug(address);
+
+    if (!(address.prefix in this._insights)) {
+      this._insights[address.prefix] = new AddressInsight(address.prefix);
     }
 
-    parsed.image = `${parsed.address}${parsed.value}`;
+    this._insights[address.prefix].collect(address);
 
-    return parsed;
+    return address;
   }
 
   /**
@@ -198,23 +201,25 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   ValueLiteral(ctx: ValueLiteralCstChildren) {
     if (ctx.VariableLiteral) {
-      const macro = this.visit(ctx.VariableLiteral) as VariableRegister;
+      const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
 
       return macro.value;
     }
 
     if (ctx.NumericLiteral) {
-      return this.visit(ctx.NumericLiteral);
+      return this.NumericLiteral(ctx.NumericLiteral[0].children);
     }
+
+    return ctx;
   }
 
   expression(ctx: ExpressionCstChildren) {
-    return this.visit(ctx.additionExpression);
+    return this.additionExpression(ctx.additionExpression[0].children);
   }
 
   functionExpression(ctx: FunctionExpressionCstChildren): number {
     const func = getImage(ctx.BuiltinFunctions);
-    const value = this.visit(ctx.atomicExpression);
+    const value = this.atomicExpression(ctx.atomicExpression[0].children);
 
     // prettier-ignore
     const result = match(func)
@@ -239,14 +244,14 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Update a macro variable regsiter with a value
    */
   variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macro = this.visit(ctx.VariableLiteral) as ReturnType<this["VariableLiteral"]>;
+    const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
     const values: WatcherValuePayload = {
       register: macro.register,
       curr: NaN,
       prev: macro.value
     };
 
-    const value = this.visit(ctx.expression);
+    const value = this.expression(ctx.expression[0].children);
 
     values.curr = value;
 
@@ -315,17 +320,13 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   atomicExpression(ctx: AtomicExpressionCstChildren) {
     if (ctx.bracketExpression) {
-      return this.visit(ctx.bracketExpression);
+      return this.bracketExpression(ctx.bracketExpression[0].children);
     } else if (ctx.NumericLiteral) {
-      return this.visit(ctx.NumericLiteral) as ReturnType<MacroInterpreter["NumericLiteral"]>;
+      return this.NumericLiteral(ctx.NumericLiteral[0].children);
     } else if (ctx.functionExpression) {
-      return this.visit(ctx.functionExpression) as ReturnType<
-        MacroInterpreter["functionExpression"]
-      >;
+      return this.functionExpression(ctx.functionExpression[0].children);
     } else if (ctx.VariableLiteral) {
-      const macroVar = this.visit(ctx.VariableLiteral) as ReturnType<
-        MacroInterpreter["VariableLiteral"]
-      >;
+      const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
       return macroVar.value;
     } else {
       return ctx;
@@ -333,7 +334,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   bracketExpression(ctx: BracketExpressionCstChildren) {
-    return this.visit(ctx.expression);
+    return this.expression(ctx.expression[0].children);
   }
 
   /**
