@@ -2,7 +2,8 @@ import { AddressedValueCstChildren } from "../types/fanuc";
 import { getImage, parseNumber } from "../utils";
 
 export class NcAddress {
-  private _value: number;
+  value: number;
+
   private _address: string;
   private _isNegative: boolean;
 
@@ -11,17 +12,17 @@ export class NcAddress {
   }
 
   get image() {
-    return `${this._address}${this._value}`;
+    return `${this._address}${this.value}`;
   }
 
   constructor(ctx: AddressedValueCstChildren) {
-    this._value = NaN;
+    this.value = NaN;
     this._address = getImage(ctx.Address);
     this._isNegative = Boolean(ctx?.Minus);
 
     if (ctx?.NumericValue) {
       const minus = this._isNegative ? "-" : "";
-      this._value = parseNumber(`${minus}${getImage(ctx.NumericValue)}`);
+      this.value = parseNumber(`${minus}${getImage(ctx.NumericValue)}`);
     }
 
     return this;

@@ -8,6 +8,8 @@ export interface ParsedLineData {
   mCodes: IToken[];
   comments: string[];
   addresses: NcAddress[];
+  gCodeMap: Record<string, boolean>;
+  mCodeMap: Record<string, boolean>;
 }
 
 export interface ParsedAddressData {

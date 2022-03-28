@@ -1,4 +1,4 @@
-import { AddressInsight } from "../lib/Insights";
+import { AddressInsight } from "../lib";
 import { InterpretedProgram, LexingErrors, ParsingErrors } from "../types";
 import { createToolchain } from "./createToolchain";
 

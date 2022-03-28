@@ -28,32 +28,45 @@ import type {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { getImage, parseNumber, trimLeadingChar, unbox, unwrap } from "../utils";
+import { getImage, hasDwell, parseNumber, trimLeadingChar, unbox, unwrap } from "../utils";
 import { degreeToRadian, radianToDegree } from "../utils/trig";
-import { AddressInsight } from "./Insights";
+import { AddressInsight } from "./AddressInsight";
+import { G10Line } from "./G10Line";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
+import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
+// interface GcodeFlags {
+//   [K: string]: boolean;
+// }
+
 const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
 
+// eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:interpreter");
 
 /**
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseCstVisitor {
-  events: Emittery;
-  logger: MacroLogger;
-  vars: MacroVariables;
+  events: Emittery = new Emittery();
+  logger: MacroLogger = new MacroLogger();
+
   varStack: MacroVariables[] = [];
+  vars: MacroVariables = new MacroVariables(1, 10);
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
+  private _mem: MacroMemory = new MacroMemory();
   private _insights: Record<string, AddressInsight> = {};
+
+  get Offsets() {
+    return this._mem;
+  }
 
   get Insights() {
     return this._insights;
@@ -61,18 +74,6 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   constructor() {
     super();
-
-    this.events = new Emittery();
-
-    /**
-     * @todo lets replace this with the new {@link MacroRuntime}
-     */
-    this.vars = new MacroVariables(1, 10);
-
-    // Logger Configuration
-    this.logger = new MacroLogger();
-
-    // Keep This Last!
     this.validateVisitor();
   }
 
@@ -86,7 +87,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   program(ctx: ProgramCstChildren) {
     const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
     const lines = this.lines(ctx.lines[0].children);
-
+    // const g10s = this._mem.
     return { ...prgId, lines };
   }
 
@@ -99,6 +100,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (ctx.Line) {
       for (const line of ctx.Line) {
         const vLine = this.Line(line.children);
+
         lines.push(vLine);
       }
     }
@@ -127,8 +129,10 @@ export class MacroInterpreter extends BaseCstVisitor {
       N: NaN,
       gCodes: [],
       mCodes: [],
+      comments: [],
       addresses: [],
-      comments: []
+      gCodeMap: {},
+      mCodeMap: {}
     };
 
     if (ctx?.Comment) {
@@ -138,10 +142,18 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.G_Code) {
+      for (const token of ctx.G_Code) {
+        parsed.gCodeMap[token.image] = true;
+      }
+
       parsed.gCodes.push(...ctx.G_Code);
     }
 
     if (ctx?.M_Code) {
+      for (const token of ctx.M_Code) {
+        parsed.mCodeMap[token.image] = true;
+      }
+
       parsed.mCodes.push(...ctx.M_Code);
     }
 
@@ -150,11 +162,17 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.AddressedValue) {
-      for (const address of ctx.AddressedValue) {
-        const parsedAddr = this.AddressedValue(address.children);
+      for (const { children } of ctx.AddressedValue) {
+        const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
 
         parsed.addresses.push(parsedAddr);
       }
+    }
+
+    if (parsed.gCodeMap["G10"]) {
+      const g10 = new G10Line({ ...parsed });
+
+      this._mem.evalG10(g10);
     }
 
     return parsed;
@@ -163,16 +181,19 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Parse all possible info out of this address
    */
-  AddressedValue(ctx: AddressedValueCstChildren): NcAddress {
+  AddressedValue(
+    ctx: AddressedValueCstChildren,
+    gCodeFlags: Record<string, boolean> = {}
+  ): NcAddress {
     const address = new NcAddress(ctx);
-
-    debug(address);
 
     if (!(address.prefix in this._insights)) {
       this._insights[address.prefix] = new AddressInsight(address.prefix);
     }
 
-    this._insights[address.prefix].collect(address);
+    if (!hasDwell(gCodeFlags)) {
+      this._insights[address.prefix].collect(address);
+    }
 
     return address;
   }
@@ -213,6 +234,31 @@ export class MacroInterpreter extends BaseCstVisitor {
     return ctx;
   }
 
+  /**
+   * Update a macro variable regsiter with a value
+   */
+  variableAssignment(ctx: VariableAssignmentCstChildren) {
+    const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
+    const values: WatcherValuePayload = {
+      register: macro.register,
+      curr: NaN,
+      prev: macro.value
+    };
+
+    const value = this.expression(ctx.expression[0].children);
+
+    values.curr = value;
+
+    this.setMacroValue(macro.register, value);
+
+    /**
+     * @TODO remove the watches for events
+     */
+    if (this.varWatches[macro.register]) {
+      this.varWatches[macro.register](values);
+    }
+  }
+
   expression(ctx: ExpressionCstChildren) {
     return this.additionExpression(ctx.additionExpression[0].children);
   }
@@ -238,31 +284,6 @@ export class MacroInterpreter extends BaseCstVisitor {
       .otherwise(() => NaN);
 
     return result;
-  }
-
-  /**
-   * Update a macro variable regsiter with a value
-   */
-  variableAssignment(ctx: VariableAssignmentCstChildren) {
-    const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
-    const values: WatcherValuePayload = {
-      register: macro.register,
-      curr: NaN,
-      prev: macro.value
-    };
-
-    const value = this.expression(ctx.expression[0].children);
-
-    values.curr = value;
-
-    this.setMacroValue(macro.register, value);
-
-    /**
-     * @TODO remove the watches for events
-     */
-    if (this.varWatches[macro.register]) {
-      this.varWatches[macro.register](values);
-    }
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren) {
@@ -386,20 +407,6 @@ export class MacroInterpreter extends BaseCstVisitor {
   watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
     this.varWatches[macroRegister] = handler;
   }
-
-  /**
-   * Get the children for a single array'ed node
-   */
-  // private visitChild<T extends CstChildrenDictionary, M extends string>(ctx: T, childNode: M) {
-  //   const nodeArr: CstElement[] = ctx[childNode];
-  //   const node = Array.isArray(nodeArr) ? nodeArr[0] : nodeArr;
-
-  //   if ("children" in node) {
-  //     return this[childNode](node.children);
-  //   } else {
-  //     return this[childNode](node);
-  //   }
-  // }
 }
 
 export const interpreter = new MacroInterpreter();
