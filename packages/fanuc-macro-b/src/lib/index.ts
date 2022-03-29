@@ -7,5 +7,6 @@ export * from "./MacroMemory";
 export * from "./MacroParser";
 export * from "./MacroRuntime";
 export * from "./MacroVariables";
+export * from "./Memory/OffsetGroups";
 export * from "./NcSpec/locals";
 export * as Tokens from "./Tokens";

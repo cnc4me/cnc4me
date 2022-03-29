@@ -1,5 +1,6 @@
 import { MEMORY } from "../PackageConfig";
 import { G10Line } from "./G10Line";
+import { OFFSET_GROUPS, TOOL_OFFSETS } from "./Memory/OffsetGroups";
 
 type OffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
 
@@ -8,6 +9,13 @@ interface AxisLocations {
   Y: number;
   Z: number;
   B: number;
+}
+
+interface ToolOffsetValues {
+  length: number;
+  lengthComp: number;
+  diameter: number;
+  diameterComp: number;
 }
 
 interface UpdatedValue {
@@ -39,17 +47,44 @@ const AXIS_MAP: Record<string, number> = {
   B: 4
 };
 
+/**
+ * A Representaion of a CNC machines' macro memory.
+ */
 export class MacroMemory {
   private _config: typeof MEMORY;
   private _mode: PositioningMode;
   private _vars: Record<number, number>;
+
+  get G54(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(54);
+  }
+
+  get G55(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(55);
+  }
+
+  get G56(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(56);
+  }
+
+  get G57(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(57);
+  }
+
+  get G58(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(58);
+  }
+
+  get G59(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(59);
+  }
 
   constructor(mode: PositioningMode = "G90") {
     this._vars = {};
     this._mode = mode;
     this._config = MEMORY;
 
-    range(1, 14000).forEach(idx => this.resetVar(idx));
+    range(1, 14000).forEach(idx => this.clear(idx));
   }
 
   /**
@@ -76,7 +111,7 @@ export class MacroMemory {
   /**
    * Increment a value in a register
    */
-  adjust(key: number, value: number): UpdatedValue {
+  increment(key: number, value: number): UpdatedValue {
     const prev = this._vars[key];
 
     this._vars[key] = prev + value;
@@ -88,16 +123,9 @@ export class MacroMemory {
   }
 
   /**
-   * Check if a register has a value
-   */
-  isset(register: number): boolean {
-    return Boolean(this._vars[register]);
-  }
-
-  /**
    * Clear a register value by writing `NaN`
    */
-  resetVar(register: number): void {
+  clear(register: number): void {
     this._vars[register] = NaN;
   }
 
@@ -112,32 +140,69 @@ export class MacroMemory {
     console.log(group, register);
   }
 
+  getToolOffsets(toolNum: number): ToolOffsetValues {
+    return {
+      length: this.getToolLength(toolNum),
+      diameter: this.getToolDiameter(toolNum),
+      lengthComp: this.getToolLengthComp(toolNum),
+      diameterComp: this.getToolDiameterComp(toolNum)
+    };
+  }
+
   /**
    * Tool Length Offset Group (L10)
    */
   setToolLength(toolNum: number, value: number) {
-    this.setToolOffsetValue(toolNum, 10, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_LENGTH, value);
+  }
+
+  /**
+   * Get Tool Length value by tool number
+   */
+  getToolLength(toolNum: number) {
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_LENGTH);
   }
 
   /**
    * Tool Length Compensation Offset Group (L11)
    */
   setToolLengthComp(toolNum: number, value: number) {
-    this.setToolOffsetValue(toolNum, 11, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_LENGTH_COMP, value);
+  }
+
+  /**
+   * Get Tool Length Comp value by tool number
+   */
+  getToolLengthComp(toolNum: number) {
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_LENGTH_COMP);
   }
 
   /**
    * Tool Diameter Offset Group (L12)
    */
   setToolDiameter(toolNum: number, value: number) {
-    this.setToolOffsetValue(toolNum, 12, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_DIAMETER, value);
   }
 
   /**
-   * Tool Diameter Compensation Offset Group (L13)
+   * Get Tool diameter value by tool number
+   */
+  getToolDiameter(toolNum: number) {
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_DIAMETER);
+  }
+
+  /**
+   * Tool Diameter Compensation. Offset Group (L13)
    */
   setToolDiameterComp(toolNum: number, value: number) {
-    this.setToolOffsetValue(toolNum, 13, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_DIAMETER_COMP, value);
+  }
+
+  /**
+   * Get Tool Diameter Comp value by tool number
+   */
+  getToolDiameterComp(toolNum: number) {
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_DIAMETER_COMP);
   }
 
   /**
@@ -145,9 +210,7 @@ export class MacroMemory {
    */
   setWorkOffset(offsetGroup: OffsetGroups, locations: Partial<AxisLocations>) {
     Object.entries(locations).forEach(([axis, value]) => {
-      if (value) {
-        this.setWorkOffsetAxisValue(offsetGroup, axis, value);
-      }
+      this.setWorkOffsetAxisValue(offsetGroup, axis, value);
     });
   }
 
@@ -163,21 +226,10 @@ export class MacroMemory {
   }
 
   /**
-   * Set the group value for a tool by number
-   */
-  setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
-    this._validateToolNumber(toolNum);
-
-    const target = this.composeToolOffsetRegister(offsetGroup, toolNum);
-
-    this.write(target, value);
-  }
-
-  /**
    * Set the work offset axis value
    */
   setWorkOffsetAxisValue(offsetGroup: OffsetGroups, axis: string, value: number) {
-    const target = this.composeWorkOffsetAxisRegister(offsetGroup, axis);
+    const target = this._composeWorkOffsetAxisRegister(offsetGroup, axis);
 
     this.write(target, value);
   }
@@ -185,7 +237,7 @@ export class MacroMemory {
   /**
    * Compose a tool offset register number by group and tool num.
    */
-  composeToolOffsetRegister(group: number, toolNum: number): number {
+  _composeToolOffsetRegister(group: number, toolNum: number): number {
     this._validateToolNumber(toolNum);
     // eslint-disable-next-line prettier/prettier
     return (group * 1000) + toolNum;
@@ -194,18 +246,22 @@ export class MacroMemory {
   /**
    * Compose a work offset axis register number by group and axis.
    *
-   * The arguments `(54, "X")`  would produce `5221`
+   * The arguments `(54, "X")` will produce `5221`
+   * The arguments `(56, "Z")` will produce `5263`
    */
-  composeWorkOffsetAxisRegister(offset: number, axis: string): number {
+  _composeWorkOffsetAxisRegister(offset: number, axis: string): number {
     // eslint-disable-next-line prettier/prettier
     return 5000 + (WORK_OFFSET_MAP[offset] * 10) + AXIS_MAP[axis];
   }
 
+  /**
+   * Create an array of all the set macro variables
+   */
   toArray() {
     const valueArr: [register: number, value: number][] = [];
 
     Object.entries(this._vars).forEach(([register, value]) => {
-      if (value) {
+      if (!isNaN(value)) {
         valueArr.push([parseInt(register), value]);
       }
     });
@@ -213,6 +269,39 @@ export class MacroMemory {
     return valueArr;
   }
 
+  private _getToolOffsetValueByGroup(toolNum: number, group: number) {
+    this._validateToolNumber(toolNum);
+
+    const reg = this._composeToolOffsetRegister(group, toolNum);
+
+    return this.read(reg);
+  }
+
+  private _getCommonWorkOffsetAxisLocations(commonOffset: number): AxisLocations {
+    return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
+      const reg = this._composeWorkOffsetAxisRegister(commonOffset, axis);
+
+      return {
+        ...locations,
+        [axis]: this.read(reg)
+      };
+    }, {} as AxisLocations);
+  }
+
+  /**
+   * Set the group value for a tool by number
+   */
+  private _setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
+    this._validateToolNumber(toolNum);
+
+    const reg = this._composeToolOffsetRegister(offsetGroup, toolNum);
+
+    this.write(reg, value);
+  }
+
+  /**
+   * Check the given tool number against validation rules
+   */
   private _validateToolNumber(toolNum: number) {
     const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
 
