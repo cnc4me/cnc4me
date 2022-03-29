@@ -1,29 +1,13 @@
-import { MEMORY } from "../PackageConfig";
-import { G10Line } from "./G10Line";
-import { OFFSET_GROUPS } from "./Memory/OffsetGroups";
-
-type CommonOffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
-
-interface AxisLocations {
-  X: number;
-  Y: number;
-  Z: number;
-  B: number;
-}
-
-interface ToolOffsetValues {
-  length: number;
-  lengthComp: number;
-  diameter: number;
-  diameterComp: number;
-}
-
-interface UpdatedValue {
-  prev: number;
-  curr: number;
-}
-
-type PositioningMode = "G90" | "G91";
+import { MEMORY } from "../../PackageConfig";
+import { G10Line } from "../G10Line";
+import {
+  AxisLocations,
+  CommonOffsetGroups,
+  PositioningMode,
+  ToolOffsetValues,
+  UpdatedValue
+} from "./MacroMemoryTypes";
+import { OFFSET_GROUPS } from "./MemoryOffsetGroups";
 
 function range(start: number, end: number) {
   end = end + 1; // include the end
@@ -124,6 +108,9 @@ export class MacroMemory {
     console.log(group, register);
   }
 
+  /**
+   * Get all tool offset values for a tool number
+   */
   getToolOffsets(toolNum: number): ToolOffsetValues {
     return {
       length: this.getToolLength(toolNum),

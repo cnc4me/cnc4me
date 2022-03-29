@@ -41,7 +41,7 @@ import {
 import { AddressInsight } from "./AddressInsight";
 import { G10Line } from "./G10Line";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
-import { MacroMemory } from "./MacroMemory";
+import { MacroMemory } from "./MacroMemory/MacroMemory";
 import { parser } from "./MacroParser";
 import { MacroVariables } from "./MacroVariables";
 import { NcAddress } from "./NcAddress";
