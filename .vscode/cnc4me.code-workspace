@@ -17,6 +17,10 @@
       "path": "../packages/fanuc-macro-b"
     },
     {
+      "name": "[PKG] NcStat Library",
+      "path": "../packages/ncstat-lib"
+    },
+    {
       "name": "[PKG] Jest Matchers",
       "path": "../packages/jest-matchers"
     },

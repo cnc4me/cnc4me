@@ -1,3 +1,3 @@
 export * from "./MacroMemory";
-export * from "./MacroMemoryTypes";
-export * from "./MemoryOffsetGroups";
+export * from "./OffsetGroups";
+export * from "./types";

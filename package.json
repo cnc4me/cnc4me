@@ -12,25 +12,25 @@
     "site:build": "pnpm --filter ./apps/website build"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.144",
-    "@swc/jest": "^0.2.17",
+    "@swc/core": "^1.2.159",
+    "@swc/jest": "^0.2.20",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
-    "@typescript-eslint/eslint-plugin": "^5.12.1",
-    "@typescript-eslint/parser": "^5.12.1",
-    "eslint": "^8.9.0",
-    "eslint-config-prettier": "^8.4.0",
+    "@typescript-eslint/eslint-plugin": "^5.15.0",
+    "@typescript-eslint/parser": "^5.15.0",
+    "eslint": "^8.11.0",
+    "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.5.0",
     "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^26.1.1",
+    "eslint-plugin-jest": "^26.1.2",
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
     "lerna": "^4.0.0",
-    "prettier": "^2.5.1",
+    "prettier": "^2.6.0",
     "rimraf": "^3.0.2",
     "ts-jest": "27.0.5",
     "ts-node-dev": "^1.1.8",
-    "typescript": "^4.5.5"
+    "typescript": "^4.6.2"
   }
 }

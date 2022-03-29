@@ -1,13 +1,13 @@
 import { MEMORY } from "../../PackageConfig";
 import { G10Line } from "../G10Line";
+import { OFFSET_GROUPS } from "./OffsetGroups";
 import {
   AxisLocations,
   CommonOffsetGroups,
   PositioningMode,
   ToolOffsetValues,
   UpdatedValue
-} from "./MacroMemoryTypes";
-import { OFFSET_GROUPS } from "./MemoryOffsetGroups";
+} from "./types";
 
 function range(start: number, end: number) {
   end = end + 1; // include the end
