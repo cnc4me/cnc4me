@@ -1,6 +1,6 @@
-import { MacroMemory } from "../src";
+import { MacroMemory } from "../../src";
 
-describe("testing the MacroMemory class", () => {
+describe("testing the MacroMemory's *ToolOffset* methods", () => {
   const mem = new MacroMemory();
 
   it("can set tool offset values and read by tool number.", () => {

@@ -1,8 +1,8 @@
 import { MEMORY } from "../PackageConfig";
 import { G10Line } from "./G10Line";
-import { OFFSET_GROUPS, TOOL_OFFSETS } from "./Memory/OffsetGroups";
+import { OFFSET_GROUPS } from "./Memory/OffsetGroups";
 
-type OffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
+type CommonOffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
 
 interface AxisLocations {
   X: number;
@@ -30,22 +30,6 @@ function range(start: number, end: number) {
   const length = (end - start) / 1;
   return Array.from({ length }, (_, i) => start + i);
 }
-
-const WORK_OFFSET_MAP: Record<number, number> = {
-  54: 22,
-  55: 24,
-  56: 26,
-  57: 28,
-  58: 30,
-  59: 32
-};
-
-const AXIS_MAP: Record<string, number> = {
-  X: 1,
-  Y: 2,
-  Z: 3,
-  B: 4
-};
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -153,62 +137,68 @@ export class MacroMemory {
    * Tool Length Offset Group (L10)
    */
   setToolLength(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_LENGTH, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.LENGTH, value);
   }
 
   /**
    * Get Tool Length value by tool number
    */
   getToolLength(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_LENGTH);
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.LENGTH);
   }
 
   /**
    * Tool Length Compensation Offset Group (L11)
    */
   setToolLengthComp(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_LENGTH_COMP, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.LENGTH_COMP, value);
   }
 
   /**
    * Get Tool Length Comp value by tool number
    */
   getToolLengthComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_LENGTH_COMP);
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.LENGTH_COMP);
   }
 
   /**
    * Tool Diameter Offset Group (L12)
    */
   setToolDiameter(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_DIAMETER, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.DIAMETER, value);
   }
 
   /**
    * Get Tool diameter value by tool number
    */
   getToolDiameter(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_DIAMETER);
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.DIAMETER);
   }
 
   /**
    * Tool Diameter Compensation. Offset Group (L13)
    */
   setToolDiameterComp(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL_DIAMETER_COMP, value);
+    this._setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.DIAMETER_COMP, value);
   }
 
   /**
    * Get Tool Diameter Comp value by tool number
    */
   getToolDiameterComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL_DIAMETER_COMP);
+    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.DIAMETER_COMP);
   }
 
   /**
    * Set axis values for a Work Offset Group (L2)
+   *
+   * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
+   * Use in program: `G54 X0 Y0`
+   *
+   * G10 line sets:  `G10 G90 L2 P2 R0`
+   * Use in program: `G55 X0 Y0`
    */
-  setWorkOffset(offsetGroup: OffsetGroups, locations: Partial<AxisLocations>) {
+  setWorkOffset(offsetGroup: CommonOffsetGroups, locations: Partial<AxisLocations>) {
     Object.entries(locations).forEach(([axis, value]) => {
       this.setWorkOffsetAxisValue(offsetGroup, axis, value);
     });
@@ -216,19 +206,20 @@ export class MacroMemory {
 
   /**
    * Set axis values for an Extended Work Offset Group (L20)
+   *
+   * The "P" address value will match between setting / using
+   *
+   * G10 line sets:  `G10 G90 L20 Pnnn X0 Y0 Z0 B0`
+   * Use in program: `G54.1 Pnnn X0 Y0`
    */
-  setWorkExtendedOffset(extOffsetGroup: OffsetGroups, locations: Partial<AxisLocations>) {
-    Object.entries(locations).forEach(([axis, value]) => {
-      if (value) {
-        this.setWorkOffsetAxisValue(extOffsetGroup, axis, value);
-      }
-    });
-  }
+  // setWorkExtendedOffset(extOffsetGroup: number, locations: Partial<AxisLocations>) {
+  //   throw Error("NOT IMPLEMENTED YET");
+  // }
 
   /**
    * Set the work offset axis value
    */
-  setWorkOffsetAxisValue(offsetGroup: OffsetGroups, axis: string, value: number) {
+  setWorkOffsetAxisValue(offsetGroup: CommonOffsetGroups, axis: string, value: number) {
     const target = this._composeWorkOffsetAxisRegister(offsetGroup, axis);
 
     this.write(target, value);
@@ -250,6 +241,22 @@ export class MacroMemory {
    * The arguments `(56, "Z")` will produce `5263`
    */
   _composeWorkOffsetAxisRegister(offset: number, axis: string): number {
+    const WORK_OFFSET_MAP: Record<number, number> = {
+      54: 22,
+      55: 24,
+      56: 26,
+      57: 28,
+      58: 30,
+      59: 32
+    } as const;
+
+    const AXIS_MAP: Record<string, number> = {
+      X: 1,
+      Y: 2,
+      Z: 3,
+      B: 4
+    } as const;
+
     // eslint-disable-next-line prettier/prettier
     return 5000 + (WORK_OFFSET_MAP[offset] * 10) + AXIS_MAP[axis];
   }
