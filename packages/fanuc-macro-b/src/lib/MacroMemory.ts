@@ -116,28 +116,28 @@ export class MacroMemory {
    * Tool Length Offset Group (L10)
    */
   setToolLength(toolNum: number, value: number) {
-    this.setToolOffsetValue(10, toolNum, value);
+    this.setToolOffsetValue(toolNum, 10, value);
   }
 
   /**
    * Tool Length Compensation Offset Group (L11)
    */
   setToolLengthComp(toolNum: number, value: number) {
-    this.setToolOffsetValue(11, toolNum, value);
+    this.setToolOffsetValue(toolNum, 11, value);
   }
 
   /**
    * Tool Diameter Offset Group (L12)
    */
   setToolDiameter(toolNum: number, value: number) {
-    this.setToolOffsetValue(12, toolNum, value);
+    this.setToolOffsetValue(toolNum, 12, value);
   }
 
   /**
    * Tool Diameter Compensation Offset Group (L13)
    */
   setToolDiameterComp(toolNum: number, value: number) {
-    this.setToolOffsetValue(13, toolNum, value);
+    this.setToolOffsetValue(toolNum, 13, value);
   }
 
   /**
@@ -166,7 +166,9 @@ export class MacroMemory {
    * Set the group value for a tool by number
    */
   setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
-    const target = this.getToolOffsetRegister(offsetGroup, toolNum);
+    this._validateToolNumber(toolNum);
+
+    const target = this.composeToolOffsetRegister(offsetGroup, toolNum);
 
     this.write(target, value);
   }
@@ -175,7 +177,7 @@ export class MacroMemory {
    * Set the work offset axis value
    */
   setWorkOffsetAxisValue(offsetGroup: OffsetGroups, axis: string, value: number) {
-    const target = this.getWorkOffsetAxisRegister(offsetGroup, axis);
+    const target = this.composeWorkOffsetAxisRegister(offsetGroup, axis);
 
     this.write(target, value);
   }
@@ -183,15 +185,8 @@ export class MacroMemory {
   /**
    * Compose a tool offset register number by group and tool num.
    */
-  getToolOffsetRegister(group: number, toolNum: number): number {
-    const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
-
-    if (toolNum > maxToolNum) {
-      throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
-    } else if (toolNum <= 0) {
-      throw Error(`${toolNum} is invalid, Tools must be positive.`);
-    }
-
+  composeToolOffsetRegister(group: number, toolNum: number): number {
+    this._validateToolNumber(toolNum);
     // eslint-disable-next-line prettier/prettier
     return (group * 1000) + toolNum;
   }
@@ -201,7 +196,7 @@ export class MacroMemory {
    *
    * The arguments `(54, "X")`  would produce `5221`
    */
-  getWorkOffsetAxisRegister(offset: number, axis: string): number {
+  composeWorkOffsetAxisRegister(offset: number, axis: string): number {
     // eslint-disable-next-line prettier/prettier
     return 5000 + (WORK_OFFSET_MAP[offset] * 10) + AXIS_MAP[axis];
   }
@@ -217,4 +212,66 @@ export class MacroMemory {
 
     return valueArr;
   }
+
+  private _validateToolNumber(toolNum: number) {
+    const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
+
+    if (toolNum > maxToolNum) {
+      throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
+    } else if (toolNum <= 0) {
+      throw Error(`${toolNum} is invalid, Tools must be positive.`);
+    }
+  }
 }
+
+// www.cncdata.co.uk 15
+// System Variables for Time Information
+// Variable
+// number Function
+// #3001 This variable functions as a timer that counts in 1–millisecond
+// increments at all times. When the power is turned on, the value
+// of this variable is reset to 0. When 2147483648 milliseconds is
+// reached, the value of this timer returns to 0.
+// #3002 This variable functions as a timer that counts in 1–hour
+// increments when the cycle start lamp is on. This timer
+// preserves its value even when the power is turned off. When
+// 9544.371767 hours is reached, the value of this timer returns to
+// 0.
+// #3011 This variable can be used to read the current date (year/month/
+// day). Year/month/day information is converted to an apparent
+// decimal number. For example, September 28, 2001 is
+// represented as 20010928.
+// #3012 This variable can be used to read the current time (hours/min-
+// utes/seconds). Hours/minutes/seconds information is converted
+// to an apparent decimal number. For example, 34 minutes and
+// 56 seconds after 3 p.m. is represented as 153456.
+// // System Variables for Modal Information
+// Variable
+// Number Function Group
+// #4001 G00, G01, G02, G03, G33 Group 1
+// #4002 G17, G18, G19 Group 2
+// #4003 G90, G91 Group 3
+// #4004 Group 4
+// #4005 G94, G95 Group 5
+// #4006 G20, G21 Group 6
+// #4007 G40, G41, G42 Group 7
+// #4008 G43, G44, G49 Group 8
+// #4009 G73, G74, G76, G80–G89 Group 9
+// #4010 G98, G99 Group 10
+// #4011 G98, G99 Group 11
+// #4012 G65, G66, G67 Group 12
+// #4013 G96,G97 Group 13
+// #4014 G54–G59 Group 14
+// #4015 G61–G64 Group 15
+// #4016 G68, G69 Group 16
+// : : :
+// #4022 Group 22
+// #4102 B code
+// #4107 D code
+// #4109 F code
+// #4111 H code
+// #4113 M code
+// #4114 Sequence number
+// #4115 Program number
+// #4119 S code
+// #4120 T code

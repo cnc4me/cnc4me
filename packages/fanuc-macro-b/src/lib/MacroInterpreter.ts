@@ -28,8 +28,16 @@ import type {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import { getImage, hasDwell, parseNumber, trimLeadingChar, unbox, unwrap } from "../utils";
-import { degreeToRadian, radianToDegree } from "../utils/trig";
+import {
+  degreeToRadian,
+  getImage,
+  hasDwell,
+  parseNumber,
+  radianToDegree,
+  trimLeadingChar,
+  unbox,
+  unwrap
+} from "../utils";
 import { AddressInsight } from "./AddressInsight";
 import { G10Line } from "./G10Line";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";

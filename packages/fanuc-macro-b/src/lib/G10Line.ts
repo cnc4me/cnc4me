@@ -1,7 +1,7 @@
 import { find } from "lodash";
 
-import { ParsedLineData } from "../../types";
-import { NcAddress } from "../NcAddress";
+import { ParsedLineData } from "../types";
+import { NcAddress } from "./NcAddress";
 
 export class G10Line {
   private _line: ParsedLineData;
