@@ -39,7 +39,7 @@ import {
   unwrap
 } from "../utils";
 import { AddressInsight } from "./AddressInsight";
-import { G10Line } from "./G10Line";
+// import { G10Line } from "./G10Line";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { MacroMemory } from "./MacroMemory/MacroMemory";
 import { parser } from "./MacroParser";
@@ -178,9 +178,8 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (parsed.gCodeMap["G10"]) {
-      const g10 = new G10Line({ ...parsed });
-
-      this._mem.evalG10(g10);
+      // const g10 = new G10Line({ ...parsed });
+      // this._mem.evalG10(g10);
     }
 
     return parsed;

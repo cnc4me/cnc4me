@@ -46,3 +46,12 @@ export function trimLeadingChar(address: string): string {
 export function parseNumber(value: string): number {
   return value.includes(".") ? parseFloat(value) : parseInt(value);
 }
+
+/**
+ * Generate an array of integers, including start and finish.
+ */
+export function range(start: number, end: number) {
+  end = end + 1; // include the end
+  const length = (end - start) / 1;
+  return Array.from({ length }, (_, i) => start + i);
+}

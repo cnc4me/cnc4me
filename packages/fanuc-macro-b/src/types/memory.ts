@@ -10,4 +10,11 @@ export interface UpdatedValue {
   curr: number;
 }
 
-export type PositioningMode = "G90" | "G91";
+export type CommonOffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
+
+export interface ToolOffsetValues {
+  length: number;
+  lengthComp: number;
+  diameter: number;
+  diameterComp: number;
+}
