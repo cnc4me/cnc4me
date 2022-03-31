@@ -1,5 +1,6 @@
 import Debug from "debug";
-import { match } from "ts-pattern";
+import { pick } from "lodash";
+import { __, match } from "ts-pattern";
 
 import { MEMORY } from "../../PackageConfig";
 import type {
@@ -122,31 +123,25 @@ export class MacroMemory {
     debug("Evaluating G10 line", g10);
 
     return match<G10Line>(g10)
-      .with({ L: WORK.COMMON }, ({ P }) => {
-        debug(`L2 P${P}`);
+      .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
+        const positions = pick(rest, ["X", "Y", "Z", "B"]);
+
+        this.setWorkOffset(P + 53, positions);
       })
       .with({ L: WORK.AUX }, ({ P }) => {
         debug(`L20 P${P}`);
       })
-      .with({ L: TOOL.LENGTH_COMP }, ({ P, R }) => {
-        if (R) {
-          this.setToolLengthComp(P, R);
-        }
+      .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
+        this.setToolLengthComp(P, R);
       })
-      .with({ L: TOOL.LENGTH }, ({ P, R }) => {
-        if (R) {
-          this.setToolLength(P, R);
-        }
+      .with({ L: TOOL.LENGTH, R: __.number }, ({ P, R }) => {
+        this.setToolLength(P, R);
       })
-      .with({ L: TOOL.DIAMETER_COMP }, ({ P, R }) => {
-        if (R) {
-          this.setToolDiameterComp(P, R);
-        }
+      .with({ L: TOOL.DIAMETER_COMP, R: __.number }, ({ P, R }) => {
+        this.setToolDiameterComp(P, R);
       })
-      .with({ L: TOOL.DIAMETER }, ({ P, R }) => {
-        if (R) {
-          this.setToolDiameter(P, R);
-        }
+      .with({ L: TOOL.DIAMETER, R: __.number }, ({ P, R }) => {
+        this.setToolDiameter(P, R);
       })
       .otherwise(v => {
         debug(v);
@@ -239,7 +234,9 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setWorkOffset(offsetGroup: CommonOffsetGroups, locations: Partial<AxisLocations>) {
+  setWorkOffset(offsetGroup: number, locations: Partial<AxisLocations>) {
+    this._validateWorkOffset(offsetGroup);
+
     Object.entries(locations).forEach(([axis, value]) => {
       this.setWorkOffsetAxisValue(offsetGroup, axis, value);
     });
@@ -260,7 +257,7 @@ export class MacroMemory {
   /**
    * Set the work offset axis value
    */
-  setWorkOffsetAxisValue(offsetGroup: CommonOffsetGroups, axis: string, value: number) {
+  setWorkOffsetAxisValue(offsetGroup: number, axis: string, value: number) {
     const target = this._composeWorkOffsetAxisRegister(offsetGroup, axis);
 
     this.write(target, value);
@@ -321,6 +318,19 @@ export class MacroMemory {
       throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
     } else if (toolNum <= 0) {
       throw Error(`${toolNum} is invalid, Tools must be positive.`);
+    }
+  }
+
+  /**
+   * Check the given offset number against validation rules
+   */
+  private _validateWorkOffset(workOffset: number) {
+    debug("Validating offset number", { workOffset });
+
+    if (workOffset >= 60) {
+      throw Error(`(${workOffset}) exceeds configured maximum. (54 - 59)`);
+    } else if (workOffset <= 52) {
+      throw Error(`(${workOffset}) exceeds configured minimum. (54 - 59)`);
     }
   }
 

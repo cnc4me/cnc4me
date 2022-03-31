@@ -43,7 +43,7 @@ describe("testing the MacroMemory#g10()", () => {
     expect(mem.read(13055)).toBe(0.5);
   });
 
-  it.skip("can set `G54` work offsets via g10 line.", () => {
+  it("can set `G54` work offsets via g10 line.", () => {
     mem.g10({ L: 2, P: 1, X: 1, Y: 2, Z: 3, B: 4 });
 
     expect(mem.read(5221)).toBe(1);
