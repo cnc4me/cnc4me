@@ -4,7 +4,7 @@
     "composite": true,
     "noUnusedLocals": false,
     "outDir": "../../dist/out-tsc",
-    "types": ["node", "lodash"]
+    "types": ["node", "lodash", "chance"]
   },
   "references": [
     {

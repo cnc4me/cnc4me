@@ -3,20 +3,14 @@ import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
 import { MEMORY } from "../../PackageConfig";
-import type {
-  AxisLocations,
-  CommonOffsetGroups,
-  G10Line,
-  ToolOffsetValues,
-  UpdatedValue
-} from "../../types";
+import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
 import { range } from "../../utils";
 import { OFFSET_GROUPS } from "./OffsetGroups";
 import { MACRO_VAR } from "./OffsetRegisters";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
-debug.enabled = true;
+// debug.enabled = true;
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -131,7 +125,7 @@ export class MacroMemory {
       .with({ L: WORK.AUX }, ({ P, ...rest }) => {
         const positions = pick(rest, ["X", "Y", "Z", "B"]);
 
-        this.setAuxWorkOffset(P);
+        this.setAuxWorkOffset(P, positions);
         debug(`L20 P${P}`);
       })
       .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
@@ -251,8 +245,12 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setAuxWorkOffset(P: number) {
+  setAuxWorkOffset(P: number, locations: Partial<AxisLocations>) {
     throw new Error("Method not implemented.");
+
+    Object.entries(locations).forEach(([axis, value]) => {
+      this.setWorkOffsetAxisValue(offsetGroup, axis, value);
+    });
   }
 
   /**
