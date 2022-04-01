@@ -126,9 +126,12 @@ export class MacroMemory {
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
         const positions = pick(rest, ["X", "Y", "Z", "B"]);
 
-        this.setWorkOffset(P + 53, positions);
+        this.setCommonWorkOffset(P + 53, positions);
       })
-      .with({ L: WORK.AUX }, ({ P }) => {
+      .with({ L: WORK.AUX }, ({ P, ...rest }) => {
+        const positions = pick(rest, ["X", "Y", "Z", "B"]);
+
+        this.setAuxWorkOffset(P);
         debug(`L20 P${P}`);
       })
       .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
@@ -234,12 +237,22 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setWorkOffset(offsetGroup: number, locations: Partial<AxisLocations>) {
+  setCommonWorkOffset(offsetGroup: number, locations: Partial<AxisLocations>) {
     this._validateWorkOffset(offsetGroup);
 
     Object.entries(locations).forEach(([axis, value]) => {
       this.setWorkOffsetAxisValue(offsetGroup, axis, value);
     });
+  }
+
+  /**
+   * Set axis values for a Work Offset Group (L2)
+   *
+   * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
+   * Use in program: `G54 X0 Y0`
+   */
+  setAuxWorkOffset(P: number) {
+    throw new Error("Method not implemented.");
   }
 
   /**
