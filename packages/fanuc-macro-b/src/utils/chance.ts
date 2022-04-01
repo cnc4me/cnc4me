@@ -1,11 +1,21 @@
 import { Chance } from "chance";
 
+import { AxisLocations } from "../types";
+
 const chance = Chance();
 
-export function smallRand() {
-  return chance.floating({ fixed: 4, min: -1, max: 1 });
+export function rand(min: number, max: number): number {
+  return chance.floating({ fixed: 4, min, max });
 }
 
-export function bigRand() {
-  return chance.floating({ fixed: 4, min: -10, max: 10 });
-}
+export const rX = () => rand(-12, 12);
+export const rY = () => rand(0, 24);
+export const rZ = () => rand(0, 14);
+export const rB = () => rand(-360, 360);
+
+export const getRandomAxisLocations = (): AxisLocations => ({
+  X: rX(),
+  Y: rY(),
+  Z: rZ(),
+  B: rB()
+});

@@ -1,22 +1,8 @@
 import { MacroMemory } from "../../src";
 
+const mem = new MacroMemory();
+
 describe("testing the MacroMemory's *ToolOffset* methods", () => {
-  const mem = new MacroMemory();
-
-  it("can set tool offset values and read by tool number.", () => {
-    const toolNumber = 123;
-
-    mem.setToolLength(toolNumber, 6.2341);
-    mem.setToolDiameter(toolNumber, 0.4995);
-    mem.setToolLengthComp(toolNumber, -0.0003);
-    mem.setToolDiameterComp(toolNumber, -0.0012);
-
-    expect(mem.read(11123)).toBe(6.2341);
-    expect(mem.read(13123)).toBe(0.4995);
-    expect(mem.read(10123)).toBe(-0.0003);
-    expect(mem.read(12123)).toBe(-0.0012);
-  });
-
   it("can set tool length by number and read by address.", () => {
     mem.setToolLength(1, 6.2341);
     mem.setToolLength(10, 3.4266);
