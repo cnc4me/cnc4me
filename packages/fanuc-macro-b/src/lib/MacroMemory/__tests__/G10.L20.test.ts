@@ -1,19 +1,22 @@
-import { MacroMemory } from "../../MacroMemory";
+import { getRandomAxisLocations } from "../../../testing";
+import { MacroMemory } from "../MacroMemory";
 
 const mem = new MacroMemory();
 
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
-  it.skip("can set `G54.1` work offsets via G10 line.", () => {
-    mem.g10({ L: 20, P: 1, X: 1, Y: 2, Z: 3, B: 4 });
+  it("can set `G54.1` work offsets via G10 line.", () => {
+    const { X, Y, Z, B } = getRandomAxisLocations();
 
-    expect(mem.G54.X).toBe(1);
-    expect(mem.G54.Y).toBe(2);
-    expect(mem.G54.Z).toBe(3);
-    expect(mem.G54.B).toBe(5.5);
+    mem.g10({ L: 20, P: 1, X, Y, Z, B });
 
-    expect(mem.read(5221)).toBe(1);
-    expect(mem.read(5222)).toBe(2);
-    expect(mem.read(5223)).toBe(3);
-    expect(mem.read(5224)).toBe(4);
+    // expect(mem.G54_1(1).X).toBe(X);
+    // expect(mem.G54_1(1).Y).toBe(Y);
+    // expect(mem.G54_1(1).Z).toBe(Z);
+    // expect(mem.G54_1(1).B).toBe(B);
+
+    expect(mem.read(7001)).toBe(X);
+    expect(mem.read(7002)).toBe(Y);
+    expect(mem.read(7003)).toBe(Z);
+    expect(mem.read(7004)).toBe(B);
   });
 });

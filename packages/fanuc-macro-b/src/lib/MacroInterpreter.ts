@@ -41,9 +41,8 @@ import {
 import { AddressInsight } from "./AddressInsight";
 // import { G10Line } from "./G10Line";
 import { LoggerConfig, MacroLogger } from "./MacroLogger";
-import { MacroMemory } from "./MacroMemory/MacroMemory";
+import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
-import { MacroVariables } from "./MacroVariables";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
@@ -65,8 +64,6 @@ export class MacroInterpreter extends BaseCstVisitor {
   events: Emittery = new Emittery();
   logger: MacroLogger = new MacroLogger();
 
-  varStack: MacroVariables[] = [];
-  vars: MacroVariables = new MacroVariables(1, 10);
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
   private _mem: MacroMemory = new MacroMemory();
@@ -375,7 +372,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   getMacro(register: number): VariableRegister {
     const macro = {
       register,
-      value: this.vars.getMap().get(register) ?? NaN
+      value: this._mem.read(register) ?? NaN
     };
 
     return macro;
@@ -384,15 +381,15 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Retrieve the macro variable map
    */
-  getMacros(): Map<number, number> {
-    return this.vars.getMap();
+  getMacros(): number[][] {
+    return this._mem.toArray();
   }
 
   /**
    * Preload a macro variable register with a value
    */
   setMacroValue(register: number, value: number): VariableRegister {
-    this.vars.write(register, value);
+    this._mem.write(register, value);
 
     this.logger.operation(`#${register}`, "=", value);
 
@@ -415,5 +412,3 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.varWatches[macroRegister] = handler;
   }
 }
-
-export const interpreter = new MacroInterpreter();

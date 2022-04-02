@@ -11,7 +11,7 @@ describe("testing the MacroMemory's *WorkOffset* methods", () => {
       B: 90
     };
 
-    mem.setWorkOffset(54, offsets);
+    mem.setCommonWorkOffset(54, offsets);
 
     expect(mem.read(5221)).toBe(6.2341);
     expect(mem.read(5222)).toBe(4.4416);
@@ -28,7 +28,7 @@ describe("testing the MacroMemory's *WorkOffset* methods", () => {
       B: 0
     };
 
-    mem.setWorkOffset(55, offsets);
+    mem.setCommonWorkOffset(55, offsets);
 
     expect(mem.read(5241)).toBe(9.2575);
     expect(mem.read(5242)).toBe(14.1283);

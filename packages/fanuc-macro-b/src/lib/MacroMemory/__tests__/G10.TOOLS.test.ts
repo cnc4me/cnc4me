@@ -1,5 +1,5 @@
-import { MacroMemory } from "../../src";
-import { rand } from "../../src/utils";
+import { rand } from "../../../testing";
+import { MacroMemory } from "../MacroMemory";
 
 /**
  * G10 Line Reference

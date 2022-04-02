@@ -6,7 +6,11 @@ import { MEMORY } from "../../PackageConfig";
 import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
 import { range } from "../../utils";
 import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
-import { composeToolOffsetRegister, composeWorkOffsetAxisRegister } from "./MemoryMap/composer";
+import {
+  composeAuxWorkOffsetAxisRegister,
+  composeToolOffsetRegister,
+  composeWorkOffsetAxisRegister
+} from "./MemoryMap/composer";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
@@ -47,10 +51,27 @@ export class MacroMemory {
     return this._getCommonWorkOffsetAxisLocations(59);
   }
 
+  /**
+   * Construct a new instance of the MacroMemory class and initialize the variables
+   */
   constructor(mode?: number) {
     this.write(GROUP_3, mode ?? 90);
 
     range(1, 14000).forEach(idx => this.clear(idx));
+  }
+
+  /**
+   * Get locations from a `G54.1 Pnnn` work offset
+   */
+  G54_1(group: number): AxisLocations {
+    const axisReg = (axis: string) => composeAuxWorkOffsetAxisRegister(group, axis);
+
+    return {
+      X: this.read(axisReg("X")),
+      Y: this.read(axisReg("Y")),
+      Z: this.read(axisReg("Z")),
+      B: this.read(axisReg("B"))
+    };
   }
 
   /**
@@ -232,11 +253,13 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setCommonWorkOffset(offsetGroup: number, locations: Partial<AxisLocations>) {
-    this._validateWorkOffset(offsetGroup);
+  setCommonWorkOffset(group: number, locations: Partial<AxisLocations>) {
+    this._validateWorkOffset(group);
 
     Object.entries(locations).forEach(([axis, value]) => {
-      this.setWorkOffsetAxisValue(offsetGroup, axis, value);
+      const target = composeWorkOffsetAxisRegister(group, axis);
+
+      this.write(target, value);
     });
   }
 
@@ -246,33 +269,12 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setAuxWorkOffset(P: number, locations: Partial<AxisLocations>) {
-    throw new Error("Method not implemented.");
-
+  setAuxWorkOffset(group: number, locations: Partial<AxisLocations>) {
     Object.entries(locations).forEach(([axis, value]) => {
-      this.setWorkOffsetAxisValue(offsetGroup, axis, value);
+      const target = composeAuxWorkOffsetAxisRegister(group, axis);
+
+      this.write(target, value);
     });
-  }
-
-  /**
-   * Set axis values for an Extended Work Offset Group (L20)
-   *
-   * The "P" address value will match between setting / using
-   *
-   * G10 line sets:  `G10 G90 L20 Pnnn X0 Y0 Z0 B0`
-   * Use in program: `G54.1 Pnnn X0 Y0`
-   */
-  // setWorkExtendedOffset(extOffsetGroup: number, locations: Partial<AxisLocations>) {
-  //   throw Error("NOT IMPLEMENTED YET");
-  // }
-
-  /**
-   * Set the work offset axis value
-   */
-  setWorkOffsetAxisValue(offsetGroup: number, axis: string, value: number) {
-    const target = composeWorkOffsetAxisRegister(offsetGroup, axis);
-
-    this.write(target, value);
   }
 
   /**

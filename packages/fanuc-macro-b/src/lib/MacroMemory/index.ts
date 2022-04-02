@@ -1,2 +1,1 @@
-export * from "./MacroMemory";
-export * as MemoryMap from "./MemoryMap";
+export { MacroMemory } from "./MacroMemory";

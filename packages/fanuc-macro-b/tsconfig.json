@@ -4,8 +4,9 @@
     "composite": true,
     "noUnusedLocals": false,
     "outDir": "../../dist/out-tsc",
-    "types": ["node", "lodash", "chance"]
+    "types": ["node", "lodash", "chevrotain", "chance"]
   },
+  "include": ["src/**/*.ts"],
   "references": [
     {
       "path": "./tsconfig.lib.json"
