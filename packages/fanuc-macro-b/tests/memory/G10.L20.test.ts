@@ -15,8 +15,8 @@ import { bigRand } from "../../src/utils";
  */
 const mem = new MacroMemory();
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
-  it.skip("can set `G54` work offsets via G10 line.", () => {
-    mem.g10({ L: 2, P: 1, X: 1, Y: 2, Z: 3, B: 4 });
+  it.skip("can set `G54.1` work offsets via G10 line.", () => {
+    mem.g10({ L: 20, P: 1, X: 1, Y: 2, Z: 3, B: 4 });
 
     expect(mem.G54.X).toBe(1);
     expect(mem.G54.Y).toBe(2);

@@ -5,8 +5,7 @@ import { __, match } from "ts-pattern";
 import { MEMORY } from "../../PackageConfig";
 import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
 import { range } from "../../utils";
-import { OFFSET_GROUPS } from "./OffsetGroups";
-import { MACRO_VAR } from "./OffsetRegisters";
+import { AXIS_ADRRESS_INDEX, GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
@@ -16,10 +15,12 @@ const debug = Debug("macro:memory");
  * A Representaion of a CNC machines' macro memory.
  */
 export class MacroMemory {
-  private _mode: number;
   private _config = MEMORY;
   private _vars: Record<number, number> = {};
-  private _modals: Record<number, number> = {};
+
+  get G53(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(53);
+  }
 
   get G54(): AxisLocations {
     return this._getCommonWorkOffsetAxisLocations(54);
@@ -46,7 +47,7 @@ export class MacroMemory {
   }
 
   constructor(mode?: number) {
-    this._mode = mode ?? 90;
+    this.write(GROUP_3, mode ?? 90);
 
     range(1, 14000).forEach(idx => this.clear(idx));
   }
@@ -75,17 +76,17 @@ export class MacroMemory {
   /**
    * Write a value to a named register
    */
-  modal(key: keyof typeof MACRO_VAR, value: number): UpdatedValue {
-    const register = MACRO_VAR[key];
-    const prev = this._vars[register];
+  // modal(key: keyof typeof MACRO_VAR, value: number): UpdatedValue {
+  //   const register = MACRO_VAR[key];
+  //   const prev = this._vars[register];
 
-    this._vars[register] = value;
+  //   this._vars[register] = value;
 
-    return {
-      prev,
-      curr: this._vars[register]
-    };
-  }
+  //   return {
+  //     prev,
+  //     curr: this._vars[register]
+  //   };
+  // }
 
   /**
    * Increment a value in a register
@@ -343,41 +344,5 @@ export class MacroMemory {
     } else if (workOffset <= 52) {
       throw Error(`(${workOffset}) exceeds configured minimum. (54 - 59)`);
     }
-  }
-
-  /**
-   * Compose a tool offset register number by group and tool num.
-   */
-  private _composeToolOffsetRegister(group: number, toolNum: number): number {
-    this._validateToolNumber(toolNum);
-    // eslint-disable-next-line prettier/prettier
-    return (group * 1000) + toolNum;
-  }
-
-  /**
-   * Compose a work offset axis register number by group and axis.
-   *
-   * The arguments `(54, "X")` will produce `5221`
-   * The arguments `(56, "Z")` will produce `5263`
-   */
-  private _composeWorkOffsetAxisRegister(offset: number, axis: string): number {
-    const WORK_OFFSET_MAP: Record<number, number> = {
-      54: 22,
-      55: 24,
-      56: 26,
-      57: 28,
-      58: 30,
-      59: 32
-    } as const;
-
-    const AXIS_MAP: Record<string, number> = {
-      X: 1,
-      Y: 2,
-      Z: 3,
-      B: 4
-    } as const;
-
-    // eslint-disable-next-line prettier/prettier
-    return 5000 + (WORK_OFFSET_MAP[offset] * 10) + AXIS_MAP[axis];
   }
 }

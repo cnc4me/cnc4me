@@ -4,6 +4,22 @@ import { getRandomAxisLocations } from "../../src/utils";
 const mem = new MacroMemory();
 
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
+  it("can set `G53` (external) work offsets via G10 line.", () => {
+    const { X, Y, Z, B } = getRandomAxisLocations();
+
+    mem.g10({ L: 2, P: 0, X, Y, Z, B });
+
+    expect(mem.G53.X).toBe(X);
+    expect(mem.G53.Y).toBe(Y);
+    expect(mem.G53.Z).toBe(Z);
+    expect(mem.G53.B).toBe(B);
+
+    expect(mem.read(5201)).toBe(X);
+    expect(mem.read(5202)).toBe(Y);
+    expect(mem.read(5203)).toBe(Z);
+    expect(mem.read(5204)).toBe(B);
+  });
+
   it("can set `G54` work offsets via G10 line.", () => {
     const { X, Y, Z, B } = getRandomAxisLocations();
 

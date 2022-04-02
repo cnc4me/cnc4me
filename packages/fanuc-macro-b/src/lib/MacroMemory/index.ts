@@ -1,3 +1,2 @@
 export * from "./MacroMemory";
-export * from "./OffsetGroups";
-export * from "./OffsetRegisters";
+export * as MemoryMap from "./MemoryMap";
