@@ -1,5 +1,5 @@
-import { MacroMemory } from "../../src";
-import { getRandomAxisLocations } from "../../src/utils";
+import { getRandomAxisLocations } from "../../../utils";
+import { MacroMemory } from "../MacroMemory";
 
 const mem = new MacroMemory();
 

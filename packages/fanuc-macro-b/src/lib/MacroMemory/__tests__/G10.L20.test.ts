@@ -1,19 +1,7 @@
-import { MacroMemory } from "../../src";
-import { bigRand } from "../../src/utils";
+import { MacroMemory } from "../../MacroMemory";
 
-/**
- * G10 Line Reference
- *
- * ```
- * L2  = Common Work Offsets
- * L10 = Tool Length Compensation
- * L11 = Tool Length Geometry
- * L12 = Tool Diameter Compensation
- * L13 = Tool Diameter Geometry
- * L20 = Aux Work Offsets
- * ```
- */
 const mem = new MacroMemory();
+
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   it.skip("can set `G54.1` work offsets via G10 line.", () => {
     mem.g10({ L: 20, P: 1, X: 1, Y: 2, Z: 3, B: 4 });

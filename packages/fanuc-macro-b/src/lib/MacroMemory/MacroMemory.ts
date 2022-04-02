@@ -5,7 +5,8 @@ import { __, match } from "ts-pattern";
 import { MEMORY } from "../../PackageConfig";
 import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
 import { range } from "../../utils";
-import { AXIS_ADRRESS_INDEX, GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
+import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
+import { composeToolOffsetRegister, composeWorkOffsetAxisRegister } from "./MemoryMap/composer";
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
@@ -127,7 +128,6 @@ export class MacroMemory {
         const positions = pick(rest, ["X", "Y", "Z", "B"]);
 
         this.setAuxWorkOffset(P, positions);
-        debug(`L20 P${P}`);
       })
       .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
         this.setToolLengthComp(P, R);
@@ -270,7 +270,7 @@ export class MacroMemory {
    * Set the work offset axis value
    */
   setWorkOffsetAxisValue(offsetGroup: number, axis: string, value: number) {
-    const target = this._composeWorkOffsetAxisRegister(offsetGroup, axis);
+    const target = composeWorkOffsetAxisRegister(offsetGroup, axis);
 
     this.write(target, value);
   }
@@ -291,14 +291,14 @@ export class MacroMemory {
   }
 
   private _getToolOffsetValueByGroup(toolNum: number, group: number) {
-    const reg = this._composeToolOffsetRegister(group, toolNum);
+    const reg = composeToolOffsetRegister(group, toolNum);
 
     return this.read(reg);
   }
 
   private _getCommonWorkOffsetAxisLocations(commonOffset: number): AxisLocations {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
-      const reg = this._composeWorkOffsetAxisRegister(commonOffset, axis);
+      const reg = composeWorkOffsetAxisRegister(commonOffset, axis);
 
       return {
         ...locations,
@@ -313,7 +313,7 @@ export class MacroMemory {
   private _setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
     debug("Setting tool offset value", { toolNum, offsetGroup, value });
 
-    const reg = this._composeToolOffsetRegister(offsetGroup, toolNum);
+    const reg = composeToolOffsetRegister(offsetGroup, toolNum);
 
     this.write(reg, value);
   }
