@@ -9,7 +9,7 @@ export function createToolchain(options?: MacroToolchainOptions) {
   const interpreter = new MacroInterpreter();
 
   if (options) {
-    if (options?.autoExec && options?.preloadInput) {
+    if (options?.preloadInput) {
       const { errors, tokens } = lexer.tokenize(options.preloadInput);
 
       if (errors) {

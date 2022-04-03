@@ -5,12 +5,10 @@ import { MacroMemory } from "../MacroMemory";
  * G10 Line Reference
  *
  * ```
- * L2  = Common Work Offsets
  * L10 = Tool Length Compensation
  * L11 = Tool Length Geometry
  * L12 = Tool Diameter Compensation
  * L13 = Tool Diameter Geometry
- * L20 = Aux Work Offsets
  * ```
  */
 const mem = new MacroMemory();

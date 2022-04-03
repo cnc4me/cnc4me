@@ -10,8 +10,6 @@ export interface UpdatedValue {
   curr: number;
 }
 
-export type CommonOffsetGroups = 53 | 54 | 55 | 56 | 57 | 58 | 59;
-
 export interface ToolOffsetValues {
   length: number;
   lengthComp: number;

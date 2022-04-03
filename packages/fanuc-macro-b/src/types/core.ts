@@ -60,6 +60,6 @@ export interface MacroToolchain {
 }
 
 export interface MacroToolchainOptions {
-  autoExec: boolean;
+  // autoExec: boolean;
   preloadInput: string;
 }

@@ -1,10 +1,10 @@
 import Debug from "debug";
-import { pick } from "lodash";
+import { each, pick } from "lodash";
 import { __, match } from "ts-pattern";
 
 import { MEMORY } from "../../PackageConfig";
 import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
-import { range } from "../../utils";
+import { createToolchain, range } from "../../utils";
 import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
 import {
   composeAuxWorkOffsetAxisRegister,
@@ -14,7 +14,7 @@ import {
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
-// debug.enabled = true;
+debug.enabled = true;
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -96,21 +96,6 @@ export class MacroMemory {
   }
 
   /**
-   * Write a value to a named register
-   */
-  // modal(key: keyof typeof MACRO_VAR, value: number): UpdatedValue {
-  //   const register = MACRO_VAR[key];
-  //   const prev = this._vars[register];
-
-  //   this._vars[register] = value;
-
-  //   return {
-  //     prev,
-  //     curr: this._vars[register]
-  //   };
-  // }
-
-  /**
    * Increment a value in a register
    */
   increment(key: number, value: number): UpdatedValue {
@@ -132,23 +117,39 @@ export class MacroMemory {
   }
 
   /**
+   * Clear all registers and reset the memory
+   */
+  reset(): void {
+    Object.keys(this._vars).forEach(register => {
+      this.clear(parseInt(register));
+    });
+  }
+
+  evalG10(g10Line: string) {
+    const { withParser } = createToolchain({ preloadInput: g10Line });
+
+    const result = withParser(parser => parser.Line());
+
+    console.log(result);
+  }
+
+  /**
    * Evaluate a G10 line to extract values
    */
   g10(g10: G10Line) {
-    const { WORK, TOOL } = OFFSET_GROUPS;
-
     debug("Evaluating G10 line", g10);
+
+    const getPositions = (partialG10: Partial<AxisLocations>) =>
+      pick(partialG10, ["X", "Y", "Z", "B"]);
+
+    const { WORK, TOOL } = OFFSET_GROUPS;
 
     return match<G10Line>(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
-        const positions = pick(rest, ["X", "Y", "Z", "B"]);
-
-        this.setCommonWorkOffset(P + 53, positions);
+        this.setCommonWorkOffset(P + 53, getPositions(rest));
       })
       .with({ L: WORK.AUX }, ({ P, ...rest }) => {
-        const positions = pick(rest, ["X", "Y", "Z", "B"]);
-
-        this.setAuxWorkOffset(P, positions);
+        this.setAuxWorkOffset(P, getPositions(rest));
       })
       .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
         this.setToolLengthComp(P, R);
@@ -167,17 +168,6 @@ export class MacroMemory {
         throw Error("INVALID `L` ADDRESS");
       });
   }
-
-  /**
-   * Evaluate a G10 line to extract values
-   */
-  // evalG10(g10: G10Line) {
-  //   const { L: group, P: register } = g10;
-
-  //   // const macro = group.value + register.value;
-
-  //   debug(group, register);
-  // }
 
   /**
    * Get all tool offset values for a tool number
@@ -280,7 +270,7 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  toArray() {
+  toArray(): [register: number, value: number][] {
     const valueArr: [register: number, value: number][] = [];
 
     Object.entries(this._vars).forEach(([register, value]) => {
@@ -292,12 +282,31 @@ export class MacroMemory {
     return valueArr;
   }
 
-  private _getToolOffsetValueByGroup(toolNum: number, group: number) {
+  /**
+   * Set the group value for a tool by number
+   */
+  private _setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
+    const reg = composeToolOffsetRegister(offsetGroup, toolNum);
+
+    debug("Setting tool offset value", { toolNum, offsetGroup, value });
+
+    this.write(reg, value);
+  }
+
+  /**
+   * Get a tool offset value by number and group.
+   */
+  private _getToolOffsetValueByGroup(toolNum: number, group: number): number {
     const reg = composeToolOffsetRegister(group, toolNum);
+
+    debug("Fetching tool offset value", { toolNum, group });
 
     return this.read(reg);
   }
 
+  /**
+   * Get set axis locations for a given work offset
+   */
   private _getCommonWorkOffsetAxisLocations(commonOffset: number): AxisLocations {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = composeWorkOffsetAxisRegister(commonOffset, axis);
@@ -310,30 +319,19 @@ export class MacroMemory {
   }
 
   /**
-   * Set the group value for a tool by number
-   */
-  private _setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
-    debug("Setting tool offset value", { toolNum, offsetGroup, value });
-
-    const reg = composeToolOffsetRegister(offsetGroup, toolNum);
-
-    this.write(reg, value);
-  }
-
-  /**
    * Check the given tool number against validation rules
    */
-  private _validateToolNumber(toolNum: number) {
-    debug("Validating tool number", { toolNum });
+  // private _validateToolNumber(toolNum: number) {
+  //   debug("Validating tool number", { toolNum });
 
-    const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
+  //   const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
 
-    if (toolNum > maxToolNum) {
-      throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
-    } else if (toolNum <= 0) {
-      throw Error(`${toolNum} is invalid, Tools must be positive.`);
-    }
-  }
+  //   if (toolNum > maxToolNum) {
+  //     throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
+  //   } else if (toolNum <= 0) {
+  //     throw Error(`${toolNum} is invalid, Tools must be positive.`);
+  //   }
+  // }
 
   /**
    * Check the given offset number against validation rules

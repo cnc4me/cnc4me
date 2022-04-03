@@ -34,25 +34,34 @@ export function composeToolOffsetRegister(group: number, toolNum: number): numbe
  * The arguments `(4, "B")` will produce `5284`
  */
 export function composeWorkOffsetAxisRegister(offset: number, axis: string): number {
+  /**
+   * Renishaw EasySet utilizes incrementing `S` values to set offsets.
+   * 1=54, 2=55, 3=56, etc...
+   */
+  if (offset < 52) {
+    offset += 52;
+  }
+
   const workOffsetAddressMap: Record<number, number> = {
-    53: 200,
-    54: 220,
-    55: 240,
-    56: 260,
-    57: 280,
-    58: 300,
-    59: 320
+    53: 5200,
+    54: 5220,
+    55: 5240,
+    56: 5260,
+    57: 5280,
+    58: 5300,
+    59: 5320
   };
 
-  return 5000 + workOffsetAddressMap[offset + 52] + AXIS_ADRRESS_INDEX[axis];
+  return workOffsetAddressMap[offset] + AXIS_ADRRESS_INDEX[axis];
 }
 
 /**
  * Compose an aux work offset axis register number by group and axis.
  *
  * The arguments `(1, "X")` will produce `7001`
- * The arguments `(2, "Y")` will produce `7202`
- * The arguments `(3, "Z")` will produce ``
+ * The arguments `(2, "Y")` will produce `7022`
+ * The arguments `(3, "Z")` will produce `7043`
+ * The arguments `(4, "B")` will produce `7064`
  * The arguments `(48, "X")` will produce `7941`
  */
 export function composeAuxWorkOffsetAxisRegister(offset: number, axis: string): number {

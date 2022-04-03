@@ -3,20 +3,27 @@ import { MacroMemory } from "../MacroMemory";
 
 const mem = new MacroMemory();
 
-describe("setting `L2` work offsets with MacroMemory#g10()", () => {
-  it("can set `G54.1` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
+  it.each`
+    P     | xReg    | yReg    | zReg    | bReg
+    ${1}  | ${7001} | ${7002} | ${7003} | ${7004}
+    ${2}  | ${7021} | ${7022} | ${7023} | ${7024}
+    ${3}  | ${7041} | ${7042} | ${7043} | ${7044}
+    ${4}  | ${7061} | ${7062} | ${7063} | ${7064}
+    ${5}  | ${7081} | ${7082} | ${7083} | ${7084}
+    ${25} | ${7481} | ${7482} | ${7483} | ${7484}
+    ${49} | ${7961} | ${7962} | ${7963} | ${7964}
+  `(
+    "calling `G10 L20 P$P` sets #$xReg, #$yReg, #$zReg, #$bReg",
+    ({ P, xReg, yReg, zReg, bReg }: Record<string, number>) => {
+      const { X, Y, Z, B } = getRandomAxisLocations();
 
-    mem.g10({ L: 20, P: 1, X, Y, Z, B });
+      mem.g10({ L: 20, P, X, Y, Z, B });
 
-    // expect(mem.G54_1(1).X).toBe(X);
-    // expect(mem.G54_1(1).Y).toBe(Y);
-    // expect(mem.G54_1(1).Z).toBe(Z);
-    // expect(mem.G54_1(1).B).toBe(B);
-
-    expect(mem.read(7001)).toBe(X);
-    expect(mem.read(7002)).toBe(Y);
-    expect(mem.read(7003)).toBe(Z);
-    expect(mem.read(7004)).toBe(B);
-  });
+      expect(mem.read(xReg)).toBe(X);
+      expect(mem.read(yReg)).toBe(Y);
+      expect(mem.read(zReg)).toBe(Z);
+      expect(mem.read(bReg)).toBe(B);
+    }
+  );
 });

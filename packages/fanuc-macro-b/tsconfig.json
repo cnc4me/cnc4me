@@ -4,6 +4,7 @@
     "composite": true,
     "noUnusedLocals": false,
     "outDir": "../../dist/out-tsc",
+    "lib": ["dom", "ESNext"],
     "types": ["node", "lodash", "chevrotain", "chance"]
   },
   "include": ["src/**/*.ts"],

@@ -4,7 +4,13 @@ import { MacroMemory } from "../MacroMemory";
 const mem = new MacroMemory();
 
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
-  it("can set `G53` (external) work offsets via G10 line.", () => {
+  let randomLocations = {};
+
+  beforeEach(() => {
+    randomLocations = getRandomAxisLocations();
+  });
+
+  it("can set `G53` work offsets via G10 line.", () => {
     const { X, Y, Z, B } = getRandomAxisLocations();
 
     mem.g10({ L: 2, P: 0, X, Y, Z, B });

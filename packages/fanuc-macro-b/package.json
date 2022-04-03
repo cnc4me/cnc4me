@@ -7,7 +7,7 @@
   "license": "MIT",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --runInBand",
+    "test": "jest",
     "build": "tsc -b -v tsconfig.lib.json",
     "repl": "tsnd ./demo/repl.demo.ts",
     "types2": "tsnd ./scripts/gen_v2.ts",
