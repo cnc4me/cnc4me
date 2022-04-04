@@ -1,4 +1,3 @@
-import Debug from "debug";
 import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
@@ -10,6 +9,7 @@ import type {
   UpdatedValue
 } from "../../types";
 import { range } from "../../utils";
+import { memory as debug } from "../debuggers";
 import {
   composeAuxWorkOffsetAxisRegister,
   composeToolOffsetRegister,
@@ -19,13 +19,7 @@ import { G10Line } from "./G10Line";
 import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
-
-const getPositions = (partialG10: Partial<AxisLocations>) => pick(partialG10, ["X", "Y", "Z", "B"]);
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const debug = Debug("macro:memory");
-
-// debug.enabled = true;
+const getPositions = (locations: Partial<AxisLocations>) => pick(locations, ["X", "Y", "Z", "B"]);
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -97,7 +91,7 @@ export class MacroMemory {
   g10(g10: PossibleG10LineValues) {
     debug("Evaluating G10 line", g10);
 
-    return match<PossibleG10LineValues>(g10)
+    return match(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
         this.setCommonWorkOffset(P, getPositions(rest));
       })

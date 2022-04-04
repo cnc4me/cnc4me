@@ -1,15 +1,10 @@
+import { has } from "lodash";
+
+import { ParsedLineData } from "../../types";
 import { G10ParseResult, PossibleG10LineValues } from "../../types/g10";
-import { createToolchain } from "../../utils/createToolchain";
+import { createToolchain } from "../../utils";
 
 export class G10Line {
-  L: number;
-  P: number;
-  R?: number;
-  X?: number;
-  Y?: number;
-  Z?: number;
-  B?: number;
-
   /**
    * Parsing a string of text as a G10 line for values
    *
@@ -22,32 +17,28 @@ export class G10Line {
       return { error: errors[0].message, result: null };
     }
 
-    const lineCst = parser.lines();
-    const result = interpreter.lines(lineCst.children);
+    const linesCst = parser.lines();
+    const parsedLines = interpreter.lines(linesCst.children);
+    const result = G10Line.fromLineData(parsedLines[0]);
 
-    if (!result[0].gCodeMap["G10"]) {
-      return { error: `G10 not found in ${input}.`, result: null };
-    }
-
-    // const addressValueTuples = .map(a => [a.prefix, a.value]);
-
-    const addresses = result[0].addresses.reduce((values, currAddr) => {
-      return {
-        ...values,
-        [currAddr.prefix]: currAddr.value
-      };
-    }, {} as PossibleG10LineValues);
-
-    return { error: null, result: addresses };
+    return {
+      result,
+      error: null
+    };
   }
 
-  constructor(L: number, P: number, X?: number, Y?: number, Z?: number, B?: number, R?: number) {
-    this.L = L;
-    this.P = P;
-    this.R = R;
-    this.X = X;
-    this.Y = Y;
-    this.Z = Z;
-    this.B = B;
+  /**
+   *
+   */
+  static fromLineData(line: ParsedLineData): PossibleG10LineValues {
+    const { addresses, gCodeMap } = line;
+
+    if (has(gCodeMap, "G10") === false) {
+      throw Error(`G10 not found.`);
+    }
+
+    return addresses.reduce((values, currAddr) => {
+      return { ...values, [currAddr.prefix]: currAddr.value };
+    }, {} as PossibleG10LineValues);
   }
 }
