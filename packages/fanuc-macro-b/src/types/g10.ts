@@ -21,10 +21,12 @@ export interface G10ToolOffsets extends G10LineBase {
 
 export type PossibleG10LineValues = G10ToolOffsets | G10WorkOffsets;
 
-export type G10ParseResult = {
-  error: string;
-  result: null;
-} & {
-  error: null;
-  result: PossibleG10LineValues;
-};
+export type G10ParseResult =
+  | {
+      error: string;
+      result: null;
+    }
+  | {
+      error: null;
+      result: PossibleG10LineValues;
+    };

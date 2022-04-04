@@ -15,6 +15,7 @@ import {
   composeToolOffsetRegister,
   composeWorkOffsetAxisRegister
 } from "./composer";
+import { G10Line } from "./G10Line";
 import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
@@ -75,6 +76,19 @@ export class MacroMemory {
    */
   reset(): void {
     Object.keys(this._vars).forEach(register => this.clear(register));
+  }
+
+  /**
+   * Evaluate and read into memory offsets from a G10 line
+   */
+  evalG10(input: string) {
+    const { error, result } = G10Line.parse(input);
+
+    if (result) {
+      this.g10(result);
+    } else {
+      throw Error(error);
+    }
   }
 
   /**
