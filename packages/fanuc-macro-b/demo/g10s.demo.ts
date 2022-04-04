@@ -8,7 +8,7 @@ G10 L11 P9 R.0031
 M30
 %`;
 
-const { parseErrors, result, insights } = program(code);
+const { parseErrors, result } = program(code);
 
 if (parseErrors.length > 0) {
   console.error(parseErrors);

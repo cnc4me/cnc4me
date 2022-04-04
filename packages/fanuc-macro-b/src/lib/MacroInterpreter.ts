@@ -50,7 +50,7 @@ import { Plus, Product } from "./Tokens";
 //   [K: string]: boolean;
 // }
 
-const BaseCstVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
+const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
 
@@ -60,7 +60,7 @@ const debug = Debug("macro:interpreter");
 /**
  * Macro Interpreter
  */
-export class MacroInterpreter extends BaseCstVisitor {
+export class MacroInterpreter extends BaseVisitor {
   events: Emittery = new Emittery();
   logger: MacroLogger = new MacroLogger();
 

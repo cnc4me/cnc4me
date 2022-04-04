@@ -1,9 +1,9 @@
 import { getRandomAxisLocations } from "../../../testing";
 import { MacroMemory } from "../MacroMemory";
 
-const mem = new MacroMemory();
-
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
+  const mem = new MacroMemory();
+
   it.each`
     P     | xReg    | yReg    | zReg    | bReg
     ${1}  | ${7001} | ${7002} | ${7003} | ${7004}

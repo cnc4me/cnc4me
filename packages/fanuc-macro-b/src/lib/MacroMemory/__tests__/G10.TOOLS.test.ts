@@ -11,8 +11,9 @@ import { MacroMemory } from "../MacroMemory";
  * L13 = Tool Diameter Geometry
  * ```
  */
-const mem = new MacroMemory();
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
+  const mem = new MacroMemory();
+
   it.each`
     register | L     | P      | R
     ${10001} | ${10} | ${1}   | ${rand(0, 12)}

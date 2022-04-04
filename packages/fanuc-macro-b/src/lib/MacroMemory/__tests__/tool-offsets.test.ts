@@ -1,8 +1,8 @@
 import { MacroMemory } from "../MacroMemory";
 
-const mem = new MacroMemory();
-
 describe("testing the MacroMemory's *ToolOffset* methods", () => {
+  const mem = new MacroMemory();
+
   it("can set tool length by number and read by address.", () => {
     mem.setToolLength(1, 6.2341);
     mem.setToolLength(10, 3.4266);

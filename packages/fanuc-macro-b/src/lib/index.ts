@@ -1,5 +1,4 @@
 export * from "./AddressInsight";
-export * from "./G10Line";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
 export * from "./MacroLogger";

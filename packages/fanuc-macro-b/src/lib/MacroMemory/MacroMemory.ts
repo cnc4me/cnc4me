@@ -1,20 +1,30 @@
 import Debug from "debug";
-import { each, pick } from "lodash";
+import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
 import { MEMORY } from "../../PackageConfig";
-import type { AxisLocations, G10Line, ToolOffsetValues, UpdatedValue } from "../../types";
-import { createToolchain, range } from "../../utils";
-import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
+import type {
+  AxisLocations,
+  PossibleG10LineValues,
+  ToolOffsetValues,
+  UpdatedValue
+} from "../../types";
+import { range } from "../../utils";
 import {
   composeAuxWorkOffsetAxisRegister,
   composeToolOffsetRegister,
   composeWorkOffsetAxisRegister
-} from "./MemoryMap/composer";
+} from "./composer";
+import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
+
+const { WORK, TOOL } = OFFSET_GROUPS;
+
+const getPositions = (partialG10: Partial<AxisLocations>) => pick(partialG10, ["X", "Y", "Z", "B"]);
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const debug = Debug("macro:memory");
-debug.enabled = true;
+
+// debug.enabled = true;
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -23,34 +33,6 @@ export class MacroMemory {
   private _config = MEMORY;
   private _vars: Record<number, number> = {};
 
-  get G53(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(53);
-  }
-
-  get G54(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(54);
-  }
-
-  get G55(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(55);
-  }
-
-  get G56(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(56);
-  }
-
-  get G57(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(57);
-  }
-
-  get G58(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(58);
-  }
-
-  get G59(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(59);
-  }
-
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
    */
@@ -58,20 +40,6 @@ export class MacroMemory {
     this.write(GROUP_3, mode ?? 90);
 
     range(1, 14000).forEach(idx => this.clear(idx));
-  }
-
-  /**
-   * Get locations from a `G54.1 Pnnn` work offset
-   */
-  G54_1(group: number): AxisLocations {
-    const axisReg = (axis: string) => composeAuxWorkOffsetAxisRegister(group, axis);
-
-    return {
-      X: this.read(axisReg("X")),
-      Y: this.read(axisReg("Y")),
-      Z: this.read(axisReg("Z")),
-      B: this.read(axisReg("B"))
-    };
   }
 
   /**
@@ -96,57 +64,28 @@ export class MacroMemory {
   }
 
   /**
-   * Increment a value in a register
-   */
-  increment(key: number, value: number): UpdatedValue {
-    const prev = this._vars[key];
-
-    this._vars[key] = prev + value;
-
-    return {
-      prev,
-      curr: this._vars[key]
-    };
-  }
-
-  /**
    * Clear a register value by writing `NaN`
    */
-  clear(register: number): void {
-    this._vars[register] = NaN;
+  clear(register: number | string): void {
+    this._vars[typeof register === "string" ? parseInt(register) : register] = NaN;
   }
 
   /**
    * Clear all registers and reset the memory
    */
   reset(): void {
-    Object.keys(this._vars).forEach(register => {
-      this.clear(parseInt(register));
-    });
-  }
-
-  evalG10(g10Line: string) {
-    const { withParser } = createToolchain({ preloadInput: g10Line });
-
-    const result = withParser(parser => parser.Line());
-
-    console.log(result);
+    Object.keys(this._vars).forEach(register => this.clear(register));
   }
 
   /**
    * Evaluate a G10 line to extract values
    */
-  g10(g10: G10Line) {
+  g10(g10: PossibleG10LineValues) {
     debug("Evaluating G10 line", g10);
 
-    const getPositions = (partialG10: Partial<AxisLocations>) =>
-      pick(partialG10, ["X", "Y", "Z", "B"]);
-
-    const { WORK, TOOL } = OFFSET_GROUPS;
-
-    return match<G10Line>(g10)
+    return match<PossibleG10LineValues>(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
-        this.setCommonWorkOffset(P + 53, getPositions(rest));
+        this.setCommonWorkOffset(P, getPositions(rest));
       })
       .with({ L: WORK.AUX }, ({ P, ...rest }) => {
         this.setAuxWorkOffset(P, getPositions(rest));
@@ -167,6 +106,35 @@ export class MacroMemory {
         debug(v);
         throw Error("INVALID `L` ADDRESS");
       });
+  }
+
+  /**
+   * Get locations from a `G54.1 Pnnn` work offset
+   */
+  G54_1(group: number): AxisLocations {
+    const axisReg = (axis: string) => composeAuxWorkOffsetAxisRegister(group, axis);
+
+    return {
+      X: this.read(axisReg("X")),
+      Y: this.read(axisReg("Y")),
+      Z: this.read(axisReg("Z")),
+      B: this.read(axisReg("B"))
+    };
+  }
+
+  /**
+   * Create an array of all the set macro variables
+   */
+  toArray(): [register: number, value: number][] {
+    const valueArr: [register: number, value: number][] = [];
+
+    Object.entries(this._vars).forEach(([register, value]) => {
+      if (!isNaN(value)) {
+        valueArr.push([parseInt(register), value]);
+      }
+    });
+
+    return valueArr;
   }
 
   /**
@@ -244,8 +212,6 @@ export class MacroMemory {
    * Use in program: `G54 X0 Y0`
    */
   setCommonWorkOffset(group: number, locations: Partial<AxisLocations>) {
-    this._validateWorkOffset(group);
-
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeWorkOffsetAxisRegister(group, axis);
 
@@ -267,19 +233,32 @@ export class MacroMemory {
     });
   }
 
-  /**
-   * Create an array of all the set macro variables
-   */
-  toArray(): [register: number, value: number][] {
-    const valueArr: [register: number, value: number][] = [];
+  get G53(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(53);
+  }
 
-    Object.entries(this._vars).forEach(([register, value]) => {
-      if (!isNaN(value)) {
-        valueArr.push([parseInt(register), value]);
-      }
-    });
+  get G54(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(54);
+  }
 
-    return valueArr;
+  get G55(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(55);
+  }
+
+  get G56(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(56);
+  }
+
+  get G57(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(57);
+  }
+
+  get G58(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(58);
+  }
+
+  get G59(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(59);
   }
 
   /**
@@ -319,6 +298,20 @@ export class MacroMemory {
   }
 
   /**
+   * Increment the value of a register instead of writing the value.
+   */
+  private _increment(key: number, increment: number): UpdatedValue {
+    const prev = this._vars[key];
+
+    this._vars[key] = prev + increment;
+
+    return {
+      prev,
+      curr: this._vars[key]
+    };
+  }
+
+  /**
    * Check the given tool number against validation rules
    */
   // private _validateToolNumber(toolNum: number) {
@@ -336,13 +329,13 @@ export class MacroMemory {
   /**
    * Check the given offset number against validation rules
    */
-  private _validateWorkOffset(workOffset: number) {
-    debug("Validating offset number", { workOffset });
+  // private _validateWorkOffset(workOffset: number) {
+  //   debug("Validating offset number", { workOffset });
 
-    if (workOffset >= 60) {
-      throw Error(`(${workOffset}) exceeds configured maximum. (54 - 59)`);
-    } else if (workOffset <= 52) {
-      throw Error(`(${workOffset}) exceeds configured minimum. (54 - 59)`);
-    }
-  }
+  //   if (workOffset >= 60) {
+  //     throw Error(`(${workOffset}) exceeds configured maximum. (54 - 59)`);
+  //   } else if (workOffset <= 52) {
+  //     throw Error(`(${workOffset}) exceeds configured minimum. (54 - 59)`);
+  //   }
+  // }
 }

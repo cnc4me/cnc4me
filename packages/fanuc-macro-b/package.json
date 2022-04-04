@@ -26,6 +26,7 @@
     "ts-pattern": "^3.3.5"
   },
   "devDependencies": {
+    "@chevrotain/types": "^10.1.2",
     "@cnc4me/chevrotain-jest-extension": "workspace:*",
     "@cnc4me/chevrotain-types-generator": "workspace:*",
     "@cnc4me/jest-matchers": "workspace:*",

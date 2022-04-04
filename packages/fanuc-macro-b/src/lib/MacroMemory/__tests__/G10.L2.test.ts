@@ -1,17 +1,18 @@
 import { getRandomAxisLocations } from "../../../testing";
+import { AxisLocations } from "../../../types";
 import { MacroMemory } from "../MacroMemory";
 
-const mem = new MacroMemory();
-
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {
-  let randomLocations = {};
+  const mem = new MacroMemory();
+
+  let testPoint = {} as AxisLocations;
 
   beforeEach(() => {
-    randomLocations = getRandomAxisLocations();
+    testPoint = getRandomAxisLocations();
   });
 
   it("can set `G53` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 0, X, Y, Z, B });
 
@@ -27,7 +28,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G54` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 1, X, Y, Z, B });
 
@@ -43,7 +44,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G55` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 2, X, Y, Z, B });
 
@@ -59,7 +60,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G56` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 3, X, Y, Z, B });
 
@@ -75,7 +76,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G57` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 4, X, Y, Z, B });
 
@@ -91,7 +92,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G58` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 5, X, Y, Z, B });
 
@@ -107,7 +108,7 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
   });
 
   it("can set `G59` work offsets via G10 line.", () => {
-    const { X, Y, Z, B } = getRandomAxisLocations();
+    const { X, Y, Z, B } = testPoint;
 
     mem.g10({ L: 2, P: 6, X, Y, Z, B });
 

@@ -20,11 +20,12 @@ describe("testing methods for composing memory addresses", () => {
 
   it.each`
     register | group | axis
-    ${5201}  | ${1}  | ${"X"}
-    ${5223}  | ${2}  | ${"Z"}
-    ${5241}  | ${3}  | ${"X"}
-    ${5302}  | ${6}  | ${"Y"}
-    ${5324}  | ${7}  | ${"B"}
+    ${5221}  | ${1}  | ${"X"}
+    ${5243}  | ${2}  | ${"Z"}
+    ${5261}  | ${3}  | ${"X"}
+    ${5282}  | ${4}  | ${"Y"}
+    ${5304}  | ${5}  | ${"B"}
+    ${5323}  | ${6}  | ${"Z"}
   `("composeWorkOffsetAxisRegister($group, '$axis') = $register", ({ register, group, axis }) => {
     const address = composeWorkOffsetAxisRegister(group, axis);
 
