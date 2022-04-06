@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=ASIN[1]
@@ -6,22 +6,22 @@ const code = `
 #3=ASIN[${Math.sqrt(3) / 2}]`;
 
 describe("function: ASIN[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate ASIN[1]", () => {
-    expect(result.get(1)).toBe(90);
+    expect(Memory.read(1)).toBe(90);
   });
 
   it("can calculate ASIN[x] (√2 / 2)", () => {
-    expect(result.get(2)).toBeWithinTolerance(45, 1e-14);
+    expect(Memory.read(2)).toBeWithinTolerance(45, 1e-14);
   });
 
   it("can calculate ASIN[x] (√3 / 2)", () => {
-    expect(result.get(3)).toBeWithinTolerance(60, 1e-14);
+    expect(Memory.read(3)).toBeWithinTolerance(60, 1e-14);
   });
 });

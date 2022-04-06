@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=COS[5]
@@ -9,34 +9,34 @@ const code = `
 #6=COS[90]`;
 
 describe("function: COS[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate COS[5]", () => {
-    expect(result.get(1)).toBeWithinTolerance(0.99619, 1e-5);
+    expect(Memory.read(1)).toBeWithinTolerance(0.99619, 1e-5);
   });
 
   it("can calculate COS[15]", () => {
-    expect(result.get(2)).toBeWithinTolerance(0.96593, 1e-5);
+    expect(Memory.read(2)).toBeWithinTolerance(0.96593, 1e-5);
   });
 
   it("can calculate COS[30]", () => {
-    expect(result.get(3)).toBeWithinTolerance(0.86603, 1e-5);
+    expect(Memory.read(3)).toBeWithinTolerance(0.86603, 1e-5);
   });
 
   it("can calculate COS[45]", () => {
-    expect(result.get(4)).toBeWithinTolerance(0.70711, 1e-5);
+    expect(Memory.read(4)).toBeWithinTolerance(0.70711, 1e-5);
   });
 
   it("can calculate COS[60]", () => {
-    expect(result.get(5)).toBeWithinTolerance(0.5, 1e-14);
+    expect(Memory.read(5)).toBeWithinTolerance(0.5, 1e-14);
   });
 
   it("can calculate COS[90]", () => {
-    expect(result.get(6)).toBeWithinTolerance(0, 1e-16);
+    expect(Memory.read(6)).toBeWithinTolerance(0, 1e-16);
   });
 });

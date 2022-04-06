@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=ATAN[1]
@@ -6,22 +6,22 @@ const code = `
 #3=ATAN[${Math.sqrt(3)}]`;
 
 describe("function: ATAN[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate ATAN[1]", () => {
-    expect(result.get(1)).toBe(45);
+    expect(Memory.read(1)).toBe(45);
   });
 
   it("can calculate ATAN[0.5773502691896258] (1/√3)", () => {
-    expect(result.get(2)).toBeWithinTolerance(30, 1e-14);
+    expect(Memory.read(2)).toBeWithinTolerance(30, 1e-14);
   });
 
   it("can calculate ATAN[1.7320508075688772] (√3)", () => {
-    expect(result.get(3)).toBeWithinTolerance(60, 1e-14);
+    expect(Memory.read(3)).toBeWithinTolerance(60, 1e-14);
   });
 });

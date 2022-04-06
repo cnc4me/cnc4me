@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=SQRT[2]
@@ -8,30 +8,30 @@ const code = `
 #5=SQRT[3173]`;
 
 describe("function: SQRT[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate SQRT[2]", () => {
-    expect(result.get(1)).toBeWithinTolerance(1.41421, 1e-5);
+    expect(Memory.read(1)).toBeWithinTolerance(1.41421, 1e-5);
   });
 
   it("can calculate SQRT[36]", () => {
-    expect(result.get(2)).toBe(6);
+    expect(Memory.read(2)).toBe(6);
   });
 
   it("can calculate SQRT[49]", () => {
-    expect(result.get(3)).toBe(7);
+    expect(Memory.read(3)).toBe(7);
   });
 
   it("can calculate SQRT[144]", () => {
-    expect(result.get(4)).toBe(12);
+    expect(Memory.read(4)).toBe(12);
   });
 
   it("can calculate SQRT[3173]", () => {
-    expect(result.get(5)).toBeWithinTolerance(56.32939, 1e-5);
+    expect(Memory.read(5)).toBeWithinTolerance(56.32939, 1e-5);
   });
 });

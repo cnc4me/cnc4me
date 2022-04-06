@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=FIX[5.251]
@@ -7,26 +7,26 @@ const code = `
 #4=FIX[100]`;
 
 describe("function: FIX[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate FIX[5.251]", () => {
-    expect(result.get(1)).toBe(5);
+    expect(Memory.read(1)).toBe(5);
   });
 
   it("can calculate FIX[-2.736]", () => {
-    expect(result.get(2)).toBe(-3);
+    expect(Memory.read(2)).toBe(-3);
   });
 
   it("can calculate FIX[0.001]", () => {
-    expect(result.get(3)).toBe(0);
+    expect(Memory.read(3)).toBe(0);
   });
 
   it("can calculate FIX[100]", () => {
-    expect(result.get(4)).toBe(100);
+    expect(Memory.read(4)).toBe(100);
   });
 });

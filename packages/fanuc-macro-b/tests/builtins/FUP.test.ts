@@ -1,4 +1,4 @@
-import { interpret } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=FUP[5.251]
@@ -7,26 +7,26 @@ const code = `
 #4=FUP[9.004]`;
 
 describe("function: FUP[]", () => {
-  const { interpreter, parseErrors } = interpret(code, "lines");
-  const result = interpreter.getMacros();
+  const { parser, interpreter } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can calculate FUP[5.251]", () => {
-    expect(result.get(1)).toBe(6);
+    expect(Memory.read(1)).toBe(6);
   });
 
   it("can calculate FUP[-2.136]", () => {
-    expect(result.get(2)).toBe(-2);
+    expect(Memory.read(2)).toBe(-2);
   });
 
   it("can calculate FUP[0.001]", () => {
-    expect(result.get(3)).toBe(1);
+    expect(Memory.read(3)).toBe(1);
   });
 
   it("can calculate FUP[9.004]", () => {
-    expect(result.get(4)).toBe(10);
+    expect(Memory.read(4)).toBe(10);
   });
 });
