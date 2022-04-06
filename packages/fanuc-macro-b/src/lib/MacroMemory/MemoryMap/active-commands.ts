@@ -1,9 +1,0 @@
-export const CURRENT_B = 4102;
-export const CURRENT_D = 4107;
-export const CURRENT_F = 4109;
-export const CURRENT_H = 4111;
-export const CURRENT_M = 4113;
-export const CURRENT_N_LINE = 4114;
-export const CURRENT_PROGRAM_NUMBER = 4115;
-export const CURRENT_S = 4119;
-export const CURRENT_T = 4120;

@@ -1,22 +1,22 @@
 import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
-import { MEMORY } from "../../PackageConfig";
 import type {
   AxisLocations,
   PossibleG10LineValues,
   ToolOffsetValues,
   UpdatedValue
 } from "../../types";
-import { range } from "../../utils";
+// import { range } from "../../utils";
 import { memory as debug } from "../debuggers";
 import {
   composeAuxWorkOffsetAxisRegister,
   composeToolOffsetRegister,
   composeWorkOffsetAxisRegister
 } from "./composer";
-import { G10Line } from "./G10Line";
-import { GROUP_3, OFFSET_GROUPS } from "./MemoryMap";
+import { OFFSET_GROUPS } from "./constants";
+import { parseG10 } from "./g10-tools";
+import { GROUP_3 } from "./register-map";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
 const getPositions = (locations: Partial<AxisLocations>) => pick(locations, ["X", "Y", "Z", "B"]);
@@ -25,7 +25,6 @@ const getPositions = (locations: Partial<AxisLocations>) => pick(locations, ["X"
  * A Representaion of a CNC machines' macro memory.
  */
 export class MacroMemory {
-  private _config = MEMORY;
   private _vars: Record<number, number> = {};
 
   /**
@@ -34,7 +33,7 @@ export class MacroMemory {
   constructor(mode?: number) {
     this.write(GROUP_3, mode ?? 90);
 
-    range(1, 14000).forEach(idx => this.clear(idx));
+    // range(1, 14000).forEach(idx => this.clear(idx));
   }
 
   /**
@@ -51,6 +50,8 @@ export class MacroMemory {
     const prev = this._vars[key];
 
     this._vars[key] = value;
+
+    debug("writing", value, "to #", key);
 
     return {
       prev,
@@ -76,7 +77,7 @@ export class MacroMemory {
    * Evaluate and read into memory offsets from a G10 line
    */
   evalG10(input: string) {
-    const { error, result } = G10Line.parse(input);
+    const { error, result } = parseG10(input);
 
     if (result) {
       this.g10(result);

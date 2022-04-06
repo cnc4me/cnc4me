@@ -1,5 +1,5 @@
-import { G10Line } from "../G10Line";
-import { OFFSET_GROUPS } from "../MemoryMap";
+import { OFFSET_GROUPS } from "../../MacroMemory/constants";
+import { parseG10 } from "../g10-tools";
 
 /**
  * G10 Line Reference
@@ -23,10 +23,10 @@ const G10_LINES = {
   T298_DIAMETER_COMP: "G10 L12 P298 R-.0012"
 };
 
-describe("testing the G10Line.parse() method for extracting adresses and values", () => {
+describe("testing the parseG10() method for extracting adresses and values", () => {
   describe("extracting X, Y, Z, and B values", () => {
     it(`can get values for G54 via ${G10_LINES.G54}`, () => {
-      const result = G10Line.parse(G10_LINES.G54);
+      const result = parseG10(G10_LINES.G54);
 
       expect(result).toMatchObject({
         error: null,
@@ -42,7 +42,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
     });
 
     it(`can get values for G55 via ${G10_LINES.G55}`, () => {
-      const result = G10Line.parse(G10_LINES.G55);
+      const result = parseG10(G10_LINES.G55);
 
       expect(result).toMatchObject({
         error: null,
@@ -58,7 +58,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
     });
 
     it(`can get values for G54.1 P7 via ${G10_LINES.G54_1_P7}`, () => {
-      const result = G10Line.parse(G10_LINES.G54_1_P7);
+      const result = parseG10(G10_LINES.G54_1_P7);
 
       expect(result).toMatchObject({
         error: null,
@@ -76,7 +76,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
 
   describe("extracting P and R values", () => {
     it(`can get values for T5 (height) via ${G10_LINES.T5_LENGTH}`, () => {
-      const result = G10Line.parse(G10_LINES.T5_LENGTH);
+      const result = parseG10(G10_LINES.T5_LENGTH);
 
       expect(result).toMatchObject({
         error: null,
@@ -89,7 +89,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
     });
 
     it(`can get values for T156 (height comp.) via ${G10_LINES.T156_LENGTH_COMP}`, () => {
-      const result = G10Line.parse(G10_LINES.T156_LENGTH_COMP);
+      const result = parseG10(G10_LINES.T156_LENGTH_COMP);
 
       expect(result).toMatchObject({
         error: null,
@@ -102,7 +102,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
     });
 
     it(`can get values for T33 (diameter) via ${G10_LINES.T33_DIAMETER}`, () => {
-      const result = G10Line.parse(G10_LINES.T33_DIAMETER);
+      const result = parseG10(G10_LINES.T33_DIAMETER);
 
       expect(result).toMatchObject({
         error: null,
@@ -115,7 +115,7 @@ describe("testing the G10Line.parse() method for extracting adresses and values"
     });
 
     it(`can get values for T298 (diameter comp.) via ${G10_LINES.T298_DIAMETER_COMP}`, () => {
-      const result = G10Line.parse(G10_LINES.T298_DIAMETER_COMP);
+      const result = parseG10(G10_LINES.T298_DIAMETER_COMP);
 
       expect(result).toMatchObject({
         error: null,
