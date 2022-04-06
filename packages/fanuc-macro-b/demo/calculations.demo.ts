@@ -15,4 +15,6 @@ const code = `
 const { interpreter } = lines(code);
 const { Memory } = interpreter;
 
-console.log(Memory.toArray());
+// console.log(Memory.toMap());
+console.log(Memory.toJson());
+// console.log(Memory.toArray());

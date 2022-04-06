@@ -132,21 +132,6 @@ export class MacroMemory {
   }
 
   /**
-   * Create an array of all the set macro variables
-   */
-  toArray(): [register: number, value: number][] {
-    const valueArr: [register: number, value: number][] = [];
-
-    Object.entries(this._vars).forEach(([register, value]) => {
-      if (!isNaN(value)) {
-        valueArr.push([parseInt(register), value]);
-      }
-    });
-
-    return valueArr;
-  }
-
-  /**
    * Get all tool offset values for a tool number
    */
   getToolOffsets(toolNum: number): ToolOffsetValues {
@@ -240,6 +225,43 @@ export class MacroMemory {
 
       this.write(target, value);
     });
+  }
+
+  /**
+   * Create an array of all the set macro variables
+   */
+  toArray(): [register: number, value: number][] {
+    const valueArr: [register: number, value: number][] = [];
+
+    Object.entries(this._vars).forEach(([register, value]) => {
+      if (!isNaN(value)) {
+        valueArr.push([parseInt(register), value]);
+      }
+    });
+
+    return valueArr;
+  }
+
+  /**
+   * Collect all the set registers into a POJO for further processing
+   */
+  toObject(): Record<number, number> {
+    const valueMap: Record<number, number> = {};
+
+    Object.entries(this._vars).forEach(([register, value]) => {
+      if (!isNaN(value)) {
+        valueMap[parseInt(register)] = value;
+      }
+    });
+
+    return valueMap;
+  }
+
+  /**
+   * Serialize all the set registers to a JSON string
+   */
+  toJson(): string {
+    return JSON.stringify(this.toObject());
   }
 
   get G53(): AxisLocations {

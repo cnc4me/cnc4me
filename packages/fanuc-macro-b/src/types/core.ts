@@ -1,4 +1,4 @@
-import type { CstNode, ILexingError, IRecognitionException } from "chevrotain";
+import type { ILexingError, IRecognitionException } from "chevrotain";
 
 import type { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
 import type { ParsedLineData } from "./parsed";
