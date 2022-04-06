@@ -83,7 +83,7 @@ export class MacroRuntime {
       void this._events.emit("error", this._parser.errors);
     }
 
-    const result = this._interpreter.visit(cst) as InterpretedProgram;
+    const result = this._interpreter.visit(cst);
 
     return { beginExec, result } as RuntimeOutput;
   }
@@ -121,9 +121,9 @@ export class MacroRuntime {
     this._tokenizeForParsing(code);
     // this._tokenizeActiveProgram();
 
-    const cst = this._parser.program();
+    const programCst = this._parser.program();
 
-    return this._interpreter.visit(cst) as InterpretedProgram;
+    return this._interpreter.visit(programCst);
   }
 
   /**

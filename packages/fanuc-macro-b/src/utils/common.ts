@@ -13,9 +13,9 @@ export function unbox<T>(arr: T | T[]): T {
 /**
  * Get the contents of a parenthesis wrapped comment.
  *
- * @example unwrap("( tacos )") = "tacos"
+ * @example unwrapComment("( tacos )") = "tacos"
  */
-export function unwrap(comment: string): string {
+export function unwrapComment(comment: string): string {
   return comment.replace(/^\(/, "").replace(/\)$/, "").trim();
 }
 
@@ -36,7 +36,7 @@ export function zeroPad(input: number | string) {
 /**
  * Trim the first alphabetic character from a string
  */
-export function trimLeadingChar(address: string): string {
+export function stripFirstChar(address: string): string {
   return address.replace(/^[A-Z]/, "");
 }
 

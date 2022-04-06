@@ -8,6 +8,7 @@
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest",
+    "test:mem": "jest MacroMemory",
     "build": "tsc -b -v tsconfig.lib.json",
     "repl": "tsnd ./demo/repl.demo.ts",
     "types2": "tsnd ./scripts/gen_v2.ts",

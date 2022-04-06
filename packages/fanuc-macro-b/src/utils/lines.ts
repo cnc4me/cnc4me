@@ -1,15 +1,18 @@
-import { ErrorsAndResultOf, InterpretedLines } from "../types";
+import type { MacroInterpreter, MacroParser } from "../lib";
+import type { InterpretedLines } from "../types";
 import { createToolchain } from "./createToolchain";
+
+interface LinesOutput {
+  parser: MacroParser;
+  result: InterpretedLines;
+  interpreter: MacroInterpreter;
+}
 
 /**
  * Analyze a text in the context of being a valid NC program
  */
-export function lines(input: string): ErrorsAndResultOf<InterpretedLines> {
-  const { parser, lexer, interpreter } = createToolchain();
-
-  const { tokens, errors } = lexer.tokenize(input);
-
-  parser.input = tokens;
+export function lines(input: string): LinesOutput {
+  const { parser, interpreter } = createToolchain({ preloadInput: input });
 
   const cst = parser.lines();
 
@@ -17,7 +20,7 @@ export function lines(input: string): ErrorsAndResultOf<InterpretedLines> {
 
   return {
     result,
-    lexingErrors: errors,
-    parseErrors: parser.errors
+    parser,
+    interpreter
   };
 }

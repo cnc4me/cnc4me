@@ -1,6 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
-import Debug from "debug";
 import Emittery from "emittery";
 import { match } from "ts-pattern";
 
@@ -34,42 +33,33 @@ import {
   hasDwell,
   parseNumber,
   radianToDegree,
-  trimLeadingChar,
+  stripFirstChar,
   unbox,
-  unwrap
+  unwrapComment
 } from "../utils";
 import { AddressInsight } from "./AddressInsight";
+import { interpreter as debug } from "./debuggers";
 // import { G10Line } from "./G10Line";
-import { LoggerConfig, MacroLogger } from "./MacroLogger";
 import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
-// interface GcodeFlags {
-//   [K: string]: boolean;
-// }
-
 const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
-
-// eslint-disable-next-line @typescript-eslint/no-unused-vars
-const debug = Debug("macro:interpreter");
 
 /**
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseVisitor {
   events: Emittery = new Emittery();
-  logger: MacroLogger = new MacroLogger();
-
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
   private _mem: MacroMemory = new MacroMemory();
   private _insights: Record<string, AddressInsight> = {};
 
-  get Offsets() {
+  get Memory() {
     return this._mem;
   }
 
@@ -80,10 +70,6 @@ export class MacroInterpreter extends BaseVisitor {
   constructor() {
     super();
     this.validateVisitor();
-  }
-
-  onLog(listener: LoggerConfig["listener"]) {
-    this.logger.tap(listener);
   }
 
   /**
@@ -104,8 +90,9 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx.Line) {
       for (const line of ctx.Line) {
-        const vLine = this.Line(line.children);
-
+        debug(line);
+        const vLine = this.visit(line);
+        debug(vLine);
         lines.push(vLine);
       }
     }
@@ -121,7 +108,7 @@ export class MacroInterpreter extends BaseVisitor {
     const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
 
     return {
-      programTitle: unwrap(comment),
+      programTitle: unwrapComment(comment),
       programNumber: parseInt(node.payload)
     };
   }
@@ -142,7 +129,8 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx?.Comment) {
       for (const comment of ctx.Comment) {
-        parsed.comments.push(unwrap(getImage(comment)));
+        const rawComment = getImage(comment);
+        parsed.comments.push(unwrapComment(rawComment));
       }
     }
 
@@ -163,7 +151,14 @@ export class MacroInterpreter extends BaseVisitor {
     }
 
     if (ctx?.LineNumber) {
-      parsed.N = parseInt(trimLeadingChar(getImage(ctx.LineNumber)));
+      const rawLineNumber = getImage(ctx.LineNumber);
+      parsed.N = parseInt(stripFirstChar(rawLineNumber));
+    }
+
+    if (ctx?.variableAssignment) {
+      const { children } = unbox(ctx.variableAssignment);
+      const register = this.variableAssignment(children);
+      debug(register);
     }
 
     if (ctx?.AddressedValue) {
@@ -215,10 +210,10 @@ export class MacroInterpreter extends BaseVisitor {
   /**
    * A Macro Variable, defined as a `#` and a number
    */
-  VariableLiteral(ctx: VariableLiteralCstChildren) {
+  VariableLiteral(ctx: VariableLiteralCstChildren): VariableRegister {
     const register = parseInt(getImage(ctx.Integer));
 
-    return this.getMacro(register);
+    return this.getMacroRegister(register);
   }
 
   /**
@@ -241,35 +236,39 @@ export class MacroInterpreter extends BaseVisitor {
   /**
    * Update a macro variable regsiter with a value
    */
-  variableAssignment(ctx: VariableAssignmentCstChildren) {
+  variableAssignment(ctx: VariableAssignmentCstChildren): VariableRegister {
     const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
-    const values: WatcherValuePayload = {
+    const payload: WatcherValuePayload = {
       register: macro.register,
       curr: NaN,
       prev: macro.value
     };
 
-    const value = this.expression(ctx.expression[0].children);
+    const { children } = unbox(ctx.expression);
+    const value = this.expression(children);
 
-    values.curr = value;
-
-    this.setMacroValue(macro.register, value);
+    payload.curr = value;
 
     /**
      * @TODO remove the watches for events
      */
     if (this.varWatches[macro.register]) {
-      this.varWatches[macro.register](values);
+      this.varWatches[macro.register](payload);
     }
+
+    return this.setMacroValue(macro.register, value);
   }
 
-  expression(ctx: ExpressionCstChildren) {
-    return this.additionExpression(ctx.additionExpression[0].children);
+  expression(ctx: ExpressionCstChildren): number {
+    const { children } = unbox(ctx.additionExpression);
+    return this.additionExpression(children);
   }
 
   functionExpression(ctx: FunctionExpressionCstChildren): number {
     const func = getImage(ctx.BuiltinFunctions);
-    const value = this.atomicExpression(ctx.atomicExpression[0].children);
+
+    const { children } = unbox(ctx.atomicExpression);
+    const value = this.atomicExpression(children);
 
     // prettier-ignore
     const result = match(func)
@@ -290,7 +289,7 @@ export class MacroInterpreter extends BaseVisitor {
     return result;
   }
 
-  additionExpression(ctx: AdditionExpressionCstChildren) {
+  additionExpression(ctx: AdditionExpressionCstChildren): number {
     let result = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as
@@ -304,10 +303,10 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.AdditionOperator[idx];
 
           if (tokenMatcher(operator, Plus)) {
-            this.logger.operation(result, "+", rhsValue);
+            debug(result, "+", rhsValue);
             result += rhsValue;
           } else {
-            this.logger.operation(result, "-", rhsValue);
+            debug(result, "-", rhsValue);
             result -= rhsValue;
           }
         }
@@ -317,7 +316,7 @@ export class MacroInterpreter extends BaseVisitor {
     return result;
   }
 
-  multiplicationExpression(ctx: MultiplicationExpressionCstChildren) {
+  multiplicationExpression(ctx: MultiplicationExpressionCstChildren): number {
     let result = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
@@ -330,10 +329,10 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.MultiplicationOperator[idx];
 
           if (tokenMatcher(operator, Product)) {
-            this.logger.operation(result, "*", rhsValue);
+            debug(result, "*", rhsValue);
             result *= rhsValue;
           } else {
-            this.logger.operation(result, "/", rhsValue);
+            debug(result, "/", rhsValue);
             result /= rhsValue;
           }
         }
@@ -343,7 +342,7 @@ export class MacroInterpreter extends BaseVisitor {
     return result;
   }
 
-  atomicExpression(ctx: AtomicExpressionCstChildren) {
+  atomicExpression(ctx: AtomicExpressionCstChildren): number {
     if (ctx.bracketExpression) {
       return this.bracketExpression(ctx.bracketExpression[0].children);
     } else if (ctx.NumericLiteral) {
@@ -354,7 +353,7 @@ export class MacroInterpreter extends BaseVisitor {
       const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
       return macroVar.value;
     } else {
-      return ctx;
+      return NaN;
     }
   }
 
@@ -369,7 +368,7 @@ export class MacroInterpreter extends BaseVisitor {
   /**
    * Retrieve a single macro variable register
    */
-  getMacro(register: number): VariableRegister {
+  getMacroRegister(register: number): VariableRegister {
     const macro = {
       register,
       value: this._mem.read(register) ?? NaN
@@ -381,7 +380,7 @@ export class MacroInterpreter extends BaseVisitor {
   /**
    * Retrieve the macro variable map
    */
-  getMacros(): number[][] {
+  getMacros(): [register: number, value: number][] {
     return this._mem.toArray();
   }
 
@@ -391,9 +390,9 @@ export class MacroInterpreter extends BaseVisitor {
   setMacroValue(register: number, value: number): VariableRegister {
     this._mem.write(register, value);
 
-    this.logger.operation(`#${register}`, "=", value);
+    debug(`#${register}`, "=", value);
 
-    return this.getMacro(register);
+    return this.getMacroRegister(register);
   }
 
   /**
