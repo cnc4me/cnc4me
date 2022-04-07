@@ -5,6 +5,8 @@ import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
 import type {
+  InterpretedProgram,
+  MacroInsights,
   ParsedLineData,
   ProgramIdentifier,
   VariableRegister,
@@ -38,9 +40,8 @@ import {
   unbox,
   unwrapComment
 } from "../utils";
-import { AddressInsight } from "./AddressInsight";
 import { interpreter as debug } from "./debuggers";
-// import { G10Line } from "./G10Line";
+import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
 import { NcAddress } from "./NcAddress";
@@ -58,13 +59,17 @@ export class MacroInterpreter extends BaseVisitor {
   varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
   private _mem: MacroMemory = new MacroMemory();
-  private _insights: Record<string, AddressInsight> = {};
+  private _insights: InsightCollection = new InsightCollection();
 
-  get Memory() {
+  get Memory(): MacroMemory {
     return this._mem;
   }
 
-  get Insights() {
+  set Memory(mem: MacroMemory) {
+    this._mem = mem;
+  }
+
+  get Insights(): InsightCollection {
     return this._insights;
   }
 
@@ -76,7 +81,7 @@ export class MacroInterpreter extends BaseVisitor {
   /**
    * Root Node for valid NC Programs
    */
-  program(ctx: ProgramCstChildren) {
+  program(ctx: ProgramCstChildren): InterpretedProgram {
     const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
     const lines = this.lines(ctx.lines[0].children);
     // const g10s = this._mem.
@@ -118,6 +123,10 @@ export class MacroInterpreter extends BaseVisitor {
    * Get the complete contents of a line of G code
    */
   Line(ctx: LineCstChildren): ParsedLineData {
+    const lineDebug = debug.extend("line", ":");
+
+    lineDebug(ctx);
+
     const parsed: ParsedLineData = {
       N: NaN,
       gCodes: [],
@@ -159,7 +168,7 @@ export class MacroInterpreter extends BaseVisitor {
     if (ctx?.variableAssignment) {
       const { children } = unbox(ctx.variableAssignment);
       const register = this.variableAssignment(children);
-      debug(register);
+      lineDebug(register);
     }
 
     if (ctx?.AddressedValue) {
@@ -171,9 +180,12 @@ export class MacroInterpreter extends BaseVisitor {
     }
 
     if (parsed.gCodeMap["G10"]) {
+      // this.Insights["G10"].collect(ctx.);
       // const g10 = new G10Line({ ...parsed });
       // this._mem.evalG10(g10);
     }
+
+    lineDebug(parsed);
 
     return parsed;
   }
@@ -187,12 +199,10 @@ export class MacroInterpreter extends BaseVisitor {
   ): NcAddress {
     const address = new NcAddress(ctx);
 
-    if (!(address.prefix in this._insights)) {
-      this._insights[address.prefix] = new AddressInsight(address.prefix);
-    }
+    const insight = new AddressInsight(address);
 
     if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
-      this._insights[address.prefix].collect(address);
+      this._insights.collect(insight);
     }
 
     return address;

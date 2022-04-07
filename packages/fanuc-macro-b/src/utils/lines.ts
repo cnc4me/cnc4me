@@ -1,26 +1,17 @@
-import type { MacroInterpreter, MacroParser } from "../lib";
-import type { InterpretedLines } from "../types";
+import type { InterpretedLines, WithTools } from "../types";
 import { createToolchain } from "./createToolchain";
 
-interface LinesOutput {
-  parser: MacroParser;
-  result: InterpretedLines;
-  interpreter: MacroInterpreter;
-}
-
 /**
- * Analyze a text in the context of being a valid NC program
+ * Run lines of text as gcode throught the {@link MacroInterpreter}
  */
-export function lines(input: string): LinesOutput {
+export function lines(input: string): WithTools<InterpretedLines, "parser" | "interpreter"> {
   const { parser, interpreter } = createToolchain({ preloadInput: input });
 
-  const cst = parser.lines();
-
-  const result = interpreter.visit(cst) as InterpretedLines;
+  const linesCst = parser.lines();
 
   return {
-    result,
     parser,
-    interpreter
+    interpreter,
+    result: interpreter.lines(linesCst.children)
   };
 }

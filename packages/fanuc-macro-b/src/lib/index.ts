@@ -1,4 +1,4 @@
-export * from "./AddressInsight";
+export * from "./Insights";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
 export * from "./MacroLogger";

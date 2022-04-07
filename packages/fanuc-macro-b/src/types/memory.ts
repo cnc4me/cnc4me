@@ -10,6 +10,10 @@ export interface UpdatedValue {
   curr: number;
 }
 
+export interface WatcherValuePayload extends UpdatedValue {
+  register: number;
+}
+
 export interface ToolOffsetValues {
   length: number;
   lengthComp: number;

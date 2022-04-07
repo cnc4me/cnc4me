@@ -10,9 +10,11 @@ import type {
   RuntimeEvents,
   RuntimeOutput
 } from "../types";
+import { ProgramCstNode } from "../types/fanuc";
 import { createToolchain, matchProgramNumber } from "../utils";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
+import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 
 function range(x: number, y: number): number[] {
@@ -26,13 +28,14 @@ export class MacroRuntime {
   private _debug = Debug("macro:runtime");
   private _events = new Emittery<RuntimeEvents>();
 
+  private _mem: MacroMemory;
   private _lexer: MacroLexer;
-  private _lexerErrors: ILexingError[] = [];
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
 
   private _activeProgram = NaN;
   private _vars = new Map<number, number>();
+  private _lexerErrors: ILexingError[] = [];
   private _programs: Record<number, string> = {};
 
   get Lexer(): MacroLexer {
@@ -59,12 +62,27 @@ export class MacroRuntime {
     return this._interpreter;
   }
 
+  get Memory(): MacroMemory {
+    return this._mem;
+  }
+
+  get Insights() {
+    return this._interpreter.Insights;
+  }
+
   constructor() {
     const { parser, lexer, interpreter } = createToolchain();
 
     this._lexer = lexer;
     this._parser = parser;
     this._interpreter = interpreter;
+
+    /**
+     * Replace the MacroInterpreter's memory backend
+     * with the runtime's instance of {@link MacroMemory}
+     */
+    this._mem = new MacroMemory();
+    this._interpreter.Memory = this._mem;
 
     this._initializeMacroRegisters();
   }
@@ -77,13 +95,13 @@ export class MacroRuntime {
 
     this._tokenizeActiveProgram();
 
-    const cst = this._parser.program();
+    const programCst = this._parser.program() as ProgramCstNode;
 
     if (this._parser.errors.length > 0) {
       void this._events.emit("error", this._parser.errors);
     }
 
-    const result = this._interpreter.visit(cst);
+    const result = this._interpreter.program(programCst.children);
 
     return { beginExec, result } as RuntimeOutput;
   }
@@ -121,9 +139,9 @@ export class MacroRuntime {
     this._tokenizeForParsing(code);
     // this._tokenizeActiveProgram();
 
-    const programCst = this._parser.program();
+    const programCst = this._parser.program() as ProgramCstNode;
 
-    return this._interpreter.visit(programCst);
+    return this._interpreter.program(programCst.children);
   }
 
   /**

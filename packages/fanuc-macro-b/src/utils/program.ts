@@ -1,23 +1,18 @@
-import { AddressInsight } from "../lib";
-import { InterpretedProgram, LexingErrors, ParsingErrors } from "../types";
+import type { InsightCollection } from "../lib";
+import type { InterpretedProgram, ParsingErrors } from "../types";
 import { createToolchain } from "./createToolchain";
 
 interface ProgramAnalisys {
   result: InterpretedProgram;
-  insights: Record<string, AddressInsight>;
-  parseErrors: ParsingErrors;
-  lexingErrors: LexingErrors;
+  insights: InsightCollection;
+  errors: ParsingErrors;
 }
 
 /**
  * Analyze a text in the context of being a valid NC program
  */
 export function program(input: string): ProgramAnalisys {
-  const { parser, lexer, interpreter } = createToolchain();
-
-  const { tokens, errors } = lexer.tokenize(input);
-
-  parser.input = tokens;
+  const { parser, interpreter } = createToolchain({ preloadInput: input });
 
   const cst = parser.program();
 
@@ -26,7 +21,6 @@ export function program(input: string): ProgramAnalisys {
   return {
     result,
     insights: interpreter.Insights,
-    lexingErrors: errors,
-    parseErrors: parser.errors
+    errors: parser.errors
   };
 }

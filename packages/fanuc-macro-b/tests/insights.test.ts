@@ -36,41 +36,43 @@ M30
 %`;
 
 describe("address Insights", () => {
-  const { parseErrors, insights } = program(code);
+  const { errors, insights } = program(code);
 
-  it("analyzes without errors", () => {
-    expect(parseErrors).toHaveLength(0);
+  it("runs without errors", () => {
+    expect(errors).toHaveLength(0);
   });
 
-  it("extracts insights about G10 lines", () => {
-    expect(insights["G10"]).toHaveLength(1);
+  it.skip("extracts insights about G10 lines", () => {
+    expect(insights.get("G10")).toHaveLength(1);
   });
 
-  it("extracts insights about `B`", () => {
-    expect(insights["B"].toArray()).toHaveLength(2);
-    expect(insights["B"].min).toBe(0);
-    expect(insights["B"].max).toBe(90);
+  it("extracts insights about `B` addresses", () => {
+    expect(insights.get("B")).toHaveLength(1);
+    expect(insights.values("B")).toStrictEqual([90]);
+    expect(insights.max("B")).toBe(90);
   });
 
-  it("extracts insights about `T`", () => {
-    expect(insights["T"].toArray()).toHaveLength(2);
+  it("extracts insights about `T` addresses", () => {
+    expect(insights.get("T")).toHaveLength(2);
+    expect(insights.values("T")).toStrictEqual([43, 162]);
   });
 
-  it("extracts insights about `X`", () => {
-    expect(insights["X"].toArray()).toHaveLength(2);
-    expect(insights["X"].min).toBe(0.75);
-    expect(insights["X"].max).toBe(1.75);
+  it("extracts insights about `X` addresses", () => {
+    expect(insights.values("X")).toHaveLength(3);
+    expect(insights.uniqValues("X")).toHaveLength(2);
+    expect(insights.min("X")).toBe(0.75);
+    expect(insights.max("X")).toBe(1.75);
   });
 
-  it("extracts insights about `Y`", () => {
-    expect(insights["Y"].toArray()).toHaveLength(2);
-    expect(insights["Y"].min).toBe(0.19);
-    expect(insights["Y"].max).toBe(1.81);
+  it("extracts insights about `Y` addresses", () => {
+    expect(insights.get("Y")).toHaveLength(2);
+    expect(insights.min("Y")).toBe(0.19);
+    expect(insights.max("Y")).toBe(1.81);
   });
 
-  it("extracts insights about `Z`", () => {
-    expect(insights["Z"].toArray()).toHaveLength(4);
-    expect(insights["Z"].min).toBe(-0.5631);
-    expect(insights["Z"].max).toBe(7.89);
+  it("extracts insights about `Z` addresses", () => {
+    expect(insights.get("Z")).toHaveLength(3);
+    expect(insights.min("Z")).toBe(-0.5631);
+    expect(insights.max("Z")).toBe(1);
   });
 });

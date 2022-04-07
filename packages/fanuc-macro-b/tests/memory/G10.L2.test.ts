@@ -24,7 +24,6 @@ describe("setting `L2` work offsets with MacroMemory#g10()", () => {
     const { X, Y, Z, B } = getRandomAxisLocations();
 
     mem.g10({ L: 2, P: 1, X, Y, Z, B });
-    console.log(mem.G54);
 
     expect(mem.G54.X).toBe(X);
     expect(mem.G54.Y).toBe(Y);
