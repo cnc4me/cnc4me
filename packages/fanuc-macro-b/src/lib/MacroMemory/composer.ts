@@ -34,7 +34,7 @@ export function composeToolOffsetRegister(group: number, toolNum: number): numbe
  * The arguments `(4, "B")` will produce `5284`
  */
 export function composeWorkOffsetAxisRegister(offset: number, axis: string): number {
-  if (offset < 0) {
+  if (offset < 0 || offset > 6) {
     throw Error(`Cannot compose an offset from input: ${offset}`);
   }
 

@@ -1,4 +1,4 @@
-import { evaluate } from "../src";
+import { lines } from "../src";
 
 const code = `#1=1
 #2=2
@@ -12,22 +12,23 @@ const code = `#1=1
 #10=[[48/#9]+[8*#4]]/[#5+[[#4*3]/2]+3]`;
 
 describe("macros expressions", () => {
-  const { macros, parseErrors } = evaluate(code);
+  const { interpreter, parser } = lines(code);
+  const { Memory } = interpreter;
 
   it("parses with no errors", () => {
-    expect(parseErrors).toHaveLength(0);
+    expect(parser.errors).toHaveLength(0);
   });
 
   it("can interpret variable assignments", () => {
-    expect(macros.get(1)).toBe(1);
-    expect(macros.get(2)).toBe(2);
-    expect(macros.get(3)).toBe(3);
-    expect(macros.get(4)).toBe(4);
-    expect(macros.get(5)).toBe(5);
-    expect(macros.get(6)).toBe(6);
-    expect(macros.get(7)).toBe(3);
-    expect(macros.get(8)).toBe(6);
-    expect(macros.get(9)).toBe(18);
-    expect(macros.get(10)).toBeWithinTolerance(2.47619, 5e-5);
+    expect(Memory.read(1)).toBe(1);
+    expect(Memory.read(2)).toBe(2);
+    expect(Memory.read(3)).toBe(3);
+    expect(Memory.read(4)).toBe(4);
+    expect(Memory.read(5)).toBe(5);
+    expect(Memory.read(6)).toBe(6);
+    expect(Memory.read(7)).toBe(3);
+    expect(Memory.read(8)).toBe(6);
+    expect(Memory.read(9)).toBe(18);
+    expect(Memory.read(10)).toBeWithinTolerance(2.47619, 5e-5);
   });
 });

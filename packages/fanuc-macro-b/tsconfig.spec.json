@@ -3,10 +3,5 @@
   "compilerOptions": {
     "types": ["jest", "chevrotain", "@cnc4me/jest-matchers", "@cnc4me/chevrotain-jest-extension"]
   },
-  "include": [
-    "src/**/*.ts",
-    "tests/**/*.test.ts",
-    "tests/**/*.spec.ts",
-    "src/**/__tests__/*.test.ts"
-  ]
+  "include": ["src/**/*.ts", "tests/**/*.test.ts", "tests/**/*.spec.ts"]
 }

@@ -1,5 +1,5 @@
-import { OFFSET_GROUPS } from "../../MacroMemory/constants";
-import { parseG10 } from "../g10-tools";
+import { OFFSET_GROUPS } from "../../src/lib/MacroMemory/constants";
+import { parseG10 } from "../../src/lib/MacroMemory/g10-tools";
 
 /**
  * G10 Line Reference

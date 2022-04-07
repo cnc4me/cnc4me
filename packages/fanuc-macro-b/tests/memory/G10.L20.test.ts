@@ -1,5 +1,5 @@
-import { getRandomAxisLocations } from "../../../testing";
-import { MacroMemory } from "../MacroMemory";
+import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
+import { getRandomAxisLocations } from "../../src/testing";
 
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
   const mem = new MacroMemory();

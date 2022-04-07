@@ -2,7 +2,7 @@ import {
   composeAuxWorkOffsetAxisRegister,
   composeToolOffsetRegister,
   composeWorkOffsetAxisRegister
-} from "../composer";
+} from "../../src/lib/MacroMemory/composer";
 
 describe("testing methods for composing memory addresses", () => {
   it.each`

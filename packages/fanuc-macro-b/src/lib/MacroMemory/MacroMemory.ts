@@ -265,31 +265,31 @@ export class MacroMemory {
   }
 
   get G53(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(53);
+    return this._getCommonWorkOffsetAxisLocations(0);
   }
 
   get G54(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(54);
+    return this._getCommonWorkOffsetAxisLocations(1);
   }
 
   get G55(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(55);
+    return this._getCommonWorkOffsetAxisLocations(2);
   }
 
   get G56(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(56);
+    return this._getCommonWorkOffsetAxisLocations(3);
   }
 
   get G57(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(57);
+    return this._getCommonWorkOffsetAxisLocations(4);
   }
 
   get G58(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(58);
+    return this._getCommonWorkOffsetAxisLocations(5);
   }
 
   get G59(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(59);
+    return this._getCommonWorkOffsetAxisLocations(6);
   }
 
   /**

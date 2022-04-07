@@ -31,6 +31,7 @@ import {
   degreeToRadian,
   getImage,
   hasDwell,
+  hasG10,
   parseNumber,
   radianToDegree,
   stripFirstChar,
@@ -190,7 +191,7 @@ export class MacroInterpreter extends BaseVisitor {
       this._insights[address.prefix] = new AddressInsight(address.prefix);
     }
 
-    if (!hasDwell(gCodeFlags)) {
+    if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
       this._insights[address.prefix].collect(address);
     }
 

@@ -1,4 +1,4 @@
-import { MacroMemory } from "../MacroMemory";
+import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
 
 describe("testing the MacroMemory's *ToolOffset* methods", () => {
   const mem = new MacroMemory();
