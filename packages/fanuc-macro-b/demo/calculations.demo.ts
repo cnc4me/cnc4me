@@ -1,17 +1,20 @@
 import { lines } from "../src";
 
 const code = `
-G10L20P1X5.2315Y16.9805Z4.3611B0. ( OP1 )
-G10L20P2X-2.2231Y5.5545Z8.0032B90. ( OP2 )
-G10L20P3X6.3021Y8.1200Z6.3512B180. ( OP3 )
-G10L20P4X-5.692Y11.9856Z2.3516B270. ( OP4 )
-N10#1=5
-N20#2=4
-N30#3=3
-N40#4=[#1 + #2] * #3`;
+G10 L20 P1 X5.2315 Y16.9805 Z4.3611 B0. ( OP1 )
+G10 L20 P2 X-2.2231 Y5.5545 Z8.0032 B90. ( OP2 )
+G10 L20 P3 X6.3021 Y8.1200 Z6.3512 B180. ( OP3 )
+G10 L20 P4 X-5.692 Y11.9856 Z2.3516 B270. ( OP4 )
+N10 #1=5
+N20 #2=4
+N30 #3=3
+N40 #4=[#1 + #2] * #3`;
 
 const { interpreter } = lines(code);
 const { Memory } = interpreter;
 
-console.log(Memory.toJson());
-// console.log(Memory.toArray());
+const serialized = Memory.serialize();
+
+console.log(serialized);
+
+console.log(JSON.parse(serialized));

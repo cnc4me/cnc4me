@@ -9,7 +9,8 @@
   "scripts": {
     "dev": "pnpm --filter ./apps/website dev",
     "site:test": "pnpm --filter ./apps/website test",
-    "site:build": "pnpm --filter ./apps/website build"
+    "site:build": "pnpm --filter ./apps/website build",
+    "site:push": "git subtree push --prefix apps/website macro-playground main"
   },
   "devDependencies": {
     "@swc/core": "^1.2.159",
