@@ -19,13 +19,47 @@ import { parseG10 } from "./g10-tools";
 import { GROUP_3 } from "./register-map";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
-const getPositions = (locations: Partial<AxisLocations>) => pick(locations, ["X", "Y", "Z", "B"]);
+
+/**
+ * Helper function to extract axis locations from an object of addresses
+ */
+function getPositions(locations: Partial<AxisLocations>) {
+  return pick(locations, ["X", "Y", "Z", "B"]);
+}
 
 /**
  * A Representaion of a CNC machines' macro memory.
  */
 export class MacroMemory {
   private _vars: Record<number, number> = {};
+
+  get G53(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(0);
+  }
+
+  get G54(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(1);
+  }
+
+  get G55(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(2);
+  }
+
+  get G56(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(3);
+  }
+
+  get G57(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(4);
+  }
+
+  get G58(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(5);
+  }
+
+  get G59(): AxisLocations {
+    return this._getCommonWorkOffsetAxisLocations(6);
+  }
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
@@ -40,18 +74,22 @@ export class MacroMemory {
    * Read a value from a register
    */
   read(key: number): number {
-    return this._vars[key];
+    const value = this._vars[key];
+
+    debug(`[READ ] #${key}= ${value}`);
+
+    return value;
   }
 
   /**
    * Write  a value to a register
    */
   write(key: number, value: number): UpdatedValue {
+    debug(`[WRITE] #${key}= ${value}`);
+
     const prev = this._vars[key];
 
     this._vars[key] = value;
-
-    debug("writing", value, "to #", key);
 
     return {
       prev,
@@ -90,7 +128,7 @@ export class MacroMemory {
    * Evaluate a G10 line to extract values
    */
   g10(g10: PossibleG10LineValues) {
-    debug("Evaluating G10 line", g10);
+    debug("[ G10 ]", g10);
 
     return match(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
@@ -206,6 +244,7 @@ export class MacroMemory {
    * Use in program: `G54 X0 Y0`
    */
   setCommonWorkOffset(group: number, locations: Partial<AxisLocations>) {
+    debug("[O-SET]", `G${group + 53}=`, locations);
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeWorkOffsetAxisRegister(group, axis);
 
@@ -220,6 +259,7 @@ export class MacroMemory {
    * Use in program: `G54 X0 Y0`
    */
   setAuxWorkOffset(group: number, locations: Partial<AxisLocations>) {
+    debug("[O-SET]", `G54.1 P${group}=`, locations);
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeAuxWorkOffsetAxisRegister(group, axis);
 
@@ -264,41 +304,11 @@ export class MacroMemory {
     return JSON.stringify(this.toObject());
   }
 
-  get G53(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(0);
-  }
-
-  get G54(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(1);
-  }
-
-  get G55(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(2);
-  }
-
-  get G56(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(3);
-  }
-
-  get G57(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(4);
-  }
-
-  get G58(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(5);
-  }
-
-  get G59(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(6);
-  }
-
   /**
    * Set the group value for a tool by number
    */
-  private _setToolOffsetValue(toolNum: number, offsetGroup: number, value: number) {
-    const reg = composeToolOffsetRegister(offsetGroup, toolNum);
-
-    debug("Setting tool offset value", { toolNum, offsetGroup, value });
+  private _setToolOffsetValue(toolNum: number, group: number, value: number) {
+    const reg = composeToolOffsetRegister(group, toolNum);
 
     this.write(reg, value);
   }
@@ -308,8 +318,6 @@ export class MacroMemory {
    */
   private _getToolOffsetValueByGroup(toolNum: number, group: number): number {
     const reg = composeToolOffsetRegister(group, toolNum);
-
-    debug("Fetching tool offset value", { toolNum, group });
 
     return this.read(reg);
   }

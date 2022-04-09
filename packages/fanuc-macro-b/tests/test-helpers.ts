@@ -1,6 +1,6 @@
 import { Chance } from "chance";
 
-import type { AxisLocations } from "../types";
+import type { AxisLocations } from "../src/types";
 
 const chance = Chance();
 

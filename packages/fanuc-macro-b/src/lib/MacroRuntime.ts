@@ -5,6 +5,7 @@ import Emittery from "emittery";
 import type {
   InterpretedLines,
   InterpretedProgram,
+  ParsedLineData,
   ProgramLoadOptions,
   RuntimeErrors,
   RuntimeEvents,
@@ -147,7 +148,7 @@ export class MacroRuntime {
   /**
    * Analyze a text in the context of being a valid NC program
    */
-  evalLines(code: string): InterpretedLines {
+  evalLines(code: string): ParsedLineData[] {
     this._tokenizeForParsing(code);
 
     const cst = this._parser.lines();

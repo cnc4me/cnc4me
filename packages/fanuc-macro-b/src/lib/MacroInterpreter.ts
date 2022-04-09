@@ -1,14 +1,15 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
+import { filter, reduce } from "lodash";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
 import type {
   InterpretedProgram,
-  MacroInsights,
   ParsedLineData,
   ProgramIdentifier,
+  ValidG10OffsetGroups,
   VariableRegister,
   WatcherValuePayload
 } from "../types";
@@ -40,7 +41,7 @@ import {
   unbox,
   unwrapComment
 } from "../utils";
-import { interpreter as debug } from "./debuggers";
+import { enableDebugging, interpreter as debug } from "./debuggers";
 import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
@@ -96,9 +97,7 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx.Line) {
       for (const line of ctx.Line) {
-        debug(line);
         const vLine = this.visit(line);
-        debug(vLine);
         lines.push(vLine);
       }
     }
@@ -123,10 +122,6 @@ export class MacroInterpreter extends BaseVisitor {
    * Get the complete contents of a line of G code
    */
   Line(ctx: LineCstChildren): ParsedLineData {
-    const lineDebug = debug.extend("line", ":");
-
-    lineDebug(ctx);
-
     const parsed: ParsedLineData = {
       N: NaN,
       gCodes: [],
@@ -134,8 +129,11 @@ export class MacroInterpreter extends BaseVisitor {
       comments: [],
       addresses: [],
       gCodeMap: {},
-      mCodeMap: {}
+      mCodeMap: {},
+      addressMap: {}
     };
+
+    enableDebugging();
 
     if (ctx?.Comment) {
       for (const comment of ctx.Comment) {
@@ -145,19 +143,17 @@ export class MacroInterpreter extends BaseVisitor {
     }
 
     if (ctx?.G_Code) {
-      for (const token of ctx.G_Code) {
+      ctx.G_Code.forEach(token => {
+        parsed.gCodes.push(token);
         parsed.gCodeMap[token.image] = true;
-      }
-
-      parsed.gCodes.push(...ctx.G_Code);
+      });
     }
 
     if (ctx?.M_Code) {
-      for (const token of ctx.M_Code) {
+      ctx.M_Code.forEach(token => {
+        parsed.mCodes.push(token);
         parsed.mCodeMap[token.image] = true;
-      }
-
-      parsed.mCodes.push(...ctx.M_Code);
+      });
     }
 
     if (ctx?.LineNumber) {
@@ -167,25 +163,32 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx?.variableAssignment) {
       const { children } = unbox(ctx.variableAssignment);
-      const register = this.variableAssignment(children);
-      lineDebug(register);
+      this.variableAssignment(children);
     }
 
     if (ctx?.AddressedValue) {
-      for (const { children } of ctx.AddressedValue) {
+      ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
-
         parsed.addresses.push(parsedAddr);
-      }
+        parsed.addressMap[parsedAddr.prefix] = parsedAddr.value;
+      });
     }
 
-    if (parsed.gCodeMap["G10"]) {
+    if ("G10" in parsed.gCodeMap) {
+      const { addressMap } = parsed;
+
       // this.Insights["G10"].collect(ctx.);
-      // const g10 = new G10Line({ ...parsed });
-      // this._mem.evalG10(g10);
+      // const g10 = new G10Line(values);
+      this._mem.g10({
+        L: addressMap["L"] as ValidG10OffsetGroups,
+        P: addressMap["P"],
+        R: addressMap["R"],
+        X: addressMap["X"],
+        Y: addressMap["Y"],
+        Z: addressMap["Z"],
+        B: addressMap["B"]
+      });
     }
-
-    lineDebug(parsed);
 
     return parsed;
   }
@@ -198,7 +201,6 @@ export class MacroInterpreter extends BaseVisitor {
     gCodeFlags: Record<string, boolean> = {}
   ): NcAddress {
     const address = new NcAddress(ctx);
-
     const insight = new AddressInsight(address);
 
     if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
@@ -228,17 +230,19 @@ export class MacroInterpreter extends BaseVisitor {
   }
 
   /**
-   * If a number, then
+   * If a number, then the visit the node, otherwise evaluate the macro var
    */
   ValueLiteral(ctx: ValueLiteralCstChildren) {
     if (ctx.VariableLiteral) {
-      const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
+      const { children } = unbox(ctx.VariableLiteral);
+      const macro = this.VariableLiteral(children);
 
       return macro.value;
     }
 
     if (ctx.NumericLiteral) {
-      return this.NumericLiteral(ctx.NumericLiteral[0].children);
+      const { children } = unbox(ctx.NumericLiteral);
+      return this.NumericLiteral(children);
     }
 
     return ctx;
@@ -248,15 +252,16 @@ export class MacroInterpreter extends BaseVisitor {
    * Update a macro variable regsiter with a value
    */
   variableAssignment(ctx: VariableAssignmentCstChildren): VariableRegister {
-    const macro = this.VariableLiteral(ctx.VariableLiteral[0].children);
+    const varLitChildren = unbox(ctx.VariableLiteral).children;
+    const macro = this.VariableLiteral(varLitChildren);
     const payload: WatcherValuePayload = {
       register: macro.register,
       curr: NaN,
       prev: macro.value
     };
 
-    const { children } = unbox(ctx.expression);
-    const value = this.expression(children);
+    const exprChildren = unbox(ctx.expression).children;
+    const value = this.expression(exprChildren);
 
     payload.curr = value;
 
@@ -270,15 +275,20 @@ export class MacroInterpreter extends BaseVisitor {
     return this.setMacroValue(macro.register, value);
   }
 
+  /**
+   *
+   */
   expression(ctx: ExpressionCstChildren): number {
     const { children } = unbox(ctx.additionExpression);
     return this.additionExpression(children);
   }
 
+  /**
+   * Evaluate one of the built-in functions proivided by the system
+   */
   functionExpression(ctx: FunctionExpressionCstChildren): number {
-    const func = getImage(ctx.BuiltinFunctions);
-
     const { children } = unbox(ctx.atomicExpression);
+    const func = getImage(ctx.BuiltinFunctions);
     const value = this.atomicExpression(children);
 
     // prettier-ignore
@@ -368,8 +378,12 @@ export class MacroInterpreter extends BaseVisitor {
     }
   }
 
+  /**
+   * Ignore the brackets and return the children
+   */
   bracketExpression(ctx: BracketExpressionCstChildren) {
-    return this.expression(ctx.expression[0].children);
+    const { children } = unbox(ctx.expression);
+    return this.expression(children);
   }
 
   /**
@@ -400,8 +414,6 @@ export class MacroInterpreter extends BaseVisitor {
    */
   setMacroValue(register: number, value: number): VariableRegister {
     this._mem.write(register, value);
-
-    debug(`#${register}`, "=", value);
 
     return this.getMacroRegister(register);
   }

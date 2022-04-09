@@ -1,10 +1,10 @@
+import type { Debugger } from "debug";
 import Debug from "debug";
 
-const rootDebugger = Debug("macro");
+const macroDebugger = Debug("macro");
+const _extend = (ns: string): Debugger => macroDebugger.extend(ns);
 
-const _extend = (ns: string) => rootDebugger.extend(ns, ":");
-
-// rootDebugger.enabled = true;
+export const enableDebugging = (ns?: string) => Debug.enable(ns ?? "macro:*");
 
 export const memory = _extend("memory");
 export const parser = _extend("parser");

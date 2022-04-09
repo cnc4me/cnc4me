@@ -1,3 +1,9 @@
+export type ValidG10WorkOffsetGroup = 2 | 20;
+
+export type ValidG10ToolOffsetGroup = 10 | 11 | 12 | 13;
+
+export type ValidG10OffsetGroups = ValidG10WorkOffsetGroup | ValidG10ToolOffsetGroup;
+
 interface G10LineBase {
   readonly L: number;
   readonly P: number;
@@ -5,7 +11,7 @@ interface G10LineBase {
 }
 
 export interface G10WorkOffsets extends G10LineBase {
-  readonly L: 2 | 20;
+  readonly L: ValidG10WorkOffsetGroup;
   // readonly L: number;
   readonly X?: number;
   readonly Y?: number;
@@ -14,7 +20,7 @@ export interface G10WorkOffsets extends G10LineBase {
 }
 
 export interface G10ToolOffsets extends G10LineBase {
-  readonly L: 10 | 11 | 12 | 13;
+  readonly L: ValidG10ToolOffsetGroup;
   // readonly L: number;
   readonly R?: number;
 }

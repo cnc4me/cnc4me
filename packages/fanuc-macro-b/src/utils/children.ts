@@ -1,4 +1,6 @@
-import { CstChildrenDictionary, CstElement } from "chevrotain";
+import { CstChildrenDictionary, CstElement, CstNode } from "chevrotain";
+
+import { unbox } from "./common";
 
 /**
  * Get the element from a context
@@ -13,10 +15,8 @@ export function elem<T extends CstChildrenDictionary, M extends keyof T>(
 /**
  * Get the children from a node if they are present, otherwise return the node
  */
-export function children<T extends CstElement>(cstElem: T): CstChildrenDictionary | undefined {
-  if ("children" in cstElem) {
-    return cstElem.children;
-  }
+export function children<T extends CstNode[]>(cstNodeArr: T): CstChildrenDictionary {
+  const { children } = unbox(cstNodeArr);
 
-  return undefined;
+  return children;
 }
