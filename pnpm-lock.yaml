@@ -233,6 +233,7 @@ importers:
 
   packages/fanuc-macro-b:
     specifiers:
+      '@chevrotain/types': ^10.1.2
       '@cnc4me/chevrotain-jest-extension': workspace:*
       '@cnc4me/chevrotain-types-generator': workspace:*
       '@cnc4me/jest-matchers': workspace:*
@@ -270,6 +271,7 @@ importers:
       lodash: 4.17.21
       ts-pattern: 3.3.5
     devDependencies:
+      '@chevrotain/types': 10.1.2
       '@cnc4me/chevrotain-jest-extension': link:../chevrotain-jest-extension
       '@cnc4me/chevrotain-types-generator': link:../chevrotain-types-generator
       '@cnc4me/jest-matchers': link:../jest-matchers

@@ -1,14 +1,14 @@
 import { IToken, tokenMatcher, TokenType } from "chevrotain";
 
 export function toMatchToken(
+  this: jest.MatcherContext,
   expected: IToken,
-  given: unknown
+  received: TokenType
 ): jest.CustomMatcherResult {
-  const pass = tokenMatcher(expected, given as TokenType);
+  const pass = tokenMatcher(expected, received);
 
   return {
-    message: () =>
-      `expected ${expected.tokenType.name} to be ${(given as TokenType).name}`,
+    message: () => `expected ${expected.tokenType.name} to be ${received.name}`,
     pass
   };
 }

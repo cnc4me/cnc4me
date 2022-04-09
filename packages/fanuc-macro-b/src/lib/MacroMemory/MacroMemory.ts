@@ -300,7 +300,7 @@ export class MacroMemory {
   /**
    * Serialize all the set registers to a JSON string
    */
-  toJson(): string {
+  serialize(): string {
     return JSON.stringify(this.toObject());
   }
 
