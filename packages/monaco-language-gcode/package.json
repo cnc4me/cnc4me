@@ -10,8 +10,11 @@
     "test": "jest"
   },
   "dependencies": {
-    "@cnc4me/chrysalis": "workspace:*",
+    "@cnc4me/chrysalis": "workspace:*"
+  },
+  "devDependencies": {
     "eslint": "^8.11.0",
-    "jest": "^27.5.1"
+    "jest": "^27.5.1",
+    "typescript": "^4.6.2"
   }
 }

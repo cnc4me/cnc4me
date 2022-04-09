@@ -38,3 +38,6 @@ common/deploy/
 common/temp/
 common/autoinstallers/*/.npmrc
 **/.rush/temp/
+
+# Local Netlify folder
+.netlify
