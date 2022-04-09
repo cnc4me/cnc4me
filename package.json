@@ -10,8 +10,7 @@
     "dev": "pnpm --filter ./apps/website dev",
     "build": "pnpm --filter ./apps/website build",
     "site:test": "pnpm --filter ./apps/website test",
-    "site:push": "git subtree push --prefix apps/website macro-playground main",
-    "prebuild": "[[ $CI = true ]] && npx pnpm@7.0.0-rc3 install -r --store=node_modules/.pnpm-store || echo skipping pnpm install"
+    "site:push": "git subtree push --prefix apps/website macro-playground main"
   },
   "devDependencies": {
     "@swc/core": "^1.2.159",
