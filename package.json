@@ -8,9 +8,10 @@
   ],
   "scripts": {
     "dev": "pnpm --filter ./apps/website dev",
+    "build": "pnpm --filter ./apps/website build",
     "site:test": "pnpm --filter ./apps/website test",
-    "site:build": "pnpm --filter ./apps/website build",
-    "site:push": "git subtree push --prefix apps/website macro-playground main"
+    "site:push": "git subtree push --prefix apps/website macro-playground main",
+    "prebuild": "[[ $CI = true ]] && npx pnpm@7.0.0-rc3 install -r --store=node_modules/.pnpm-store || echo skipping pnpm install"
   },
   "devDependencies": {
     "@swc/core": "^1.2.159",
@@ -28,6 +29,7 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
     "lerna": "^4.0.0",
+    "pnpm": "^7.0.0-rc.3",
     "prettier": "^2.6.0",
     "rimraf": "^3.0.2",
     "ts-jest": "27.0.5",

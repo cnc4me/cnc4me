@@ -19,6 +19,7 @@ importers:
       eslint-plugin-simple-import-sort: ^7.0.0
       jest: ^27.5.1
       lerna: ^4.0.0
+      pnpm: ^7.0.0-rc.3
       prettier: ^2.6.0
       rimraf: ^3.0.2
       ts-jest: 27.0.5
@@ -40,6 +41,7 @@ importers:
       eslint-plugin-simple-import-sort: 7.0.0_eslint@8.11.0
       jest: 27.5.1
       lerna: 4.0.0
+      pnpm: 7.0.0-rc.3
       prettier: 2.6.0
       rimraf: 3.0.2
       ts-jest: 27.0.5_dc8baabc9570e2df1a26803dfba5c854
@@ -6395,6 +6397,12 @@ packages:
     engines: {node: '>=8'}
     dependencies:
       find-up: 4.1.0
+
+  /pnpm/7.0.0-rc.3:
+    resolution: {integrity: sha512-g8dKBFPhPC+tKWNPl/E8O41bnC+ImxjVqJRsvFjvp0moVZXrN5Ht6a8qLnqxCBHcluBJLaPKcDY89ZlNd7k4Mg==}
+    engines: {node: '>=14.19'}
+    hasBin: true
+    dev: true
 
   /postcss-js/4.0.0_postcss@8.4.12:
     resolution: {integrity: sha512-77QESFBwgX4irogGVPgQ5s07vLvFqWr228qZY+w6lW599cRlK/HmnlivnnVUxkjHnCu4J16PDMHcH+e+2HbvTQ==}
