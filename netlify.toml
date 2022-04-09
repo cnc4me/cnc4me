@@ -1,4 +1,5 @@
 [build.environment]
+NODE_FLAGS = "--prefix=/"
 NODE_VERSION = "16"
 
 [build]
