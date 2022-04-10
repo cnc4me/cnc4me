@@ -2,9 +2,9 @@
 NODE_FLAGS = "--version"
 NODE_VERSION = "16"
 
-# [build]
-# command = "npx pnpm run build"
-# publish = "apps/website/dist"
+[build]
+command = "pnpm run build"
+publish = "apps/website/dist"
 
 # [[plugins]]
 # package = "/.netlify/netlify-plugin-pnpm"

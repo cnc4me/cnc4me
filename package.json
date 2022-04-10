@@ -3,9 +3,6 @@
   "version": "1.0.0",
   "license": "MIT",
   "private": true,
-  "workspaces": [
-    "packages/*"
-  ],
   "scripts": {
     "dev": "pnpm --filter ./apps/website dev",
     "build": "pnpm --filter ./apps/website build",
