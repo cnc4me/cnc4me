@@ -4,9 +4,9 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter ./apps/website dev",
-    "build": "pnpm --filter ./apps/website build",
-    "site:test": "pnpm --filter ./apps/website test",
+    "dev": "pnpm --filter macro-playground dev",
+    "build": "pnpm --filter macro-playground build",
+    "site:test": "pnpm --filter macro-playground test",
     "site:push": "git subtree push --prefix apps/website macro-playground main"
   },
   "devDependencies": {
