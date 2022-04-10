@@ -4,9 +4,12 @@
   "license": "MIT",
   "private": true,
   "scripts": {
-    "dev": "pnpm --filter macro-playground dev",
-    "build": "pnpm --filter macro-playground build",
-    "site:test": "pnpm --filter macro-playground test",
+    "dev": "pnpm -F macro-playground dev",
+    "preview": "pnpm netlify deploy",
+    "prod": "pnpm run site:build && pnpm site:deploy",
+    "site:test": "pnpm -F macro-playground test",
+    "site:build": "pnpm -F macro-playground build",
+    "site:deploy": "pnpm netlify deploy --prod",
     "site:push": "git subtree push --prefix apps/website macro-playground main"
   },
   "devDependencies": {

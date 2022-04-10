@@ -75,24 +75,23 @@ export default function App() {
         <div className="flex flex-col flex-grow bg-neutral-700">
           <h1 className="px-2 py-3 text-3xl shadow-neutral-800 bg-neutral-800 text-violet-500">Macro Registers</h1>
           <div className="flex flex-col gap-1 px-4 pt-2 font-mono">
-            <div className="flex flex-row ">
+            <div className="flex flex-row">
               <div className="w-12 text-violet-100">NO.</div>
               <div className="pl-1 text-violet-100">DATA</div>
             </div>
 
-            {macros.map(macro => {
-              return (
-                !isNaN(macro[1]) &&
-                macro[0] < 1000 && (
+            {macros
+              .filter(macro => !isNaN(macro[1]))
+              .map(macro => {
+                return (
                   <div key={macro[0]} className="flex flex-row">
-                    <div className="w-10 pt-px text-violet-100">#{zeroPad(macro[0], 3)}</div>
+                    <div className="w-12 pt-px text-violet-100">#{zeroPad(macro[0], 4)}</div>
                     <div className="flex-grow pl-1 border-t border-l bg-violet-100 border-l-black border-t-black">
                       {macro[1].toFixed(10)}
                     </div>
                   </div>
-                )
-              );
-            })}
+                );
+              })}
           </div>
           {errors.length > 0 ? (
             <div className="px-4 py-2 bg-neutral-800">
