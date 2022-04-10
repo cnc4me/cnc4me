@@ -3,9 +3,8 @@ NODE_FLAGS = "--prefix=/"
 NODE_VERSION = "16"
 
 [build]
+command = "npx pnpm run build"
 publish = "apps/website/dist"
-# command = "npx pnpm i --store=node_modules/.pnpm-store && npx pnpm run build"
-command = "pnpm i --store=node_modules/.pnpm-store && pnpm run build"
 
 [[plugins]]
 package = "/.netlify/netlify-plugin-pnpm"
