@@ -3,7 +3,8 @@ NODE_FLAGS = "--version"
 NODE_VERSION = "16"
 
 [build]
-command = "npx pnpm@6 install --filter macro-playground --store-dir=node_modules/.pnpm-store && npx pnpm run build"
+# base = "apps/website"
+command = "npx pnpm@6 install --recursive --store-dir=node_modules/.pnpm-store && npx pnpm i --filter macro-website && npx pnpm run build"
 publish = "apps/website/dist"
 
 # [[plugins]]

@@ -20,7 +20,7 @@
   "projects": [
     {
       "packageName": "@cnc4me/macro-playground",
-      "projectFolder": "apps/macro-playground",
+      "projectFolder": "apps/website",
       "reviewCategory": "production"
     },
     {
