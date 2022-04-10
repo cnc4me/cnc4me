@@ -17,7 +17,6 @@ yarn-error.log*
 #
 # Directories
 #
-dist/
 coverage/
 .nyc_output/
 .npm/
