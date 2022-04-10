@@ -3,8 +3,8 @@ NODE_FLAGS = "--version"
 NODE_VERSION = "16"
 
 [build]
-base = "apps/website"
-command = "npx pnpm@6 i --store-dir=node_modules/.pnpm-store && npx pnpm build"
+# base = "apps/website"
+command = "npx pnpm@6 install --recursive --store-dir=node_modules/.pnpm-store && npx pnpm run build"
 publish = "apps/website/dist"
 
 # [[plugins]]
