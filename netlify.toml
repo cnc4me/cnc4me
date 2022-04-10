@@ -4,7 +4,7 @@ NODE_VERSION = "16"
 
 [build]
 # base = "apps/website"
-command = "npx pnpm@6 install --store-dir=node_modules/.pnpm-store && npx pnpm -F macro-playground && npx pnmp run build"
+command = "npx pnpm@6 install --store-dir=node_modules/.pnpm-store && npx pnpm -F macro-playground install && npx pnpm run build"
 publish = "apps/website/dist"
 
 # [[plugins]]
