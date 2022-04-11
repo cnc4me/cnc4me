@@ -3,6 +3,7 @@ import { __, match } from "ts-pattern";
 
 import type {
   AxisLocations,
+  MacroValueArray,
   PossibleG10LineValues,
   ToolOffsetValues,
   UpdatedValue
@@ -149,10 +150,7 @@ export class MacroMemory {
       .with({ L: TOOL.DIAMETER, R: __.number }, ({ P, R }) => {
         this.setToolDiameter(P, R);
       })
-      .otherwise(v => {
-        debug(v);
-        throw Error("INVALID `L` ADDRESS");
-      });
+      .run();
   }
 
   /**
@@ -270,8 +268,8 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  toArray(): [register: number, value: number][] {
-    const valueArr: [register: number, value: number][] = [];
+  toArray(): MacroValueArray {
+    const valueArr: MacroValueArray = [];
 
     Object.entries(this._vars).forEach(([register, value]) => {
       if (!isNaN(value)) {

@@ -1,6 +1,6 @@
 import type { MacroInterpreter } from "../lib";
 import { OneOrMany } from ".";
-import { EvalErrors } from "./core";
+import { EvalErrors } from "./types";
 
 export interface ProgramLoadOptions {
   setActive: boolean;

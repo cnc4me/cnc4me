@@ -1,3 +1,5 @@
+export type MacroValueArray = [register: number, value: number][];
+
 export interface AxisLocations {
   X: number;
   Y: number;
