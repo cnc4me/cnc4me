@@ -71,18 +71,14 @@ export class MacroMemory {
    * Construct a new instance of the MacroMemory class and initialize the variables
    */
   constructor() {
-    debug("initializing");
-
     this.write(GROUP_3, 90);
 
-    /**
-     * Initialize macro variable registers to `NaN`
-     */
     // eslint-disable-next-line prettier/prettier
     const registers: number[] = [
       ...range(1, 33),
-      ...range(100, 299),
-      ...range(500, 799),
+      ...range(100, 199),
+      ...range(500, 9999),
+      ...range(3000, 4999),
       ...range(5000, 14000)
     ];
 

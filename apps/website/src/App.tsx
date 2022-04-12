@@ -5,17 +5,14 @@ import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
 import Errors from "./components/Errors";
+import { ValueTable } from "./components/ValueTable";
 import { configureMonaco } from "./handlers/configureMonaco";
 import { useEditorTheme } from "./hooks/useEditorTheme";
 import { useMacroRuntime } from "./hooks/useMacroRuntime";
-import { useMacroTools } from "./hooks/useMacroTools";
 import { EditorOptions, MonacoEditor } from "./types";
 import { getExampleCode } from "./utils/getExampleCode";
-import { zeroPad } from "./utils/helpers";
 
-// eslint-disable-next-line import/no-default-export
 export default function App() {
-  // const { interpreter, parser, lexer } = useMacroTools();
   const [runtime] = useMacroRuntime();
   const { Interpreter, Parser } = runtime;
 
@@ -46,33 +43,37 @@ export default function App() {
 
   function sliceRegisters() {
     const macros = runtime.Memory.toArray();
-    console.log(macros);
-    const pageStart = offset * (pageCount - 1);
 
-    setLeftCol(macros.slice(pageStart, pageStart + offset));
-    setRightCol(macros.slice(pageStart + offset, pageStart + (offset + offset)));
+    if (pageCount === 1) {
+      const start = offset * (pageCount - 1);
+      const end = start + offset;
+      const left = macros.slice(start, end);
+      const right = macros.slice(end, end + 13);
+
+      setLeftCol(left);
+      setRightCol(right);
+    } else {
+      // eslint-disable-next-line prettier/prettier
+      const start = 33 + (offset * (pageCount - 2));
+      const end = start + offset;
+      const left = macros.slice(start, end);
+      const right = macros.slice(end, end + offset);
+
+      setLeftCol(left);
+      setRightCol(right);
+    }
   }
 
   function parseGCode(code: string) {
-    runtime.evalLines(code);
-    if (errors) {
-      setErrors(errors);
-    } else {
-      const { children } = Parser.lines();
-      const result = Interpreter.lines(children);
+    const parsedLines = runtime.evalLines(code);
 
-      if (Parser.errors.length) {
-        setErrors(Parser.errors);
-      }
-
-      setInterpreterResult(result);
-      sliceRegisters();
-    }
+    setInterpreterResult(parsedLines);
+    sliceRegisters();
   }
 
   useEffect(() => {
     sliceRegisters();
-  }, [pageCount]);
+  }, [pageCount, runtime.Memory]);
 
   const handleEditorChange: OnChange = (value?: string) => {
     parseGCode(String(value));
@@ -82,26 +83,6 @@ export default function App() {
     editorRef.current = editor;
     parseGCode(getExampleCode());
   };
-
-  const ValueTable: React.FC<{ macros: MacroValueArray }> = ({ macros }) => (
-    <div className="flex flex-col gap-1 px-4 pt-2 font-mono">
-      <div className="flex flex-row">
-        <div className="w-12 text-violet-100">NO.</div>
-        <div className="pl-1 text-violet-100">DATA</div>
-      </div>
-
-      {macros.map(macro => {
-        return (
-          <div key={macro[0]} className="flex flex-row">
-            <div className="w-12 pt-px text-violet-100">#{zeroPad(macro[0], 4)}</div>
-            <div className="flex-grow pl-1 border-t border-l bg-violet-100 border-l-black border-t-black">
-              {macro[1].toFixed(10)}
-            </div>
-          </div>
-        );
-      })}
-    </div>
-  );
 
   return (
     <div className="flex flex-col h-screen overflow-y-hidden bg-neutral-800">
@@ -154,7 +135,7 @@ export default function App() {
               </button>
             </div>
             <div className="px-8 py-2 text-white">
-              Current Page: <span className="text-violet-300">{pageCount}</span>
+              Page <span className="text-violet-300">{pageCount}</span>
             </div>
             <div className="">
               <button
