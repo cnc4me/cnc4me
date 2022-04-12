@@ -1,7 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
-import { filter, reduce } from "lodash";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
@@ -41,7 +40,7 @@ import {
   unbox,
   unwrapComment
 } from "../utils";
-import { enableDebugging, interpreter as debug } from "./debuggers";
+import { interpreter as debug } from "./debuggers";
 import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroMemory } from "./MacroMemory";
 import { parser } from "./MacroParser";
@@ -57,9 +56,8 @@ const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
  */
 export class MacroInterpreter extends BaseVisitor {
   events: Emittery = new Emittery();
-  varWatches: Array<(payload: WatcherValuePayload) => unknown> = [];
 
-  private _mem: MacroMemory = new MacroMemory();
+  private _mem: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();
 
   get Memory(): MacroMemory {
@@ -74,8 +72,10 @@ export class MacroInterpreter extends BaseVisitor {
     return this._insights;
   }
 
-  constructor() {
+  constructor(opts?: { memory: MacroMemory }) {
     super();
+    debug("initializing");
+    this._mem = opts?.memory ?? new MacroMemory();
     this.validateVisitor();
   }
 
@@ -132,8 +132,6 @@ export class MacroInterpreter extends BaseVisitor {
       mCodeMap: {},
       addressMap: {}
     };
-
-    enableDebugging();
 
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
@@ -230,8 +228,12 @@ export class MacroInterpreter extends BaseVisitor {
    */
   VariableLiteral(ctx: VariableLiteralCstChildren): VariableRegister {
     const register = parseInt(getImage(ctx.Integer));
+    const macro = {
+      register,
+      value: this._mem.read(register) ?? NaN
+    };
 
-    return this.getMacroRegister(register);
+    return macro;
   }
 
   /**
@@ -274,11 +276,11 @@ export class MacroInterpreter extends BaseVisitor {
     /**
      * @TODO remove the watches for events
      */
-    if (this.varWatches[macro.register]) {
-      this.varWatches[macro.register](payload);
-    }
+    // if (this.varWatches[macro.register]) {
+    //   this.varWatches[macro.register](payload);
+    // }
 
-    this.setMacroValue(macro.register, value);
+    this._mem.write(macro.register, value);
   }
 
   /**
@@ -390,53 +392,5 @@ export class MacroInterpreter extends BaseVisitor {
   bracketExpression(ctx: BracketExpressionCstChildren) {
     const { children } = unbox(ctx.expression);
     return this.expression(children);
-  }
-
-  /**
-   * Macro Variable Methods
-   */
-
-  /**
-   * Retrieve a single macro variable register
-   */
-  getMacroRegister(register: number): VariableRegister {
-    const macro = {
-      register,
-      value: this._mem.read(register) ?? NaN
-    };
-
-    return macro;
-  }
-
-  /**
-   * Retrieve the macro variable map
-   */
-  getMacros(): [register: number, value: number][] {
-    return this._mem.toArray();
-  }
-
-  /**
-   * Preload a macro variable register with a value
-   */
-  setMacroValue(register: number, value: number) {
-    this._mem.write(register, value);
-
-    // return this.getMacroRegister(register);
-  }
-
-  /**
-   * Preload multiple macro variable registers with values
-   */
-  setMacroVars(registerValues: [register: number, value: number][]) {
-    for (const [register, value] of registerValues) {
-      this.setMacroValue(register, value);
-    }
-  }
-
-  /**
-   * Attach a method to observe the value changes for a macro register
-   */
-  watchMacroVar(macroRegister: number, handler: (payload: WatcherValuePayload) => unknown) {
-    this.varWatches[macroRegister] = handler;
   }
 }

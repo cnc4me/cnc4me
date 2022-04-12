@@ -2,11 +2,12 @@
 /* eslint-disable no-console */
 import { LexingErrors, MacroValueArray, ParsedLineData, ParsingErrors } from "@cnc4me/fanuc-macro-b";
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
-import { useRef, useState } from "react";
+import { useEffect, useRef, useState } from "react";
 
 import Errors from "./components/Errors";
 import { configureMonaco } from "./handlers/configureMonaco";
 import { useEditorTheme } from "./hooks/useEditorTheme";
+import { useMacroRuntime } from "./hooks/useMacroRuntime";
 import { useMacroTools } from "./hooks/useMacroTools";
 import { EditorOptions, MonacoEditor } from "./types";
 import { getExampleCode } from "./utils/getExampleCode";
@@ -14,44 +15,64 @@ import { zeroPad } from "./utils/helpers";
 
 // eslint-disable-next-line import/no-default-export
 export default function App() {
-  const { interpreter, parser, lexer } = useMacroTools();
+  // const { interpreter, parser, lexer } = useMacroTools();
+  const [runtime] = useMacroRuntime();
+  const { Interpreter, Parser } = runtime;
+
+  runtime.onError(errors => console.log(errors));
+
   const [interpreterResult, setInterpreterResult] = useState<ParsedLineData[]>([]);
-
-  const [offset, setOffset] = useState(1);
-  const [pageCount, setPageCount] = useState(0);
-
   const editorRef = useRef<MonacoEditor>();
-  const [macros, setMacros] = useState<MacroValueArray>([]);
+
+  const [offset, setOffset] = useState(20);
+  const [pageCount, setPageCount] = useState(1);
   const [leftCol, setLeftCol] = useState<MacroValueArray>([]);
   const [rightCol, setRightCol] = useState<MacroValueArray>([]);
 
   const [errors, setErrors] = useState<ParsingErrors | LexingErrors>([]);
+
   const [editorTheme, _themeSetters] = useEditorTheme("gcode-dark");
   const [editorOptions, _setEditorOptions] = useState<EditorOptions>({
     minimap: { enabled: false }
   });
 
-  const parseGCode = (code: string) => {
-    const { tokens, errors } = lexer.tokenize(code);
+  function pageLeft() {
+    setPageCount(pageCount - 1 < 1 ? 1 : pageCount - 1);
+  }
 
-    if (errors.length) {
+  function pageRight() {
+    setPageCount(pageCount + 1);
+  }
+
+  function sliceRegisters() {
+    const macros = runtime.Memory.toArray();
+    console.log(macros);
+    const pageStart = offset * (pageCount - 1);
+
+    setLeftCol(macros.slice(pageStart, pageStart + offset));
+    setRightCol(macros.slice(pageStart + offset, pageStart + (offset + offset)));
+  }
+
+  function parseGCode(code: string) {
+    runtime.evalLines(code);
+    if (errors) {
       setErrors(errors);
+    } else {
+      const { children } = Parser.lines();
+      const result = Interpreter.lines(children);
+
+      if (Parser.errors.length) {
+        setErrors(Parser.errors);
+      }
+
+      setInterpreterResult(result);
+      sliceRegisters();
     }
+  }
 
-    parser.input = tokens;
-    const { children } = parser.lines();
-    const result = interpreter.lines(children);
-
-    setInterpreterResult(result);
-
-    if (parser.errors.length) {
-      setErrors(parser.errors);
-    }
-
-    const macros = interpreter.Memory.toArray();
-    setLeftCol(macros.filter(a => a[0] <= 149));
-    setRightCol(macros.filter(a => a[0] > 150));
-  };
+  useEffect(() => {
+    sliceRegisters();
+  }, [pageCount]);
 
   const handleEditorChange: OnChange = (value?: string) => {
     parseGCode(String(value));
@@ -120,6 +141,28 @@ export default function App() {
             </div>
             <div className="">
               <ValueTable macros={rightCol} />
+            </div>
+          </div>
+          <div className="flex flex-row py-4 justify-center">
+            <div className="">
+              <button
+                onClick={pageLeft}
+                disabled={pageCount === 1}
+                className="rounded-lg py-2 w-32 border-2 border-violet-600 bg-violet-700 text-white disabled:text-gray-400  disabled:border-gray-600 disabled:bg-gray-500"
+              >
+                &laquo; Page
+              </button>
+            </div>
+            <div className="px-8 py-2 text-white">
+              Current Page: <span className="text-violet-300">{pageCount}</span>
+            </div>
+            <div className="">
+              <button
+                onClick={pageRight}
+                className="rounded-lg py-2 w-32 border-2 border-violet-600 bg-violet-700 text-white"
+              >
+                Page &raquo;
+              </button>
             </div>
           </div>
         </div>

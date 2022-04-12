@@ -1,5 +1,7 @@
 import { CstParser } from "chevrotain";
+import debug from "debug";
 
+import { parser as debug } from "./debuggers";
 import {
   AdditionOperator,
   Address,
@@ -29,6 +31,7 @@ import { allTokens } from "./Tokens/allTokens";
 export class MacroParser extends CstParser {
   constructor() {
     super(allTokens);
+    debug("initializing");
     this.performSelfAnalysis();
   }
 

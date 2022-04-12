@@ -1,35 +1,26 @@
-import { CstNode, ILexingError } from "chevrotain";
+import { ILexingError } from "chevrotain";
 
-import { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
+import { MacroEnv } from "../lib/MacroEnv";
 import { MacroToolchainOptions } from "../types";
 
 export function createToolchain(options?: MacroToolchainOptions) {
   const errors: ILexingError[] = [];
-  const lexer = new MacroLexer();
-  const parser = new MacroParser();
-  const interpreter = new MacroInterpreter();
+  const env = new MacroEnv();
 
   if (options?.preloadInput) {
-    const { errors, tokens } = lexer.tokenize(options.preloadInput);
+    const { errors, tokens } = env.Lexer.tokenize(options.preloadInput);
 
     if (errors) {
       errors.push(...errors);
     }
 
-    parser.input = tokens;
-  }
-
-  function withParser<R>(cb: (parserInstance: MacroParser) => CstNode) {
-    const cst = cb(parser);
-
-    return interpreter.visit(cst) as R;
+    env.Parser.input = tokens;
   }
 
   return {
-    lexer,
-    parser,
     errors,
-    interpreter,
-    withParser
+    lexer: env.Lexer,
+    parser: env.Parser,
+    interpreter: env.Interpreter
   };
 }

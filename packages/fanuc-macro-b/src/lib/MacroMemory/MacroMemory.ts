@@ -8,6 +8,7 @@ import type {
   ToolOffsetValues,
   UpdatedValue
 } from "../../types";
+import { range } from "../../utils";
 // import { range } from "../../utils";
 import { memory as debug } from "../debuggers";
 import {
@@ -26,6 +27,10 @@ const { WORK, TOOL } = OFFSET_GROUPS;
  */
 function getPositions(locations: Partial<AxisLocations>) {
   return pick(locations, ["X", "Y", "Z", "B"]);
+}
+
+function int(input: string | number) {
+  return typeof input === "string" ? parseInt(input) : input;
 }
 
 /**
@@ -65,10 +70,25 @@ export class MacroMemory {
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
    */
-  constructor(mode?: number) {
-    this.write(GROUP_3, mode ?? 90);
+  constructor() {
+    debug("initializing");
 
-    // range(1, 14000).forEach(idx => this.clear(idx));
+    this.write(GROUP_3, 90);
+
+    /**
+     * Initialize macro variable registers to `NaN`
+     */
+    // eslint-disable-next-line prettier/prettier
+    const registers: number[] = [
+      ...range(1, 33),
+      ...range(100, 299),
+      ...range(500, 799),
+      ...range(5000, 14000)
+    ];
+
+    registers.forEach(idx => this.clear(idx));
+
+    debug(`Initialized ${registers.length} registers`);
   }
 
   /**
@@ -102,7 +122,7 @@ export class MacroMemory {
    * Clear a register value by writing `NaN`
    */
   clear(register: number | string): void {
-    this._vars[typeof register === "string" ? parseInt(register) : register] = NaN;
+    this._vars[int(register)] = NaN;
   }
 
   /**
@@ -269,15 +289,9 @@ export class MacroMemory {
    * Create an array of all the set macro variables
    */
   toArray(): MacroValueArray {
-    const valueArr: MacroValueArray = [];
-
-    Object.entries(this._vars).forEach(([register, value]) => {
-      if (!isNaN(value)) {
-        valueArr.push([parseInt(register), value]);
-      }
+    return Object.entries(this._vars).map(([register, value]) => {
+      return [parseInt(register), value];
     });
-
-    return valueArr;
   }
 
   /**
@@ -287,9 +301,7 @@ export class MacroMemory {
     const valueMap: Record<number, number> = {};
 
     Object.entries(this._vars).forEach(([register, value]) => {
-      if (!isNaN(value)) {
-        valueMap[parseInt(register)] = value;
-      }
+      valueMap[parseInt(register)] = value;
     });
 
     return valueMap;
