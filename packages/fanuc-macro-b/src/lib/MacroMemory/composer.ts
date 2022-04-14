@@ -28,14 +28,14 @@ export function composeToolOffsetRegister(group: number, toolNum: number): numbe
 /**
  * Compose a work offset axis register number by group and axis.
  *
- * The arguments `(1, "X")` will produce `5221`
- * The arguments `(2, "Y")` will produce `5242`
- * The arguments `(3, "Z")` will produce `5263`
- * The arguments `(4, "B")` will produce `5284`
+ * - The arguments `(1, "X")` will produce `5221`
+ * - The arguments `(2, "Y")` will produce `5242`
+ * - The arguments `(3, "Z")` will produce `5263`
+ * - The arguments `(4, "B")` will produce `5284`
  */
-export function composeWorkOffsetAxisRegister(offset: number, axis: string): number {
-  if (offset < 0 || offset > 6) {
-    throw Error(`Cannot compose an offset from input: ${offset}`);
+export function composeWorkOffsetAxisRegister(groupOffset: number, axis: string): number {
+  if (groupOffset < 0 || groupOffset > 6) {
+    throw Error(`Cannot compose a register from input: ${groupOffset}`);
   }
 
   const workOffsetAddressMap: Record<number, number> = {
@@ -48,20 +48,20 @@ export function composeWorkOffsetAxisRegister(offset: number, axis: string): num
     6: 5320 /* G59 */
   };
 
-  return workOffsetAddressMap[offset] + AXIS_ADRRESS_INDEX[axis];
+  return workOffsetAddressMap[groupOffset] + AXIS_ADRRESS_INDEX[axis];
 }
 
 /**
- * Compose an aux work offset axis register number by group and axis.
+ * Compose an aux work offset axis register number by coordinate group and axis.
  *
- * The arguments `(1, "X")` will produce `7001`
- * The arguments `(2, "Y")` will produce `7022`
- * The arguments `(3, "Z")` will produce `7043`
- * The arguments `(4, "B")` will produce `7064`
- * The arguments `(48, "X")` will produce `7941`
+ * - The arguments `(1, "X")` will produce `7001`
+ * - The arguments `(2, "Y")` will produce `7022`
+ * - The arguments `(3, "Z")` will produce `7043`
+ * - The arguments `(4, "B")` will produce `7064`
+ * - The arguments `(48, "X")` will produce `7941`
  */
-export function composeAuxWorkOffsetAxisRegister(offset: number, axis: string): number {
-  const startOfAuxOffsetGroup = offset * ONE_GROUP_OF_OFFSET_REGISTERS;
+export function composeAuxWorkOffsetAxisRegister(pGroup: number, axis: string): number {
+  const startOfAuxOffsetGroup = pGroup * ONE_GROUP_OF_OFFSET_REGISTERS;
 
   // eslint-disable-next-line prettier/prettier
   return (7000 - ONE_GROUP_OF_OFFSET_REGISTERS) + startOfAuxOffsetGroup + AXIS_ADRRESS_INDEX[axis];

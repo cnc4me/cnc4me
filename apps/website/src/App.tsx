@@ -1,11 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
-import { LexingErrors, MacroValueArray, ParsedLineData, ParsingErrors } from "@cnc4me/fanuc-macro-b";
+import {
+  AxisLocations,
+  LexingErrors,
+  MacroMemory,
+  MacroValueArray,
+  ParsedLineData,
+  ParsingErrors
+} from "@cnc4me/fanuc-macro-b";
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import { useEffect, useRef, useState } from "react";
 
 import Errors from "./components/Errors";
 import { ValueTable } from "./components/ValueTable";
+import WorkCoordinates from "./components/WorkCoordinates";
 import { configureMonaco } from "./handlers/configureMonaco";
 import { useEditorTheme } from "./hooks/useEditorTheme";
 import { useMacroRuntime } from "./hooks/useMacroRuntime";
@@ -14,27 +22,30 @@ import { getExampleCode } from "./utils/getExampleCode";
 
 export default function App() {
   const [runtime] = useMacroRuntime();
-  const { Interpreter, Parser } = runtime;
-
-  runtime.onError(errors => console.log(errors));
+  const { Memory, Interpreter, Parser } = runtime;
 
   const [interpreterResult, setInterpreterResult] = useState<ParsedLineData[]>([]);
-  const editorRef = useRef<MonacoEditor>();
 
+  const editorRef = useRef<MonacoEditor>();
   const [offset, setOffset] = useState(20);
   const [pageCount, setPageCount] = useState(1);
   const [leftCol, setLeftCol] = useState<MacroValueArray>([]);
   const [rightCol, setRightCol] = useState<MacroValueArray>([]);
+  const [errors, setErrors] = useState<string[]>([]);
 
-  const [errors, setErrors] = useState<ParsingErrors | LexingErrors>([]);
+  const [G54, setG54] = useState<AxisLocations>();
 
   const [editorTheme, _themeSetters] = useEditorTheme("gcode-dark");
   const [editorOptions, _setEditorOptions] = useState<EditorOptions>({
     minimap: { enabled: false }
   });
 
+  runtime.onError(errors => {
+    console.log(errors);
+  });
+
   function pageLeft() {
-    setPageCount(pageCount - 1 < 1 ? 1 : pageCount - 1);
+    setPageCount(pageCount - 1 === 0 ? 1 : pageCount - 1);
   }
 
   function pageRight() {
@@ -42,7 +53,7 @@ export default function App() {
   }
 
   function sliceRegisters() {
-    const macros = runtime.Memory.toArray();
+    const macros = Memory.toArray();
 
     if (pageCount === 1) {
       const start = offset * (pageCount - 1);
@@ -67,6 +78,7 @@ export default function App() {
   function parseGCode(code: string) {
     const parsedLines = runtime.evalLines(code);
 
+    setG54(Memory.getWorkCoordinates(54));
     setInterpreterResult(parsedLines);
     sliceRegisters();
   }
@@ -114,9 +126,22 @@ export default function App() {
             </div>
           ) : undefined}
         </div>
-        <div className="flex flex-col flex-grow bg-neutral-700">
+        <div className="flex flex-col flex-grow bg-neutral-800 ">
           <h1 className="px-2 py-3 text-3xl shadow-neutral-800 bg-neutral-800 text-violet-500">Macro Registers</h1>
-          <div className="grid grid-cols-2 grid-flow-row">
+          <div className="flex flex-col">
+            <div className="border-t border-t-purple-600">
+              <WorkCoordinates memory={Memory} />
+            </div>
+            <div className="p-2 text-yellow-100 border-t border-t-purple-600">
+              {JSON.stringify(Memory.toArray(), null, "  ")}
+            </div>
+            <div className="p-2 text-yellow-100 border-t  border-t-purple-600">{JSON.stringify(G54, null, "  ")}</div>
+          </div>
+        </div>
+
+        <div className="flex flex-col flex-grow hidden bg-neutral-700">
+          <h1 className="px-2 py-3 text-3xl shadow-neutral-800 bg-neutral-800 text-violet-500">Macro Registers</h1>
+          <div className="grid grid-flow-row grid-cols-2">
             <div className="">
               <ValueTable macros={leftCol} />
             </div>
@@ -124,12 +149,12 @@ export default function App() {
               <ValueTable macros={rightCol} />
             </div>
           </div>
-          <div className="flex flex-row py-4 justify-center">
+          <div className="flex flex-row justify-center py-4">
             <div className="">
               <button
                 onClick={pageLeft}
                 disabled={pageCount === 1}
-                className="rounded-lg py-2 w-32 border-2 border-violet-600 bg-violet-700 text-white disabled:text-gray-400  disabled:border-gray-600 disabled:bg-gray-500"
+                className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700 disabled:text-gray-400 disabled:border-gray-600 disabled:bg-gray-500"
               >
                 &laquo; Page
               </button>
@@ -140,7 +165,7 @@ export default function App() {
             <div className="">
               <button
                 onClick={pageRight}
-                className="rounded-lg py-2 w-32 border-2 border-violet-600 bg-violet-700 text-white"
+                className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700"
               >
                 Page &raquo;
               </button>
@@ -157,6 +182,20 @@ export default function App() {
           © 2022
         </div>
       </div>
+    </div>
+  );
+}
+function newFunction(Memory: MacroMemory) {
+  return (
+    <div className="p-4 mx-4">
+      {Object.entries(Memory.getWorkCoordinates(54) ?? {}).map(([axis, value]) => {
+        return (
+          <div className="flex flex-row">
+            <div className="w-12 pt-px text-violet-100">{axis}</div>
+            <div className="flex-grow pl-1 border-t border-l bg-violet-100 border-l-black border-t-black">{value}</div>
+          </div>
+        );
+      })}
     </div>
   );
 }

@@ -3,6 +3,7 @@ import { __, match } from "ts-pattern";
 
 import type {
   AxisLocations,
+  FirstParam,
   MacroValueArray,
   PossibleG10LineValues,
   ToolOffsetValues,
@@ -29,116 +30,76 @@ function getPositions(locations: Partial<AxisLocations>) {
   return pick(locations, ["X", "Y", "Z", "B"]);
 }
 
-function int(input: string | number) {
-  return typeof input === "string" ? parseInt(input) : input;
-}
-
 /**
  * A Representaion of a CNC machines' macro memory.
  */
 export class MacroMemory {
+  static REGISTERS: number[] = [
+    ...range(1, 33),
+    ...range(100, 199),
+    ...range(500, 9999),
+    ...range(3000, 4999),
+    ...range(5000, 14000)
+  ];
+
   private _vars: Record<number, number> = {};
-
-  get G53(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(0);
-  }
-
-  get G54(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(1);
-  }
-
-  get G55(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(2);
-  }
-
-  get G56(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(3);
-  }
-
-  get G57(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(4);
-  }
-
-  get G58(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(5);
-  }
-
-  get G59(): AxisLocations {
-    return this._getCommonWorkOffsetAxisLocations(6);
-  }
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
    */
   constructor() {
     this.write(GROUP_3, 90);
-
-    // eslint-disable-next-line prettier/prettier
-    const registers: number[] = [
-      ...range(1, 33),
-      ...range(100, 199),
-      ...range(500, 9999),
-      ...range(3000, 4999),
-      ...range(5000, 14000)
-    ];
-
-    registers.forEach(idx => this.clear(idx));
-
-    debug(`Initialized ${registers.length} registers`);
+    this.reset();
   }
 
   /**
    * Read a value from a register
    */
-  read(key: number): number {
-    const value = this._vars[key];
+  read(register: number): number {
+    const value = this._read(register);
 
-    debug(`[READ ] #${key}= ${value}`);
+    debug(`[READ ] #${register}= ${value}`);
 
     return value;
   }
 
   /**
+   * Read a range of values from a starting register
+   */
+  readBlocks(from: number, count: number): number[] {
+    return range(from, from + count).map(i => this.read(i));
+  }
+
+  /**
    * Write  a value to a register
    */
-  write(key: number, value: number): UpdatedValue {
-    debug(`[WRITE] #${key}= ${value}`);
+  write(register: number, value: number): UpdatedValue {
+    debug(`[WRITE] #${register}= ${value}`);
 
-    const prev = this._vars[key];
+    const prev = this._read(register);
 
-    this._vars[key] = value;
+    this._write(register, value);
 
     return {
       prev,
-      curr: this._vars[key]
+      curr: this._vars[register]
     };
   }
 
   /**
    * Clear a register value by writing `NaN`
    */
-  clear(register: number | string): void {
-    this._vars[int(register)] = NaN;
+  clear(register: number): void {
+    this._write(register, NaN);
   }
 
   /**
-   * Clear all registers and reset the memory
+   * Clear all registers to reset the memory
    */
   reset(): void {
-    Object.keys(this._vars).forEach(register => this.clear(register));
-  }
+    MacroMemory.REGISTERS.forEach(idx => this.clear(idx));
 
-  /**
-   * Evaluate and read into memory offsets from a G10 line
-   */
-  evalG10(input: string) {
-    const { error, result } = parseG10(input);
-
-    if (result) {
-      this.g10(result);
-    } else {
-      throw Error(error);
-    }
+    debug(`Initialized ${MacroMemory.REGISTERS.length} registers`);
   }
 
   /**
@@ -170,17 +131,34 @@ export class MacroMemory {
   }
 
   /**
-   * Get locations from a `G54.1 Pnnn` work offset
+   * Evaluate and read into memory offsets from a G10 line
    */
-  G54_1(group: number): AxisLocations {
-    const axisReg = (axis: string) => composeAuxWorkOffsetAxisRegister(group, axis);
+  evalG10(input: string) {
+    const { error, result } = parseG10(input);
 
-    return {
-      X: this.read(axisReg("X")),
-      Y: this.read(axisReg("Y")),
-      Z: this.read(axisReg("Z")),
-      B: this.read(axisReg("B"))
-    };
+    if (result) {
+      this.g10(result);
+    } else {
+      throw Error(error);
+    }
+  }
+
+  /**
+   * Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
+   */
+  getWorkCoordinates(gOffset: number): AxisLocations {
+    if (gOffset < 53 || gOffset > 59) {
+      throw Error(`${gOffset} is not a valid Work Coordinate Group`);
+    }
+
+    return this._getCommonWorkOffsetAxisLocations(gOffset);
+  }
+
+  /**
+   * Get auxiliary work coordinates for a G54.1 `P` group
+   */
+  getAuxWorkCoordinates(pGroup: number): AxisLocations {
+    return this._getAuxWorkOffsetAxisLocations(pGroup);
   }
 
   /**
@@ -284,21 +262,36 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  toArray(): MacroValueArray {
-    return Object.entries(this._vars).map(([register, value]) => {
-      return [parseInt(register), value];
+  get forEach() {
+    return Object.entries(this._vars);
+  }
+
+  /**
+   * Create an array of all the set macro variables
+   */
+  toArray(opts?: { includeUnset: boolean }): MacroValueArray {
+    const values: MacroValueArray = [];
+
+    Object.entries(this._vars).forEach(([register, value]) => {
+      const valueIsNotSet = value === null || isNaN(value);
+
+      if (value || (valueIsNotSet && opts?.includeUnset)) {
+        values.push([parseInt(register), value]);
+      }
     });
+
+    return values;
   }
 
   /**
    * Collect all the set registers into a POJO for further processing
    */
-  toObject(): Record<number, number> {
-    const valueMap: Record<number, number> = {};
+  toObject(opts: FirstParam<MacroMemory["toArray"]>): Record<number, number> {
+    const valueMap: Record<string, number> = {};
 
-    Object.entries(this._vars).forEach(([register, value]) => {
-      valueMap[parseInt(register)] = value;
-    });
+    for (const [register, value] of this.toArray(opts)) {
+      valueMap[register] = value;
+    }
 
     return valueMap;
   }
@@ -307,7 +300,15 @@ export class MacroMemory {
    * Serialize all the set registers to a JSON string
    */
   serialize(): string {
-    return JSON.stringify(this.toObject());
+    return JSON.stringify(this._vars);
+  }
+
+  private _write(register: number, value: number) {
+    this._vars[register] = value;
+  }
+
+  private _read(register: number): number {
+    return this._vars[register] ?? NaN;
   }
 
   /**
@@ -333,11 +334,27 @@ export class MacroMemory {
    */
   private _getCommonWorkOffsetAxisLocations(commonOffset: number): AxisLocations {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
-      const reg = composeWorkOffsetAxisRegister(commonOffset, axis);
+      const reg = composeWorkOffsetAxisRegister(commonOffset - 53, axis);
 
       return {
         ...locations,
-        [axis]: this.read(reg)
+        [axis]: this._vars[reg]
+        // [axis]: this.read(reg)
+      };
+    }, {} as AxisLocations);
+  }
+
+  /**
+   * Get set axis locations for a given work offset
+   */
+  private _getAuxWorkOffsetAxisLocations(pGroup: number): AxisLocations {
+    return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
+      const reg = composeAuxWorkOffsetAxisRegister(pGroup, axis);
+
+      return {
+        ...locations,
+        [axis]: this._vars[reg]
+        // [axis]: this.read(reg)
       };
     }, {} as AxisLocations);
   }
@@ -355,32 +372,4 @@ export class MacroMemory {
       curr: this._vars[key]
     };
   }
-
-  /**
-   * Check the given tool number against validation rules
-   */
-  // private _validateToolNumber(toolNum: number) {
-  //   debug("Validating tool number", { toolNum });
-
-  //   const maxToolNum = this._config.UPPER_TOOL_NUMBER_LIMIT;
-
-  //   if (toolNum > maxToolNum) {
-  //     throw Error(`(${toolNum}) exceeds configured maximum tool number (${maxToolNum}).`);
-  //   } else if (toolNum <= 0) {
-  //     throw Error(`${toolNum} is invalid, Tools must be positive.`);
-  //   }
-  // }
-
-  /**
-   * Check the given offset number against validation rules
-   */
-  // private _validateWorkOffset(workOffset: number) {
-  //   debug("Validating offset number", { workOffset });
-
-  //   if (workOffset >= 60) {
-  //     throw Error(`(${workOffset}) exceeds configured maximum. (54 - 59)`);
-  //   } else if (workOffset <= 52) {
-  //     throw Error(`(${workOffset}) exceeds configured minimum. (54 - 59)`);
-  //   }
-  // }
 }
