@@ -1,5 +1,4 @@
 import { CstParser } from "chevrotain";
-import debug from "debug";
 
 import { parser as debug } from "./debuggers";
 import {
