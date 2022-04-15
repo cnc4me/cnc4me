@@ -7,7 +7,8 @@ import type {
   MacroValueArray,
   PossibleG10LineValues,
   ToolOffsetValues,
-  UpdatedValue
+  UpdatedValue,
+  WorkCoordinatesArray
 } from "../../types";
 import { range } from "../../utils";
 // import { range } from "../../utils";
@@ -144,9 +145,10 @@ export class MacroMemory {
   }
 
   /**
-   * Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
+   * Get work coordinates as labeled axis locations for a common work offset
+   * (G53, G54, G55, G56, G57, G58, G59)
    */
-  getWorkCoordinates(gOffset: number): AxisLocations {
+  getAxisLocations(gOffset: number): AxisLocations {
     if (gOffset < 53 || gOffset > 59) {
       throw Error(`${gOffset} is not a valid Work Coordinate Group`);
     }
@@ -155,9 +157,21 @@ export class MacroMemory {
   }
 
   /**
+   * Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
+   */
+  getWorkCoordinates(gOffset: number): WorkCoordinatesArray {
+    const { X, Y, Z, B } = this.getAxisLocations(gOffset);
+    return [X, Y, Z, B];
+  }
+
+  /**
    * Get auxiliary work coordinates for a G54.1 `P` group
    */
   getAuxWorkCoordinates(pGroup: number): AxisLocations {
+    if (pGroup < 1 || pGroup > 299) {
+      throw Error(`${pGroup} is not a valid Aux Work Coordinate Group`);
+    }
+
     return this._getAuxWorkOffsetAxisLocations(pGroup);
   }
 
@@ -286,7 +300,7 @@ export class MacroMemory {
   /**
    * Collect all the set registers into a POJO for further processing
    */
-  toObject(opts: FirstParam<MacroMemory["toArray"]>): Record<number, number> {
+  toObject(opts?: FirstParam<MacroMemory["toArray"]>): Record<number, number> {
     const valueMap: Record<string, number> = {};
 
     for (const [register, value] of this.toArray(opts)) {

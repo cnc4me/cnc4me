@@ -1,9 +1,7 @@
-import { LexingErrors, ParsingErrors } from "@cnc4me/fanuc-macro-b";
-
 import { zeroPad } from "../utils/helpers";
 
 // eslint-disable-next-line import/no-default-export
-export default function Errors({ errors }: { errors: ParsingErrors | LexingErrors }) {
+export default function Errors({ errors }: { errors: string[] }) {
   return (
     <div className="">
       <h1 className="pb-1 text-xl font-bold text-violet-400">Errors:</h1>

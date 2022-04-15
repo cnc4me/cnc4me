@@ -19,7 +19,7 @@ export function getExampleCode() {
     "",
     "( EVAL G10 LINES) ",
     "G10 G90 L2 P1 X1.2345 Y9.8765 Z-8.6753 B270.",
-    "G10 G90 L20 P4 X11.1111 Y22.2222 Z3.3333 B90.",
+    "G10 G90 L2 P2 X4.6234 Y3.8245 Z-7.2204 B90.",
     "",
     "( ... AND MORE! ) ",
     ""

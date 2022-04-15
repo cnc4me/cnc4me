@@ -7,6 +7,8 @@ export interface AxisLocations {
   B: number;
 }
 
+export type WorkCoordinatesArray = [X: number, Y: number, Z: number, B: number];
+
 export interface UpdatedValue {
   prev: number;
   curr: number;
