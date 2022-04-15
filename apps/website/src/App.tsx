@@ -53,7 +53,7 @@ export default function App() {
   }
 
   function sliceRegisters() {
-    const macros = Memory.toArray();
+    const macros = Memory.toArray({ includeUnset: true });
 
     if (pageCount === 1) {
       const start = offset * (pageCount - 1);
@@ -79,12 +79,11 @@ export default function App() {
     const parsedLines = runtime.evalLines(code);
 
     setInterpreterResult(parsedLines);
-    sliceRegisters();
   }
 
   useEffect(() => {
     sliceRegisters();
-  }, [pageCount, runtime.Memory]);
+  }, [pageCount, interpreterResult, runtime.Memory]);
 
   const handleEditorChange: OnChange = (value?: string) => {
     parseGCode(String(value));
@@ -176,49 +175,47 @@ export default function App() {
                   <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
                     Debug
                   </h1>
-                  <div className="p-2 text-yellow-100">{JSON.stringify(Memory.toObject(), null, "  ")}</div>
+                  <div className="p-2 text-blue-400">{JSON.stringify(Memory.toObject(), null, "  ")}</div>
                 </div>
               );
             })
             .with("macros", () => {
               return (
-                <>
-                  <div className="container">
-                    <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
-                      Macro Variables
-                    </h1>
-                    <div className="grid grid-flow-row grid-cols-2">
-                      <div className="">
-                        <ValueTable macros={leftCol} />
-                      </div>
-                      <div className="">
-                        <ValueTable macros={rightCol} />
-                      </div>
+                <div className="container">
+                  <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
+                    Macro Variables
+                  </h1>
+                  <div className="grid grid-flow-row grid-cols-2">
+                    <div className="">
+                      <ValueTable macros={leftCol} />
                     </div>
-                    <div className="flex flex-row justify-center py-4">
-                      <div className="">
-                        <button
-                          onClick={pageLeft}
-                          disabled={pageCount === 1}
-                          className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700 disabled:text-gray-400 disabled:border-gray-600 disabled:bg-gray-500"
-                        >
-                          &laquo; Page
-                        </button>
-                      </div>
-                      <div className="px-8 py-2 text-white">
-                        Page <span className="text-violet-300">{pageCount}</span>
-                      </div>
-                      <div className="">
-                        <button
-                          onClick={pageRight}
-                          className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700"
-                        >
-                          Page &raquo;
-                        </button>
-                      </div>
+                    <div className="">
+                      <ValueTable macros={rightCol} />
                     </div>
                   </div>
-                </>
+                  <div className="flex flex-row justify-center py-4">
+                    <div className="">
+                      <button
+                        onClick={pageLeft}
+                        disabled={pageCount === 1}
+                        className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700 disabled:text-gray-400 disabled:border-gray-600 disabled:bg-gray-500"
+                      >
+                        &laquo; Page
+                      </button>
+                    </div>
+                    <div className="px-8 py-2 text-white">
+                      Page <span className="text-violet-300">{pageCount}</span>
+                    </div>
+                    <div className="">
+                      <button
+                        onClick={pageRight}
+                        className="w-32 py-2 text-white border-2 rounded-lg border-violet-600 bg-violet-700"
+                      >
+                        Page &raquo;
+                      </button>
+                    </div>
+                  </div>
+                </div>
               );
             })
             .otherwise(() => {
