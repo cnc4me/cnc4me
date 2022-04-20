@@ -1,4 +1,4 @@
-export function getExampleCode() {
+export function useExampleCode(): string {
   return [
     "( VARIABLE ASSIGNMENTS )",
     "#1=3.141592654",
@@ -17,11 +17,17 @@ export function getExampleCode() {
     "#8=ROUND[#1]",
     "#9=FUP[#1]",
     "",
-    "( EVAL G10 LINES) ",
+    "( EVAL G10 LINES FOR WORK OFFSETS ) ",
     "G10 G90 L2 P1 X1.2345 Y9.8765 Z-8.6753 B270.",
     "G10 G90 L2 P2 X4.6234 Y3.8245 Z-7.2204 B90.",
     "",
-    "( ... AND MORE! ) ",
+    "( OR FOR TOOL OFFSETS) ",
+    "G10 G90 L11 P1 R3.1235",
+    "G10 G90 L10 P1 R.004",
+    "G10 G90 L13 P1 R.50",
+    "G10 G90 L12 P1 R-.001",
+    "",
+    "( AND MORE! ) ",
     ""
   ].join("\n");
 }

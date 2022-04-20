@@ -13,7 +13,7 @@ export const Coordinates: React.FC<{ group: number; locations: AxisLocations }> 
       <div className="flex flex-col flex-grow pr-10">
         {Object.entries(locations).map(([axis, value]) => {
           return (
-            <div className="flex flex-row">
+            <div key={axis} className="flex flex-row">
               <div className="w-12 pt-px pr-3 text-right text-violet-100">{axis}</div>
               <div className="flex-grow pl-1 border-t border-l bg-violet-100 border-l-black border-t-black">
                 {value}

@@ -1,11 +1,11 @@
 import { AxisLocations, MacroMemory } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
-import { Coordinates } from "./Coordinates";
+import { Coordinates } from "../components/Coordinates";
 
 type GroupCoordsTuple = [group: number, coords: AxisLocations];
 
-export const OffsetsPage: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+export const OffsetTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const leftCol: GroupCoordsTuple[] = [53, 54, 55, 56].map(g => [g, memory.getAxisLocations(g)]);
   const rightCol: GroupCoordsTuple[] = [57, 58, 59].map(g => [g, memory.getAxisLocations(g)]);
 
@@ -30,12 +30,12 @@ export const OffsetsPage: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
             <div className="grid grid-flow-row grid-cols-2 px-4 pt-2 font-mono">
               <div>
                 {leftCol.map(([group, coords]) => {
-                  return <Coordinates group={group} locations={coords} />;
+                  return <Coordinates key={group} group={group} locations={coords} />;
                 })}
               </div>
               <div>
                 {rightCol.map(([group, coords]) => {
-                  return <Coordinates group={group} locations={coords} />;
+                  return <Coordinates key={group} group={group} locations={coords} />;
                 })}
               </div>
             </div>
@@ -45,3 +45,4 @@ export const OffsetsPage: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
     </div>
   );
 };
+3;

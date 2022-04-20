@@ -18,7 +18,15 @@ export interface WatcherValuePayload extends UpdatedValue {
   register: number;
 }
 
-export interface ToolOffsetValues {
+export type ToolOffsetArray = [
+  toolNumber: number,
+  lengthGeom: number,
+  lengthWear: number,
+  diamGeom: number,
+  diamWear: number
+];
+
+export interface ToolOffsetDict {
   length: number;
   lengthComp: number;
   diameter: number;

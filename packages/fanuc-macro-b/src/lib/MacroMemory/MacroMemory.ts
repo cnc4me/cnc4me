@@ -6,7 +6,8 @@ import type {
   FirstParam,
   MacroValueArray,
   PossibleG10LineValues,
-  ToolOffsetValues,
+  ToolOffsetArray,
+  ToolOffsetDict,
   UpdatedValue,
   WorkCoordinatesArray
 } from "../../types";
@@ -178,13 +179,21 @@ export class MacroMemory {
   /**
    * Get all tool offset values for a tool number
    */
-  getToolOffsets(toolNum: number): ToolOffsetValues {
+  getToolOffsets(toolNum: number): ToolOffsetDict {
     return {
       length: this.getToolLength(toolNum),
       diameter: this.getToolDiameter(toolNum),
       lengthComp: this.getToolLengthComp(toolNum),
       diameterComp: this.getToolDiameterComp(toolNum)
     };
+  }
+
+  /**
+   * Get all tool offset values as an array of values
+   */
+  getToolOffsetArray(toolNum: number): ToolOffsetArray {
+    const { length, diameter, lengthComp, diameterComp } = this.getToolOffsets(toolNum);
+    return [toolNum, length, diameter, lengthComp, diameterComp];
   }
 
   /**
@@ -276,9 +285,9 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  get forEach() {
-    return Object.entries(this._vars);
-  }
+  // get forEach() {
+  //   return Object.entries(this._vars);
+  // }
 
   /**
    * Create an array of all the set macro variables

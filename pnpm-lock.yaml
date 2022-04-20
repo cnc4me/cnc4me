@@ -108,14 +108,15 @@ importers:
       '@cnc4me/monaco-language-gcode': workspace:*
       '@cnc4me/monaco-theme-gcode': workspace:*
       '@monaco-editor/react': ^4.3.1
+      '@types/mousetrap': ^1.6.9
       '@types/react': ^17.0.41
       '@types/react-dom': ^17.0.14
       '@vitejs/plugin-react': ^1.2.0
       autoprefixer: ^10.4.4
-      chevrotain: ^10.1.2
       eslint: ^8.11.0
       jest: ^27.5.1
       monaco-editor: ^0.32.1
+      mousetrap: ^1.6.5
       postcss: ^8.4.12
       react: ^17.0.2
       react-dom: ^17.0.2
@@ -130,12 +131,13 @@ importers:
       '@cnc4me/monaco-language-gcode': link:../../packages/monaco-language-gcode
       '@cnc4me/monaco-theme-gcode': link:../../packages/monaco-theme-gcode
       '@monaco-editor/react': 4.3.1_e62f1489d5efe674a41c3f8d6971effe
-      chevrotain: 10.1.2
       monaco-editor: 0.32.1
+      mousetrap: 1.6.5
       react: 17.0.2
       react-dom: 17.0.2_react@17.0.2
       ts-pattern: 3.3.5
     devDependencies:
+      '@types/mousetrap': 1.6.9
       '@types/react': 17.0.41
       '@types/react-dom': 17.0.14
       '@vitejs/plugin-react': 1.2.0
@@ -507,7 +509,7 @@ packages:
       '@babel/core': ^7.0.0
     dependencies:
       '@babel/compat-data': 7.17.7
-      '@babel/core': 7.17.8_supports-color@9.2.2
+      '@babel/core': 7.17.8
       '@babel/helper-validator-option': 7.16.7
       browserslist: 4.20.2
       semver: 6.3.0
@@ -4341,6 +4343,10 @@ packages:
 
   /@types/minimist/1.2.2:
     resolution: {integrity: sha512-jhuKLIRrhvCPLqwPcx6INqmKeiA5EWrsCOPhrlFSrbrmU4ZMPjj5Ul/oLCMDO98XRUIwVm78xICz4EPCektzeQ==}
+    dev: true
+
+  /@types/mousetrap/1.6.9:
+    resolution: {integrity: sha512-HUAiN65VsRXyFCTicolwb5+I7FM6f72zjMWr+ajGk+YTvzBgXqa2A5U7d+rtsouAkunJ5U4Sb5lNJjo9w+nmXg==}
     dev: true
 
   /@types/ms/0.7.31:
@@ -11154,6 +11160,10 @@ packages:
 
   /monaco-editor/0.32.1:
     resolution: {integrity: sha512-LUt2wsUvQmEi2tfTOK+tjAPvt7eQ+K5C4rZPr6SeuyzjAuAHrIvlUloTcOiGjZW3fn3a/jFQCONrEJbNOaCqbA==}
+    dev: false
+
+  /mousetrap/1.6.5:
+    resolution: {integrity: sha512-QNo4kEepaIBwiT8CDhP98umTetp+JNfQYBWvC1pc6/OAibuXtRcxZ58Qz8skvEHYvURne/7R8T5VoOI7rDsEUA==}
     dev: false
 
   /move-file/3.0.0:

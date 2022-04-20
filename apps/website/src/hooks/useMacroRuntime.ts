@@ -1,8 +1,8 @@
 import { MacroRuntime } from "@cnc4me/fanuc-macro-b";
 import { useState } from "react";
 
-export function useMacroRuntime() {
-  const runtimeInstance = new MacroRuntime();
+const runtimeInstance = new MacroRuntime();
 
+export function useMacroRuntime() {
   return useState(runtimeInstance);
 }
