@@ -4,7 +4,7 @@ import { useEffect, useState } from "react";
 import { ValueTable } from "../components/ValueTable";
 import { ViewHeading } from "./ViewHeading";
 
-export const MacroTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+export const MacroView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const [pageCount, setPageCount] = useState(1);
   const [leftCol, setLeftCol] = useState<MacroValueArray>([]);
   const [rightCol, setRightCol] = useState<MacroValueArray>([]);

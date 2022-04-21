@@ -3,13 +3,12 @@
 import { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useRef, useState } from "react";
-import { Link, Outlet, Route, Routes } from "react-router-dom";
-import { match } from "ts-pattern";
 
+import { Footer } from "./Footer";
 import { configureMonaco } from "./handlers/configureMonaco";
 import { useEditorTheme, useExampleCode, useMacroRuntime } from "./hooks";
 import { EditorOptions, MonacoEditor, TabStr } from "./types";
-import { DebugTab, MacroTab, OffsetTab, ToolsTab } from "./views";
+import { DebugView, MacroView, OffsetView, ToolsView } from "./views";
 
 export default function App() {
   const example = useExampleCode();
@@ -40,20 +39,34 @@ export default function App() {
 
   const onEditorMount: OnMount = editor => {
     editorRef.current = editor;
-    // parseGCode(example);
+    parseGCode(example);
   };
 
-  const handleEditorChange: OnChange = (value?: string) => {
+  const onEditorChange: OnChange = (value?: string) => {
     parseGCode(String(value));
   };
 
-  function run() {
+  const onRunBtnClick = () => {
     const value = editorRef.current?.getValue();
 
     if (value) {
       parseGCode(String(value));
     }
-  }
+  };
+
+  const CurrentView: React.FC = () => {
+    return activeTab === "offsets" ? (
+      <OffsetView memory={memory} />
+    ) : activeTab === "macros" ? (
+      <MacroView memory={memory} />
+    ) : activeTab === "tools" ? (
+      <ToolsView memory={memory} />
+    ) : activeTab === "debug" ? (
+      <DebugView memory={memory} errors={errors} />
+    ) : (
+      <h1 className="text-red-600">ERROR</h1>
+    );
+  };
 
   return (
     <div className="flex flex-col h-screen overflow-y-hidden bg-neutral-800">
@@ -83,7 +96,7 @@ export default function App() {
             <p className="px-6 py-3 text-sm italic text-violet-100">{`\u00BB`} Try editing some of the values!</p>
             <div className="flex-grow"></div>
             <button
-              onClick={() => run()}
+              onClick={() => onRunBtnClick()}
               className="px-3 mr-2 my-1.5 text-white border-1 rounded-md border-violet-600 bg-violet-700"
             >
               Run {`\u2bc8`}
@@ -95,53 +108,17 @@ export default function App() {
             options={editorOptions}
             defaultValue={example}
             onMount={onEditorMount}
-            onChange={handleEditorChange}
+            onChange={onEditorChange}
             beforeMount={configureMonaco}
           />
         </div>
         <div className="flex flex-col flex-grow bg-neutral-800">
-          {match<TabStr>(activeTab)
-            .with("offsets", () => {
-              return <OffsetTab memory={memory} />;
-            })
-            .with("macros", () => {
-              return <MacroTab memory={memory} />;
-            })
-            .with("tools", () => {
-              return <ToolsTab memory={memory} />;
-            })
-            .with("debug", () => {
-              return <DebugTab memory={memory} errors={errors} />;
-            })
-            .otherwise(() => {
-              return <h1 className="text-red-600">ERROR</h1>;
-            })}
+          <CurrentView />
         </div>
       </div>
 
-      <div className="flex flex-row text-purple-100 border-t border-t-purple-600 bg-neutral-900">
-        <div className="p-2 text-sm">
-          View the{" "}
-          <a
-            className="text-purple-600 text-bold hover:text-purple-400"
-            href="https://github.com/cnc4me/cnc4me/tree/main/packages/fanuc-macro-b"
-          >
-            Parser
-          </a>{" "}
-          on Github
-        </div>
-        <div className="flex-grow text-center p-2 text-sm">
-          <a className="text-purple-600 text-bold hover:text-purple-400" href="https://github.com/cnc4me/cnc4me">
-            CNC 4 ME
-          </a>{" "}
-          © 2022
-        </div>
-        <div className="p-2 text-sm">
-          Made By{" "}
-          <a className="text-purple-600 text-bold hover:text-purple-400" href="https://github.com/kevinkhill">
-            Kevin Hill
-          </a>
-        </div>
+      <div className="border-t border-t-purple-600">
+        <Footer />
       </div>
     </div>
   );

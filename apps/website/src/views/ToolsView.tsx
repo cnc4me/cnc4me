@@ -1,10 +1,10 @@
-import { MacroMemory, ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
+import { MacroMemory } from "@cnc4me/fanuc-macro-b";
 import { useState } from "react";
 
 import { intRange, toFixed, zeroPad } from "../utils/helpers";
 import { ViewHeading } from "./ViewHeading";
 
-export const ToolsTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const [start, setStart] = useState(1);
   const [perPage, setPerPage] = useState(24);
   const [precision, setPrecision] = useState(4);

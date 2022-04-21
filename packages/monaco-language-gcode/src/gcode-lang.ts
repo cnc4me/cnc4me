@@ -6,6 +6,7 @@ export const gcodeLanguage = createMonarchLanguage(
   [
     [/#\d/, "macro-var"],
     [/\(.+\)/, "comment"],
+    [/G[0-9]+/, "keyword"],
     [/[\=\+\-\*\/]/, "operators"],
     [/(\d+(?:\.\d+)?)/, "number"]
     // [/\[[a-zA-Z 0-9:]+\]/, "custom-date"]

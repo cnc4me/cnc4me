@@ -4,7 +4,7 @@ import React from "react";
 import { Errors } from "../components/Errors";
 import { ViewHeading } from "./ViewHeading";
 
-export const DebugTab: React.FC<{ memory: MacroMemory; errors: string[] }> = ({ memory, errors }) => {
+export const DebugView: React.FC<{ memory: MacroMemory; errors: string[] }> = ({ memory, errors }) => {
   return (
     <div className="container">
       <ViewHeading value="Debug" />

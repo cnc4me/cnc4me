@@ -1,4 +1,4 @@
-export { DebugTab } from "./DebugTab";
-export { MacroTab } from "./MacroTab";
-export { OffsetTab } from "./OffsetTab";
-export { ToolsTab } from "./ToolsTab";
+export { OffsetView } from "./CoordinatesView";
+export { DebugView } from "./DebugView";
+export { MacroView } from "./MacrosView";
+export { ToolsView } from "./ToolsView";
