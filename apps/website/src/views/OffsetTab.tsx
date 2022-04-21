@@ -2,6 +2,7 @@ import { AxisLocations, MacroMemory } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
 import { Coordinates } from "../components/Coordinates";
+import { ViewHeading } from "./ViewHeading";
 
 type GroupCoordsTuple = [group: number, coords: AxisLocations];
 
@@ -11,9 +12,7 @@ export const OffsetTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
 
   return (
     <div className="container">
-      <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
-        Work Coordinates
-      </h1>
+      <ViewHeading value="Work Coordinates" />
       <div className="flex flex-col">
         <div className="pb-4 border-t border-t-purple-600">
           <div className="container">

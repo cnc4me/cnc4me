@@ -23,9 +23,19 @@ export function useExampleCode(): string {
     "",
     "( OR FOR TOOL OFFSETS) ",
     "G10 G90 L11 P1 R3.1235",
-    "G10 G90 L10 P1 R.004",
-    "G10 G90 L13 P1 R.50",
+    "G10 G90 L10 P1 R.5",
+    "G10 G90 L13 P1 R-.0025",
     "G10 G90 L12 P1 R-.001",
+
+    "G10 G90 L11 P2 R5.3162",
+    "G10 G90 L10 P2 R.375",
+    "G10 G90 L13 P2 R.0012",
+    "G10 G90 L12 P2 R3.1235",
+
+    "G10 G90 L11 P3 R2.3903",
+    "G10 G90 L10 P3 R1.",
+    "G10 G90 L13 P3 R.375",
+    "G10 G90 L12 P3 R.004",
     "",
     "( AND MORE! ) ",
     ""

@@ -2,6 +2,7 @@ import { MacroMemory, MacroValueArray } from "@cnc4me/fanuc-macro-b";
 import { useEffect, useState } from "react";
 
 import { ValueTable } from "../components/ValueTable";
+import { ViewHeading } from "./ViewHeading";
 
 export const MacroTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const [pageCount, setPageCount] = useState(1);
@@ -41,9 +42,7 @@ export const MacroTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
 
   return (
     <div className="container">
-      <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
-        Macro Variables
-      </h1>
+      <ViewHeading value="Macro Variables" />
       <div className="grid grid-flow-row grid-cols-2">
         <div className="">
           <ValueTable macros={leftCol} />

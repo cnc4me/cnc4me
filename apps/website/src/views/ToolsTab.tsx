@@ -2,6 +2,7 @@ import { MacroMemory, ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
 import { useState } from "react";
 
 import { intRange, toFixed, zeroPad } from "../utils/helpers";
+import { ViewHeading } from "./ViewHeading";
 
 export const ToolsTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const [start, setStart] = useState(1);
@@ -12,9 +13,7 @@ export const ToolsTab: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
 
   return (
     <div className="container">
-      <h1 className="px-2 py-3 text-3xl border-b shadow-neutral-800 bg-neutral-800 border-b-violet-600 text-violet-500">
-        Tools
-      </h1>
+      <ViewHeading value="Tools" />
       <div className="font-mono flex flex-col flex-grow mt-2">
         <div className="flex flex-row justify-around ml-12 mr-4">
           <div className="text-blue-400">(LENGTH)</div>
