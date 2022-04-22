@@ -3,33 +3,38 @@
 import { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useRef, useState } from "react";
+import { useLocation, useParams } from "react-router-dom";
 
 import { Footer } from "./Footer";
 import { configureMonaco } from "./handlers/configureMonaco";
 import { useEditorTheme, useExampleCode, useMacroRuntime } from "./hooks";
+import { usePathname } from "./hooks/usePathname";
 import { EditorOptions, MonacoEditor, TabStr } from "./types";
 import { DebugView, MacroView, OffsetView, ToolsView } from "./views";
 
 export default function App() {
+  const tabs: TabStr[] = ["macros", "offsets", "tools", "debug"];
+
   const example = useExampleCode();
   const runtime = useMacroRuntime();
 
+  const pathname = usePathname() as TabStr;
+  const homeTab = tabs.includes(pathname) ? pathname : "macros";
+  const [activeTab, setActiveTab] = useState<TabStr>(homeTab);
+
   const editorRef = useRef<MonacoEditor>();
-  const [editorTheme, _themeSetters] = useEditorTheme("gcode-dark");
-  const [editorOptions, _setEditorOptions] = useState<EditorOptions>({
+  const [editorTheme] = useEditorTheme("gcode-dark");
+  const [editorOptions] = useState<EditorOptions>({
     minimap: { enabled: false }
   });
 
+  const [errors, setErrors] = useState<string[]>([]);
   const [memory, setMemory] = useState<MacroMemory>(runtime.Memory);
   const [interpreterResult, setInterpreterResult] = useState<ParsedLineData[]>([]);
-  const [errors, setErrors] = useState<string[]>([]);
 
   runtime.onError(errors => {
     console.log(errors);
   });
-
-  const tabs: TabStr[] = ["macros", "offsets", "tools", "debug"];
-  const [activeTab, setActiveTab] = useState<TabStr>("macros");
 
   const parseGCode = (code: string) => {
     const parsedLines = runtime.evalLines(code);
@@ -53,6 +58,10 @@ export default function App() {
       parseGCode(String(value));
     }
   };
+
+  // useEffect(() => {
+  //   console.log(pathname);
+  // });
 
   const CurrentView: React.FC = () => {
     return activeTab === "offsets" ? (
