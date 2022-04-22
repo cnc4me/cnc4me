@@ -9,3 +9,7 @@ publish = "apps/website/dist"
 
 # [[plugins]]
 # package = "/.netlify/netlify-plugin-pnpm"
+
+[[redirects]]
+from = "/*"
+to = "/index.html"
