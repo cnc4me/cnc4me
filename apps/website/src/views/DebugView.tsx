@@ -1,13 +1,21 @@
 import { MacroMemory } from "@cnc4me/fanuc-macro-b";
 import lzstring from "lz-string";
-import React from "react";
+import React, { useEffect, useState } from "react";
 
 import { Errors } from "../components/Errors";
-import { useExampleCode } from "../hooks";
 import { ViewHeading } from "./ViewHeading";
 
-export const DebugView: React.FC<{ memory: MacroMemory; errors: string[] }> = ({ memory, errors }) => {
-  const example = useExampleCode();
+export const DebugView: React.FC<{ editorContents: string; memory: MacroMemory; errors: string[] }> = ({
+  editorContents,
+  memory,
+  errors
+}) => {
+  const [encodedInput, setEncodedInput] = useState("");
+
+  useEffect(() => {
+    const encoded = lzstring.compressToEncodedURIComponent(editorContents);
+    setEncodedInput(encoded);
+  });
 
   return (
     <div className="container flex flex-col">
@@ -17,7 +25,7 @@ export const DebugView: React.FC<{ memory: MacroMemory; errors: string[] }> = ({
           <pre>{JSON.stringify(memory.toObject(), null, "  ")}</pre>
         </div>
         <div className="border-purple-500 border p-2">
-          <div className="font-mono text-purple-500 break-all">{lzstring.compressToEncodedURIComponent(example)}</div>
+          <div className="font-mono text-purple-500 break-all">{encodedInput}</div>
         </div>
         <div>
           {errors.length > 0 ? (

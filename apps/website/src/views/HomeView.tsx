@@ -12,7 +12,7 @@ export const HomeView = () => {
           </p>
           <p className="px-10 py-5 text-purple-300">
             It was created with the goal of letting an operator view how a macro program might execute in the machine,
-            without interupting production.
+            without interrupting production.
           </p>
         </div>
         {/* <div className="border-purple-500 border p-2"></div> */}

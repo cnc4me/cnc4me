@@ -27,6 +27,7 @@ export default function App() {
   const [activeTab, setActiveTab] = useState<ViewStr>(homeTab);
 
   const editorRef = useRef<MonacoEditor>();
+  const getEditorContents = () => editorRef.current?.getValue() ?? "";
   const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
 
   const [errors, setErrors] = useState<string[]>([]);
@@ -53,7 +54,7 @@ export default function App() {
   };
 
   const onRunBtnClick = () => {
-    const value = editorRef.current?.getValue();
+    const value = getEditorContents();
 
     if (value) {
       parseGCode(String(value));
@@ -70,7 +71,7 @@ export default function App() {
       .with("offsets", () => <OffsetView memory={memory} />)
       .with("macros", () => <MacroView memory={memory} />)
       .with("tools", () => <ToolsView memory={memory} />)
-      .with("debug", () => <DebugView memory={memory} errors={errors} />)
+      .with("debug", () => <DebugView editorContents={getEditorContents()} memory={memory} errors={errors} />)
       .otherwise(() => <h1 className="p-10 text-red-600">ERROR</h1>);
 
   return (
