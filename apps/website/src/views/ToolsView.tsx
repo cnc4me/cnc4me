@@ -1,20 +1,37 @@
-import { MacroMemory } from "@cnc4me/fanuc-macro-b";
-import { useState } from "react";
+import { MacroMemory, range, ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
+import React, { useEffect, useState } from "react";
 
-import { intRange, toFixed, zeroPad } from "../utils/helpers";
+import { PagerButtons } from "../components/PagerButtons";
+import { toFixed, zeroPad } from "../utils/helpers";
 import { ViewHeading } from "./ViewHeading";
 
-export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
-  const [start, setStart] = useState(1);
-  const [perPage, setPerPage] = useState(24);
-  const [precision, setPrecision] = useState(4);
+const DISPLAY_PRECISION = 4;
 
-  const values = intRange(start, perPage).map(t => memory.getToolOffsetArray(t));
+const REGISTERS_PER_PAGE = 24;
+
+export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+  const [pageCount, setPageCount] = useState(1);
+  const [values, setValues] = useState<ToolOffsetArray[]>([]);
+
+  const pageLeft = () => setPageCount(pageCount - 1 === 0 ? 1 : pageCount - 1);
+  const pageRight = () => setPageCount(pageCount + 1);
+
+  const setValuesFromStart = (start: number) => {
+    const registers = range(start, start + REGISTERS_PER_PAGE - 1);
+    const offsets = registers.map(t => memory.getToolOffsetArray(t));
+    setValues(offsets);
+  };
+
+  useEffect(() => {
+    const zeroIndex = pageCount - 1;
+    const offset = REGISTERS_PER_PAGE * zeroIndex;
+    setValuesFromStart(1 + offset);
+  }, [pageCount, memory]);
 
   return (
-    <div className="container">
+    <div className="container h-full flex flex-col">
       <ViewHeading value="Tools" />
-      <div className="font-mono flex flex-col flex-grow mt-2">
+      <div className="font-mono flex flex-col flex-grow pt-2">
         <div className="flex flex-row justify-around ml-12 mr-4">
           <div className="text-blue-400">(LENGTH)</div>
           <div className="text-blue-400">(RADIUS)</div>
@@ -36,21 +53,24 @@ export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
               <div key={zeroPad(offset[0], 3)} className="flex gap-1">
                 <div className="flex-shrink text-blue-400">{zeroPad(index, 3)}</div>
                 <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(lengthGeom, precision)}
+                  {toFixed(lengthGeom, DISPLAY_PRECISION)}
                 </div>
                 <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(lengthWear, precision)}
+                  {toFixed(lengthWear, DISPLAY_PRECISION)}
                 </div>
                 <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(diamGeom, precision)}
+                  {toFixed(diamGeom, DISPLAY_PRECISION)}
                 </div>
                 <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(diamWear, precision)}
+                  {toFixed(diamWear, DISPLAY_PRECISION)}
                 </div>
               </div>
             );
           })}
         </div>
+      </div>
+      <div className="flex-shrink">
+        <PagerButtons onPageLeft={pageLeft} onPageRight={pageRight} pageCount={pageCount} />
       </div>
     </div>
   );

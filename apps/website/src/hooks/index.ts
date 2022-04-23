@@ -1,6 +1,5 @@
-export { useEditorTheme } from "./useEditorTheme";
+export { useEditorTheme } from "../components/editor/useEditorTheme";
 export { useExampleCode } from "./useExampleCode";
 export { useMacroRuntime } from "./useMacroRuntime";
-export { useMacroTools } from "./useMacroTools";
 // export {} from "./useMousetrap";
 // export {} from "./useToggle";

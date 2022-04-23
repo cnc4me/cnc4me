@@ -3,30 +3,31 @@
 import { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
 import Editor, { OnChange, OnMount } from "@monaco-editor/react";
 import React, { useEffect, useRef, useState } from "react";
-import { useLocation, useParams } from "react-router-dom";
+import { match } from "ts-pattern";
 
-import { Footer } from "./Footer";
-import { configureMonaco } from "./handlers/configureMonaco";
+import { MacroEditor } from "./components/editor/MacroEditor";
+import { MonacoEditor } from "./components/editor/types";
+import { Footer } from "./components/Footer";
+import { SmallButton } from "./components/SmallButton";
 import { useEditorTheme, useExampleCode, useMacroRuntime } from "./hooks";
 import { usePathname } from "./hooks/usePathname";
-import { EditorOptions, MonacoEditor, TabStr } from "./types";
-import { DebugView, MacroView, OffsetView, ToolsView } from "./views";
+import { DebugView, HomeView, MacroView, OffsetView, ToolsView } from "./views";
+
+type ViewStr = "welcome" | "macros" | "offsets" | "tools" | "debug";
+
+const DEFAULT_VIEW = "welcome";
+const views: ViewStr[] = ["welcome", "macros", "offsets", "tools", "debug"];
 
 export default function App() {
-  const tabs: TabStr[] = ["macros", "offsets", "tools", "debug"];
-
   const example = useExampleCode();
   const runtime = useMacroRuntime();
 
-  const pathname = usePathname() as TabStr;
-  const homeTab = tabs.includes(pathname) ? pathname : "macros";
-  const [activeTab, setActiveTab] = useState<TabStr>(homeTab);
+  const pathname = usePathname() as ViewStr;
+  const homeTab = views.includes(pathname) ? pathname : DEFAULT_VIEW;
+  const [activeTab, setActiveTab] = useState<ViewStr>(homeTab);
 
   const editorRef = useRef<MonacoEditor>();
-  const [editorTheme] = useEditorTheme("gcode-dark");
-  const [editorOptions] = useState<EditorOptions>({
-    minimap: { enabled: false }
-  });
+  const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
 
   const [errors, setErrors] = useState<string[]>([]);
   const [memory, setMemory] = useState<MacroMemory>(runtime.Memory);
@@ -63,72 +64,53 @@ export default function App() {
   //   console.log(pathname);
   // });
 
-  const CurrentView: React.FC = () => {
-    return activeTab === "offsets" ? (
-      <OffsetView memory={memory} />
-    ) : activeTab === "macros" ? (
-      <MacroView memory={memory} />
-    ) : activeTab === "tools" ? (
-      <ToolsView memory={memory} />
-    ) : activeTab === "debug" ? (
-      <DebugView memory={memory} errors={errors} />
-    ) : (
-      <h1 className="text-red-600">ERROR</h1>
-    );
-  };
+  const CurrentView = () =>
+    match<ViewStr>(activeTab)
+      .with("welcome", () => <HomeView />)
+      .with("offsets", () => <OffsetView memory={memory} />)
+      .with("macros", () => <MacroView memory={memory} />)
+      .with("tools", () => <ToolsView memory={memory} />)
+      .with("debug", () => <DebugView memory={memory} errors={errors} />)
+      .otherwise(() => <h1 className="p-10 text-red-600">ERROR</h1>);
 
   return (
-    <div className="flex flex-col h-screen overflow-y-hidden bg-neutral-800">
-      <div className="flex flex-row font-bold text-purple-200 bg-violet-900">
+    <div className="container-fluid flex flex-col h-screen overflow-y-hidden bg-neutral-800">
+      <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
         <div className="flex-grow">
           <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
         </div>
         <div>
-          {tabs.map(tabName => {
+          {views.map(tabName => {
+            const className = `w-28 h-12 py-2 text-white ${
+              activeTab === tabName ? "bg-neutral-900 rounded-tr-md rounded-tl-md" : "bg-violet-900"
+            }`;
+
             return (
-              <button
-                key={tabName}
-                onClick={() => setActiveTab(tabName)}
-                className={`w-32 h-12 py-2 text-white ${
-                  activeTab === tabName ? "bg-neutral-900 rounded-tr-md rounded-tl-md" : "bg-violet-900"
-                }`}
-              >
+              <button key={tabName} onClick={() => setActiveTab(tabName)} className={className}>
                 {tabName.toUpperCase()}
               </button>
             );
           })}
         </div>
-      </div>
-      <div className="flex flex-row flex-grow">
-        <div className="flex flex-col w-1/2 border-r border-r-purple-600">
+      </header>
+
+      <main className="flex flex-row flex-grow">
+        <section className="flex flex-col w-1/2 border-r border-r-purple-600">
           <div className="flex border-b border-b-gray-900 bg-[#1E1E1E]">
             <p className="px-6 py-3 text-sm italic text-violet-100">{`\u00BB`} Try editing some of the values!</p>
             <div className="flex-grow"></div>
-            <button
-              onClick={() => onRunBtnClick()}
-              className="px-3 mr-2 my-1.5 text-white border-1 rounded-md border-violet-600 bg-violet-700"
-            >
-              Run {`\u2bc8`}
-            </button>
+            <SmallButton label={`Run \u2bc8`} onClick={onRunBtnClick} />
           </div>
-          <Editor
-            theme={editorTheme}
-            defaultLanguage="gcode"
-            options={editorOptions}
-            defaultValue={example}
-            onMount={onEditorMount}
-            onChange={onEditorChange}
-            beforeMount={configureMonaco}
-          />
-        </div>
-        <div className="flex flex-col flex-grow bg-neutral-800">
+          <MacroEditor contents={example} theme={editorTheme} onMount={onEditorMount} onChange={onEditorChange} />
+        </section>
+        <aside className="flex-grow min-h-100 bg-neutral-800">
           <CurrentView />
-        </div>
-      </div>
+        </aside>
+      </main>
 
-      <div className="border-t border-t-purple-600">
+      <footer className="border-t border-t-purple-600">
         <Footer />
-      </div>
+      </footer>
     </div>
   );
 }

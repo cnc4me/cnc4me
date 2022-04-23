@@ -108,6 +108,8 @@ importers:
       '@cnc4me/monaco-language-gcode': workspace:*
       '@cnc4me/monaco-theme-gcode': workspace:*
       '@monaco-editor/react': ^4.3.1
+      '@netlify/classnames-template-literals': ^1.0.3
+      '@types/lz-string': ^1.3.34
       '@types/mousetrap': ^1.6.9
       '@types/react': ^17.0.41
       '@types/react-dom': ^17.0.14
@@ -115,12 +117,13 @@ importers:
       autoprefixer: ^10.4.4
       eslint: ^8.11.0
       jest: ^27.5.1
+      lz-string: ^1.4.4
       monaco-editor: ^0.32.1
       mousetrap: ^1.6.5
       postcss: ^8.4.12
       react: ^17.0.2
       react-dom: ^17.0.2
-      react-router-dom: '6'
+      react-router-dom: ^6
       tailwindcss: ^3.0.23
       ts-pattern: ^3.3.5
       typescript: ^4.6.2
@@ -132,6 +135,8 @@ importers:
       '@cnc4me/monaco-language-gcode': link:../../packages/monaco-language-gcode
       '@cnc4me/monaco-theme-gcode': link:../../packages/monaco-theme-gcode
       '@monaco-editor/react': 4.3.1_e62f1489d5efe674a41c3f8d6971effe
+      '@netlify/classnames-template-literals': 1.0.3
+      lz-string: 1.4.4
       monaco-editor: 0.32.1
       mousetrap: 1.6.5
       react: 17.0.2
@@ -139,6 +144,7 @@ importers:
       react-router-dom: 6.3.0_react-dom@17.0.2+react@17.0.2
       ts-pattern: 3.3.5
     devDependencies:
+      '@types/lz-string': 1.3.34
       '@types/mousetrap': 1.6.9
       '@types/react': 17.0.41
       '@types/react-dom': 17.0.14
@@ -3250,6 +3256,10 @@ packages:
       readdirp: 3.6.0
     dev: true
 
+  /@netlify/classnames-template-literals/1.0.3:
+    resolution: {integrity: sha512-1y/RV1E7A8/5uT0LyEz5rrOomQpuO5lEqOs10t6CKE9vR2nCBI3ytk7BK6sQS8HuEuCmKa+cL6YXondTYuLCEg==}
+    dev: false
+
   /@netlify/config/17.0.20:
     resolution: {integrity: sha512-X5dZe3ALUoxw2p9NVvraoMrZF73FlHdPhopW0nJItBmiA/y8LyKupa/KVCBxKf6R02KnYORr0YUnIeZbIO3syw==}
     engines: {node: ^12.20.0 || ^14.14.0 || >=16.0.0}
@@ -4336,6 +4346,10 @@ packages:
 
   /@types/lodash/4.14.180:
     resolution: {integrity: sha512-XOKXa1KIxtNXgASAnwj7cnttJxS4fksBRywK/9LzRV5YxrF80BXZIGeQSuoESQ/VkUj30Ae0+YcuHc15wJCB2g==}
+    dev: true
+
+  /@types/lz-string/1.3.34:
+    resolution: {integrity: sha512-j6G1e8DULJx3ONf6NdR5JiR2ZY3K3PaaqiEuKYkLQO0Czfi1AzrtjfnfCROyWGeDd5IVMKCwsgSmMip9OWijow==}
     dev: true
 
   /@types/minimatch/3.0.5:
@@ -10742,6 +10756,11 @@ packages:
   /luxon/1.28.0:
     resolution: {integrity: sha512-TfTiyvZhwBYM/7QdAVDh+7dBTBA29v4ik0Ce9zda3Mnf8on1S5KJI8P2jKFZ8+5C0jhmr0KwJEO/Wdpm0VeWJQ==}
     dev: true
+
+  /lz-string/1.4.4:
+    resolution: {integrity: sha1-wNjq82BZ9wV5bh40SBHPTEmNOiY=}
+    hasBin: true
+    dev: false
 
   /macos-release/3.0.1:
     resolution: {integrity: sha512-3l6OrhdDg2H2SigtuN3jBh+5dRJRWxNKuJTPBbGeNJTsmt/pj9PO25wYaNb05NuNmAsl435j4rDP6rgNXz7s7g==}
