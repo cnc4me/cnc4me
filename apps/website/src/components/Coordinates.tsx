@@ -1,6 +1,4 @@
-import { AxisLocations } from "@cnc4me/fanuc-macro-b";
-
-import { zeroPad } from "../utils/helpers";
+import { AxisLocations, zeroPad } from "@cnc4me/fanuc-macro-b";
 
 export const Coordinates: React.FC<{ group: number; locations: AxisLocations }> = ({ group, locations }) => {
   return (

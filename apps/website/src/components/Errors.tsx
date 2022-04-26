@@ -1,4 +1,4 @@
-import { zeroPad } from "../utils/helpers";
+import { zeroPad } from "@cnc4me/fanuc-macro-b";
 
 export const Errors = ({ errors }: { errors: string[] }) => {
   return (

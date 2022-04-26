@@ -1,12 +1,11 @@
-import { MacroMemory, range, ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
+import { MacroMemory, range, ToolOffsetArray, zeroPad } from "@cnc4me/fanuc-macro-b";
 import React, { useEffect, useState } from "react";
 
 import { PagerButtons } from "../components/PagerButtons";
-import { toFixed, zeroPad } from "../utils/helpers";
+import { toFixed } from "../utils/helpers";
 import { ViewHeading } from "./ViewHeading";
 
 const DISPLAY_PRECISION = 4;
-
 const REGISTERS_PER_PAGE = 24;
 
 export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {

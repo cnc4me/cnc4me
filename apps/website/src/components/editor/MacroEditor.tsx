@@ -1,44 +1,44 @@
-import { chrysalis } from "@cnc4me/chrysalis";
+import { chrysalis, Monaco } from "@cnc4me/chrysalis";
+import { zeroPad } from "@cnc4me/fanuc-macro-b";
 import { gcodeLanguage } from "@cnc4me/monaco-language-gcode";
 import { gcodeDarkTheme, gcodeLightTheme } from "@cnc4me/monaco-theme-gcode";
-import Editor, { OnChange, OnMount } from "@monaco-editor/react";
-import type * as Monaco from "monaco-editor";
-import React, { useState } from "react";
+import Editor, { EditorProps, OnChange, OnMount } from "@monaco-editor/react";
+import React from "react";
 
-import { EditorOptions } from "./types";
-import { EditorThemes } from "./useEditorTheme";
+import type { EditorThemes } from "../../types";
 
-const DEFAULT_EDITOR_OPTIONS = { minimap: { enabled: false } } as const;
+const DEFAULT_EDITOR_OPTIONS = {
+  minimap: { enabled: false },
+  lineNumbers: (currLine: number) => zeroPad(currLine)
+} as const;
+
+function configureMonaco<T extends typeof Monaco>(monaco: T): T {
+  const { registerCustomLanguage, registerCustomTheme } = chrysalis(monaco);
+
+  monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
+
+  registerCustomLanguage("gcode", gcodeLanguage);
+  registerCustomTheme("gcode-dark", gcodeDarkTheme);
+  registerCustomTheme("gcode-light", gcodeLightTheme);
+
+  return monaco;
+}
 
 export const MacroEditor: React.FC<{
-  options?: EditorOptions;
+  options?: EditorProps["options"];
   contents?: string;
   theme?: EditorThemes;
   onMount: OnMount;
   onChange: OnChange;
-}> = ({ onMount, onChange, options = DEFAULT_EDITOR_OPTIONS, contents = "", theme = "gcode-dark" }) => {
-  function configureMonaco<T extends typeof Monaco>(monaco: T): T {
-    const { registerCustomLanguage, registerCustomTheme } = chrysalis(monaco);
-
-    monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-
-    registerCustomLanguage("gcode", gcodeLanguage);
-    registerCustomTheme("gcode-dark", gcodeDarkTheme);
-    registerCustomTheme("gcode-light", gcodeLightTheme);
-
-    return monaco;
-  }
-
-  const [editorOptions] = useState<EditorOptions>(options ?? DEFAULT_EDITOR_OPTIONS);
-
+}> = ({ onMount, onChange, options, contents = "", theme = "gcode-dark" }) => {
   return (
     <Editor
       theme={theme}
-      defaultLanguage="gcode"
-      options={editorOptions}
-      defaultValue={contents}
       onMount={onMount}
       onChange={onChange}
+      defaultLanguage="gcode"
+      defaultValue={contents}
+      options={options ?? DEFAULT_EDITOR_OPTIONS}
       beforeMount={configureMonaco}
     />
   );

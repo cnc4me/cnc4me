@@ -1,22 +1,22 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
+import { MonacoCodeEditor } from "@cnc4me/chrysalis";
 import { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
-import Editor, { OnChange, OnMount } from "@monaco-editor/react";
-import React, { useEffect, useRef, useState } from "react";
+import { OnChange, OnMount } from "@monaco-editor/react";
+import React, { useRef, useState } from "react";
 import { match } from "ts-pattern";
 
 import { MacroEditor } from "./components/editor/MacroEditor";
-import { MonacoEditor } from "./components/editor/types";
 import { Footer } from "./components/Footer";
 import { SmallButton } from "./components/SmallButton";
 import { useEditorTheme, useExampleCode, useMacroRuntime } from "./hooks";
 import { usePathname } from "./hooks/usePathname";
 import { DebugView, HomeView, MacroView, OffsetView, ToolsView } from "./views";
 
-type ViewStr = "welcome" | "macros" | "offsets" | "tools" | "debug";
+type ViewStr = "home" | "macros" | "offsets" | "tools" | "debug";
 
-const DEFAULT_VIEW = "welcome";
-const views: ViewStr[] = ["welcome", "macros", "offsets", "tools", "debug"];
+const DEFAULT_VIEW = "home";
+const views: ViewStr[] = ["home", "macros", "offsets", "tools", "debug"];
 
 export default function App() {
   const example = useExampleCode();
@@ -26,7 +26,7 @@ export default function App() {
   const homeTab = views.includes(pathname) ? pathname : DEFAULT_VIEW;
   const [activeTab, setActiveTab] = useState<ViewStr>(homeTab);
 
-  const editorRef = useRef<MonacoEditor>();
+  const editorRef = useRef<MonacoCodeEditor>();
   const getEditorContents = () => editorRef.current?.getValue() ?? "";
   const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
 
@@ -67,10 +67,10 @@ export default function App() {
 
   const CurrentView = () =>
     match<ViewStr>(activeTab)
-      .with("welcome", () => <HomeView />)
-      .with("offsets", () => <OffsetView memory={memory} />)
-      .with("macros", () => <MacroView memory={memory} />)
+      .with("home", () => <HomeView />)
       .with("tools", () => <ToolsView memory={memory} />)
+      .with("macros", () => <MacroView memory={memory} />)
+      .with("offsets", () => <OffsetView memory={memory} />)
       .with("debug", () => <DebugView editorContents={getEditorContents()} memory={memory} errors={errors} />)
       .otherwise(() => <h1 className="p-10 text-red-600">ERROR</h1>);
 

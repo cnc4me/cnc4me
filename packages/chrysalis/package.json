@@ -1,9 +1,13 @@
 {
   "name": "@cnc4me/chrysalis",
   "version": "1.0.0",
-  "description": "Helpers for customizing the Monaco editor and Monarch",
+  "description": "A thin wrapper easing the customization of the Monaco Editor",
   "author": "Kevin Hill",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cnc4me/chrysalis"
+  },
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest"

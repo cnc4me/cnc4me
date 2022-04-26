@@ -10,7 +10,10 @@
     "site:test": "pnpm -F macro-playground test",
     "site:build": "pnpm -F macro-playground build",
     "site:deploy": "pnpm netlify deploy --prod",
-    "site:push": "git subtree push --prefix apps/website macro-playground main"
+    "subtree:chrysalis": "git subtree push --prefix packages/chrysalis chrysalis main",
+    "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
+    "subtree:monaco-theme": "git subtree push --prefix packages/monaco-theme-gcode monaco-theme-gcode main",
+    "subtree:monaco-lang": "git subtree push --prefix packages/monaco-language-gcode monaco-language-gcode main"
   },
   "devDependencies": {
     "@swc/core": "^1.2.159",
@@ -27,8 +30,6 @@
     "eslint-plugin-prettier": "^4.0.0",
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
-    "lerna": "^4.0.0",
-    "netlify-cli": "^9.16.4",
     "pnpm": "^7.0.0-rc.3",
     "prettier": "^2.6.0",
     "rimraf": "^3.0.2",

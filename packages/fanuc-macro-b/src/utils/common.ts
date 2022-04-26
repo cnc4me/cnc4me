@@ -29,8 +29,8 @@ export function getImage(token: IToken | IToken[]): string {
 /**
  * Pad an integer with zeros
  */
-export function zeroPad(input: number | string) {
-  return String(input).padStart(4, "0");
+export function zeroPad(input: number | string, length = 4) {
+  return String(input).padStart(length, "0");
 }
 
 /**

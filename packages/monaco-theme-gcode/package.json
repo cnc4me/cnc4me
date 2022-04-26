@@ -2,9 +2,13 @@
   "name": "@cnc4me/monaco-theme-gcode",
   "version": "1.0.0",
   "private": true,
-  "description": "Custom gcode theme for Monarch and the Monaco Editor",
+  "description": "Custom theme for Monarch and the Monaco Editor",
   "author": "Kevin Hill",
   "license": "MIT",
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cnc4me/monaco-theme-gcode"
+  },
   "main": "./src/index.ts",
   "scripts": {
     "test": "jest"
