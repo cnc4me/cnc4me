@@ -14,7 +14,7 @@ export const MacroView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const pageRight = () => setPageCount(pageCount + 1);
 
   const sliceRegisters = () => {
-    const macros = memory.toArray({ includeUnset: true });
+    const macros = memory.toArray({ includeUnset: true }).slice(1, 1000);
     const offset = 20;
 
     if (pageCount === 1) {
@@ -42,9 +42,9 @@ export const MacroView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   }, [pageCount, memory]);
 
   return (
-    <div className="container h-full flex flex-col">
+    <div className="container flex flex-col h-full">
       <ViewHeading value="Macro Variables" />
-      <div className="grid grid-flow-row flex-grow grid-cols-2">
+      <div className="grid flex-grow grid-flow-row grid-cols-2">
         <div className="">
           <ValueTable macros={leftCol} />
         </div>

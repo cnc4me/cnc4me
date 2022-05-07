@@ -2,7 +2,9 @@ import { ViewHeading } from "./ViewHeading";
 
 const packages = [
   ["@cnc4me/chrysalis", "A thin wrapper around the Monaco editor to enable easy customization."],
-  ["@cnc4me/fanuc-macro-b", "A complete environment "]
+  ["@cnc4me/fanuc-macro-b", "A complete environment "],
+  ["@cnc4me/monaco-theme-gcode", "Custom theme for Monarch and the Monaco Editor"],
+  ["@cnc4me/monaco-language-gcode", "Custom language for Monarch and the Monaco Editor"]
 ];
 
 export const HomeView = () => {
@@ -19,14 +21,14 @@ export const HomeView = () => {
             It was created with the goal of letting an operator view how a macro program might execute in the machine,
             without interrupting production.
           </p>
-          <div className="px-10 py-5">
+          <div className="hidden w-auto px-10 py-5">
             <h3 className="pb-4 text-2xl text-purple-500">Packages</h3>
-            <div className="grid grid-flow-col grid-cols-2 gap-2">
+            <div className="grid grid-flow-col grid-cols-2 gap-5">
               {packages.map(([repoId, desc]) => {
                 const href = `https://github.com/cnc4me/${repoId.split("/")[1]}`;
 
                 return (
-                  <div className="flex justify-center">
+                  <div key={repoId} className="flex justify-center">
                     <div className="block text-center bg-white rounded-lg shadow-lg">
                       <div className="p-6">
                         <h5 className="mb-2 text-xl font-medium text-gray-900">{repoId}</h5>
@@ -40,9 +42,6 @@ export const HomeView = () => {
                           </a>
                         </button>
                       </div>
-                      {/* <div class="py-3 px-6 border-t border-gray-300 text-gray-600">
-      2 days ago
-    </div> */}
                     </div>
                   </div>
                 );

@@ -2,7 +2,7 @@ import { MacroMemory, range, ToolOffsetArray, zeroPad } from "@cnc4me/fanuc-macr
 import React, { useEffect, useState } from "react";
 
 import { PagerButtons } from "../components/PagerButtons";
-import { toFixed } from "../utils/helpers";
+import { toFixed } from "../lib/helpers";
 import { ViewHeading } from "./ViewHeading";
 
 const DISPLAY_PRECISION = 4;

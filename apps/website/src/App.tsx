@@ -1,56 +1,93 @@
 /* eslint-disable @typescript-eslint/no-unused-vars */
 /* eslint-disable no-console */
-import { MonacoCodeEditor } from "@cnc4me/chrysalis";
-import { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
 import { OnChange, OnMount } from "@monaco-editor/react";
-import React, { useRef, useState } from "react";
+import { compressToEncodedURIComponent, decompressFromEncodedURIComponent } from "lz-string";
+import React, { useEffect, useRef, useState } from "react";
+import { useSearchParams } from "react-router-dom";
 import { match } from "ts-pattern";
 
 import { MacroEditor } from "./components/editor/MacroEditor";
 import { Footer } from "./components/Footer";
 import { SmallButton } from "./components/SmallButton";
 import { useEditorTheme, useExampleCode, useMacroRuntime } from "./hooks";
-import { usePathname } from "./hooks/usePathname";
+import { MacroMemoryType, MonacoCodeEditorType, ParsedLineDataType, ViewStr } from "./types";
 import { DebugView, HomeView, MacroView, OffsetView, ToolsView } from "./views";
 
-type ViewStr = "home" | "macros" | "offsets" | "tools" | "debug";
-
-const DEFAULT_VIEW = "home";
 const views: ViewStr[] = ["home", "macros", "offsets", "tools", "debug"];
 
-export default function App() {
+const App: React.FC = () => {
   const example = useExampleCode();
   const runtime = useMacroRuntime();
+  const editorRef = useRef<MonacoCodeEditorType>();
 
-  const pathname = usePathname() as ViewStr;
-  const homeTab = views.includes(pathname) ? pathname : DEFAULT_VIEW;
-  const [activeTab, setActiveTab] = useState<ViewStr>(homeTab);
-
-  const editorRef = useRef<MonacoCodeEditor>();
-  const getEditorContents = () => editorRef.current?.getValue() ?? "";
-  const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
-
-  const [errors, setErrors] = useState<string[]>([]);
-  const [memory, setMemory] = useState<MacroMemory>(runtime.Memory);
-  const [interpreterResult, setInterpreterResult] = useState<ParsedLineData[]>([]);
-
-  runtime.onError(errors => {
-    console.log(errors);
+  const [activeTab, setActiveTab] = useState<ViewStr>("home");
+  const [searchParams, setSearchParams] = useSearchParams({
+    content: "",
+    tab: activeTab
   });
 
+  const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
+  const [errors, setErrors] = useState<string[]>([]);
+  const [editorContent, setEditorContent] = useState<string>(example);
+  const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
+  const [interpreterResult, setInterpreterResult] = useState<ParsedLineDataType[]>([]);
+
+  useEffect(() => {
+    if (searchParams.has("tab")) {
+      const tab = searchParams.get("tab") as ViewStr;
+
+      if (views.includes(tab)) {
+        setActiveTab(tab);
+      }
+    }
+
+    runtime.onError(errors => {
+      console.log(errors);
+    });
+  });
+
+  const getEditorContents = () => editorRef.current?.getValue() ?? "ERROR";
+
   const parseGCode = (code: string) => {
-    const parsedLines = runtime.evalLines(code);
-    setInterpreterResult(parsedLines);
-    setMemory(runtime.Memory);
+    try {
+      const parsedLines = runtime.evalLines(code);
+      setInterpreterResult(parsedLines);
+      setMemory(runtime.Memory);
+    } catch (err) {
+      console.error(err);
+    }
+  };
+
+  const setContentUrlParam = (input: string) => {
+    const encodedInput = compressToEncodedURIComponent(input);
+    searchParams.set("content", encodedInput);
+    setSearchParams(searchParams);
   };
 
   const onEditorMount: OnMount = editor => {
     editorRef.current = editor;
-    parseGCode(example);
+
+    let content = "";
+
+    if (searchParams.has("content")) {
+      content = String(searchParams.get("content"));
+      if (content !== "") {
+        const decoded = String(decompressFromEncodedURIComponent(content));
+        editor.setValue(decoded);
+        parseGCode(decoded);
+      }
+    }
   };
 
-  const onEditorChange: OnChange = (value?: string) => {
-    parseGCode(String(value));
+  const onEditorChange: OnChange = (input?: string) => {
+    setContentUrlParam(String(input));
+    parseGCode(String(input));
+  };
+
+  const onTabSelect = (tabName: ViewStr) => {
+    setActiveTab(tabName);
+    searchParams.set("tab", tabName);
+    setSearchParams(searchParams);
   };
 
   const onRunBtnClick = () => {
@@ -60,10 +97,6 @@ export default function App() {
       parseGCode(String(value));
     }
   };
-
-  // useEffect(() => {
-  //   console.log(pathname);
-  // });
 
   const CurrentView = () =>
     match<ViewStr>(activeTab)
@@ -75,7 +108,7 @@ export default function App() {
       .otherwise(() => <h1 className="p-10 text-red-600">ERROR</h1>);
 
   return (
-    <div className="container-fluid flex flex-col h-screen overflow-y-hidden bg-neutral-800">
+    <div className="flex flex-col h-screen overflow-y-hidden container-fluid bg-neutral-800">
       <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
         <div className="flex-grow">
           <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
@@ -87,7 +120,7 @@ export default function App() {
             }`;
 
             return (
-              <button key={tabName} onClick={() => setActiveTab(tabName)} className={className}>
+              <button key={tabName} onClick={() => onTabSelect(tabName)} className={className}>
                 {tabName.toUpperCase()}
               </button>
             );
@@ -102,7 +135,7 @@ export default function App() {
             <div className="flex-grow"></div>
             <SmallButton label={`Run \u2bc8`} onClick={onRunBtnClick} />
           </div>
-          <MacroEditor contents={example} theme={editorTheme} onMount={onEditorMount} onChange={onEditorChange} />
+          <MacroEditor contents={editorContent} theme={editorTheme} onMount={onEditorMount} onChange={onEditorChange} />
         </section>
         <aside className="flex-grow min-h-100 bg-neutral-800">
           <CurrentView />
@@ -114,4 +147,6 @@ export default function App() {
       </footer>
     </div>
   );
-}
+};
+
+export default App;
