@@ -5,11 +5,8 @@
   "private": true,
   "scripts": {
     "dev": "pnpm -F macro-playground dev",
-    "preview": "pnpm netlify deploy",
-    "prod": "pnpm run site:build && pnpm site:deploy",
     "site:test": "pnpm -F macro-playground test",
     "site:build": "pnpm -F macro-playground build",
-    "site:deploy": "pnpm netlify deploy --prod",
     "subtree:chrysalis": "git subtree push --prefix packages/chrysalis chrysalis main",
     "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
     "subtree:monaco-theme": "git subtree push --prefix packages/monaco-theme-gcode monaco-theme-gcode main",

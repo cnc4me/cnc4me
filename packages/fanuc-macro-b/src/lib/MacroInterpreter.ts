@@ -47,6 +47,11 @@ import { parser } from "./MacroParser";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
+interface InterpreterEvents {
+  M0: undefined;
+  M1: undefined;
+}
+
 const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
@@ -55,7 +60,7 @@ const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseVisitor {
-  events: Emittery = new Emittery();
+  events = new Emittery<InterpreterEvents>();
 
   private _mem: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();
