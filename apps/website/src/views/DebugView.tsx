@@ -1,15 +1,15 @@
-/* eslint-disable @typescript-eslint/no-unused-vars */
 import React from "react";
 
 import { Errors } from "../components/Errors";
 import { MacroMemoryType } from "../types";
 import { ViewHeading } from "./ViewHeading";
 
-export const DebugView: React.FC<{ editorContents: string; memory: MacroMemoryType; errors: string[] }> = ({
-  editorContents,
-  memory,
-  errors
-}) => {
+interface Props {
+  memory: MacroMemoryType;
+  errors: string[];
+}
+
+export const DebugView: React.FC<Props> = ({ memory, errors }) => {
   return (
     <div className="container flex flex-col">
       <ViewHeading value="Debug" />

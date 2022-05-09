@@ -26,7 +26,7 @@ const App: React.FC = () => {
     tab: activeTab
   });
 
-  const [editorTheme, { setEditorThemeDark, setEditorThemeLight }] = useEditorTheme("gcode-dark");
+  const [editorTheme] = useEditorTheme("gcode-dark");
   const [errors, setErrors] = useState<string[]>([]);
   const [editorContent, setEditorContent] = useState<string>(example);
   const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
@@ -45,8 +45,6 @@ const App: React.FC = () => {
       console.log(errors);
     });
   });
-
-  const getEditorContents = () => editorRef.current?.getValue() ?? "ERROR";
 
   const parseGCode = (code: string) => {
     try {
@@ -91,7 +89,7 @@ const App: React.FC = () => {
   };
 
   const onRunBtnClick = () => {
-    const value = getEditorContents();
+    const value = editorRef.current?.getValue();
 
     if (value) {
       parseGCode(String(value));
@@ -104,14 +102,14 @@ const App: React.FC = () => {
       .with("tools", () => <ToolsView memory={memory} />)
       .with("macros", () => <MacroView memory={memory} />)
       .with("offsets", () => <OffsetView memory={memory} />)
-      .with("debug", () => <DebugView editorContents={getEditorContents()} memory={memory} errors={errors} />)
+      .with("debug", () => <DebugView memory={memory} errors={errors} />)
       .otherwise(() => <h1 className="p-10 text-red-600">ERROR</h1>);
 
   return (
     <div className="flex flex-col h-screen overflow-y-hidden container-fluid bg-neutral-800">
       <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
         <div className="flex-grow">
-          <h1 className="py-2 pl-4 text-2xl">Fanuc Macro B Playground</h1>
+          <h1 className="py-2 pl-4 text-2xl">Macro Playground</h1>
         </div>
         <div>
           {views.map(tabName => {
@@ -133,11 +131,11 @@ const App: React.FC = () => {
           <div className="flex border-b border-b-gray-900 bg-[#1E1E1E]">
             <p className="px-6 py-3 text-sm italic text-violet-100">{`\u00BB`} Try editing some of the values!</p>
             <div className="flex-grow"></div>
-            <SmallButton label={`Run \u2bc8`} onClick={onRunBtnClick} />
+            {/* <SmallButton label={`Run \u2bc8`} onClick={onRunBtnClick} /> */}
           </div>
           <MacroEditor contents={editorContent} theme={editorTheme} onMount={onEditorMount} onChange={onEditorChange} />
         </section>
-        <aside className="flex-grow min-h-100 bg-neutral-800">
+        <aside className="flex-1 flex-grow min-h-100 bg-neutral-800">
           <CurrentView />
         </aside>
       </main>

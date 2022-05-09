@@ -38,7 +38,7 @@ export const MacroEditor: React.FC<{
       onChange={onChange}
       defaultLanguage="gcode"
       defaultValue={contents}
-      options={options ?? DEFAULT_EDITOR_OPTIONS}
+      options={{ ...DEFAULT_EDITOR_OPTIONS, ...options }}
       beforeMount={configureMonaco}
     />
   );
