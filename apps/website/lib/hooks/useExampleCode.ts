@@ -1,0 +1,43 @@
+export function useExampleCode(): string {
+  return [
+    "( VARIABLE ASSIGNMENTS )",
+    "#1=3.141592654",
+    "",
+    "( ALGEBRA )",
+    "#2=[1+2]*3",
+    "",
+    "( VARIABLE SUBSTITUTIONS )",
+    "#3=#2/#1",
+    "#4=[4*#2]-3",
+    "#5=[6+#3+#2]/[#4-#2]",
+    "",
+    "( BUILT-IN FUNCTIONS )",
+    "#6=ABS[-2.3512]",
+    "#7=SQRT[49]",
+    "#8=ROUND[#1]",
+    "#9=FUP[#1]",
+    "",
+    "( EVAL G10 LINES FOR WORK OFFSETS ) ",
+    "G10 G90 L2 P1 X1.2345 Y9.8765 Z-8.6753 B270.",
+    "G10 G90 L2 P2 X4.6234 Y3.8245 Z-7.2204 B90.",
+    "",
+    "( OR FOR TOOL OFFSETS) ",
+    "G10 G90 L11 P1 R3.1235",
+    "G10 G90 L10 P1 R.5",
+    "G10 G90 L13 P1 R-.0025",
+    "G10 G90 L12 P1 R-.001",
+
+    "G10 G90 L11 P2 R5.3162",
+    "G10 G90 L10 P2 R.375",
+    "G10 G90 L13 P2 R.0012",
+    "G10 G90 L12 P2 R3.1235",
+
+    "G10 G90 L11 P3 R2.3903",
+    "G10 G90 L10 P3 R1.",
+    "G10 G90 L13 P3 R.375",
+    "G10 G90 L12 P3 R.004",
+    "",
+    "( AND MORE! ) ",
+    ""
+  ].join("\n");
+}

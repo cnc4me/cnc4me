@@ -100,7 +100,6 @@ export default function App(): JSX.Element {
   };
 
   return (
-    <div className="flex flex-col h-screen overflow-y-hidden container-fluid bg-neutral-800">
       <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
         <div className="flex-grow">
           <h1 className="py-2 pl-4 text-2xl">Macro Playground</h1>

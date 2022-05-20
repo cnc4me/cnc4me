@@ -1,7 +1,7 @@
 module.exports = {
   mode: "jit",
   darkMode: "media",
-  content: ["./src/**/*.{js,jsx,ts,tsx}"],
+  content: ["./pages/**/*.{ts,tsx}", "./components/**/*.{ts,tsx}"],
   theme: {
     extend: {}
   },
