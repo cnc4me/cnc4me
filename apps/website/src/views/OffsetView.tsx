@@ -1,14 +1,14 @@
-import { AxisLocations, MacroMemory } from "@cnc4me/fanuc-macro-b";
+import { MacroMemory, WorkCoordinateArray } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
 import { Coordinates } from "../components/Coordinates";
 import { ViewHeading } from "./ViewHeading";
 
-type GroupCoordsTuple = [group: number, coords: AxisLocations];
+type GroupCoordsTuple = [group: number, coords: WorkCoordinateArray];
 
 export const OffsetView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
-  const leftCol: GroupCoordsTuple[] = [53, 54, 55, 56].map(g => [g, memory.getAxisLocations(g)]);
-  const rightCol: GroupCoordsTuple[] = [57, 58, 59].map(g => [g, memory.getAxisLocations(g)]);
+  const leftCol: GroupCoordsTuple[] = [53, 54, 55, 56].map(g => [g, memory.getWorkCoordinateArray(g)]);
+  const rightCol: GroupCoordsTuple[] = [57, 58, 59].map(g => [g, memory.getWorkCoordinateArray(g)]);
 
   return (
     <div className="container">

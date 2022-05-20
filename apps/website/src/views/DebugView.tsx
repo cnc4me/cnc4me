@@ -6,10 +6,12 @@ import { ViewHeading } from "./ViewHeading";
 
 interface Props {
   memory: MacroMemoryType;
-  errors: string[];
+  errors?: string[];
 }
 
 export const DebugView: React.FC<Props> = ({ memory, errors }) => {
+  const hasErrors = errors && errors.length > 0;
+
   return (
     <div className="container flex flex-col">
       <ViewHeading value="Debug" />
@@ -18,11 +20,11 @@ export const DebugView: React.FC<Props> = ({ memory, errors }) => {
           <pre>{JSON.stringify(memory.toObject(), null, "  ")}</pre>
         </div>
         <div>
-          {errors.length > 0 ? (
+          {hasErrors && (
             <div className="px-4 py-2 bg-neutral-800">
               <Errors errors={errors} />{" "}
             </div>
-          ) : undefined}
+          )}
         </div>
       </div>
     </div>

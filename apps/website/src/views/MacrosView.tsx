@@ -14,7 +14,7 @@ export const MacroView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const pageRight = () => setPageCount(pageCount + 1);
 
   const sliceRegisters = () => {
-    const macros = memory.toArray({ includeUnset: true }).slice(1, 1000);
+    const macros = memory.toArray({ includeUnset: true }).slice(0, 1000);
     const offset = 20;
 
     if (pageCount === 1) {

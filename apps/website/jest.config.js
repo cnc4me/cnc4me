@@ -1,4 +1,4 @@
-const { jestConfig } = require("../../tools/testing-utils");
+const { jestConfig } = require("../../tools");
 const pkg = require("./package.json");
 
 /** @type import("ts-jest/dist/types").ProjectConfigTsJest */

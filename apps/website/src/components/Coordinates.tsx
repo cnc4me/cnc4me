@@ -1,6 +1,6 @@
-import { AxisLocations, zeroPad } from "@cnc4me/fanuc-macro-b";
+import { WorkCoordinateArray, zeroPad } from "@cnc4me/fanuc-macro-b";
 
-export const Coordinates: React.FC<{ group: number; locations: AxisLocations }> = ({ group, locations }) => {
+export const Coordinates: React.FC<{ group: number; locations: WorkCoordinateArray }> = ({ group, locations }) => {
   return (
     <div className="flex flex-row mb-1">
       <div className="flex flex-col">
@@ -9,10 +9,10 @@ export const Coordinates: React.FC<{ group: number; locations: AxisLocations }> 
       </div>
 
       <div className="flex flex-col flex-grow pr-10">
-        {Object.entries(locations).map(([axis, value]) => {
+        {locations.map((value, axisNum) => {
           return (
-            <div key={axis} className="flex flex-row">
-              <div className="w-12 pt-px pr-3 text-right text-violet-100">{axis}</div>
+            <div key={axisNum} className="flex flex-row">
+              <div className="w-12 pt-px pr-3 text-right text-violet-100">{[..."XYZB"][axisNum]}</div>
               <div className="flex-grow pl-1 border-t border-l bg-violet-100 border-l-black border-t-black">
                 {String(value)}
               </div>
