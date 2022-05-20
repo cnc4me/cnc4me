@@ -15,7 +15,8 @@
   "scripts": {
     "test": "jest",
     "demo:types": "tsnd ./example/types.ts",
-    "demo:tsnode": "tsnd ./example/tsnode.ts"
+    "demo:tsnode": "tsnd ./example/tsnode.ts",
+    "dts": "npm-dts generate"
   },
   "dependencies": {
     "chevrotain": "^10.1.2"
@@ -29,6 +30,9 @@
     "eslint": "^8.11.0",
     "jest": "^27.5.1",
     "jest-extended": "^2.0.0",
+    "npm-dts": "^1.3.11",
+    "rollup": "^2.74.0",
+    "tsx": "^3.3.1",
     "typescript": "^4.6.2"
   }
 }

@@ -1,4 +1,4 @@
-const { jestConfig } = require("../../tools/jest.utils");
+const { jestConfig } = require("../../tools");
 const pkg = require("./package.json");
 
 module.exports = {

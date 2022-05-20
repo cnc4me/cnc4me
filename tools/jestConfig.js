@@ -1,12 +1,12 @@
 const path = require("path");
-const baseConfig = require("../../../jest.config.base");
+const baseConfig = require("../jest.config.base");
 
-const rootDir = path.join(__dirname, "../../..");
+const rootDir = path.join(__dirname, "..");
 
 /**
  * Helper function to create jest configs for packages
  **/
-module.exports = pkg => {
+module.exports.jestConfig = pkg => {
   const packageName = pkg.name.replace("@cnc4me/", "");
 
   return {

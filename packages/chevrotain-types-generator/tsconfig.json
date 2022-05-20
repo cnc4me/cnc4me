@@ -2,11 +2,11 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "rootDir": ".",
-    "outDir": "../../dist/chevrotain-types-generator/out-tsc",
+    "outDir": "dist",
     "types": ["node"]
   },
   "include": ["src/*", "example/*", "tests/*", "example/out/__generated__.d.ts"],
-  "exclude": ["**/node_modules", "**/.*/"],
+  "exclude": ["node_modules/*"],
   "references": [
     {
       "path": "./tsconfig.lib.json"

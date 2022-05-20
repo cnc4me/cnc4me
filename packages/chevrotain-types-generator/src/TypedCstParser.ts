@@ -1,7 +1,7 @@
 import { CstParser } from "chevrotain";
 
 import { generateTypes } from "./api";
-import { CstDtsGeneratorOptions } from "./types";
+import type { CstDtsGeneratorOptions } from "./types";
 
 /**
  * Small class to extend from to provide the method to generate types.

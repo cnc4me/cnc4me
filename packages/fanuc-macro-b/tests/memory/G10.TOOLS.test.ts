@@ -1,5 +1,5 @@
 import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
-import { rand } from "../../src/testing";
+import { rand } from "../helpers";
 
 /**
  * G10 Line Reference

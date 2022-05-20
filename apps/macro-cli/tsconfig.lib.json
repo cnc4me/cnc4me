@@ -2,7 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "declaration": true,
-    "lib": ["dom"]
+    "lib": ["dom"],
+    "types": ["@cnc4me/fanuc-macro-b"]
   },
   "include": ["./src/**/*.ts"],
   "exclude": ["**/*.spec.ts", "**/*.test.ts"]

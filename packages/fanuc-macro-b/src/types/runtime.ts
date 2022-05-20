@@ -1,15 +1,15 @@
+import { ILexingError, IRecognitionException } from "chevrotain";
+
 import type { MacroInterpreter } from "../lib";
-import { OneOrMany } from ".";
-import { EvalErrors } from "./types";
 
 export interface ProgramLoadOptions {
   setActive: boolean;
 }
-
-export type RuntimeErrors = OneOrMany<EvalErrors | string>;
+export type RuntimeErrors = string | ILexingError | IRecognitionException;
 
 export interface RuntimeOutput {
   beginExec: Date;
+  // errors: RuntimeErrors[];
   result: ReturnType<MacroInterpreter["program"]>;
 }
 

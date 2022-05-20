@@ -2,14 +2,14 @@ import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
 import type {
-  AxisLocations,
   FirstParam,
   MacroValueArray,
   PossibleG10LineValues,
   ToolOffsetArray,
   ToolOffsetDict,
   UpdatedValue,
-  WorkCoordinatesArray
+  WorkCoordinateArray,
+  WorkCoordinateHash
 } from "../../types";
 import { range } from "../../utils";
 // import { range } from "../../utils";
@@ -28,7 +28,7 @@ const { WORK, TOOL } = OFFSET_GROUPS;
 /**
  * Helper function to extract axis locations from an object of addresses
  */
-function getPositions(locations: Partial<AxisLocations>) {
+function getPositions(locations: Partial<WorkCoordinateHash>) {
   return pick(locations, ["X", "Y", "Z", "B"]);
 }
 
@@ -149,31 +149,41 @@ export class MacroMemory {
    * Get work coordinates as labeled axis locations for a common work offset
    * (G53, G54, G55, G56, G57, G58, G59)
    */
-  getAxisLocations(gOffset: number): AxisLocations {
+  getWorkCoordinateHash(gOffset: number): WorkCoordinateHash {
     if (gOffset < 53 || gOffset > 59) {
       throw Error(`${gOffset} is not a valid Work Coordinate Group`);
     }
 
-    return this._getCommonWorkOffsetAxisLocations(gOffset);
+    return this._getCommonWorkOffsetWorkCoordinateHash(gOffset);
   }
 
   /**
    * Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
    */
-  getWorkCoordinates(gOffset: number): WorkCoordinatesArray {
-    const { X, Y, Z, B } = this.getAxisLocations(gOffset);
+  getWorkCoordinateArray(gOffset: number): WorkCoordinateArray {
+    const { X, Y, Z, B } = this.getWorkCoordinateHash(gOffset);
+
     return [X, Y, Z, B];
   }
 
   /**
    * Get auxiliary work coordinates for a G54.1 `P` group
    */
-  getAuxWorkCoordinates(pGroup: number): AxisLocations {
+  getAuxWorkCoordinateHash(pGroup: number): WorkCoordinateHash {
     if (pGroup < 1 || pGroup > 299) {
       throw Error(`${pGroup} is not a valid Aux Work Coordinate Group`);
     }
 
-    return this._getAuxWorkOffsetAxisLocations(pGroup);
+    return this._getAuxWorkOffsetWorkCoordinateHash(pGroup);
+  }
+
+  /**
+   * Get auxiliary work coordinates for a G54.1 `P` group
+   */
+  getAuxWorkCoordinateArray(pGroup: number): WorkCoordinateArray {
+    const { X, Y, Z, B } = this._getAuxWorkOffsetWorkCoordinateHash(pGroup);
+
+    return [X, Y, Z, B];
   }
 
   /**
@@ -258,7 +268,7 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setCommonWorkOffset(group: number, locations: Partial<AxisLocations>) {
+  setCommonWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
     debug("[O-SET]", `G${group + 53}=`, locations);
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeWorkOffsetAxisRegister(group, axis);
@@ -273,7 +283,7 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setAuxWorkOffset(group: number, locations: Partial<AxisLocations>) {
+  setAuxWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
     debug("[O-SET]", `G54.1 P${group}=`, locations);
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeAuxWorkOffsetAxisRegister(group, axis);
@@ -355,7 +365,7 @@ export class MacroMemory {
   /**
    * Get set axis locations for a given work offset
    */
-  private _getCommonWorkOffsetAxisLocations(commonOffset: number): AxisLocations {
+  private _getCommonWorkOffsetWorkCoordinateHash(commonOffset: number): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = composeWorkOffsetAxisRegister(commonOffset - 53, axis);
 
@@ -364,13 +374,13 @@ export class MacroMemory {
         [axis]: this._vars[reg]
         // [axis]: this.read(reg)
       };
-    }, {} as AxisLocations);
+    }, {} as WorkCoordinateHash);
   }
 
   /**
    * Get set axis locations for a given work offset
    */
-  private _getAuxWorkOffsetAxisLocations(pGroup: number): AxisLocations {
+  private _getAuxWorkOffsetWorkCoordinateHash(pGroup: number): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = composeAuxWorkOffsetAxisRegister(pGroup, axis);
 
@@ -379,7 +389,7 @@ export class MacroMemory {
         [axis]: this._vars[reg]
         // [axis]: this.read(reg)
       };
-    }, {} as AxisLocations);
+    }, {} as WorkCoordinateHash);
   }
 
   /**

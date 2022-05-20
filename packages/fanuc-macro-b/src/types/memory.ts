@@ -1,13 +1,13 @@
 export type MacroValueArray = [register: number, value: number][];
 
-export interface AxisLocations {
+export interface WorkCoordinateHash {
   X: number;
   Y: number;
   Z: number;
   B: number;
 }
 
-export type WorkCoordinatesArray = [X: number, Y: number, Z: number, B: number];
+export type WorkCoordinateArray = [X: number, Y: number, Z: number, B: number];
 
 export interface UpdatedValue {
   prev: number;

@@ -1,16 +1,9 @@
 import { ILexingError, IRecognitionException, IToken } from "chevrotain";
 import Emittery from "emittery";
 
-import type {
-  InterpretedProgram,
-  LexingErrors,
-  ParsedLineData,
-  ProgramLoadOptions,
-  RuntimeErrors,
-  RuntimeEvents,
-  RuntimeOutput
-} from "../types";
-import { ProgramCstNode } from "../types/fanuc";
+import type { InterpretedProgram, ParsedLineData, ProgramLoadOptions } from "../types";
+import type { ProgramCstNode } from "../types/fanuc";
+import type { RuntimeErrors, RuntimeEvents, RuntimeOutput } from "../types/runtime";
 import { matchProgramNumber } from "../utils";
 import { runtime as debug } from "./debuggers";
 import { InsightCollection } from "./Insights";
@@ -74,13 +67,19 @@ export class MacroRuntime {
 
     const programCst = this.Parser.program() as ProgramCstNode;
 
+    /**
+     * @TODO ERROR HANDLING!!!!
+     */
     if (this.Parser.errors.length > 0) {
-      void this._events.emit("error", this.Parser.errors);
+      // void this._events.emit("error", this.Parser.errors);
     }
 
     const result = this.Interpreter.program(programCst.children);
 
-    return { beginExec, result } as RuntimeOutput;
+    return {
+      beginExec,
+      result
+    } as RuntimeOutput;
   }
 
   /**
@@ -89,24 +88,26 @@ export class MacroRuntime {
   reset(): void {
     this.Memory.reset();
     this.Parser.input = [];
+    this._env.Parser.errors = [];
     this._activeProgram = NaN;
   }
 
   /**
    * Retrieve a record of errors
    */
-  getErrors() {
-    return {
-      parseErrors: this.ParserErrors,
-      lexingErrors: this.LexerErrors
-    };
+  getErrors(): RuntimeErrors[] {
+    const errors = [...this.ParserErrors, ...this.LexerErrors];
+
+    this._env.Parser.errors = [];
+
+    return errors;
   }
 
   /**
    * Register a function to handle errors that occur in the runtime.
    */
-  onError(handler: (eventData: RuntimeErrors) => void): void {
-    this._events.on("error", handler);
+  onError(handler: (eventData: RuntimeErrors) => void) {
+    return this._events.on("error", handler);
   }
 
   /**
@@ -115,7 +116,7 @@ export class MacroRuntime {
   loadParser(input: string):
     | {
         input: string;
-        errors: LexingErrors;
+        errors: ILexingError[];
         tokens: IToken[];
       }
     | {
@@ -254,8 +255,8 @@ export class MacroRuntime {
   /**
    * Helper to emit errors
    */
-  private _emitError(err: RuntimeErrors): false {
-    void this._events.emit("error", err);
+  private _emitError(error: string | RuntimeErrors): false {
+    void this._events.emit("error", error);
     return false;
   }
 
@@ -274,9 +275,12 @@ export class MacroRuntime {
   private _tokenizeForParsing(input: string): void {
     const { errors, tokens } = this.Lexer.tokenize(input);
 
+    /**
+     * @TODO error handling needs to be addressed
+     */
     if (errors.length > 0) {
       this._lexerErrors.push(...errors);
-      void this._events.emit("error", this._lexerErrors);
+      // void this._events.emit("error", this._lexerErrors);
     }
 
     this.Parser.input = tokens;
