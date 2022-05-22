@@ -30,7 +30,9 @@ import { allTokens } from "./Tokens/allTokens";
 export class MacroParser extends CstParser {
   constructor() {
     super(allTokens);
-    debug("initializing");
+
+    // debug("initializing");
+
     this.performSelfAnalysis();
   }
 
@@ -155,13 +157,16 @@ export class MacroParser extends CstParser {
   /**
    *
    */
-  private multiplicationExpression = this.RULE("multiplicationExpression", () => {
-    this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
-    this.MANY(() => {
-      this.CONSUME(MultiplicationOperator);
-      this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
-    });
-  });
+  private multiplicationExpression = this.RULE(
+    "multiplicationExpression",
+    () => {
+      this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
+      this.MANY(() => {
+        this.CONSUME(MultiplicationOperator);
+        this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
+      });
+    }
+  );
 
   /**
    * Calling a Built-In function

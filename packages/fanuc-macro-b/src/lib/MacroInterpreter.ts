@@ -79,7 +79,9 @@ export class MacroInterpreter extends BaseVisitor {
 
   constructor(opts?: { memory: MacroMemory }) {
     super();
-    debug("initializing");
+
+    // debug("initializing");
+
     this._mem = opts?.memory ?? new MacroMemory();
     this.validateVisitor();
   }
@@ -140,13 +142,13 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
-      debug(rawLineNumber);
+      // debug(rawLineNumber);
       parsed.N = parseInt(stripFirstChar(rawLineNumber));
     }
 
     if (ctx?.G_Code) {
       ctx.G_Code.forEach(token => {
-        debug(getImage(token));
+        // debug(getImage(token));
         parsed.gCodes.push(token);
         parsed.gCodeMap[token.image] = true;
       });
@@ -154,7 +156,7 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx?.M_Code) {
       ctx.M_Code.forEach(token => {
-        debug(getImage(token));
+        // debug(getImage(token));
         parsed.mCodes.push(token);
         parsed.mCodeMap[token.image] = true;
       });
@@ -168,7 +170,7 @@ export class MacroInterpreter extends BaseVisitor {
     if (ctx?.AddressedValue) {
       ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
-        debug(parsedAddr);
+        // debug(parsedAddr);
         parsed.addresses.push(parsedAddr);
         parsed.addressMap[parsedAddr.prefix] = parsedAddr.value;
       });
@@ -177,7 +179,7 @@ export class MacroInterpreter extends BaseVisitor {
     if (ctx?.Comment) {
       for (const comment of ctx.Comment) {
         const rawComment = getImage(comment);
-        debug(rawComment);
+        // debug(rawComment);
         parsed.comments.push(unwrapComment(rawComment));
       }
     }
@@ -337,10 +339,10 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.AdditionOperator[idx];
 
           if (tokenMatcher(operator, Plus)) {
-            debug(result, "+", rhsValue);
+            // debug(result, "+", rhsValue);
             result += rhsValue;
           } else {
-            debug(result, "-", rhsValue);
+            // debug(result, "-", rhsValue);
             result -= rhsValue;
           }
         }
@@ -363,10 +365,10 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.MultiplicationOperator[idx];
 
           if (tokenMatcher(operator, Product)) {
-            debug(result, "*", rhsValue);
+            // debug(result, "*", rhsValue);
             result *= rhsValue;
           } else {
-            debug(result, "/", rhsValue);
+            // debug(result, "/", rhsValue);
             result /= rhsValue;
           }
         }

@@ -1,9 +1,17 @@
 import { ILexingError, IRecognitionException, IToken } from "chevrotain";
 import Emittery from "emittery";
 
-import type { InterpretedProgram, ParsedLineData, ProgramLoadOptions } from "../types";
+import type {
+  InterpretedProgram,
+  ParsedLineData,
+  ProgramLoadOptions
+} from "../types";
 import type { ProgramCstNode } from "../types/fanuc";
-import type { RuntimeErrors, RuntimeEvents, RuntimeOutput } from "../types/runtime";
+import type {
+  RuntimeErrors,
+  RuntimeEvents,
+  RuntimeOutput
+} from "../types/runtime";
 import { matchProgramNumber } from "../utils";
 import { runtime as debug } from "./debuggers";
 import { InsightCollection } from "./Insights";
@@ -52,7 +60,7 @@ export class MacroRuntime {
   }
 
   constructor() {
-    debug("initializing");
+    // debug("initializing");
 
     this._env = new MacroEnv();
   }
@@ -218,7 +226,7 @@ export class MacroRuntime {
    * Set a program number as `active` in the runtime.
    */
   setActiveProgram(programNumber: number): void {
-    debug(`Setting program #${programNumber} active`);
+    // debug(`Setting program #${programNumber} active`);
     this._activeProgram = programNumber;
   }
 

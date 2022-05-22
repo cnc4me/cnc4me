@@ -30,7 +30,7 @@ export class MacroEnv {
   }
 
   constructor() {
-    debug("initializing");
+    // debug("initializing");
 
     this._mem = new MacroMemory();
     this._lexer = new MacroLexer();

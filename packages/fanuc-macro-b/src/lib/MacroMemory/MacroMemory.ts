@@ -2,7 +2,6 @@ import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
 import type {
-  FirstParam,
   MacroValueArray,
   PossibleG10LineValues,
   ToolOffsetArray,
@@ -60,7 +59,7 @@ export class MacroMemory {
   read(register: number): number {
     const value = this._read(register);
 
-    debug(`[READ ] #${register}= ${value}`);
+    // debug(`[READ ] #${register}= ${value}`);
 
     return value;
   }
@@ -76,11 +75,11 @@ export class MacroMemory {
    * Write  a value to a register
    */
   write(register: number, value: number): UpdatedValue {
-    debug(`[WRITE] #${register}= ${value}`);
-
     const prev = this._read(register);
 
     this._write(register, value);
+
+    // debug(`[WRITE] #${register}= ${value}`);
 
     return {
       prev,
@@ -100,15 +99,13 @@ export class MacroMemory {
    */
   reset(): void {
     MacroMemory.REGISTERS.forEach(idx => this.clear(idx));
-
-    debug(`Initialized ${MacroMemory.REGISTERS.length} registers`);
   }
 
   /**
    * Evaluate a G10 line to extract values
    */
   g10(g10: PossibleG10LineValues) {
-    debug("[ G10 ]", g10);
+    // debug("[ G10 ]", g10);
 
     return match(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
@@ -202,7 +199,8 @@ export class MacroMemory {
    * Get all tool offset values as an array of values
    */
   getToolOffsetArray(toolNum: number): ToolOffsetArray {
-    const { length, diameter, lengthComp, diameterComp } = this.getToolOffsets(toolNum);
+    const { length, diameter, lengthComp, diameterComp } =
+      this.getToolOffsets(toolNum);
     return [toolNum, length, diameter, lengthComp, diameterComp];
   }
 
@@ -231,7 +229,10 @@ export class MacroMemory {
    * Get Tool Length Comp value by tool number
    */
   getToolLengthComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.LENGTH_COMP);
+    return this._getToolOffsetValueByGroup(
+      toolNum,
+      OFFSET_GROUPS.TOOL.LENGTH_COMP
+    );
   }
 
   /**
@@ -245,7 +246,10 @@ export class MacroMemory {
    * Get Tool diameter value by tool number
    */
   getToolDiameter(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.DIAMETER);
+    return this._getToolOffsetValueByGroup(
+      toolNum,
+      OFFSET_GROUPS.TOOL.DIAMETER
+    );
   }
 
   /**
@@ -259,7 +263,10 @@ export class MacroMemory {
    * Get Tool Diameter Comp value by tool number
    */
   getToolDiameterComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.DIAMETER_COMP);
+    return this._getToolOffsetValueByGroup(
+      toolNum,
+      OFFSET_GROUPS.TOOL.DIAMETER_COMP
+    );
   }
 
   /**
@@ -269,7 +276,8 @@ export class MacroMemory {
    * Use in program: `G54 X0 Y0`
    */
   setCommonWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
-    debug("[O-SET]", `G${group + 53}=`, locations);
+    // debug("[O-SET]", `G${group + 53}=`, locations);
+
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeWorkOffsetAxisRegister(group, axis);
 
@@ -284,7 +292,8 @@ export class MacroMemory {
    * Use in program: `G54 X0 Y0`
    */
   setAuxWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
-    debug("[O-SET]", `G54.1 P${group}=`, locations);
+    // debug("[O-SET]", `G54.1 P${group}=`, locations);
+
     Object.entries(locations).forEach(([axis, value]) => {
       const target = composeAuxWorkOffsetAxisRegister(group, axis);
 
@@ -319,7 +328,9 @@ export class MacroMemory {
   /**
    * Collect all the set registers into a POJO for further processing
    */
-  toObject(opts?: FirstParam<MacroMemory["toArray"]>): Record<number, number> {
+  toObject(
+    opts?: Parameters<MacroMemory["toArray"]>[0]
+  ): Record<number, number> {
     const valueMap: Record<string, number> = {};
 
     for (const [register, value] of this.toArray(opts)) {
@@ -365,7 +376,9 @@ export class MacroMemory {
   /**
    * Get set axis locations for a given work offset
    */
-  private _getCommonWorkOffsetWorkCoordinateHash(commonOffset: number): WorkCoordinateHash {
+  private _getCommonWorkOffsetWorkCoordinateHash(
+    commonOffset: number
+  ): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = composeWorkOffsetAxisRegister(commonOffset - 53, axis);
 
@@ -380,7 +393,9 @@ export class MacroMemory {
   /**
    * Get set axis locations for a given work offset
    */
-  private _getAuxWorkOffsetWorkCoordinateHash(pGroup: number): WorkCoordinateHash {
+  private _getAuxWorkOffsetWorkCoordinateHash(
+    pGroup: number
+  ): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = composeAuxWorkOffsetAxisRegister(pGroup, axis);
 

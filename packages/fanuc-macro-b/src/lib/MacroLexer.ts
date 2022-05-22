@@ -5,8 +5,9 @@ import { allTokens } from "./Tokens/allTokens";
 
 export class MacroLexer extends Lexer {
   constructor() {
-    debug(`initializing lexer with ${allTokens.length} tokens`);
     super(allTokens);
+
+    // debug(`initializing lexer with ${allTokens.length} tokens`);
   }
 }
 

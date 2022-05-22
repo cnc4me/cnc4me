@@ -6,7 +6,7 @@
     "outDir": "../../dist/chrysalis/out-tsc",
     "types": ["node"]
   },
-  "include": ["./src/*.ts", "./src/**/*.ts"],
+  "include": ["./src/*.ts", "./src/**/*.ts", "globals.d.ts"],
   "references": [
     {
       "path": "./tsconfig.lib.json"

@@ -1,14 +1,10 @@
-import * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
-
-export type MonacoLangDef = Monaco.languages.IMonarchLanguage;
-export type MonacoThemeDef = Monaco.editor.IStandaloneThemeData;
-export type MonacoCodeEditor = Monaco.editor.IStandaloneCodeEditor;
-export type MonacoDiffEditor = Monaco.editor.IStandaloneDiffEditor;
-export type MonarchTokenizerRule = [match: RegExp, token: string];
-export type MonarchBracketTuple = [open: string, close: string, token: string];
-export type MonarchLangugageBracket =
-  | Monaco.languages.IMonarchLanguageBracket
-  | MonarchBracketTuple;
+import {
+  Monaco,
+  MonacoLangDef,
+  MonacoThemeDef,
+  MonarchLangugageBracket,
+  MonarchTokenizerRule
+} from "./types";
 
 /**
  * Given a monaco instance, this method will return two bound functions,
@@ -16,10 +12,10 @@ export type MonarchLangugageBracket =
  */
 export function chrysalis(monaco: typeof Monaco) {
   return {
-    registerCustomLanguage(languageId: string, languageDef: MonacoLangDef) {
+    registerCustomLanguage(languageId: string, languageDef: MonacoLangDef): typeof Monaco {
       return registerCustomLanguage(monaco, languageId, languageDef);
     },
-    registerCustomTheme(themeName: string, themeData: MonacoThemeDef) {
+    registerCustomTheme(themeName: string, themeData: MonacoThemeDef): typeof Monaco {
       return registerCustomTheme(monaco, themeName, themeData);
     }
   };
