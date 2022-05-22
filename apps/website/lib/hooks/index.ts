@@ -7,3 +7,4 @@ export * from "./useTabSearchParam";
 // export * from "./usePathname";
 // export * from "./useStringCompressor";
 export * from "./useToggle";
+export * from "./useUrlHash";

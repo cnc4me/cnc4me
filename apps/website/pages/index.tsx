@@ -1,6 +1,6 @@
 import { RuntimeErrors } from "@cnc4me/fanuc-macro-b";
 import { OnChange, OnMount } from "@monaco-editor/react";
-import { decompressFromEncodedURIComponent } from "lz-string";
+import { useRouter } from "next/router";
 // import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
@@ -17,6 +17,10 @@ import {
 } from "../components/views";
 import { debounce } from "../lib";
 import {
+  DEFAULT_TAB_ON_PAGE_LOAD,
+  EDITOR_ON_CHANGE_TIMEOUT
+} from "../lib/constants";
+import {
   useContentSearchParam,
   useEditorTheme,
   useExampleCode,
@@ -32,24 +36,26 @@ import {
 
 const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
 
-const EDITOR_ON_CHANGE_TIMEOUT = 700;
-const DEFAULT_TAB_ON_PAGE_LOAD: ViewStr = "home";
-
 export default function App(): JSX.Element {
+  const router = useRouter();
   const runtime = useMacroRuntime();
   const editorRef = useRef<MonacoCodeEditorType>();
   const getEditorContents = () => String(editorRef.current?.getValue());
   const setEditorContents = (input: unknown) =>
     editorRef.current?.setValue(String(input));
 
-  const { getTabParam, setTabParam } = useTabSearchParam(tabs);
   const { getContentParam, setContentParam } = useContentSearchParam();
 
+  // If there is `content=<STRING>` in the URL, use it, or if not, use the example
+  const [initialContent, setInitialContent] = useState<string>(
+    useExampleCode()
+  );
+
+  const { getTabParam, setTabParam } = useTabSearchParam(tabs);
   const initialTabOnLoad = getTabParam(DEFAULT_TAB_ON_PAGE_LOAD);
 
   const [activeTab, setActiveTab] = useState<ViewStr>(initialTabOnLoad);
   const [editorTheme] = useEditorTheme("gcode-dark");
-  // const [editorBuffer, setEditorBuffer] = useState<string>("");
 
   const [errors, setErrors] = useState<RuntimeErrors[]>([]);
   const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
@@ -61,25 +67,11 @@ export default function App(): JSX.Element {
   const CurrentView: React.FC<{ activeTab: ViewStr }> = ({ activeTab }) =>
     match<ViewStr>(activeTab)
       .with("home", () => <HomeView />)
+      .with("debug", () => <DebugView memory={memory} />)
       .with("tools", () => <ToolsView memory={memory} />)
       .with("macros", () => <MacroView memory={memory} />)
       .with("offsets", () => <OffsetView memory={memory} />)
-      .with("debug", () => <DebugView memory={memory} />)
       .otherwise(() => <h1 className="p-10 text-red-500">ERROR</h1>);
-
-  useEffect(() => {
-    let content = getContentParam();
-
-    if (content !== "") {
-      content = String(decompressFromEncodedURIComponent(content));
-    } else {
-      content = useExampleCode();
-    }
-
-    setEditorContents(content);
-  }, []);
-
-  useEffect(() => setTabParam(activeTab), [activeTab]);
 
   const parseEditorContent = () => {
     const content = getEditorContents();
@@ -96,28 +88,48 @@ export default function App(): JSX.Element {
 
   const onEditorMount: OnMount = editor => {
     editorRef.current = editor;
-
-    const content = getEditorContents();
-    const urlContent = getContentParam();
-
-    console.log(content, urlContent);
-
-    setContentParam(content);
   };
 
   const onEditorChange: OnChange = debounce((input?: string) => {
-    setContentParam(input);
+    if (input !== "") {
+      setContentParam(input);
+    }
+
     parseEditorContent();
   }, EDITOR_ON_CHANGE_TIMEOUT);
 
+  const handleTabClick = (tabName: ViewStr) => {
+    setTabParam(tabName);
+    setActiveTab(tabName);
+  };
+
   const handleResetButton = () => {
     setEditorContents("");
+    setContentParam("");
     setErrors([]);
   };
 
   const handleRunButton = () => {
     parseEditorContent();
   };
+
+  useEffect(() => {
+    if (router.isReady) {
+      setInitialContent(getContentParam() ?? useExampleCode());
+      setActiveTab(getTabParam("home"));
+      parseEditorContent();
+    }
+  }, [router.isReady]);
+
+  useEffect(() => {
+    if (router.isReady) {
+      const content = getContentParam();
+
+      if (content !== "") {
+        setEditorContents(content);
+      }
+    }
+  }, [editorRef.current, router.isReady]);
 
   return (
     <>
@@ -137,7 +149,7 @@ export default function App(): JSX.Element {
               return (
                 <button
                   key={tabName}
-                  onClick={() => setActiveTab(tabName)}
+                  onClick={() => handleTabClick(tabName)}
                   className={className}
                 >
                   {tabName.toUpperCase()}
@@ -172,6 +184,7 @@ export default function App(): JSX.Element {
             </div>
             <MacroEditor
               theme={editorTheme}
+              contents={initialContent}
               onMount={onEditorMount}
               onChange={onEditorChange}
             />

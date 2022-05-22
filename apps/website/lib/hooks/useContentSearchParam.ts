@@ -1,38 +1,39 @@
-import { compressToEncodedURIComponent } from "lz-string";
+import { unbox } from "@cnc4me/fanuc-macro-b";
+import {
+  compressToEncodedURIComponent,
+  decompressFromEncodedURIComponent
+} from "lz-string";
+import { useRouter } from "next/router";
 
 interface HookFns {
-  getContentParam: () => string;
+  getContentParam: () => undefined | string;
   setContentParam: (content?: string) => void;
 }
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
-export function useContentSearchParam(initialValue = ""): HookFns {
+export function useContentSearchParam(): HookFns {
+  const router = useRouter();
+
   return {
     getContentParam() {
-      return "";
-    },
-    setContentParam(content?: string) {
-      const encoded = compressToEncodedURIComponent(String(content));
+      if (router.query?.content) {
+        const urlContent = unbox(router.query?.content);
 
-      // searchParams.set("content", encoded);
-      console.log(encoded);
+        // `\n` or `\r` must be getting encoded to "Q"
+        // const content = urlContent === "Q" ? "" : urlContent;
+
+        return String(decompressFromEncodedURIComponent(urlContent));
+        // return String(decompressFromEncodedURIComponent(content));
+      } else {
+        return undefined;
+      }
+    },
+    setContentParam(input?: string) {
+      const content = compressToEncodedURIComponent(String(input));
+
+      router.query.content = content;
+
+      void router.replace({ query: router.query });
     }
   };
 }
-
-// export function useContentSearchParam(initialValue = ""): HookFns {
-//   const [searchParams, setSearchParams] = useSearchParams(initialValue);
-
-//   return {
-//     getContentParam() {
-//       return String(searchParams.get("content"));
-//     },
-//     setContentParam(content?: string) {
-//       const encoded = compressToEncodedURIComponent(String(content));
-
-//       searchParams.set("content", encoded);
-
-//       setSearchParams(searchParams);
-//     }
-//   };
-// }

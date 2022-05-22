@@ -22,7 +22,11 @@ export function useTabSearchParam(allowedTabs: ViewStr[]): HookFns {
       }
     },
     setTabParam(tab: string) {
-      void router.push({ query: { tab } });
+      router.query.tab = tab;
+
+      void router.replace({
+        query: router.query
+      });
     }
   };
 
