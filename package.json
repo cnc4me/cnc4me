@@ -9,8 +9,7 @@
   "scripts": {
     "dev": "pnpm -F macro-playground dev",
     "test": "pnpm -F macro-playground test",
-    "postinstall": "pnpm -r install",
-    "build": "pnpm -F macro-playground build",
+    "build": "pnpm -r install && pnpm -F macro-playground build",
     "subtree:chrysalis": "git subtree push --prefix packages/chrysalis chrysalis main",
     "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
     "subtree:monaco-theme": "git subtree push --prefix packages/monaco-theme-gcode monaco-theme-gcode main",
