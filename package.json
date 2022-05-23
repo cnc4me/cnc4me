@@ -4,7 +4,7 @@
   "license": "MIT",
   "private": true,
   "engines": {
-    "pnpm": "^7"
+    "pnpm": "*"
   },
   "scripts": {
     "dev": "pnpm -F macro-playground dev",
