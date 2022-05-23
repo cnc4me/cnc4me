@@ -13,6 +13,7 @@
     "@cnc4me/fanuc-macro-b": "workspace:*",
     "@cnc4me/monaco-language-gcode": "workspace:*",
     "@cnc4me/monaco-theme-gcode": "workspace:*",
+    "@heroicons/react": "^1.0.6",
     "@monaco-editor/react": "^4.3.1",
     "clsx": "^1.1.1",
     "lodash.debounce": "^4.0.8",
