@@ -9,7 +9,7 @@
   "scripts": {
     "dev": "pnpm -F macro-playground dev",
     "test": "pnpm -F macro-playground test",
-    "postinstall": "pnpm -F macro-playground install",
+    "postinstall": "pnpm -R install",
     "build": "pnpm -F macro-playground build",
     "subtree:chrysalis": "git subtree push --prefix packages/chrysalis chrysalis main",
     "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
