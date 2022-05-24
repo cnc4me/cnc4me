@@ -5,7 +5,7 @@ import { gcodeDarkTheme, gcodeLightTheme } from "@cnc4me/monaco-theme-gcode";
 import Editor, { EditorProps, OnChange, OnMount } from "@monaco-editor/react";
 import React from "react";
 
-import { EditorThemes } from "../../types";
+import { EditorThemes } from "../../lib/types";
 
 const DEFAULT_EDITOR_OPTIONS = {
   minimap: { enabled: false },

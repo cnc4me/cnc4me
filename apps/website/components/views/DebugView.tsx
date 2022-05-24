@@ -1,6 +1,6 @@
 import React from "react";
 
-import { MacroMemoryType } from "../../types";
+import { MacroMemoryType } from "../../lib/types";
 import { Errors } from "../Errors";
 import { ViewHeading } from "./ViewHeading";
 

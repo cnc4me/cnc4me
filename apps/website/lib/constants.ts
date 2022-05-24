@@ -1,4 +1,4 @@
-import type { ViewStr } from "../types";
+import type { ViewStr } from "./types";
 
 export const URL_PARAM_KEY_CONTENT = "content";
 

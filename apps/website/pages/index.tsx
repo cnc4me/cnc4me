@@ -32,7 +32,7 @@ import {
   MonacoCodeEditorType,
   ParsedLineDataType,
   ViewStr
-} from "../types";
+} from "../lib/types";
 
 const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
 

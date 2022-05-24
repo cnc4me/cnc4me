@@ -1,7 +1,7 @@
 import { useRouter } from "next/router";
 
 // import { useSearchParams } from "react-router-dom";
-import { ViewStr } from "../../types";
+import { ViewStr } from "../types";
 
 interface HookFns {
   getTabParam: (defaultTab: ViewStr) => ViewStr;
