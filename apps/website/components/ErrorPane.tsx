@@ -1,7 +1,9 @@
 import { RuntimeErrors, zeroPad } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
-export const ErrorPane: React.FC<{ errors: RuntimeErrors[] }> = ({ errors }) => {
+export const ErrorPane: React.FC<{ errors: RuntimeErrors[] }> = ({
+  errors
+}) => {
   return (
     <>
       {errors.length > 0 && (
@@ -10,7 +12,9 @@ export const ErrorPane: React.FC<{ errors: RuntimeErrors[] }> = ({ errors }) => 
             const text = typeof error === "string" ? error : error?.message;
             return (
               <p className="mb-1 border-b border-red-500">
-                <span className="py-1 pl-2 mr-4 text-white bg-red-500">E{zeroPad(idx, 4)}: </span>
+                <span className="py-1 pl-2 mr-4 text-white bg-red-500">
+                  E{zeroPad(idx, 4)}:{" "}
+                </span>
                 {text}
               </p>
             );

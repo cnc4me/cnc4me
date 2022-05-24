@@ -10,7 +10,10 @@ const EmptyAlert = <></>;
 const PreviewMode = (
   <>
     This page is a preview.{" "}
-    <a href="/api/exit-preview" className="underline transition-colors duration-200 hover:text-teal-300">
+    <a
+      href="/api/exit-preview"
+      className="underline transition-colors duration-200 hover:text-teal-300"
+    >
       Click here
     </a>{" "}
     to exit preview mode.
@@ -26,7 +29,9 @@ function Alert({ preview }: Props) {
       })}
     >
       <div className="container px-5 mx-auto">
-        <div className="py-2 text-sm text-center">{preview ? PreviewMode : EmptyAlert}</div>
+        <div className="py-2 text-sm text-center">
+          {preview ? PreviewMode : EmptyAlert}
+        </div>
       </div>
     </div>
   );
