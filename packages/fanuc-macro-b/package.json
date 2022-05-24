@@ -27,7 +27,6 @@
   },
   "devDependencies": {
     "@chevrotain/types": "^10.1.2",
-    "@cnc4me/chevrotain-jest-extension": "workspace:*",
     "@cnc4me/chevrotain-types-generator": "workspace:*",
     "@cnc4me/jest-matchers": "workspace:*",
     "@swc/core": "^1.2.159",
