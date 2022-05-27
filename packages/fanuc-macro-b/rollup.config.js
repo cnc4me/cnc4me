@@ -1,44 +1,34 @@
-// import dts from "rollup-plugin-dts";
-import swc from "rollup-plugin-swc";
+/* eslint-disable @typescript-eslint/no-unsafe-call */
+import commonjs from "@rollup/plugin-commonjs";
+import { nodeResolve } from "@rollup/plugin-node-resolve";
+import { defineConfig } from "rollup";
+import dts from "rollup-plugin-dts";
+import { swc } from "rollup-plugin-swc3";
 
-const name = require("./package.json").main.replace(/\.js$/, "");
+const NAME = "fanuc-macro-b";
+const input = "src/index.ts";
 
-const bundle = config => ({
-  ...config,
-  input: "src/index.ts",
-  external: id => !/^[./]/.test(id)
+const compiler = () =>
+  swc({
+    sourceMaps: true,
+    tsconfig: "./tsconfig.lib.json"
+  });
+
+const plugins = [nodeResolve(), commonjs(), compiler()];
+
+export default defineConfig({
+  input,
+  plugins,
+  output: [
+    {
+      file: `dist/cjs/${NAME}.js`,
+      format: "cjs",
+      sourcemap: true
+    },
+    {
+      file: `dist/esm/${NAME}.mjs`,
+      format: "es",
+      sourcemap: true
+    }
+  ]
 });
-
-export default [
-  bundle({
-    plugins: [
-      swc({
-        jsc: {
-          parser: {
-            syntax: "typescript"
-          },
-          target: "es2018"
-        }
-      })
-    ],
-    output: [
-      {
-        file: `${name}.js`,
-        format: "cjs",
-        sourcemap: true
-      },
-      {
-        file: `${name}.mjs`,
-        format: "es",
-        sourcemap: true
-      }
-    ]
-  })
-  // bundle({
-  //   plugins: [dts()],
-  //   output: {
-  //     file: `${name}.d.ts`,
-  //     format: "es"
-  //   }
-  // })
-];

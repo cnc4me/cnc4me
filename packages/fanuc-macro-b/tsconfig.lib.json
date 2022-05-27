@@ -1,17 +1,29 @@
 {
-  "extends": "./tsconfig.json",
   "compilerOptions": {
-    "target": "esnext",
+    "strict": true,
+    "composite": true,
+    "module": "ESNext",
+    "target": "ES2022",
     "declaration": true,
+    "rootDir": "src",
+    "outDir": "dist",
+    "declarationDir": "dist/dts",
+    "moduleResolution": "node",
+    "allowSyntheticDefaultImports": true,
+    "types": [
+      "emittery"
+    ],
     "lib": [
-      "dom"
+      "DOM",
+      "DOM.Iterable",
+      "ESNext"
     ]
   },
   "include": [
-    "**/*.ts"
+    "src/**/*.ts"
   ],
   "exclude": [
-    "**/*.spec.ts",
+    "node_modules",
     "**/*.test.ts"
   ]
 }

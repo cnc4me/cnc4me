@@ -60,7 +60,7 @@ const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseVisitor {
-  events = new Emittery<InterpreterEvents>();
+  // public events = new Emittery<InterpreterEvents>();
 
   private _mem: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();

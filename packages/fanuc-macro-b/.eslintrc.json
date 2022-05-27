@@ -1,0 +1,19 @@
+{
+  "extends": [
+    "../../.eslintrc.js"
+  ],
+  "overrides": [
+    {
+      "env": {
+        "jest": true,
+        "node": true
+      },
+      "files": [
+        "./tests/**/*.test.ts"
+      ],
+      "rules": {
+        "jest/require-hook": "off"
+      }
+    }
+  ]
+}

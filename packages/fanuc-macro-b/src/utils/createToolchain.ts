@@ -1,26 +1,28 @@
 import { ILexingError } from "chevrotain";
 
-import { MacroEnv } from "../lib/MacroEnv";
+import { MacroInterpreter, MacroLexer, MacroParser } from "../lib";
 import { MacroToolchainOptions } from "../types";
 
 export function createToolchain(options?: MacroToolchainOptions) {
   const errors: ILexingError[] = [];
-  const env = new MacroEnv();
+  const lexer = new MacroLexer();
+  const parser = new MacroParser();
+  const interpreter = new MacroInterpreter();
 
   if (options?.preloadInput) {
-    const { errors, tokens } = env.Lexer.tokenize(options.preloadInput);
+    const { errors, tokens } = lexer.tokenize(options.preloadInput);
 
     if (errors) {
       errors.push(...errors);
     }
 
-    env.Parser.input = tokens;
+    parser.input = tokens;
   }
 
   return {
     errors,
-    lexer: env.Lexer,
-    parser: env.Parser,
-    interpreter: env.Interpreter
+    lexer,
+    parser,
+    interpreter
   };
 }

@@ -9,12 +9,11 @@
     "types": [
       "node",
       "lodash",
-      "chevrotain",
-      "chance"
+      "chevrotain"
     ]
   },
   "include": [
-    "src"
+    "src/**/*.ts"
   ],
   "references": [
     {
