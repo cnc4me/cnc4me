@@ -1,4 +1,5 @@
-type G10LabelToOffsetGroupMap = typeof TOOL_OFFSET_GROUP & typeof WORK_OFFSET_GROUP;
+type G10LabelToOffsetGroupMap = typeof TOOL_OFFSET_GROUP &
+  typeof WORK_OFFSET_GROUP;
 
 /**
  * Mapping of tool offsets related G10 line "L" groups to their names.

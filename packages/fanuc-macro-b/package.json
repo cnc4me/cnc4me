@@ -5,10 +5,10 @@
   "private": true,
   "author": "Kevin Hill",
   "license": "MIT",
-  "main": "dist/fanuc-macro-b.js",
-  "module": "dist/fanuc-macro-b.mjs",
-  "types": "dist/fanuc-macro-b.d.ts",
-  "typings": "dist/fanuc-macro-b.d.ts",
+  "main": "dist/cjs/fanuc-macro-b.js",
+  "module": "dist/esm/fanuc-macro-b.mjs",
+  "types": "dist/dts/fanuc-macro-b.d.ts",
+  "typings": "dist/dts/fanuc-macro-b.d.ts",
   "scripts": {
     "test": "jest",
     "build": "concurrently -n build: -c \"bgBlue.bold,bgMagenta.bold\" npm:build:*",
@@ -28,7 +28,6 @@
     "debug": "^4.3.4",
     "emittery": "^0.10.1",
     "lodash": "^4.17.21",
-    "rollup-plugin-swc3": "^0.3.0",
     "ts-pattern": "^3.3.5"
   },
   "devDependencies": {
@@ -61,11 +60,14 @@
     "prettier": "^2.6.0",
     "rollup": "^2.74.0",
     "rollup-plugin-dts": "^4.2.1",
+    "rollup-plugin-node-externals": "^4.0.0",
     "rollup-plugin-sourcemaps": "^0.6.3",
     "rollup-plugin-swc": "^0.2.1",
+    "rollup-plugin-swc3": "^0.3.0",
     "rollup-plugin-typescript2": "^0.31.2",
     "ts-node-dev": "^1.1.8",
     "tslib": "^2.4.0",
+    "types-package-json": "^2.0.39",
     "typescript": "^4.6.2"
   }
 }

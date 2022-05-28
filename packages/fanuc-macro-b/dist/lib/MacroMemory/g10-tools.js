@@ -15,7 +15,9 @@ export function extractOffsets(line) {
  * Parsing a string of text as a G10 line for values
  */
 export function parseG10(input) {
-    const { errors, parser, interpreter } = createToolchain({ preloadInput: input });
+    const { errors, parser, interpreter } = createToolchain({
+        preloadInput: input
+    });
     if (errors.length > 0) {
         return { error: errors[0].message, result: null };
     }

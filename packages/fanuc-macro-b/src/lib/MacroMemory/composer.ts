@@ -16,7 +16,10 @@ const AXIS_ADRRESS_INDEX: Record<string, number> = {
 /**
  * Compose a tool offset register number by group and tool num.
  */
-export function composeToolOffsetRegister(group: number, toolNum: number): number {
+export function composeToolOffsetRegister(
+  group: number,
+  toolNum: number
+): number {
   if (group < 10 || group > 13) {
     throw Error("Invalid tool group value.");
   }
@@ -33,7 +36,10 @@ export function composeToolOffsetRegister(group: number, toolNum: number): numbe
  * - The arguments `(3, "Z")` will produce `5263`
  * - The arguments `(4, "B")` will produce `5284`
  */
-export function composeWorkOffsetAxisRegister(groupOffset: number, axis: string): number {
+export function composeWorkOffsetAxisRegister(
+  groupOffset: number,
+  axis: string
+): number {
   if (groupOffset < 0 || groupOffset > 6) {
     throw Error(`Cannot compose a register from input: ${groupOffset}`);
   }
@@ -60,7 +66,10 @@ export function composeWorkOffsetAxisRegister(groupOffset: number, axis: string)
  * - The arguments `(4, "B")` will produce `7064`
  * - The arguments `(48, "X")` will produce `7941`
  */
-export function composeAuxWorkOffsetAxisRegister(pGroup: number, axis: string): number {
+export function composeAuxWorkOffsetAxisRegister(
+  pGroup: number,
+  axis: string
+): number {
   const startOfAuxOffsetGroup = pGroup * ONE_GROUP_OF_OFFSET_REGISTERS;
 
   // eslint-disable-next-line prettier/prettier

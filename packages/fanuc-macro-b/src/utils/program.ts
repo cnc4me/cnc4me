@@ -1,4 +1,5 @@
 import { IRecognitionException } from "chevrotain";
+
 import type { InsightCollection } from "../lib";
 import type { InterpretedProgram } from "../types";
 import { createToolchain } from "./createToolchain";

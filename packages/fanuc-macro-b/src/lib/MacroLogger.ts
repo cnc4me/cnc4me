@@ -21,8 +21,13 @@ export class MacroLogger {
     this.config = { ...this.config, ...config };
   }
 
-  public operation(lhs: number | string, operator: string, rhs: number | string) {
-    const pad = (a: string | number) => String(a).padStart(this.config.decimals + 3, " ");
+  public operation(
+    lhs: number | string,
+    operator: string,
+    rhs: number | string
+  ) {
+    const pad = (a: string | number) =>
+      String(a).padStart(this.config.decimals + 3, " ");
     const opNum = String(this.logLines.length + 1).padStart(4, "0");
 
     const leftArg = pad(typeof lhs === "number" ? this.round(lhs) : lhs);

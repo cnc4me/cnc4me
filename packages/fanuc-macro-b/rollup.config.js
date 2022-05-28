@@ -2,10 +2,11 @@
 import commonjs from "@rollup/plugin-commonjs";
 import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
-import dts from "rollup-plugin-dts";
 import { swc } from "rollup-plugin-swc3";
 
-const NAME = "fanuc-macro-b";
+/** @type import("types-package-json").PackageJson */
+const pkg = require("./package.json");
+
 const input = "src/index.ts";
 
 const compiler = () =>
@@ -21,12 +22,12 @@ export default defineConfig({
   plugins,
   output: [
     {
-      file: `dist/cjs/${NAME}.js`,
+      file: pkg.main,
       format: "cjs",
       sourcemap: true
     },
     {
-      file: `dist/esm/${NAME}.mjs`,
+      file: pkg.module,
       format: "es",
       sourcemap: true
     }

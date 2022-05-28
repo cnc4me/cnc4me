@@ -1,40 +1,19 @@
 /* eslint-disable @typescript-eslint/no-unsafe-call */
-import commonjs from "@rollup/plugin-commonjs";
-import { nodeResolve } from "@rollup/plugin-node-resolve";
 import { defineConfig } from "rollup";
 import dts from "rollup-plugin-dts";
-import sourcemaps from "rollup-plugin-sourcemaps";
-import { swc } from "rollup-plugin-swc3";
+import { externals } from "rollup-plugin-node-externals";
 import ts from "rollup-plugin-typescript2";
-import path from "path";
-
-const USE_SWC = false;
 
 const NAME = "fanuc-macro-b";
 
-const input = "src/index.ts";
-const tsconfig = "./tsconfig.lib.json";
-
-const compiler = () =>
-  USE_SWC
-    ? swc({
-        tsconfig,
-        sourceMaps: true
-      })
-    : ts({
-        tsconfig,
-        sourceMaps: true
-      });
-
 export default defineConfig({
-  input,
+  input: "src/index.ts",
   plugins: [
-    nodeResolve({
-      rootPath: path.join(__dirname, "src")
+    ts({
+      tsconfig: "./tsconfig.json",
+      sourceMaps: true
     }),
-    commonjs(),
-    sourcemaps(),
-    compiler(),
+    externals(),
     dts()
   ],
   output: {
