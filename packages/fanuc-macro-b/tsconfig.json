@@ -9,8 +9,7 @@
     "types": [
       "node",
       "lodash",
-      "chevrotain",
-      "chance"
+      "chevrotain"
     ]
   },
   "include": [

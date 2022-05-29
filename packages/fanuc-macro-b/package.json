@@ -1,24 +1,22 @@
 {
   "name": "@cnc4me/fanuc-macro-b",
-  "version": "0.0.1",
-  "description": "",
+  "version": "1.0.0",
   "private": true,
-  "author": "Kevin Hill",
+  "description": "Virtual implementation of a fanuc gcode interpreter and execution environment",
   "license": "MIT",
-  "main": "dist/fanuc-macro-b.js",
-  "module": "dist/fanuc-macro-b.mjs",
-  "typings": "dist/fanuc-macro-b.d.ts",
+  "author": "Kevin Hill",
+  "main": "src/index.ts",
   "scripts": {
-    "test": "jest",
     "build": "rollup -c",
-    "test:mem": "jest MacroMemory",
-    "repl": "tsnd ./demo/repl.demo.ts",
-    "types": "tsnd ./scripts/generateDts.ts",
-    "diagram": "tsnd ./scripts/generateDiagram.ts",
+    "diagram": "ts-node-esm --swc ./scripts/generateDiagram.ts",
     "events": "tsnd --respawn ./demo/events.demo.ts",
-    "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
     "insights": "cross-env DEBUG=macro:* tsnd --respawn ./demo/insights.demo.ts",
-    "runtime:debug": "cross-env DEBUG=macro:* tsnd --respawn ./demo/runtime.demo.ts"
+    "repl": "tsnd ./demo/repl.demo.ts",
+    "runtime": "tsnd --respawn ./demo/runtime.demo.ts",
+    "runtime:debug": "cross-env DEBUG=macro:* tsnd --respawn ./demo/runtime.demo.ts",
+    "test": "jest",
+    "test:mem": "jest MacroMemory",
+    "types": "ts-node-esm --swc ./scripts/generateDts.ts"
   },
   "dependencies": {
     "chevrotain": "^10.1.2",
@@ -54,6 +52,7 @@
     "rollup": "^2.74.0",
     "rollup-plugin-dts": "^4.2.1",
     "rollup-plugin-swc": "^0.2.1",
+    "ts-node": "^10.8.0",
     "ts-node-dev": "^1.1.8",
     "typescript": "^4.6.2"
   }
