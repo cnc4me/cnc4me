@@ -35,7 +35,8 @@ import {
 const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
 
 let count = 1;
-const __ = (where: string) => console.log(count++, `=> ${where}`);
+const __ = (where: string, ...rest: unknown[]) =>
+  console.log(count++, `=> ${where}`, ...rest);
 
 export default function App(): JSX.Element {
   const router = useRouter();
@@ -46,7 +47,9 @@ export default function App(): JSX.Element {
     editorRef.current?.setValue(String(input));
 
   const { getContentParam, setContentParam } = useContentSearchParam();
-  const [initialContent] = useState<string>(useExampleCode());
+  const [initialContent, setInitialContent] = useState<string>(
+    useExampleCode()
+  );
 
   const { getTabParam, setTabParam } = useTabSearchParam(tabs);
   const initialTabOnLoad = getTabParam(DEFAULT_TAB_ON_PAGE_LOAD);
@@ -120,23 +123,42 @@ export default function App(): JSX.Element {
     parseEditorContent();
   };
 
+  // "onPageLoad"
+  useEffect(() => {
+    __("useEffect[]", "router.isReady", router.isReady);
+
+    if (router.isReady) {
+      __("useEffect[]", "router.isReady", router.isReady);
+
+      setInitialContent(getContentParam());
+      setActiveTab(getTabParam("home"));
+      // parseEditorContent();
+    }
+  }, []);
+
   useEffect(() => {
     __("useEffect[activeTab]");
     setTabParam(activeTab);
   }, [activeTab]);
 
-  // useEffect(() => {
-  //   if (router.isReady) {
-  //     setInitialContent(getContentParam() ?? useExampleCode());
-  //     setActiveTab(getTabParam("home"));
-  //     // parseEditorContent();
-  //   }
-  // }, [router.isReady]);
-
   useEffect(() => {
-    __("useEffect[editorRef.current, router.isReady]");
+    __("useEffect[router.isReady]", "router.isReady", router.isReady);
 
     if (router.isReady) {
+      __("useEffect[router.isReady]", "router.isReady", router.isReady);
+
+      setInitialContent(getContentParam() ?? useExampleCode());
+      setActiveTab(getTabParam("home"));
+      // parseEditorContent();
+    }
+  }, [router.isReady]);
+
+  useEffect(() => {
+    __("useEffect[editorRef.current, router.isReady]", router.isReady);
+
+    if (router.isReady) {
+      __("useEffect[editorRef.current, router.isReady]");
+
       const content = getContentParam();
 
       if (content !== "") {

@@ -4,6 +4,10 @@ import {
   decompressFromEncodedURIComponent
 } from "lz-string";
 
+export function unbox<T>(arr: T | T[]): T {
+  return Array.isArray(arr) ? arr[0] : arr;
+}
+
 export function toFixed(num: number, precision = 4): string {
   return (Math.round(num * 10000) / 10000).toFixed(precision);
 }

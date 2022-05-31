@@ -1,12 +1,13 @@
-import { unbox } from "@cnc4me/fanuc-macro-b";
 import {
   compressToEncodedURIComponent,
   decompressFromEncodedURIComponent
 } from "lz-string";
 import { useRouter } from "next/router";
 
+import { unbox } from "../helpers";
+
 interface HookFns {
-  getContentParam: () => undefined | string;
+  getContentParam: () => string;
   setContentParam: (content?: string) => void;
 }
 
@@ -25,7 +26,7 @@ export function useContentSearchParam(): HookFns {
         return String(decompressFromEncodedURIComponent(urlContent));
         // return String(decompressFromEncodedURIComponent(content));
       } else {
-        return undefined;
+        return "";
       }
     },
     setContentParam(input?: string) {
