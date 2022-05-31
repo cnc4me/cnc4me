@@ -1,15 +1,18 @@
-import type { MacroMemory, ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
+import type { ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
 import { range, zeroPad } from "@cnc4me/fanuc-macro-b";
 import React, { useEffect, useState } from "react";
 
 import { toFixed } from "../../lib";
+import { useMacroRuntime } from "../../lib/hooks";
 import { PagerButtons } from "../PagerButtons";
 import { ViewHeading } from "./ViewHeading";
 
 const DISPLAY_PRECISION = 4;
 const REGISTERS_PER_PAGE = 24;
 
-export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+export const ToolsView = (): JSX.Element => {
+  const runtime = useMacroRuntime();
+
   const [pageCount, setPageCount] = useState(1);
   const [values, setValues] = useState<ToolOffsetArray[]>([]);
 
@@ -17,8 +20,12 @@ export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
   const pageRight = () => setPageCount(pageCount + 1);
 
   const setValuesFromStart = (start: number) => {
+    const { Memory } = runtime;
+
     const registers = range(start, start + REGISTERS_PER_PAGE - 1);
-    const offsets = registers.map(t => memory.getToolOffsetArray(t));
+
+    const offsets = registers.map(t => Memory.getToolOffsetArray(t));
+
     setValues(offsets);
   };
 
@@ -26,7 +33,7 @@ export const ToolsView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
     const zeroIndex = pageCount - 1;
     const offset = REGISTERS_PER_PAGE * zeroIndex;
     setValuesFromStart(1 + offset);
-  }, [pageCount, memory]);
+  }, [pageCount, runtime.Memory]);
 
   return (
     <div className="container flex flex-col h-full">

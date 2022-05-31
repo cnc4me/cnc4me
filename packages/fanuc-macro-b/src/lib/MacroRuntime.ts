@@ -59,6 +59,14 @@ export class MacroRuntime {
     return this._env.Interpreter.Insights;
   }
 
+  get Errors(): Array<IRecognitionException | ILexingError> {
+    return [...this.ParserErrors, ...this.LexerErrors];
+  }
+
+  get hasErrors(): boolean {
+    return this.Errors.length > 0;
+  }
+
   constructor() {
     // debug("initializing");
 
@@ -98,17 +106,6 @@ export class MacroRuntime {
     this.Parser.input = [];
     this._env.Parser.errors = [];
     this._activeProgram = NaN;
-  }
-
-  /**
-   * Retrieve a record of errors
-   */
-  getErrors(): RuntimeErrors[] {
-    const errors = [...this.ParserErrors, ...this.LexerErrors];
-
-    this._env.Parser.errors = [];
-
-    return errors;
   }
 
   /**

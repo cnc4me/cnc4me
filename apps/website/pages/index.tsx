@@ -1,4 +1,3 @@
-import { RuntimeErrors } from "@cnc4me/fanuc-macro-b";
 import { OnChange, OnMount } from "@monaco-editor/react";
 import { useRouter } from "next/router";
 // import Head from "next/head";
@@ -28,13 +27,15 @@ import {
   useTabSearchParam
 } from "../lib/hooks";
 import {
-  MacroMemoryType,
   MonacoCodeEditorType,
   ParsedLineDataType,
   ViewStr
 } from "../lib/types";
 
 const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
+
+let count = 1;
+const __ = (where: string) => console.log(count++, `=> ${where}`);
 
 export default function App(): JSX.Element {
   const router = useRouter();
@@ -45,11 +46,7 @@ export default function App(): JSX.Element {
     editorRef.current?.setValue(String(input));
 
   const { getContentParam, setContentParam } = useContentSearchParam();
-
-  // If there is `content=<STRING>` in the URL, use it, or if not, use the example
-  const [initialContent, setInitialContent] = useState<string>(
-    useExampleCode()
-  );
+  const [initialContent] = useState<string>(useExampleCode());
 
   const { getTabParam, setTabParam } = useTabSearchParam(tabs);
   const initialTabOnLoad = getTabParam(DEFAULT_TAB_ON_PAGE_LOAD);
@@ -57,8 +54,8 @@ export default function App(): JSX.Element {
   const [activeTab, setActiveTab] = useState<ViewStr>(initialTabOnLoad);
   const [editorTheme] = useEditorTheme("gcode-dark");
 
-  const [errors, setErrors] = useState<RuntimeErrors[]>([]);
-  const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
+  const [errors, setErrors] = useState<string[]>([]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
   const [interpreterResult, setInterpreterResult] = useState<
     ParsedLineDataType[]
@@ -67,30 +64,45 @@ export default function App(): JSX.Element {
   const CurrentView: React.FC<{ activeTab: ViewStr }> = ({ activeTab }) =>
     match<ViewStr>(activeTab)
       .with("home", () => <HomeView />)
-      .with("debug", () => <DebugView memory={memory} />)
-      .with("tools", () => <ToolsView memory={memory} />)
-      .with("macros", () => <MacroView memory={memory} />)
-      .with("offsets", () => <OffsetView memory={memory} />)
+      .with("debug", () => <DebugView />)
+      .with("tools", () => <ToolsView />)
+      .with("macros", () => <MacroView />)
+      .with("offsets", () => <OffsetView />)
       .otherwise(() => <h1 className="p-10 text-red-500">ERROR</h1>);
 
   const parseEditorContent = () => {
+    __("parseEditorContent");
     const content = getEditorContents();
 
     try {
       const parsedLines = runtime.evalLines(content);
       setInterpreterResult(parsedLines);
-      setMemory(runtime.Memory);
-      // setErrors(runtime.getErrors());
+
+      if (runtime.hasErrors) {
+        runtime.Errors.forEach(err => {
+          setErrors([...errors, err.message]);
+        });
+      }
     } catch (err) {
       console.error(err);
     }
   };
 
   const onEditorMount: OnMount = editor => {
+    __("onEditorMount");
+
     editorRef.current = editor;
+    const content = editor.getValue();
+
+    if (content !== "") {
+      setContentParam(content);
+      parseEditorContent();
+    }
   };
 
   const onEditorChange: OnChange = debounce((input?: string) => {
+    __("onEditorChange");
+
     if (input !== "") {
       setContentParam(input);
     }
@@ -98,14 +110,9 @@ export default function App(): JSX.Element {
     parseEditorContent();
   }, EDITOR_ON_CHANGE_TIMEOUT);
 
-  const handleTabClick = (tabName: ViewStr) => {
-    setTabParam(tabName);
-    setActiveTab(tabName);
-  };
-
   const handleResetButton = () => {
+    runtime.reset();
     setEditorContents("");
-    setContentParam("");
     setErrors([]);
   };
 
@@ -114,19 +121,27 @@ export default function App(): JSX.Element {
   };
 
   useEffect(() => {
-    if (router.isReady) {
-      setInitialContent(getContentParam() ?? useExampleCode());
-      setActiveTab(getTabParam("home"));
-      parseEditorContent();
-    }
-  }, [router.isReady]);
+    __("useEffect[activeTab]");
+    setTabParam(activeTab);
+  }, [activeTab]);
+
+  // useEffect(() => {
+  //   if (router.isReady) {
+  //     setInitialContent(getContentParam() ?? useExampleCode());
+  //     setActiveTab(getTabParam("home"));
+  //     // parseEditorContent();
+  //   }
+  // }, [router.isReady]);
 
   useEffect(() => {
+    __("useEffect[editorRef.current, router.isReady]");
+
     if (router.isReady) {
       const content = getContentParam();
 
       if (content !== "") {
         setEditorContents(content);
+        parseEditorContent();
       }
     }
   }, [editorRef.current, router.isReady]);
@@ -149,7 +164,7 @@ export default function App(): JSX.Element {
               return (
                 <button
                   key={tabName}
-                  onClick={() => handleTabClick(tabName)}
+                  onClick={() => setActiveTab(tabName)}
                   className={className}
                 >
                   {tabName.toUpperCase()}

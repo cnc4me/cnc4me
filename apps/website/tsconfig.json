@@ -19,7 +19,8 @@
     "strict": true,
     "target": "es5",
     "types": [
-      "mousetrap"
+      "mousetrap",
+      "@cnc4me/fanuc-macro-b"
     ]
   },
   "include": [

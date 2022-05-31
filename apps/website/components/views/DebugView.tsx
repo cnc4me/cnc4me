@@ -1,15 +1,15 @@
 import React from "react";
 
-import { MacroMemoryType } from "../../lib/types";
+import { useMacroRuntime } from "../../lib/hooks";
 import { Errors } from "../Errors";
 import { ViewHeading } from "./ViewHeading";
 
 interface Props {
-  memory: MacroMemoryType;
   errors?: string[];
 }
 
-export const DebugView: React.FC<Props> = ({ memory, errors }) => {
+export const DebugView: React.FC<Props> = ({ errors }) => {
+  const runtime = useMacroRuntime();
   const hasErrors = errors && errors.length > 0;
 
   return (
@@ -17,7 +17,7 @@ export const DebugView: React.FC<Props> = ({ memory, errors }) => {
       <ViewHeading value="Debug" />
       <div className="flex flex-row">
         <div className="p-2 text-blue-400">
-          <pre>{JSON.stringify(memory.toObject(), null, "  ")}</pre>
+          <pre>{JSON.stringify(runtime.Memory.toObject(), null, "  ")}</pre>
         </div>
         <div>
           {hasErrors && (
