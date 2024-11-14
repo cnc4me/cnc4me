@@ -17,6 +17,7 @@
     "./tools/**/*.js",
     "./tools/**/*.ts",
     "./packages/**/*.js",
-    "./packages/**/*.ts"
+    "./packages/**/*.ts",
+    "./packages/**/*.mjs"
   ]
 }

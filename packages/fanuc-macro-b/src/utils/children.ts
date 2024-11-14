@@ -15,7 +15,9 @@ export function elem<T extends CstChildrenDictionary, M extends keyof T>(
 /**
  * Get the children from a node if they are present, otherwise return the node
  */
-export function children<T extends CstNode[]>(cstNodeArr: T): CstChildrenDictionary {
+export function children<T extends CstNode[]>(
+  cstNodeArr: T
+): CstChildrenDictionary {
   const { children } = unbox(cstNodeArr);
 
   return children;

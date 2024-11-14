@@ -1,7 +1,9 @@
 import { IRecognitionException } from "chevrotain";
+
+import { createToolchain } from "./createToolchain";
+
 import type { InsightCollection } from "../lib";
 import type { InterpretedProgram } from "../types";
-import { createToolchain } from "./createToolchain";
 
 interface ProgramAnalisys {
   result: InterpretedProgram;

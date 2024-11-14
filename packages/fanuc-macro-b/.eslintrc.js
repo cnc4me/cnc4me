@@ -1,5 +1,5 @@
 /** @type {import('eslint').Linter.Config} */
-export default {
+module.exports = {
   extends: "../../.eslintrc.js",
   env: {
     es6: true,

@@ -1,6 +1,14 @@
 import { ILexingError, IRecognitionException, IToken } from "chevrotain";
 import Emittery from "emittery";
 
+import { matchProgramNumber } from "../utils";
+import { InsightCollection } from "./Insights";
+import { MacroEnv } from "./MacroEnv";
+import { MacroInterpreter } from "./MacroInterpreter";
+import { MacroLexer } from "./MacroLexer";
+import { MacroMemory } from "./MacroMemory";
+import { MacroParser } from "./MacroParser";
+
 import type {
   InterpretedProgram,
   ParsedLineData,
@@ -12,14 +20,6 @@ import type {
   RuntimeEvents,
   RuntimeOutput
 } from "../types/runtime";
-import { matchProgramNumber } from "../utils";
-import { runtime as debug } from "./debuggers";
-import { InsightCollection } from "./Insights";
-import { MacroEnv } from "./MacroEnv";
-import { MacroInterpreter } from "./MacroInterpreter";
-import { MacroLexer } from "./MacroLexer";
-import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./MacroParser";
 
 /*
  * MacroRuntime Class to hold multiple programs in memory

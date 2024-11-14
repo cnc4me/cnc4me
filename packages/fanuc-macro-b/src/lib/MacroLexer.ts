@@ -1,7 +1,6 @@
 import { Lexer } from "chevrotain";
 
-import { lexer as debug } from "./debuggers";
-import { allTokens } from "./Tokens/allTokens";
+import { allTokens } from "./Tokens";
 
 export class MacroLexer extends Lexer {
   constructor() {

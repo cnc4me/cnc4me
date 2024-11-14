@@ -2,7 +2,9 @@ export type ValidG10WorkOffsetGroup = 2 | 20;
 
 export type ValidG10ToolOffsetGroup = 10 | 11 | 12 | 13;
 
-export type ValidG10OffsetGroups = ValidG10WorkOffsetGroup | ValidG10ToolOffsetGroup;
+export type ValidG10OffsetGroups =
+  | ValidG10WorkOffsetGroup
+  | ValidG10ToolOffsetGroup;
 
 interface G10LineBase {
   readonly L: number;

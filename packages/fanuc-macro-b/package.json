@@ -5,8 +5,6 @@
   "description": "Virtual implementation of a fanuc gcode interpreter and execution environment",
   "license": "MIT",
   "author": "Kevin Hill",
-  "type": "module",
-  "main": "src/index.ts",
   "exports": {
     ".": {
       "import": "./src/index.ts",
@@ -14,9 +12,10 @@
       "default": "./src/index.ts"
     }
   },
+  "main": "src/index.ts",
   "scripts": {
     "build": "vite build",
-    "diagram": "ts-node-esm --swc ./scripts/generateDiagram.ts",
+    "diagram": "pnpx jiti ./scripts/generateDiagram.ts",
     "events": "tsnd --respawn ./demo/events.demo.ts",
     "insights": "cross-env DEBUG=macro:* tsnd --respawn ./demo/insights.demo.ts",
     "repl": "tsnd ./demo/repl.demo.ts",
@@ -49,10 +48,11 @@
     "chance": "^1.1.8",
     "cross-env": "^7.0.3",
     "eslint": "catalog:",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "jiti": "^2.4.0",
     "prettier": "catalog:",
     "rollup": "^4",
     "rollup-plugin-dts": "^4.2.1",

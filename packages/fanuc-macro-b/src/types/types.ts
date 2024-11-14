@@ -1,5 +1,6 @@
-import type { AddressInsight } from "../lib";
 import { createToolchain } from "../utils";
+
+import type { AddressInsight } from "../lib";
 
 export type OneOrMany<T> = T | T[];
 

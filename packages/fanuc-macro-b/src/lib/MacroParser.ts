@@ -1,6 +1,5 @@
 import { CstParser } from "chevrotain";
 
-import { parser as debug } from "./debuggers";
 import {
   AdditionOperator,
   Address,
@@ -25,7 +24,7 @@ import {
   Then,
   Var
 } from "./Tokens";
-import { allTokens } from "./Tokens/allTokens";
+import { allTokens } from "./Tokens/all";
 
 export class MacroParser extends CstParser {
   constructor() {

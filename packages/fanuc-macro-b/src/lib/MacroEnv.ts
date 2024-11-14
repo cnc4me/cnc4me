@@ -1,4 +1,3 @@
-import { env as debug } from "./debuggers";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";

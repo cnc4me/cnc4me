@@ -1,13 +1,11 @@
-const path = require("path");
-
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,
-  parser: require.resolve("@typescript-eslint/parser"),
+  parser: "@typescript-eslint/parser",
   parserOptions: {
-    emcaVersion: "2020",
+    emcaVersion: "2022",
     sourceType: "module",
-    tsconfigRootDir: path.resolve(__dirname),
+    tsconfigRootDir: __dirname,
     project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"],
   },
   env: {
@@ -16,11 +14,11 @@ module.exports = {
   },
   settings: {
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"],
+      "@typescript-eslint/parser": [".mjs", ".ts", ".tsx"],
     },
     "import/resolver": {
       node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"],
+        extensions: [".js", ".mjs", ".jsx", ".ts", ".tsx"],
       },
       typescript: {
         alwaysTryTypes: true,
@@ -41,7 +39,6 @@ module.exports = {
     "plugin:@typescript-eslint/recommended-requiring-type-checking",
     "plugin:import/errors",
     "plugin:import/typescript",
-    "prettier",
     "plugin:prettier/recommended", // KEEP THIS LAST
   ],
   rules: {
@@ -60,7 +57,6 @@ module.exports = {
 
     "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
     "@typescript-eslint/unbound-method": "off",
-    "@typescript-eslint/no-var-requires": "off",
     "@typescript-eslint/no-unsafe-argument": "off",
     "@typescript-eslint/no-misused-promises": "off",
     "@typescript-eslint/no-unsafe-assignment": "off",
@@ -146,30 +142,12 @@ module.exports = {
         "packages/*/jest.config.js",
         "packages/*/tests/**/*.spec.ts",
         "packages/*/tests/**/*.test.ts",
-        "packages/*/tests/**/spec.ts",
-        "packages/*/tests/**/test.ts",
       ],
       rules: {
         "@typescript-eslint/no-unsafe-call": "off",
         "@typescript-eslint/no-unsafe-return": "off",
         "@typescript-eslint/no-unsafe-assignment": "off",
         "@typescript-eslint/no-unsafe-member-access": "off",
-        "jest/prefer-expect-assertions": "off",
-        "jest/prefer-to-be": "warn",
-        "jest/no-disabled-tests": "warn",
-        "jest/prefer-to-contain": "warn",
-        "jest/prefer-to-have-length": "warn",
-        "jest/valid-expect": "error",
-        "jest/prefer-spy-on": "error",
-        "jest/no-jest-import": "error",
-        "jest/no-focused-tests": "error",
-        "jest/no-alias-methods": "error",
-        "jest/no-test-prefixes": "error",
-        "jest/no-done-callback": "error",
-        "jest/no-identical-title": "error",
-        "jest/no-jasmine-globals": "error",
-        "jest/no-test-return-statement": "error",
-        "jest/no-deprecated-functions": "error",
       },
     },
     // tools and tests
@@ -181,7 +159,7 @@ module.exports = {
       },
     },
     {
-      files: ["rollup.config.ts"],
+      files: ["vite.config.ts", "rollup.config.ts"],
       rules: {
         "import/no-default-export": "off",
       },

@@ -4,6 +4,23 @@ import Emittery from "emittery";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
+import {
+  degreeToRadian,
+  getImage,
+  hasDwell,
+  hasG10,
+  parseNumber,
+  radianToDegree,
+  stripFirstChar,
+  unbox,
+  unwrapComment
+} from "../utils";
+import { AddressInsight, InsightCollection } from "./Insights";
+import { MacroMemory } from "./MacroMemory";
+import { parser } from "./MacroParser";
+import { NcAddress } from "./NcAddress";
+import { Plus, Product } from "./Tokens";
+
 import type {
   InterpretedProgram,
   ParsedLineData,
@@ -29,23 +46,6 @@ import type {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "../types/fanuc";
-import {
-  degreeToRadian,
-  getImage,
-  hasDwell,
-  hasG10,
-  parseNumber,
-  radianToDegree,
-  stripFirstChar,
-  unbox,
-  unwrapComment
-} from "../utils";
-import { interpreter as debug } from "./debuggers";
-import { AddressInsight, InsightCollection } from "./Insights";
-import { MacroMemory } from "./MacroMemory";
-import { parser } from "./MacroParser";
-import { NcAddress } from "./NcAddress";
-import { Plus, Product } from "./Tokens";
 
 interface InterpreterEvents {
   M0: undefined;

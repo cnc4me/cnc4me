@@ -1,6 +1,5 @@
-import type { IToken } from "chevrotain";
-
 import type { NcAddress } from "../lib/NcAddress";
+import type { IToken } from "chevrotain";
 
 export interface ProgramIdentifier {
   programTitle: string;

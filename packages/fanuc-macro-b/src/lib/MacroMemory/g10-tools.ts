@@ -1,4 +1,8 @@
-import { G10ParseResult, ParsedLineData, PossibleG10LineValues } from "../../types";
+import {
+  G10ParseResult,
+  ParsedLineData,
+  PossibleG10LineValues
+} from "../../types";
 import { createToolchain, hasG10 } from "../../utils";
 
 /**
@@ -20,7 +24,9 @@ export function extractOffsets(line: ParsedLineData): PossibleG10LineValues {
  * Parsing a string of text as a G10 line for values
  */
 export function parseG10(input: string): G10ParseResult {
-  const { errors, parser, interpreter } = createToolchain({ preloadInput: input });
+  const { errors, parser, interpreter } = createToolchain({
+    preloadInput: input
+  });
 
   if (errors.length > 0) {
     return { error: errors[0].message, result: null };

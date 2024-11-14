@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
 import { rand } from "../_vitest/helpers";
@@ -38,9 +38,12 @@ describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
     ${13066} | ${13} | ${66}  | ${rand(-1, 1)}
     ${13190} | ${13} | ${190} | ${rand(-1, 1)}
     ${13248} | ${13} | ${248} | ${rand(-1, 1)}
-  `("call to `G10 L$L P$P R$R` sets #$register = $R", ({ register, L, P, R }) => {
-    mem.g10({ L, P, R });
+  `(
+    "call to `G10 L$L P$P R$R` sets #$register = $R",
+    ({ register, L, P, R }) => {
+      mem.g10({ L, P, R });
 
-    expect(mem.read(register)).toBe(R);
-  });
+      expect(mem.read(register)).toBe(R);
+    }
+  );
 });

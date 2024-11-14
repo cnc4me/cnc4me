@@ -1,4 +1,4 @@
-import { describe, it, expect } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { OFFSET_GROUPS } from "../../src/lib/MacroMemory/constants";
 import { parseG10 } from "../../src/lib/MacroMemory/g10-tools";

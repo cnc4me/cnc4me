@@ -1,6 +1,16 @@
 import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
+import { range } from "../../utils";
+import {
+  composeAuxWorkOffsetAxisRegister,
+  composeToolOffsetRegister,
+  composeWorkOffsetAxisRegister
+} from "./composer";
+import { OFFSET_GROUPS } from "./constants";
+import { parseG10 } from "./g10-tools";
+import { GROUP_3 } from "./register-map";
+
 import type {
   MacroValueArray,
   PossibleG10LineValues,
@@ -10,17 +20,6 @@ import type {
   WorkCoordinateArray,
   WorkCoordinateHash
 } from "../../types";
-import { range } from "../../utils";
-// import { range } from "../../utils";
-import { memory as debug } from "../debuggers";
-import {
-  composeAuxWorkOffsetAxisRegister,
-  composeToolOffsetRegister,
-  composeWorkOffsetAxisRegister
-} from "./composer";
-import { OFFSET_GROUPS } from "./constants";
-import { parseG10 } from "./g10-tools";
-import { GROUP_3 } from "./register-map";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
 

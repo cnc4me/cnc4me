@@ -7,7 +7,7 @@
     "**/.DS_Store": true,
     "**/Thumbs.db": true,
     "**/.next": true,
-    "**/node_modules": false
+    "**/node_modules": true
   },
   "json.schemas": [
     {
