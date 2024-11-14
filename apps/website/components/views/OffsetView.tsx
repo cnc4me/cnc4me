@@ -6,7 +6,11 @@ import { ViewHeading } from "./ViewHeading";
 
 type GroupCoordsTuple = [group: number, coords: WorkCoordinateArray];
 
-export const OffsetView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+interface Props {
+  memory: MacroMemory;
+}
+
+export const OffsetView: React.FC<Props> = ({ memory }) => {
   const leftCol: GroupCoordsTuple[] = [53, 54, 55, 56].map(g => [
     g,
     memory.getWorkCoordinateArray(g)

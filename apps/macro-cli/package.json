@@ -16,7 +16,6 @@
     "bandersnatch": "^1.9.0"
   },
   "devDependencies": {
-    "@cnc4me/chevrotain-jest-extension": "workspace:*",
     "@cnc4me/jest-matchers": "workspace:*",
     "@swc/core": "^1.2.159",
     "@swc/jest": "^0.2.20",

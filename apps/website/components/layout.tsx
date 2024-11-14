@@ -1,13 +1,12 @@
 import React from "react";
 
 // import Alert from "./alert";
-import Footer from "./footer";
+import Footer from "./Footer";
 import Meta from "./meta";
 
-interface Props {
+type Props = React.PropsWithChildren<{
   preview?: boolean;
-  children: React.ReactNode;
-}
+}>;
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars
 const Layout: React.FC<Props> = ({ preview, children }) => {

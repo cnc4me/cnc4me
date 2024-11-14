@@ -1,8 +1,10 @@
 import { MacroValueArray, zeroPad } from "@cnc4me/fanuc-macro-b";
 
-export const ValueTable: React.FC<{ macros: MacroValueArray }> = ({
-  macros
-}) => (
+interface Props {
+  macros: MacroValueArray;
+}
+
+export const ValueTable: React.FC<Props> = ({ macros }) => (
   <div className="flex flex-col gap-1 px-4 pt-2 font-mono">
     <div className="flex flex-row">
       <div className="w-12 text-violet-100">NO.</div>

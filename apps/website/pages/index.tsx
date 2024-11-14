@@ -1,7 +1,7 @@
 import { RuntimeErrors } from "@cnc4me/fanuc-macro-b";
 import { OnChange, OnMount } from "@monaco-editor/react";
+import clsx from "clsx";
 import { useRouter } from "next/router";
-// import Head from "next/head";
 import React, { useEffect, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
@@ -15,21 +15,22 @@ import {
   OffsetView,
   ToolsView
 } from "../components/views";
-import { debounce } from "../lib";
-import {
-  DEFAULT_TAB_ON_PAGE_LOAD,
-  EDITOR_ON_CHANGE_TIMEOUT
-} from "../lib/constants";
 import {
   useContentSearchParam,
   useEditorTheme,
   useExampleCode,
   useMacroRuntime,
   useTabSearchParam
-} from "../lib/hooks";
+} from "../hooks";
+import { debounce } from "../lib";
 import {
+  DEFAULT_TAB_ON_PAGE_LOAD,
+  EDITOR_ON_CHANGE_TIMEOUT
+} from "../lib/constants";
+import { chakraPetch } from "../lib/fonts";
+import type {
   MacroMemoryType,
-  MonacoCodeEditorType,
+  MonacoCodeEditor,
   ParsedLineDataType,
   ViewStr
 } from "../lib/types";
@@ -39,7 +40,8 @@ const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
 export default function App(): JSX.Element {
   const router = useRouter();
   const runtime = useMacroRuntime();
-  const editorRef = useRef<MonacoCodeEditorType>();
+  const editorRef = useRef<MonacoCodeEditor>();
+
   const getEditorContents = () => String(editorRef.current?.getValue());
   const setEditorContents = (input: unknown) =>
     editorRef.current?.setValue(String(input));
@@ -94,7 +96,6 @@ export default function App(): JSX.Element {
     if (input !== "") {
       setContentParam(input);
     }
-
     parseEditorContent();
   }, EDITOR_ON_CHANGE_TIMEOUT);
 
@@ -136,7 +137,9 @@ export default function App(): JSX.Element {
       <Layout>
         <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
           <div className="flex-grow">
-            <h1 className="py-2 pl-4 text-2xl">Macro Playground</h1>
+            <h1 className={clsx("py-2 pl-4 text-2xl", chakraPetch.className)}>
+              Macro Playground
+            </h1>
           </div>
           <div>
             {tabs.map(tabName => {

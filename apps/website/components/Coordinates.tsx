@@ -1,9 +1,11 @@
 import { WorkCoordinateArray, zeroPad } from "@cnc4me/fanuc-macro-b";
 
-export const Coordinates: React.FC<{
+interface Props {
   group: number;
   locations: WorkCoordinateArray;
-}> = ({ group, locations }) => {
+}
+
+export const Coordinates: React.FC<Props> = ({ group, locations }) => {
   return (
     <div className="flex flex-row mb-1">
       <div className="flex flex-col">

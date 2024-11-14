@@ -2,13 +2,13 @@ import React from "react";
 
 import { LargeButton } from "./LargeButton";
 
-interface PagerButtonProps {
+interface Props {
   pageCount: number;
   onPageLeft: () => void;
   onPageRight: () => void;
 }
 
-export const PagerButtons: React.FC<PagerButtonProps> = ({
+export const PagerButtons: React.FC<Props> = ({
   onPageLeft,
   pageCount,
   onPageRight

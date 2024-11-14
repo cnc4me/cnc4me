@@ -1,5 +1,5 @@
 export * from "./useContentSearchParam";
-export * from "./useEditorTheme";
+export * from "./useEditorTheme_OLD";
 export * from "./useExampleCode";
 export * from "./useMacroRuntime";
 export * from "./useTabSearchParam";

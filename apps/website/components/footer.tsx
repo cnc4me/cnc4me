@@ -5,12 +5,12 @@ export default function Footer() {
     <div className="flex flex-row text-purple-100 bg-neutral-900">
       <div className="p-2 text-sm">
         Sources on{" "}
-        <Link href="https://github.com/cnc4me/cnc4me/tree/main/packages/fanuc-macro-b">
+        <Link href="https://github.com/cnc4me/cnc4me/tree/main/apps/website">
           Github
         </Link>
       </div>
       <div className="flex-grow p-2 text-sm text-center">
-        <Link href="https://github.com/cnc4me/cnc4me">CNC4ME</Link> © 2022
+        <Link href="https://github.com/cnc4me/cnc4me">CNC4ME</Link> © 2024
       </div>
       <div className="p-2 text-sm">
         Made By <Link href="https://github.com/kevinkhill">Kevin Hill</Link>

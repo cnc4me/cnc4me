@@ -1,7 +1,7 @@
-export type { EditorThemes } from "./hooks/useEditorTheme";
-export type { MonacoCodeEditor as MonacoCodeEditorType } from "@cnc4me/chrysalis";
-export type { MacroMemory as MacroMemoryType } from "@cnc4me/fanuc-macro-b";
-export type { ParsedLineData as ParsedLineDataType } from "@cnc4me/fanuc-macro-b";
+import type { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
+import type { editor } from "monaco-editor";
+
+export type MonacoCodeEditor = editor.IStandaloneCodeEditor;
 
 export type ViewStr = "home" | "macros" | "offsets" | "tools" | "debug";
 
@@ -12,3 +12,8 @@ export interface OffsetRegister {
   diamGeom: number;
   diamWear: number;
 }
+
+export type {
+  MacroMemory as MacroMemoryType,
+  ParsedLineData as ParsedLineDataType
+};

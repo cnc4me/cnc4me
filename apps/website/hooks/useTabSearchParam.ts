@@ -1,11 +1,12 @@
 import { useRouter } from "next/router";
 
+import type { ViewStr } from "../lib";
+
 // import { useSearchParams } from "react-router-dom";
-import { ViewStr } from "../types";
 
 interface HookFns {
-  getTabParam: (defaultTab: ViewStr) => ViewStr;
   setTabParam: (tab: ViewStr) => void;
+  getTabParam: (defaultTab: ViewStr) => ViewStr;
 }
 
 export function useTabSearchParam(allowedTabs: ViewStr[]): HookFns {

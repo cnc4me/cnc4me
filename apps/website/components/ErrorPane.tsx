@@ -1,9 +1,11 @@
 import { RuntimeErrors, zeroPad } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
-export const ErrorPane: React.FC<{ errors: RuntimeErrors[] }> = ({
-  errors
-}) => {
+interface Props {
+  errors: RuntimeErrors[];
+}
+
+export const ErrorPane: React.FC<Props> = ({ errors }) => {
   return (
     <>
       {errors.length > 0 && (

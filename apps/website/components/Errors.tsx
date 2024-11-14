@@ -1,6 +1,10 @@
 import { zeroPad } from "@cnc4me/fanuc-macro-b";
 
-export const Errors = ({ errors }: { errors: string[] }) => {
+interface Props {
+  errors: string[];
+}
+
+export const Errors: React.FC<Props> = ({ errors }) => {
   return (
     <div className="">
       <h1 className="pb-1 text-xl font-bold text-violet-400">Errors:</h1>

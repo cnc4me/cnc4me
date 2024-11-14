@@ -1,0 +1,16 @@
+import type { MonacoThemeDef } from "./types";
+
+export type GCodeDarkTheme = "gcode-dark";
+
+export const gcodeDarkTheme: MonacoThemeDef = {
+  base: "vs-dark",
+  inherit: true,
+  rules: [
+    // { token: "number", foreground: "#FFE38A" },
+    // { token: "macro-var", foreground: "#F1AAFF" },
+    // { token: "operators", foreground: "#cfcf4f" },
+    { token: "comment", foreground: "#C09D70", fontStyle: "italic" }
+    // { token: "custom-date", foreground: "008800" }
+  ],
+  colors: {}
+};

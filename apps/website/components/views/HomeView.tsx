@@ -1,4 +1,4 @@
-import { DocumentTextIcon, LightBulbIcon } from "@heroicons/react/solid";
+import { DocumentTextIcon, LightBulbIcon } from "@heroicons/react/24/solid";
 
 import { Link } from "../Link";
 
@@ -18,7 +18,7 @@ const packages = [
   ]
 ];
 
-export const HomeView = () => {
+export const HomeView: React.FC = () => {
   return (
     <div className="container bg-neutral-800">
       {/* <ViewHeading value="Welcome" /> */}

@@ -8,27 +8,33 @@ module.exports = {
     emcaVersion: "2020",
     sourceType: "module",
     tsconfigRootDir: path.resolve(__dirname),
-    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"]
+    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.json"],
   },
   env: {
     es6: true,
-    node: true
+    node: true,
   },
   settings: {
     "import/parsers": {
-      "@typescript-eslint/parser": [".ts", ".tsx"]
+      "@typescript-eslint/parser": [".ts", ".tsx"],
     },
     "import/resolver": {
       node: {
-        extensions: [".js", ".jsx", ".ts", ".tsx"]
+        extensions: [".js", ".jsx", ".ts", ".tsx"],
       },
       typescript: {
         alwaysTryTypes: true,
-        project: ["./packages/*/tsconfig.json"]
-      }
-    }
+        project: ["./packages/*/tsconfig.json"],
+      },
+    },
   },
-  plugins: ["jest", "import", "prettier", "@typescript-eslint", "simple-import-sort"],
+  plugins: [
+    "jest",
+    "import",
+    "prettier",
+    "@typescript-eslint",
+    "simple-import-sort",
+  ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -36,7 +42,7 @@ module.exports = {
     "plugin:import/errors",
     "plugin:import/typescript",
     "prettier",
-    "plugin:prettier/recommended" // KEEP THIS LAST
+    "plugin:prettier/recommended", // KEEP THIS LAST
   ],
   rules: {
     "prettier/prettier": "error",
@@ -46,9 +52,7 @@ module.exports = {
     //
 
     curly: ["error", "all"],
-    "no-mixed-operators": "error",
     // "no-console": "error",
-    "no-process-exit": "error",
 
     //
     // typescript
@@ -67,7 +71,10 @@ module.exports = {
     "@typescript-eslint/prefer-as-const": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
     "@typescript-eslint/prefer-nullish-coalescing": "error",
-    "@typescript-eslint/no-empty-function": ["error", { allow: ["arrowFunctions"] }],
+    "@typescript-eslint/no-empty-function": [
+      "error",
+      { allow: ["arrowFunctions"] },
+    ],
     "@typescript-eslint/restrict-template-expressions": [
       "error",
       {
@@ -75,8 +82,8 @@ module.exports = {
         allowBoolean: true,
         allowAny: true,
         allowNullish: true,
-        allowRegExp: true
-      }
+        allowRegExp: true,
+      },
     ],
     // "@typescript-eslint/no-unused-vars": [
     //   "warn",
@@ -87,8 +94,21 @@ module.exports = {
     // simple-import-sort
     //
 
-    "simple-import-sort/imports": "error",
     "simple-import-sort/exports": "error",
+    "simple-import-sort/imports": [
+      "error",
+      {
+        // The default grouping, but with type imports last as a separate group.
+        groups: [
+          ["^\\u0000"],
+          ["^node:"],
+          ["^@?\\w"],
+          ["^"],
+          ["^\\."],
+          ["^.+\\u0000$"],
+        ],
+      },
+    ],
 
     //
     // eslint-plugin-import
@@ -113,9 +133,9 @@ module.exports = {
       {
         devDependencies: true,
         peerDependencies: true,
-        optionalDependencies: false
-      }
-    ]
+        optionalDependencies: false,
+      },
+    ],
   },
   overrides: [
     // all test files
@@ -127,7 +147,7 @@ module.exports = {
         "packages/*/tests/**/*.spec.ts",
         "packages/*/tests/**/*.test.ts",
         "packages/*/tests/**/spec.ts",
-        "packages/*/tests/**/test.ts"
+        "packages/*/tests/**/test.ts",
       ],
       rules: {
         "@typescript-eslint/no-unsafe-call": "off",
@@ -149,29 +169,29 @@ module.exports = {
         "jest/no-identical-title": "error",
         "jest/no-jasmine-globals": "error",
         "jest/no-test-return-statement": "error",
-        "jest/no-deprecated-functions": "error"
-      }
+        "jest/no-deprecated-functions": "error",
+      },
     },
     // tools and tests
     {
       files: ["**/tools/**/*.ts", "**/tests/**/*.ts"],
       rules: {
         // allow console logs in tools and tests
-        "no-console": "off"
-      }
+        "no-console": "off",
+      },
     },
     {
       files: ["rollup.config.ts"],
       rules: {
-        "import/no-default-export": "off"
-      }
+        "import/no-default-export": "off",
+      },
     },
     {
       files: ["packages/website/src/**/*.{ts,tsx}"],
       rules: {
         "import/no-default-export": "off",
-        "no-console": "off"
-      }
-    }
-  ]
+        "no-console": "off",
+      },
+    },
+  ],
 };

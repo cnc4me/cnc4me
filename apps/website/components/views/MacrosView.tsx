@@ -5,7 +5,11 @@ import { PagerButtons } from "../PagerButtons";
 import { ValueTable } from "../ValueTable";
 import { ViewHeading } from "./ViewHeading";
 
-export const MacroView: React.FC<{ memory: MacroMemory }> = ({ memory }) => {
+interface Props {
+  memory: MacroMemory;
+}
+
+export const MacroView: React.FC<Props> = ({ memory }) => {
   const [pageCount, setPageCount] = useState(1);
   const [leftCol, setLeftCol] = useState<MacroValueArray>([]);
   const [rightCol, setRightCol] = useState<MacroValueArray>([]);

@@ -1,12 +1,12 @@
 import React from "react";
 
-interface LargeButtonProps {
+interface Props {
   disabled?: boolean;
   onClick: () => unknown;
   label: string | JSX.Element;
 }
 
-export const LargeButton: React.FC<LargeButtonProps> = ({
+export const LargeButton: React.FC<Props> = ({
   onClick,
   label,
   disabled = false

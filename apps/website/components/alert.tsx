@@ -20,7 +20,7 @@ const PreviewMode = (
   </>
 );
 
-function Alert({ preview }: Props) {
+export default function Alert({ preview }: Props) {
   return (
     <div
       className={clsx("border-b", {
@@ -36,5 +36,3 @@ function Alert({ preview }: Props) {
     </div>
   );
 }
-
-export default Alert;
