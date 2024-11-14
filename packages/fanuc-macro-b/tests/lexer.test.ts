@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { lexer } from "../src";
 import { Address, Decimal, Equals, Integer, Minus, Newline, Var } from "../src/lib/Tokens";
 

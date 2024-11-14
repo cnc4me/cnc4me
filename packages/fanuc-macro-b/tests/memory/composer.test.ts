@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import {
   composeAuxWorkOffsetAxisRegister,
   composeToolOffsetRegister,
@@ -26,7 +28,7 @@ describe("testing methods for composing memory addresses", () => {
     ${5282}  | ${4}  | ${"Y"}
     ${5304}  | ${5}  | ${"B"}
     ${5323}  | ${6}  | ${"Z"}
-  `("composeWorkOffsetAxisRegister($group, '$axis') = $register", ({ register, group, axis }) => {
+  `("composeWorkOffsetAxisRegister($group, $axis) = $register", ({ register, group, axis }) => {
     const address = composeWorkOffsetAxisRegister(group, axis);
 
     expect(address).toBe(register);
@@ -40,7 +42,7 @@ describe("testing methods for composing memory addresses", () => {
     ${7181}  | ${10} | ${"X"}
     ${7964}  | ${49} | ${"B"}
   `(
-    "composeAuxWorkOffsetAxisRegister($group, '$axis') = $register",
+    "composeAuxWorkOffsetAxisRegister($group, $axis) = $register",
     ({ register, group, axis }) => {
       const address = composeAuxWorkOffsetAxisRegister(group, axis);
 

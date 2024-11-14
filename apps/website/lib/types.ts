@@ -1,5 +1,8 @@
 import type { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
+import type { GCodeDarkTheme, GCodeLightTheme } from "@cnc4me/monaco-gcode";
 import type { editor } from "monaco-editor";
+
+export type EditorTheme = GCodeDarkTheme | GCodeLightTheme;
 
 export type MonacoCodeEditor = editor.IStandaloneCodeEditor;
 

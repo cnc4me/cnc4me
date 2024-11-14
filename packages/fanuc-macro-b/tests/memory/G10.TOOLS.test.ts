@@ -1,5 +1,7 @@
+import { describe, it, expect } from "vitest";
+
 import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
-import { rand } from "../helpers";
+import { rand } from "../_vitest/helpers";
 
 /**
  * G10 Line Reference

@@ -1,0 +1,34 @@
+{
+  "name": "@cnc4me/vitest-expect-ext",
+  "version": "1.0.0",
+  "description": "",
+  "keywords": [],
+  "repository": {
+    "type": "git",
+    "url": "https://github.com/cnc4me/vitest-expect-ext"
+  },
+  "license": "MIT",
+  "author": "Kevin Hill",
+  "type": "module",
+  "exports": {
+    ".": {
+      "types": "./src/index.d.ts",
+      "require": "./src/index.ts",
+      "default": "./src/index.ts"
+    },
+    "./config": "./src/config.ts"
+  },
+  "main": "src/index.ts",
+  "types": "src/index.d.ts",
+  "scripts": {
+    "test": "vitest"
+  },
+  "dependencies": {
+    "@vitest/expect": "catalog:",
+    "chevrotain": "catalog:"
+  },
+  "devDependencies": {
+    "typescript": "catalog:",
+    "vitest": "catalog:"
+  }
+}

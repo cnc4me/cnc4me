@@ -5,10 +5,14 @@
     "module": "CommonJS",
     "moduleResolution": "node",
     "target": "es2017",
-    "lib": ["es2017"],
+    "lib": [
+      "es2017"
+    ],
     "baseUrl": ".",
     "paths": {
-      "@cnc4me/*": ["./packages/*"]
+      "@cnc4me/*": [
+        "./packages/*"
+      ]
     },
     "sourceMap": true,
     "skipLibCheck": true,
@@ -27,10 +31,14 @@
     "noPropertyAccessFromIndexSignature": true
   },
   "references": [
-    { "path": "./packages/chrysalis" },
-    { "path": "./packages/fanuc-macro-b" },
-    { "path": "./packages/monaco-theme-gcode" },
-    { "path": "./packages/monaco-language-gcode" }
+    {
+      "path": "./packages/fanuc-macro-b"
+    },
+    {
+      "path": "./packages/monaco-gcode"
+    },
   ],
-  "include": ["**/.eslintrc.js"]
+  "include": [
+    "**/.eslintrc.js"
+  ]
 }

@@ -3,13 +3,16 @@
   "compilerOptions": {
     "noEmit": true,
     "allowJs": true,
-    "types": ["node"]
+    "types": [
+      "node"
+    ]
   },
   "include": [
     "./*.js",
     "./*.ts",
     "./apps/**/*.js",
     "./apps/**/*.ts",
+    "./apps/**/*.d.ts",
     "./apps/**/*.tsx",
     "./tools/**/*.js",
     "./tools/**/*.ts",

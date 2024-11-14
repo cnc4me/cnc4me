@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { MacroRuntime } from "../src/lib/MacroRuntime";
 
 const SAMPLE_CODE = `%

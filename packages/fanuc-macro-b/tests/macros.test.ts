@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { lines } from "../src";
 
 const code = `#1=1

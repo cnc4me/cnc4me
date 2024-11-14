@@ -1,17 +1,12 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true,
-    "lib": [
-      "dom",
-      "ESNext"
-    ],
-    "types": [
-      "node",
-      "lodash",
-      "chevrotain"
-    ]
+    "rootDir": "src",
+    "composite": true
   },
+  "files": [
+    "vite.config.ts"
+  ],
   "include": [
     "src"
   ],
@@ -20,7 +15,7 @@
       "path": "./tsconfig.lib.json"
     },
     {
-      "path": "./tsconfig.spec.json"
+      "path": "./tsconfig.eslint.json"
     }
   ]
 }

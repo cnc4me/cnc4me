@@ -1,3 +1,5 @@
+import { describe, it, expect } from "vitest";
+
 import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
 
 describe("testing the MacroMemory's *ToolOffset* methods", () => {

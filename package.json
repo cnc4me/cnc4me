@@ -20,9 +20,10 @@
     "@swc/jest": "^0.2.21",
     "@types/jest": "27.0.2",
     "@types/node": "16.11.7",
-    "@typescript-eslint/eslint-plugin": "^5.25.0",
-    "@typescript-eslint/parser": "^5.25.0",
-    "eslint": "^8.15.0",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "@vitest/eslint-plugin": "^1.1.10",
+    "eslint": "catalog:",
     "eslint-config-prettier": "^8.5.0",
     "eslint-import-resolver-typescript": "^2.7.1",
     "eslint-plugin-import": "^2.26.0",
@@ -31,11 +32,13 @@
     "eslint-plugin-simple-import-sort": "^7.0.0",
     "jest": "^27.5.1",
     "pnpm": "^7.1.2",
-    "prettier": "^2.6.2",
+    "prettier": "catalog:",
     "rimraf": "^3.0.2",
     "ts-jest": "27.0.5",
     "ts-node-dev": "^1.1.8",
     "tsup": "^8.3.5",
-    "typescript": "^4.6.4"
+    "typescript": "catalog:",
+    "vite": "catalog:",
+    "vitest": "catalog:"
   }
 }
