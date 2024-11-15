@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { program } from "../src/utils";
+import { program } from "../../src";
 
 const code = `%
 O1234 (example)

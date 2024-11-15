@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lexer } from "../src";
+import { lexer } from "../../src";
 import {
   Address,
   Decimal,
@@ -9,7 +9,7 @@ import {
   Minus,
   Newline,
   Var
-} from "../src/lib/Tokens";
+} from "../../src/lib/Tokens";
 
 describe.skip("lexer", () => {
   it("can lex a G10 line", () => {
