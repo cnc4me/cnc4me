@@ -38,3 +38,28 @@ export const G10_L_GROUPS: Record<string, keyof G10LabelToOffsetGroupMap> = {
   13: "DIAMETER",
   20: "AUX"
 } as const;
+
+/**
+ * Spacing between each successive group of address space of the memory.
+ */
+export const ONE_GROUP_OF_OFFSET_REGISTERS = 20;
+
+/**
+ * This is stored in parameter 1022 of the machine
+ */
+export const AXIS_ADRRESS_INDEX: Record<string, number> = {
+  X: 1,
+  Y: 2,
+  Z: 3,
+  B: 4
+} as const;
+
+export const WORK_OFFSET_ADDRESS_MAP: Record<number, number> = {
+  0: 5200 /* G53 */,
+  1: 5220 /* G54 */,
+  2: 5240 /* G55 */,
+  3: 5260 /* G56 */,
+  4: 5280 /* G57 */,
+  5: 5300 /* G58 */,
+  6: 5320 /* G59 */
+} as const;

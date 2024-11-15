@@ -1,51 +1,50 @@
 import {
-  AdditionOperator,
-  Address,
-  BooleanOperator,
-  Brackets,
-  BuiltinFunctions,
-  CloseBracket,
-  CloseParen,
-  Comma,
-  Comment,
-  ControlFlowKeyword,
-  Decimal,
-  Divide,
-  Do,
-  Equals,
   EqualTo,
-  Gcode,
-  GotoLine,
   GreaterThan,
   GreaterThanOrEq,
-  If,
-  Integer,
   LessThan,
   LessThanOrEq,
-  Mcode,
-  Minus,
+  NotEqualTo
+} from "./boolean";
+import { CloseBracket, CloseParen, OpenBracket, OpenParen } from "./brackets";
+import {
+  AdditionOperator,
+  BooleanOperator,
+  Brackets,
+  ControlFlowKeyword,
   MultiplicationOperator,
+  NumericValue
+} from "./categories";
+import { Do, GotoLine, If, Then, While } from "./control-flow";
+import {
+  Comma,
+  Divide,
+  Equals,
+  Minus,
   Newline,
-  NotEqualTo,
-  NumericValue,
-  OpenBracket,
-  OpenParen,
   Percent,
   Plus,
   Product,
+  Var
+} from "./symbols";
+import {
+  Address,
+  BuiltinFunctions,
+  Comment,
+  Decimal,
+  Gcode,
+  Integer,
+  LineNumber,
+  Mcode,
   ProgramNumber,
-  Then,
-  Var,
-  While,
   WhiteSpace
-} from ".";
-import { LineNumber } from "./tokens";
+} from "./tokens";
 
 /**
  * The order of tokens is important because token
- *  matches are applied sequentially
+ * matches are applied sequentially
  */
-export const allTokens = [
+export const tokenSet = [
   Newline,
   WhiteSpace,
   Percent,

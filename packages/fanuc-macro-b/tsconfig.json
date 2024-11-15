@@ -1,7 +1,9 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true
+    "strict": true,
+    "composite": true,
+    "esModuleInterop": true
   },
   "files": [
     "vite.config.ts"

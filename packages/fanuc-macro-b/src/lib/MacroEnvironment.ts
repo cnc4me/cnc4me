@@ -1,12 +1,12 @@
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
-import { MacroMemory } from "./MacroMemory";
+import { MacroMemory } from "./memory";
 import { MacroParser } from "./MacroParser";
 
 /*
  * MacroEnv Class is a formal instance of all the modules
  */
-export class MacroEnv {
+export class MacroEnvironment {
   private _mem: MacroMemory;
   private _lexer: MacroLexer;
   private _parser: MacroParser;

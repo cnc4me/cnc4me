@@ -1,29 +1,30 @@
-import { IRecognitionException } from "chevrotain";
-
-import { createToolchain } from "./createToolchain";
+import { MacroRuntime } from "../lib";
+import Toolchain from "../lib/Toolchain";
 
 import type { InsightCollection } from "../lib";
-import type { InterpretedProgram } from "../types";
+import type { InterpretedProgram, RuntimeError } from "../types";
 
 interface ProgramAnalisys {
   result: InterpretedProgram;
+  errors: RuntimeError[];
   insights: InsightCollection;
-  errors: IRecognitionException[];
 }
 
 /**
  * Analyze a text in the context of being a valid NC program
  */
-export function program(input: string): ProgramAnalisys {
-  const { parser, interpreter } = createToolchain({ preloadInput: input });
+export function program(preloadInput: string): ProgramAnalisys {
+  const runtime = new MacroRuntime();
 
-  const cst = parser.program();
+  Toolchain.create(runtime, { preloadInput });
 
-  const result = interpreter.visit(cst) as InterpretedProgram;
+  const cst = runtime.Parser.program();
+
+  const result = runtime.Interpreter.visit(cst) as InterpretedProgram;
 
   return {
     result,
-    insights: interpreter.Insights,
-    errors: parser.errors
+    errors: runtime.getErrors(),
+    insights: runtime.Interpreter.Insights
   };
 }

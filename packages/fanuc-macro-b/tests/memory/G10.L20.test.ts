@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../src/lib/MacroMemory/MacroMemory";
+import { MacroMemory } from "../../src/lib/memory/MacroMemory";
 import { getRandomAxisLocations } from "../_vitest/helpers";
 
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {

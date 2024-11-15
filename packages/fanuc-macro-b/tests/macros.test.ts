@@ -14,8 +14,9 @@ const code = `#1=1
 #10=[[48/#9]+[8*#4]]/[#5+[[#4*3]/2]+3]`;
 
 describe("macros expressions", () => {
-  const { interpreter, parser } = lines(code);
-  const { Memory } = interpreter;
+  const { runtime } = lines(code);
+  const parser = runtime.Parser;
+  const Memory = runtime.Memory;
 
   it("parses with no errors", () => {
     expect(parser.errors).toHaveLength(0);

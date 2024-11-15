@@ -1,10 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  composeAuxWorkOffsetAxisRegister,
-  composeToolOffsetRegister,
-  composeWorkOffsetAxisRegister
-} from "../../src/lib/MacroMemory/composer";
+import { RegisterMap } from "../src/lib";
 
 describe("testing methods for composing memory addresses", () => {
   it.each`
@@ -15,9 +11,9 @@ describe("testing methods for composing memory addresses", () => {
     ${13109} | ${13} | ${109}
     ${11299} | ${11} | ${299}
   `(
-    "composeToolOffsetRegister($group, $toolNum) = $register",
+    "RegisterMap.ToolOffset($group, $toolNum) = $register",
     ({ register, group, toolNum }) => {
-      const address = composeToolOffsetRegister(group, toolNum);
+      const address = RegisterMap.ToolOffset(group, toolNum);
 
       expect(address).toBe(register);
     }
@@ -32,9 +28,9 @@ describe("testing methods for composing memory addresses", () => {
     ${5304}  | ${5}  | ${"B"}
     ${5323}  | ${6}  | ${"Z"}
   `(
-    "composeWorkOffsetAxisRegister($group, $axis) = $register",
+    "RegisterMap.WorkOffset($group, $axis) = $register",
     ({ register, group, axis }) => {
-      const address = composeWorkOffsetAxisRegister(group, axis);
+      const address = RegisterMap.WorkOffset(group, axis);
 
       expect(address).toBe(register);
     }
@@ -48,9 +44,9 @@ describe("testing methods for composing memory addresses", () => {
     ${7181}  | ${10} | ${"X"}
     ${7964}  | ${49} | ${"B"}
   `(
-    "composeAuxWorkOffsetAxisRegister($group, $axis) = $register",
+    "RegisterMap.AuxWorkOffset($group, $axis) = $register",
     ({ register, group, axis }) => {
-      const address = composeAuxWorkOffsetAxisRegister(group, axis);
+      const address = RegisterMap.AuxWorkOffset(group, axis);
 
       expect(address).toBe(register);
     }

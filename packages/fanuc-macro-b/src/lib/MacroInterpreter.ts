@@ -1,6 +1,6 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
-import Emittery from "emittery";
+import mitt, { type Emitter } from "mitt";
 import { match } from "ts-pattern";
 
 import { INTERPRETER } from "../PackageConfig";
@@ -16,8 +16,8 @@ import {
   unwrapComment
 } from "../utils";
 import { AddressInsight, InsightCollection } from "./Insights";
-import { MacroMemory } from "./MacroMemory";
-import { parser } from "./MacroParser";
+import { MacroMemory } from "./memory";
+import { MacroParser } from "./MacroParser";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
@@ -47,11 +47,13 @@ import type {
   VariableLiteralCstChildren
 } from "../types/fanuc";
 
-interface InterpreterEvents {
+// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
+type InterpreterEvents = {
   M0: undefined;
   M1: undefined;
-}
+};
 
+const parser = new MacroParser();
 const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
   ? parser.getBaseCstVisitorConstructorWithDefaults()
   : parser.getBaseCstVisitorConstructor();
@@ -60,7 +62,7 @@ const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseVisitor {
-  events = new Emittery<InterpreterEvents>();
+  public events: Emitter<InterpreterEvents> = mitt<InterpreterEvents>();
 
   private _mem: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();

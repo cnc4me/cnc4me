@@ -24,11 +24,11 @@ import {
   Then,
   Var
 } from "./Tokens";
-import { allTokens } from "./Tokens/all";
+import { tokenSet } from "./Tokens/token-set";
 
 export class MacroParser extends CstParser {
   constructor() {
-    super(allTokens);
+    super(tokenSet);
 
     // debug("initializing");
 
@@ -257,5 +257,3 @@ export class MacroParser extends CstParser {
     });
   });
 }
-
-export const parser = new MacroParser();

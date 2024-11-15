@@ -1,9 +1,9 @@
 export * from "./Insights";
-export * from "./MacroEnv";
+export * from "./MacroEnvironment";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
 export * from "./MacroLogger";
-export * from "./MacroMemory";
 export * from "./MacroParser";
 export * from "./MacroRuntime";
+export * from "./memory";
 export * as Tokens from "./Tokens";

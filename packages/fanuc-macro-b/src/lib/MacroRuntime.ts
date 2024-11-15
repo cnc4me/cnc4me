@@ -1,68 +1,62 @@
-import { ILexingError, IRecognitionException, IToken } from "chevrotain";
+import { ILexingError, IToken } from "chevrotain";
 import Emittery from "emittery";
 
 import { matchProgramNumber } from "../utils";
 import { InsightCollection } from "./Insights";
-import { MacroEnv } from "./MacroEnv";
 import { MacroInterpreter } from "./MacroInterpreter";
-import { MacroLexer } from "./MacroLexer";
-import { MacroMemory } from "./MacroMemory";
+import { MacroLexer } from "./MacroLexer2";
 import { MacroParser } from "./MacroParser";
+import { MacroMemory } from "./memory";
 
 import type {
   InterpretedProgram,
   ParsedLineData,
-  ProgramLoadOptions
-} from "../types";
-import type { ProgramCstNode } from "../types/fanuc";
-import type {
-  RuntimeErrors,
+  ProgramCstNode,
+  ProgramLoadOptions,
+  RuntimeError,
   RuntimeEvents,
   RuntimeOutput
-} from "../types/runtime";
+} from "../types";
 
 /*
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime {
-  private _env: MacroEnv;
-  private _activeProgram = NaN;
-  private _lexerErrors: ILexingError[] = [];
-  private _programs: Record<number, string> = {};
   private _events = new Emittery<RuntimeEvents>();
+  private _programs: Record<number, string> = {};
+  private _activeProgram = NaN;
+  private _mem: MacroMemory;
+  private _lexer: MacroLexer;
+  private _parser: MacroParser;
+  private _interpreter: MacroInterpreter;
 
-  get Lexer(): MacroLexer {
-    return this._env.Lexer;
+  get Memory(): MacroMemory {
+    return this._mem;
   }
 
-  get LexerErrors(): ILexingError[] {
-    return this._lexerErrors;
+  get Lexer(): MacroLexer {
+    return this._lexer;
   }
 
   get Parser(): MacroParser {
-    return this._env.Parser;
-  }
-
-  get ParserErrors(): IRecognitionException[] {
-    return this._env.Parser.errors;
+    return this._parser;
   }
 
   get Interpreter(): MacroInterpreter {
-    return this._env.Interpreter;
-  }
-
-  get Memory(): MacroMemory {
-    return this._env.Memory;
+    return this._interpreter;
   }
 
   get Insights(): InsightCollection {
-    return this._env.Interpreter.Insights;
+    return this._interpreter.Insights;
   }
 
   constructor() {
     // debug("initializing");
-
-    this._env = new MacroEnv();
+    this._events = new Emittery<RuntimeEvents>();
+    this._mem = new MacroMemory();
+    this._lexer = new MacroLexer();
+    this._parser = new MacroParser();
+    this._interpreter = new MacroInterpreter({ memory: this._mem });
   }
 
   /**
@@ -73,16 +67,16 @@ export class MacroRuntime {
 
     this._tokenizeActiveProgram();
 
-    const programCst = this.Parser.program() as ProgramCstNode;
+    const programCst = this._parser.program() as unknown as ProgramCstNode;
 
     /**
      * @TODO ERROR HANDLING!!!!
      */
-    if (this.Parser.errors.length > 0) {
+    if (this._parser.errors.length > 0) {
       // void this._events.emit("error", this.Parser.errors);
     }
 
-    const result = this.Interpreter.program(programCst.children);
+    const result = this._interpreter.program(programCst.children);
 
     return {
       beginExec,
@@ -94,19 +88,18 @@ export class MacroRuntime {
    * Reset the runtime.
    */
   reset(): void {
-    this.Memory.reset();
-    this.Parser.input = [];
-    this._env.Parser.errors = [];
+    this._mem.reset();
+    this._parser.reset();
     this._activeProgram = NaN;
   }
 
   /**
    * Retrieve a record of errors
    */
-  getErrors(): RuntimeErrors[] {
-    const errors = [...this.ParserErrors, ...this.LexerErrors];
+  getErrors(): RuntimeError[] {
+    const errors = [...this._parser.errors, ...this._lexer.errors];
 
-    this._env.Parser.errors = [];
+    // this._env.Parser.errors = [];
 
     return errors;
   }
@@ -114,7 +107,7 @@ export class MacroRuntime {
   /**
    * Register a function to handle errors that occur in the runtime.
    */
-  onError(handler: (eventData: RuntimeErrors) => void) {
+  onError(handler: (eventData: RuntimeError) => void) {
     return this._events.on("error", handler);
   }
 
@@ -132,7 +125,7 @@ export class MacroRuntime {
         errors: false;
         tokens: never[];
       } {
-    const { errors, tokens } = this.Lexer.tokenize(input);
+    const { errors, tokens } = this._lexer.tokenize(input);
 
     if (errors.length > 0) {
       return {
@@ -142,7 +135,7 @@ export class MacroRuntime {
       };
     }
 
-    this.Parser.input = tokens;
+    this._parser.input = tokens;
 
     return {
       input,
@@ -158,9 +151,9 @@ export class MacroRuntime {
     this._tokenizeForParsing(code);
     // this._tokenizeActiveProgram();
 
-    const programCst = this.Parser.program() as ProgramCstNode;
+    const programCst = this._parser.program() as unknown as ProgramCstNode;
 
-    return this.Interpreter.program(programCst.children);
+    return this._interpreter.program(programCst.children);
   }
 
   /**
@@ -169,9 +162,24 @@ export class MacroRuntime {
   evalLines(code: string): ParsedLineData[] {
     this._tokenizeForParsing(code);
 
-    const cst = this.Parser.lines();
+    const cst = this._parser.lines();
 
-    return this.Interpreter.lines(cst.children);
+    return this._interpreter.lines(cst.children);
+  }
+
+  /**
+   * Set a program number as `active` in the runtime.
+   */
+  setActiveProgram(programNumber: number): void {
+    // debug(`Setting program #${programNumber} active`);
+    this._activeProgram = programNumber;
+  }
+
+  /**
+   * Load the parser's input
+   */
+  setParserInput(tokens: IToken[]) {
+    this._parser.input = tokens;
   }
 
   /**
@@ -223,14 +231,6 @@ export class MacroRuntime {
   }
 
   /**
-   * Set a program number as `active` in the runtime.
-   */
-  setActiveProgram(programNumber: number): void {
-    // debug(`Setting program #${programNumber} active`);
-    this._activeProgram = programNumber;
-  }
-
-  /**
    * Load a AnalyzedProgram into memory
    *
    * This method can create a program if given a string
@@ -263,7 +263,7 @@ export class MacroRuntime {
   /**
    * Helper to emit errors
    */
-  private _emitError(error: string | RuntimeErrors): false {
+  private _emitError(error: string | RuntimeError): false {
     void this._events.emit("error", error);
     return false;
   }
@@ -281,17 +281,17 @@ export class MacroRuntime {
    * Generate an array of {@link IToken} from an input string
    */
   private _tokenizeForParsing(input: string): void {
-    const { errors, tokens } = this.Lexer.tokenize(input);
+    const { errors, tokens } = this._lexer.tokenize(input);
 
     /**
      * @TODO error handling needs to be addressed
      */
     if (errors.length > 0) {
-      this._lexerErrors.push(...errors);
+      this._lexer.errors.push(...errors);
       // void this._events.emit("error", this._lexerErrors);
     }
 
-    this.Parser.input = tokens;
+    this._parser.input = tokens;
   }
 
   /**

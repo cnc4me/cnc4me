@@ -1,20 +1,22 @@
-import { createToolchain } from "./createToolchain";
+import { MacroRuntime } from "../lib/MacroRuntime";
+import Toolchain from "../lib/Toolchain";
 
 import type { InterpretedLines, WithTools } from "../types";
+
+type WhatIsThis = WithTools<InterpretedLines, "parser" | "interpreter">;
 
 /**
  * Run lines of text as gcode throught the {@link MacroIntepreter}
  */
-export function lines(
-  input: string
-): WithTools<InterpretedLines, "parser" | "interpreter"> {
-  const { parser, interpreter } = createToolchain({ preloadInput: input });
+export function lines(preloadInput: string) {
+  const runtime = new MacroRuntime();
 
-  const linesCst = parser.lines();
+  Toolchain.create(runtime, { preloadInput });
+
+  const linesCst = runtime.Parser.lines();
 
   return {
-    parser,
-    interpreter,
-    result: interpreter.lines(linesCst.children)
+    runtime,
+    result: runtime.Interpreter.lines(linesCst.children)
   };
 }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../src/lib/MacroMemory";
+import { MacroMemory } from "../../src/lib/memory";
 import { getRandomAxisLocations } from "../_vitest/helpers";
 
 describe("setting `L2` work offsets with MacroMemory#g10()", () => {

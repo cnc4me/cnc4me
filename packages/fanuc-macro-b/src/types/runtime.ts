@@ -5,7 +5,7 @@ import type { MacroInterpreter } from "../lib";
 export interface ProgramLoadOptions {
   setActive: boolean;
 }
-export type RuntimeErrors = string | ILexingError | IRecognitionException;
+export type RuntimeError = string | ILexingError | IRecognitionException;
 
 export interface RuntimeOutput {
   beginExec: Date;
@@ -15,5 +15,5 @@ export interface RuntimeOutput {
 
 export interface RuntimeEvents {
   close: undefined; // No arg event
-  error: RuntimeErrors;
+  error: RuntimeError;
 }

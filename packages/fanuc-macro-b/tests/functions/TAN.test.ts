@@ -11,8 +11,9 @@ const code = `
 #6=TAN[135]`;
 
 describe("function: TAN[]", () => {
-  const { parser, interpreter } = lines(code);
-  const { Memory } = interpreter;
+  const { runtime } = lines(code);
+  const parser = runtime.Parser;
+  const Memory = runtime.Memory;
 
   it("parses with no errors", () => {
     expect(parser.errors).toHaveLength(0);

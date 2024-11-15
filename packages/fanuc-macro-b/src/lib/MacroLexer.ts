@@ -1,10 +1,11 @@
 import { Lexer } from "chevrotain";
 
-import { allTokens } from "./Tokens";
+import { tokenSet } from "./Tokens/token-set";
 
 export class MacroLexer extends Lexer {
+  errors: any;
   constructor() {
-    super(allTokens);
+    super(tokenSet);
 
     // debug(`initializing lexer with ${allTokens.length} tokens`);
   }

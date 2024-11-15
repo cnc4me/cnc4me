@@ -15,8 +15,13 @@ const code = `
 #10=[5+2]-[3+[5*2+2]/[2+3]]]`;
 
 describe("evaluating expressions enclosed in [brackets]", () => {
-  const { interpreter } = lines(code);
-  const { Memory } = interpreter;
+  const { runtime } = lines(code);
+  const parser = runtime.Parser;
+  const Memory = runtime.Memory;
+
+  it("parses with no errors", () => {
+    expect(parser.errors).toHaveLength(0);
+  });
 
   it("can evaluate #1=100*[5/25]", () => {
     expect(Memory.read(1)).toBe(20);

@@ -1,15 +1,10 @@
-import { pick } from "lodash";
 import { __, match } from "ts-pattern";
 
-import { range } from "../../utils";
-import {
-  composeAuxWorkOffsetAxisRegister,
-  composeToolOffsetRegister,
-  composeWorkOffsetAxisRegister
-} from "./composer";
-import { OFFSET_GROUPS } from "./constants";
-import { parseG10 } from "./g10-tools";
-import { GROUP_3 } from "./register-map";
+import { isLexingError, range } from "../../utils";
+import { parseG10 } from "./G10";
+import { OFFSET_GROUPS } from "./offsets.const";
+import { RegisterMap } from "./registers";
+import { GROUP_3 } from "./registers.const";
 
 import type {
   MacroValueArray,
@@ -22,13 +17,6 @@ import type {
 } from "../../types";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
-
-/**
- * Helper function to extract axis locations from an object of addresses
- */
-function getPositions(locations: Partial<WorkCoordinateHash>) {
-  return pick(locations, ["X", "Y", "Z", "B"]);
-}
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -108,10 +96,12 @@ export class MacroMemory {
 
     return match(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
-        this.setCommonWorkOffset(P, getPositions(rest));
+        const { B, X, Y, Z } = rest;
+        this.setCommonWorkOffset(P, { B, X, Y, Z });
       })
       .with({ L: WORK.AUX }, ({ P, ...rest }) => {
-        this.setAuxWorkOffset(P, getPositions(rest));
+        const { B, X, Y, Z } = rest;
+        this.setAuxWorkOffset(P, { B, X, Y, Z });
       })
       .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
         this.setToolLengthComp(P, R);
@@ -134,11 +124,19 @@ export class MacroMemory {
   evalG10(input: string) {
     const { error, result } = parseG10(input);
 
-    if (result) {
-      this.g10(result);
-    } else {
-      throw Error(error);
+    if (error.length > 0) {
+      const firstError = error[0];
+
+      if (typeof firstError === "string") {
+        throw Error(firstError);
+      } else if (isLexingError(firstError)) {
+        throw new Error(firstError.message);
+      } else {
+        throw new Error(firstError.message);
+      }
     }
+
+    this.g10(result);
   }
 
   /**
@@ -278,7 +276,7 @@ export class MacroMemory {
     // debug("[O-SET]", `G${group + 53}=`, locations);
 
     Object.entries(locations).forEach(([axis, value]) => {
-      const target = composeWorkOffsetAxisRegister(group, axis);
+      const target = RegisterMap.WorkOffset(group, axis);
 
       this.write(target, value);
     });
@@ -294,7 +292,7 @@ export class MacroMemory {
     // debug("[O-SET]", `G54.1 P${group}=`, locations);
 
     Object.entries(locations).forEach(([axis, value]) => {
-      const target = composeAuxWorkOffsetAxisRegister(group, axis);
+      const target = RegisterMap.AuxWorkOffset(group, axis);
 
       this.write(target, value);
     });
@@ -358,7 +356,7 @@ export class MacroMemory {
    * Set the group value for a tool by number
    */
   private _setToolOffsetValue(toolNum: number, group: number, value: number) {
-    const reg = composeToolOffsetRegister(group, toolNum);
+    const reg = RegisterMap.ToolOffset(group, toolNum);
 
     this.write(reg, value);
   }
@@ -367,7 +365,7 @@ export class MacroMemory {
    * Get a tool offset value by number and group.
    */
   private _getToolOffsetValueByGroup(toolNum: number, group: number): number {
-    const reg = composeToolOffsetRegister(group, toolNum);
+    const reg = RegisterMap.ToolOffset(group, toolNum);
 
     return this.read(reg);
   }
@@ -379,7 +377,7 @@ export class MacroMemory {
     commonOffset: number
   ): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
-      const reg = composeWorkOffsetAxisRegister(commonOffset - 53, axis);
+      const reg = RegisterMap.WorkOffset(commonOffset - 53, axis);
 
       return {
         ...locations,
@@ -396,7 +394,7 @@ export class MacroMemory {
     pGroup: number
   ): WorkCoordinateHash {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
-      const reg = composeAuxWorkOffsetAxisRegister(pGroup, axis);
+      const reg = RegisterMap.AuxWorkOffset(pGroup, axis);
 
       return {
         ...locations,
@@ -404,19 +402,5 @@ export class MacroMemory {
         // [axis]: this.read(reg)
       };
     }, {} as WorkCoordinateHash);
-  }
-
-  /**
-   * Increment the value of a register instead of writing the value.
-   */
-  private _increment(key: number, increment: number): UpdatedValue {
-    const prev = this._vars[key];
-
-    this._vars[key] = prev + increment;
-
-    return {
-      prev,
-      curr: this._vars[key]
-    };
   }
 }
