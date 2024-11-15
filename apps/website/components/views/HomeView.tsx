@@ -7,14 +7,13 @@ const packages = [
     "@cnc4me/chrysalis",
     "A thin wrapper around the Monaco editor to enable easy customization."
   ],
-  ["@cnc4me/fanuc-macro-b", "A complete environment "],
-  [
-    "@cnc4me/monaco-theme-gcode",
-    "Custom theme for Monarch and the Monaco Editor"
+  [ //
+    "@cnc4me/fanuc-macro-b",
+    "A complete environment for Fanuc Macro B evaluation."
   ],
   [
-    "@cnc4me/monaco-language-gcode",
-    "Custom language for Monarch and the Monaco Editor"
+    "@cnc4me/monaco-gcode",
+    "Custom theme and language for Monarch and the Monaco Editor."
   ]
 ];
 

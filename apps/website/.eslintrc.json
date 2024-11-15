@@ -2,15 +2,5 @@
   "extends": [
     "../../.eslintrc.js",
     "plugin:@next/next/recommended"
-  ],
-  "overrides": [
-    {
-      "files": [
-        "./src/**/*.tsx"
-      ],
-      "rules": {
-        "jest/require-hook": "off"
-      }
-    }
   ]
 }

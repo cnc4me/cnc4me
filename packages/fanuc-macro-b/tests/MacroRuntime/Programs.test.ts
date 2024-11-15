@@ -27,19 +27,19 @@ const runtime = new MacroRuntime();
 beforeEach(() => runtime.reset());
 
 describe("parsing a simple program with the MacroRuntime", () => {
-  it("load a program", () => {
+  it("loads a program", () => {
     runtime.loadProgram(SAMPLE_CODE);
     expect(runtime.getProgramCount()).toBe(1);
   });
 
-  it("load and activate a program", () => {
+  it("loads and activates a program", () => {
     runtime.loadProgram(SAMPLE_CODE);
     runtime.setActiveProgram(TEST_PROGRAM_NUMBER);
 
     expect(runtime.getActiveProgramNumber()).toBe(TEST_PROGRAM_NUMBER);
   });
 
-  it("load and automatically activate a program", () => {
+  it("loads and automatically activates a program", () => {
     runtime.loadProgram(SAMPLE_CODE, { setActive: true });
 
     expect(runtime.getActiveProgramNumber()).toBe(TEST_PROGRAM_NUMBER);

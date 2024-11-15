@@ -26,13 +26,7 @@ module.exports = {
       },
     },
   },
-  plugins: [
-    "jest",
-    "import",
-    "prettier",
-    "@typescript-eslint",
-    "simple-import-sort",
-  ],
+  plugins: ["import", "prettier", "@typescript-eslint", "simple-import-sort"],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -134,22 +128,22 @@ module.exports = {
     ],
   },
   overrides: [
-    // all test files
-    {
-      plugins: ["jest"],
-      extends: ["plugin:jest/all"],
-      files: [
-        "packages/*/jest.config.js",
-        "packages/*/tests/**/*.spec.ts",
-        "packages/*/tests/**/*.test.ts",
-      ],
-      rules: {
-        "@typescript-eslint/no-unsafe-call": "off",
-        "@typescript-eslint/no-unsafe-return": "off",
-        "@typescript-eslint/no-unsafe-assignment": "off",
-        "@typescript-eslint/no-unsafe-member-access": "off",
-      },
-    },
+    // // all test files
+    // {
+    //   plugins: ["jest"],
+    //   extends: ["plugin:jest/all"],
+    //   files: [
+    //     "packages/*/jest.config.js",
+    //     "packages/*/tests/**/*.spec.ts",
+    //     "packages/*/tests/**/*.test.ts",
+    //   ],
+    //   rules: {
+    //     "@typescript-eslint/no-unsafe-call": "off",
+    //     "@typescript-eslint/no-unsafe-return": "off",
+    //     "@typescript-eslint/no-unsafe-assignment": "off",
+    //     "@typescript-eslint/no-unsafe-member-access": "off",
+    //   },
+    // },
     // tools and tests
     {
       files: ["**/tools/**/*.ts", "**/tests/**/*.ts"],
