@@ -1,7 +1,7 @@
 import { ILexingError, IToken } from "chevrotain";
 import Emittery from "emittery";
 
-import { matchProgramNumber } from "../utils";
+import { isLexingError, isParsingError, matchProgramNumber } from "../utils";
 import { InsightCollection } from "./Insights";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer2";
@@ -96,12 +96,17 @@ export class MacroRuntime {
   /**
    * Retrieve a record of errors
    */
-  getErrors(): RuntimeError[] {
+  getErrors(): string[] {
     const errors = [...this._parser.errors, ...this._lexer.errors];
 
     // this._env.Parser.errors = [];
 
-    return errors;
+    return errors.map(err => {
+      if (isLexingError(err) || isParsingError(err)) {
+        return err.message;
+      }
+      return err;
+    });
   }
 
   /**

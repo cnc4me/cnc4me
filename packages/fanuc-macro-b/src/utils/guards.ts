@@ -1,8 +1,10 @@
 import { isRecognitionException } from "chevrotain";
 
-import type { ILexingError } from "chevrotain";
+import type { ILexingError, IRecognitionException } from "chevrotain";
 
-export const isParsingError = isRecognitionException;
+export function isParsingError(obj: unknown): obj is IRecognitionException {
+  return isRecognitionException(obj as IRecognitionException);
+}
 
 export function isLexingError(obj: unknown): obj is ILexingError {
   if (typeof obj !== "object" || obj === null) {
