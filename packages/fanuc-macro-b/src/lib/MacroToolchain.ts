@@ -11,7 +11,8 @@ export interface MacroToolchainOptions {
  * @TODO what class uses this?
  * @TODO is this the same sorta thing as MacroRuntime? housing all the bits of the "toolchain?"
  */
-function create(runtime: MacroRuntime, options?: MacroToolchainOptions) {
+function create(options?: MacroToolchainOptions) {
+  const runtime = new MacroRuntime();
   const errors: ILexingError[] = [];
 
   if (options?.preloadInput) {
@@ -27,6 +28,6 @@ function create(runtime: MacroRuntime, options?: MacroToolchainOptions) {
   return { runtime, errors };
 }
 
-export const Toolchain = { create };
+export const MarcoToolchain = { create };
 
-export default Toolchain;
+export default MarcoToolchain;

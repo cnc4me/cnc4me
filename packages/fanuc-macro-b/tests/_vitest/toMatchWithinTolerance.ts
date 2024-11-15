@@ -27,9 +27,9 @@ function composeErrorMsg(
     ? `expected ${r} not to be nearly equal to ${e}`
     : [
         `expected values to be nearly equal`,
-        `   Recieved = ${r}`,
-        `   Expected = ${e}`,
-        ` Difference = ${d}`,
-        `  Tolerance = ${t}`
+        `    Recieved = ${r}`,
+        `    Expected = ${e}`,
+        `  Difference = ${d}`,
+        `   Tolerance = ${t}`
       ].join("\n");
 }

@@ -5,5 +5,6 @@ export * from "./MacroLexer";
 export * from "./MacroLogger";
 export * from "./MacroParser";
 export * from "./MacroRuntime";
+export * from "./MacroToolchain";
 export * from "./memory";
 export * as Tokens from "./Tokens";

@@ -1,5 +1,4 @@
-import { MacroRuntime } from "../lib";
-import Toolchain from "../lib/Toolchain";
+import { MarcoToolchain } from "../lib";
 
 import type { InsightCollection } from "../lib";
 import type { InterpretedProgram, RuntimeError } from "../types";
@@ -14,9 +13,7 @@ interface ProgramAnalisys {
  * Analyze a text in the context of being a valid NC program
  */
 export function program(preloadInput: string): ProgramAnalisys {
-  const runtime = new MacroRuntime();
-
-  Toolchain.create(runtime, { preloadInput });
+  const { runtime } = MarcoToolchain.create({ preloadInput });
 
   const cst = runtime.Parser.program();
 

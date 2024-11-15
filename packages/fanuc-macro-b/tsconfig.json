@@ -9,7 +9,8 @@
     "vite.config.ts"
   ],
   "include": [
-    "src"
+    "src",
+    "tests/_vitest/vitest.expect.d.ts"
   ],
   "references": [
     {

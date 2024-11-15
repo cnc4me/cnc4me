@@ -1,0 +1,51 @@
+import { expect, it } from "vitest";
+
+import { lines as parseLines } from "../../src";
+
+const testData: [expr: string, answer: number][] = [
+  ["100*[5/25]", 20],
+  ["10/2+3", 8],
+  ["10/[2+3]", 2],
+  ["1+2+3+4+5", 15],
+  ["[20-5]*2", 30],
+  ["20-[5*2]", 10],
+  ["2*3+5*2", 16],
+  ["2*[3+5]*2", 32],
+  ["[[1+2]*3]/[[6*2]+2]", 0.642857],
+  // ["[[[5+2]-[3+[5*2+2]/[2+3]]]", 1.6],
+
+  // Errors
+  // ["10/0", NaN], // Division by zero should throw an error
+
+  // Generated Tests
+  ["-1+2", 1], // Handling negative numbers
+  ["2+3*4-5/5", 13], // Operator precedence test (multiplication and division first)
+  ["99999+1", 100000], // Large number test
+  ["0.1+0.2", 0.3], // Floating point precision test (should be 0.3)
+  ["[25*[2+2]]/[[1+1]*2]", 25], // Brackets and nested operations
+  ["-5+3", -2], // Negative results
+  ["2*[3+5]*2+4", 36], // Mixed operations with multiple brackets
+  ["2+[3*2]+[5/2]", 10.5], // Multiple brackets and operations
+  ["[5+3]*[[2+1]*[4-1]]", 72], // Complex nested brackets
+  ["[5+5]*[5/5]+1", 11], // Nested expressions with integers and floats
+  ["2*3+4-[2*5]", 0], // Testing multiple operations with brackets
+  ["[5-2]*[3+1]", 12], // Brackets around subexpressions
+  ["2*[3+5]*[4-2]", 32], // More complex with multiple brackets
+  ["[5*3]+[4*2]", 23], // Addition of products with brackets
+  ["[[5+5]*2]/2", 10], // Nested multiplication and division with brackets
+  ["2+[3*4-[2*3]]", 8] // Nested brackets with subtraction inside
+];
+
+it.each(testData)(`parsing '%s' should equal %s`, (expr, answer) => {
+  const variable = 1;
+  const { runtime } = parseLines(`#${variable}=${expr}`);
+  const errors = runtime.getErrors();
+
+  // The second param provides the actual runtime error in the failure message
+  expect(errors[0], errors[0]).toBeUndefined();
+  // if (errors.length > 0) {
+  //   expect(runtime.Memory.read(1)).toBe(NaN);
+  // } else {
+  expect(runtime.Memory.read(1)).toMatchWithPrecision(answer, 6);
+  // }
+});
