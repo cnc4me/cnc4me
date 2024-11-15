@@ -37,6 +37,9 @@
     {
       "path": "./packages/monaco-gcode"
     },
+    {
+      "path": "./packages/vitest-expect-ext"
+    },
   ],
   "include": [
     "**/.eslintrc.js",

@@ -1,10 +1,12 @@
+/* eslint-disable @typescript-eslint/no-explicit-any */
+/* eslint-disable @typescript-eslint/no-empty-object-type */
 import "@vitest/expect";
 
-import type { IToken, TokenType } from "chevrotain";
+import type { TokenType } from "chevrotain";
 
 interface CustomMatchers<R = unknown> {
   toMatchToken: (tokType: TokenType) => R;
-  toBeWithinTolerance: (received: number, tolerance?: number) => R;
+  toMatchWithinTolerance: (received: number, tolerance?: number) => R;
 }
 
 declare module "vitest" {

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=ATAN[1]
@@ -21,10 +21,10 @@ describe("function: ATAN[]", () => {
   });
 
   it("can calculate ATAN[0.5773502691896258] (1/√3)", () => {
-    expect(Memory.read(2)).toBeWithinTolerance(30, 1e-14);
+    expect(Memory.read(2)).toMatchWithinTolerance(30, 1e-14);
   });
 
   it("can calculate ATAN[1.7320508075688772] (√3)", () => {
-    expect(Memory.read(3)).toBeWithinTolerance(60, 1e-14);
+    expect(Memory.read(3)).toMatchWithinTolerance(60, 1e-14);
   });
 });

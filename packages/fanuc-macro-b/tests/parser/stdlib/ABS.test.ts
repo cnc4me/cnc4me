@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=ABS[5]

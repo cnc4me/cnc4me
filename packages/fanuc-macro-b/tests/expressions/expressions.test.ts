@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../src";
+import { lines } from "../../src";
 
 const code = `
 #1=100*[5/25]
@@ -24,42 +24,52 @@ describe("evaluating expressions enclosed in [brackets]", () => {
   });
 
   it("can evaluate #1=100*[5/25]", () => {
-    expect(Memory.read(1)).toBe(20);
+    const val = Memory.read(1);
+    expect(val).toBe(20);
   });
 
   it("can evaluate #2=10/2+3", () => {
-    expect(Memory.read(2)).toBe(8);
+    const val = Memory.read(2);
+    expect(val).toBe(8);
   });
 
   it("can evaluate #3=10/[2+3]", () => {
-    expect(Memory.read(3)).toBe(2);
+    const val = Memory.read(3);
+    expect(val).toBe(2);
   });
 
   it("can evaluate #4=1+2+3+4+5", () => {
-    expect(Memory.read(4)).toBe(15);
+    const val = Memory.read(4);
+    expect(val).toBe(15);
   });
 
   it("can evaluate #5=[20-5]*2", () => {
-    expect(Memory.read(5)).toBe(30);
+    const val = Memory.read(5);
+    expect(val).toBe(30);
   });
 
   it("can evaluate #6=20-[5*2]", () => {
-    expect(Memory.read(6)).toBe(10);
+    const val = Memory.read(6);
+    expect(val).toBe(10);
   });
 
   it("can evaluate #7=2*3+5*2", () => {
-    expect(Memory.read(7)).toBe(16);
+    const val = Memory.read(7);
+    expect(val).toBe(16);
   });
 
   it("can evaluate #8=2*[3+5]*2", () => {
-    expect(Memory.read(8)).toBe(32);
+    const val = Memory.read(8);
+    expect(val).toBe(32);
   });
 
   it("can evaluate #9=[1+[2*[3]]]+[[6*2]+2]", () => {
-    expect(Memory.read(9)).toBeWithinTolerance(0.642857, 0.000001);
+    const val = Memory.read(9);
+    expect(val).toMatchWithinTolerance(0.642857);
   });
 
   it("can evaluate #10=[5+2]-[3+[5*2+2]/[2+3]]]", () => {
-    expect(Memory.read(10)).toBeWithinTolerance(1.6, 1e-10);
+    const val = Memory.read(10);
+    expect(val).toMatchWithinTolerance(1.6);
   });
 });

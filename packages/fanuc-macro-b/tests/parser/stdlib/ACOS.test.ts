@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=ACOS[1]
@@ -31,10 +31,10 @@ describe("function: ACOS[]", () => {
   });
 
   it("can calculate ACOS[x] (√3 / 2)", () => {
-    expect(Memory.read(4)).toBeWithinTolerance(30, 1e-14);
+    expect(Memory.read(4)).toMatchWithinTolerance(30, 1e-14);
   });
 
   it("can calculate ACOS[.5]", () => {
-    expect(Memory.read(5)).toBeWithinTolerance(60, 1e-14);
+    expect(Memory.read(5)).toMatchWithinTolerance(60, 1e-14);
   });
 });

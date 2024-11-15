@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=SIN[5]
@@ -20,23 +20,23 @@ describe("function: SIN[]", () => {
   });
 
   it("can calculate SIN[5]", () => {
-    expect(Memory.read(1)).toBeWithinTolerance(0.08715, 1e-5);
+    expect(Memory.read(1)).toMatchWithinTolerance(0.08715, 1e-5);
   });
 
   it("can calculate SIN[15]", () => {
-    expect(Memory.read(2)).toBeWithinTolerance(0.25882, 1e-5);
+    expect(Memory.read(2)).toMatchWithinTolerance(0.25882, 1e-5);
   });
 
   it("can calculate SIN[30]", () => {
-    expect(Memory.read(3)).toBeWithinTolerance(0.5, 1e-14);
+    expect(Memory.read(3)).toMatchWithinTolerance(0.5, 1e-14);
   });
 
   it("can calculate SIN[45]", () => {
-    expect(Memory.read(4)).toBeWithinTolerance(0.70711, 1e-5);
+    expect(Memory.read(4)).toMatchWithinTolerance(0.70711, 1e-5);
   });
 
   it("can calculate SIN[60]", () => {
-    expect(Memory.read(5)).toBeWithinTolerance(0.86603, 1e-5);
+    expect(Memory.read(5)).toMatchWithinTolerance(0.86603, 1e-5);
   });
 
   it("can calculate SIN[90]", () => {

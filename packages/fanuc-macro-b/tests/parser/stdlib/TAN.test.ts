@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=TAN[5]
@@ -20,26 +20,26 @@ describe("function: TAN[]", () => {
   });
 
   it("can calculate TAN[5]", () => {
-    expect(Memory.read(1)).toBeWithinTolerance(0.08749, 1e-5);
+    expect(Memory.read(1)).toMatchWithinTolerance(0.08749, 1e-5);
   });
 
   it("can calculate TAN[15]", () => {
-    expect(Memory.read(2)).toBeWithinTolerance(0.26795, 1e-5);
+    expect(Memory.read(2)).toMatchWithinTolerance(0.26795, 1e-5);
   });
 
   it("can calculate TAN[30]", () => {
-    expect(Memory.read(3)).toBeWithinTolerance(0.57735, 1e-5);
+    expect(Memory.read(3)).toMatchWithinTolerance(0.57735, 1e-5);
   });
 
   it("can calculate TAN[45]", () => {
-    expect(Memory.read(4)).toBeWithinTolerance(1, 1e-14);
+    expect(Memory.read(4)).toMatchWithinTolerance(1, 1e-14);
   });
 
   it("can calculate TAN[60]", () => {
-    expect(Memory.read(5)).toBeWithinTolerance(1.73205, 1e-5);
+    expect(Memory.read(5)).toMatchWithinTolerance(1.73205, 1e-5);
   });
 
   it("can calculate TAN[135]", () => {
-    expect(Memory.read(6)).toBeWithinTolerance(-1, 1e-14);
+    expect(Memory.read(6)).toMatchWithinTolerance(-1, 1e-14);
   });
 });

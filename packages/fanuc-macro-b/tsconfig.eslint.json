@@ -1,16 +1,7 @@
 {
   "extends": "./tsconfig.json",
-  "compilerOptions": {
-    "types": [
-      "jest",
-      "chevrotain",
-      "@cnc4me/vitest-expect-ext"
-    ],
-  },
   "include": [
-    "src/**/*.ts",
-    "tests/_vitest/*.ts",
-    "tests/**/*.test.ts",
-    "tests/**/*.spec.ts"
+    "src",
+    "tests"
   ]
 }

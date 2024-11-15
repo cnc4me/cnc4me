@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { lines } from "../../../src";
 
 const code = `
 #1=ASIN[1]
@@ -21,10 +21,10 @@ describe("function: ASIN[]", () => {
   });
 
   it("can calculate ASIN[x] (√2 / 2)", () => {
-    expect(Memory.read(2)).toBeWithinTolerance(45, 1e-14);
+    expect(Memory.read(2)).toMatchWithinTolerance(45, 1e-14);
   });
 
   it("can calculate ASIN[x] (√3 / 2)", () => {
-    expect(Memory.read(3)).toBeWithinTolerance(60, 1e-14);
+    expect(Memory.read(3)).toMatchWithinTolerance(60, 1e-14);
   });
 });

@@ -1,8 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../src";
+import { lines } from "../../src";
 
-const code = `#1=1
+const code = `
+#1=1
 #2=2
 #3=3
 #4=#2+#2
@@ -32,6 +33,6 @@ describe("macros expressions", () => {
     expect(Memory.read(7)).toBe(3);
     expect(Memory.read(8)).toBe(6);
     expect(Memory.read(9)).toBe(18);
-    expect(Memory.read(10)).toBeWithinTolerance(2.47619, 5e-5);
+    expect(Memory.read(10)).toMatchWithinTolerance(2.47619);
   });
 });
