@@ -37,26 +37,12 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": "error",
-
-    //
-    // eslint-base
-    //
-
-    curly: ["error", "all"],
-    // "no-console": "error",
-
     //
     // typescript
     //
-
-    "@typescript-eslint/consistent-type-definitions": ["error", "interface"],
-    "@typescript-eslint/unbound-method": "off",
-    "@typescript-eslint/no-unsafe-argument": "off",
-    "@typescript-eslint/no-misused-promises": "off",
-    "@typescript-eslint/no-unsafe-assignment": "off",
-    "@typescript-eslint/no-non-null-assertion": "off",
     "@typescript-eslint/explicit-module-boundary-types": "off",
-    "@typescript-eslint/no-unused-vars": "error",
+    "@typescript-eslint/unbound-method": "off",
+    "@typescript-eslint/no-unused-vars": "off",
     "@typescript-eslint/no-explicit-any": "error",
     "@typescript-eslint/prefer-as-const": "error",
     "@typescript-eslint/prefer-optional-chain": "error",
@@ -75,15 +61,10 @@ module.exports = {
         allowRegExp: true,
       },
     ],
-    // "@typescript-eslint/no-unused-vars": [
-    //   "warn",
-    //   { varsIgnorePattern: "^_", argsIgnorePattern: "^_" }
-    // ],
 
     //
     // simple-import-sort
     //
-
     "simple-import-sort/exports": "error",
     "simple-import-sort/imports": [
       "error",
@@ -103,7 +84,6 @@ module.exports = {
     //
     // eslint-plugin-import
     //
-
     "import/namespace": "off", // SUPER DUPER SLOW, why?
     "import/default": "off", // ALSO SLOW, why?
     "import/no-named-export": "off",

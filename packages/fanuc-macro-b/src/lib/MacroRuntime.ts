@@ -4,7 +4,7 @@ import Emittery from "emittery";
 import { isLexingError, isParsingError, matchProgramNumber } from "../utils";
 import { InsightCollection } from "./Insights";
 import { MacroInterpreter } from "./MacroInterpreter";
-import { MacroLexer } from "./MacroLexer2";
+import { MacroLexer2 } from "./MacroLexer2";
 import { MacroParser } from "./MacroParser";
 import { MacroMemory } from "./memory";
 
@@ -26,7 +26,7 @@ export class MacroRuntime {
   private _programs: Record<number, string> = {};
   private _activeProgram = NaN;
   private _mem: MacroMemory;
-  private _lexer: MacroLexer;
+  private _lexer: MacroLexer2;
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
 
@@ -34,7 +34,7 @@ export class MacroRuntime {
     return this._mem;
   }
 
-  get Lexer(): MacroLexer {
+  get Lexer(): MacroLexer2 {
     return this._lexer;
   }
 
@@ -54,7 +54,7 @@ export class MacroRuntime {
     // debug("initializing");
     this._events = new Emittery<RuntimeEvents>();
     this._mem = new MacroMemory();
-    this._lexer = new MacroLexer();
+    this._lexer = new MacroLexer2();
     this._parser = new MacroParser();
     this._interpreter = new MacroInterpreter({ memory: this._mem });
   }

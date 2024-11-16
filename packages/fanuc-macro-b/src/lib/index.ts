@@ -2,6 +2,7 @@ export * from "./Insights";
 export * from "./MacroEnvironment";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
+export * from "./MacroLexer2";
 export * from "./MacroLogger";
 export * from "./MacroParser";
 export * from "./MacroRuntime";

@@ -2,7 +2,7 @@ import { type ILexingResult, Lexer } from "chevrotain";
 
 import { tokenSet } from "./Tokens/token-set";
 
-export class MacroLexer {
+export class MacroLexer2 {
   private lexer: Lexer;
   private input!: string;
   private result!: ILexingResult;
@@ -33,5 +33,3 @@ export class MacroLexer {
     return this.result;
   }
 }
-
-export const lexer = new MacroLexer();

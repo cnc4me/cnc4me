@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { tokenMatcher } from "chevrotain";
+import { type CstNode, tokenMatcher } from "chevrotain";
 import mitt, { type Emitter } from "mitt";
 import { match } from "ts-pattern";
 
@@ -16,8 +16,8 @@ import {
   unwrapComment
 } from "../utils";
 import { AddressInsight, InsightCollection } from "./Insights";
-import { MacroMemory } from "./memory";
 import { MacroParser } from "./MacroParser";
+import { MacroMemory } from "./memory";
 import { NcAddress } from "./NcAddress";
 import { Plus, Product } from "./Tokens";
 
@@ -36,7 +36,9 @@ import type {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  ICstNodeVisitor,
   LineCstChildren,
+  LineCstNode,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
@@ -52,6 +54,8 @@ type InterpreterEvents = {
   M0: undefined;
   M1: undefined;
 };
+
+type AnyNode = LineCstNode | CstNode;
 
 const parser = new MacroParser();
 const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
@@ -88,6 +92,11 @@ export class MacroInterpreter extends BaseVisitor {
     this.validateVisitor();
   }
 
+  _visit(node: AnyNode) {
+    const nodeToVisit = node as CstNode;
+    return this.visit(nodeToVisit);
+  }
+
   /**
    * Root Node for valid NC Programs
    */
@@ -102,16 +111,16 @@ export class MacroInterpreter extends BaseVisitor {
    * Itterate over the {@link LineCstChildren} to extract the contents
    */
   lines(ctx: LinesCstChildren): ParsedLineData[] {
-    const lines: ParsedLineData[] = [];
+    const _lines: ParsedLineData[] = [];
 
     if (ctx.Line) {
       for (const line of ctx.Line) {
         const vLine = this.visit(line);
-        lines.push(vLine);
+        _lines.push(vLine);
       }
     }
 
-    return lines;
+    return _lines;
   }
 
   /**

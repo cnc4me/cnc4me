@@ -1,8 +1,8 @@
-import { RuntimeErrors, zeroPad } from "@cnc4me/fanuc-macro-b";
+import { RuntimeError, zeroPad } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
 interface Props {
-  errors: RuntimeErrors[];
+  errors: RuntimeError[];
 }
 
 export const ErrorPane: React.FC<Props> = ({ errors }) => {
