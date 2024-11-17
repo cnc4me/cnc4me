@@ -1,4 +1,4 @@
-import { createToken, Lexer, CstParser } from "chevrotain";
+import { createToken, CstParser, Lexer } from "chevrotain";
 
 export const True = createToken({ name: "True", pattern: /true/ });
 export const False = createToken({ name: "False", pattern: /false/ });

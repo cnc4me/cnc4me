@@ -3,10 +3,14 @@
   "compilerOptions": {
     "rootDir": ".",
     "outDir": "dist",
-    "types": ["node"]
+    "module": "ESNext"
   },
-  "include": ["src/*", "example/*", "tests/*", "example/out/__generated__.d.ts"],
-  "exclude": ["node_modules/*"],
+  "include": [
+    "src/*",
+    "tests/sample/*",
+    "tests/*",
+    "tests/sample/out/__generated__.d.ts"
+  ],
   "references": [
     {
       "path": "./tsconfig.lib.json"

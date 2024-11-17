@@ -13,10 +13,7 @@
     "test": "pnpm -F macro-playground test"
   },
   "devDependencies": {
-    "@swc/core": "^1.2.187",
-    "@swc/jest": "^0.2.21",
-    "@types/jest": "27.0.2",
-    "@types/node": "16.11.7",
+    "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@vitest/eslint-plugin": "^1.1.10",

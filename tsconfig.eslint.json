@@ -4,7 +4,8 @@
     "noEmit": true,
     "allowJs": true,
     "types": [
-      "node"
+      "node",
+      "vitest/globals"
     ]
   },
   "include": [

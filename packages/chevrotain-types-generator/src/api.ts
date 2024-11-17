@@ -1,11 +1,12 @@
+import { writeFileSync } from "node:fs";
+import path from "node:path";
+
 import {
   createSyntaxDiagramsCode,
   CstParser,
   generateCstDts,
   ICreateSyntaxDiagramsConfig
 } from "chevrotain";
-import { writeFileSync } from "fs";
-import path from "path";
 import ts from "typescript";
 
 import { CstDtsGeneratorOptions } from "./types";
@@ -18,26 +19,17 @@ export const GENERATOR_DEFAULTS: CstDtsGeneratorOptions = {
   outFile: path.join(process.cwd(), DEFAULT_FILENAME)
 };
 
-export function generateProductions(parser: CstParser) {
-  return parser.getGAstProductions();
-}
-
-export function generateSerializedProductions(parser: CstParser) {
-  return parser.getSerializedGastProductions();
-}
-
-export function generateTsNode(parser: CstParser, outFile = DEFAULT_FILENAME) {
-  return ts.createSourceFile(outFile, generateTypes(parser), ts.ScriptTarget.Latest);
-}
-
 /**
  * Generate TypeScript types from a Chevrotain Parser
  *
  * Set `outFile` to a file location to write the types to disk. If missing,
  * then the function will return the file content as a string.
  */
-export function generateTypes(parser: CstParser, args?: CstDtsGeneratorOptions): string {
-  const productions = generateProductions(parser);
+export function generateTypes(
+  parser: CstParser,
+  args?: CstDtsGeneratorOptions
+): string {
+  const productions = parser.getGAstProductions();
   const options = { ...GENERATOR_DEFAULTS, ...args };
   const content = generateCstDts(productions, options);
   const filename = options.outFile.split(path.sep).pop();
@@ -52,8 +44,22 @@ export function generateTypes(parser: CstParser, args?: CstDtsGeneratorOptions):
 /**
  * Generate HTML of a syntax diagram of a parsers' grammar
  */
-export function generateHtml(parser: CstParser, config?: ICreateSyntaxDiagramsConfig): string {
+export function generateHtml(
+  parser: CstParser,
+  config?: ICreateSyntaxDiagramsConfig
+): string {
   const options = { ...GENERATOR_DEFAULTS, ...config };
 
-  return createSyntaxDiagramsCode(generateSerializedProductions(parser), options);
+  return createSyntaxDiagramsCode(
+    parser.getSerializedGastProductions(),
+    options
+  );
+}
+
+export function generateTsNode(parser: CstParser, outFile = DEFAULT_FILENAME) {
+  return ts.createSourceFile(
+    outFile,
+    generateTypes(parser),
+    ts.ScriptTarget.Latest
+  );
 }

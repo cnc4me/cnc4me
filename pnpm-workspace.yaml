@@ -4,7 +4,6 @@ packages:
   - 'packages/**'
 
 catalog:
-  vite: "^5.4.11"
   typescript: "^5.6.3"
   chevrotain: "^10.5.0"
 
@@ -14,6 +13,8 @@ catalog:
   "@vitest/eslint-plugin": "^1.1.10"
 
   # Tooling
+  tsx: "^4.19.2"
+  vite: "^5.4.11"
   prettier: "^3.3.3"
   eslint: "^8.57.1"
   eslint-config-prettier: "^9.1.0"

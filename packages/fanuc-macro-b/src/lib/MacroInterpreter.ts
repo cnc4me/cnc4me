@@ -115,8 +115,8 @@ export class MacroInterpreter extends BaseVisitor {
 
     if (ctx.Line) {
       for (const line of ctx.Line) {
-        const vLine = this.visit(line);
-        _lines.push(vLine);
+        const visited = this.visit(line);
+        _lines.push(visited);
       }
     }
 
@@ -389,6 +389,17 @@ export class MacroInterpreter extends BaseVisitor {
     return result;
   }
 
+  /**
+   * Ignore the brackets and return the children
+   */
+  bracketExpression(ctx: BracketExpressionCstChildren) {
+    const { children } = unbox(ctx.expression);
+    return this.expression(children);
+  }
+
+  /**
+   * Evaluate an expression to get it's result
+   */
   atomicExpression(ctx: AtomicExpressionCstChildren): number {
     if (ctx.bracketExpression) {
       return this.bracketExpression(ctx.bracketExpression[0].children);
@@ -402,13 +413,5 @@ export class MacroInterpreter extends BaseVisitor {
     } else {
       return NaN;
     }
-  }
-
-  /**
-   * Ignore the brackets and return the children
-   */
-  bracketExpression(ctx: BracketExpressionCstChildren) {
-    const { children } = unbox(ctx.expression);
-    return this.expression(children);
   }
 }
