@@ -2,7 +2,7 @@
   "name": "@cnc4me/chevrotain-types-generator",
   "version": "1.0.0",
   "private": true,
-  "description": "Generate a types.d.ts file from a given Chevrotain parser.",
+  "description": "Generate a Type Declaration file from a Chevrotain parser.",
   "keywords": [
     "chevrotain",
     "parser",
@@ -11,6 +11,8 @@
   ],
   "license": "MIT",
   "author": "Kevin Hill",
+  "type": "module",
+  "exports": "./src/index.ts",
   "main": "./src/index.ts",
   "scripts": {
     "dts": "npm-dts generate",
@@ -29,7 +31,7 @@
     "eslint-plugin-prettier": "catalog:",
     "eslint-plugin-simple-import-sort": "catalog:",
     "npm-dts": "^1.3.13",
-    "rollup": "^4.27.2",
+    "rollup": "^4",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vitest": "catalog:"

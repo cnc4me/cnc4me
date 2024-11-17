@@ -1,10 +1,20 @@
+/**
+ * I don't know why the reference is not working in vscode
+ * "@cnc4me/chevrotain-types-generator";
+ *
+ * but is actually working at runtime...
+ */
+
+// eslint-disable-next-line @typescript-eslint/ban-ts-comment
+// @ts-ignore
 import { generateTypes } from "@cnc4me/chevrotain-types-generator";
 import { writeFileSync } from "fs";
 import { join } from "path";
 
-import { parser } from "../src/lib/MacroParser";
+import { MacroParser } from "../src/lib/MacroParser";
 
-const out = join(__dirname, "..", "src", "types", "fanuc.d.ts");
+const parser = new MacroParser();
 const types = generateTypes(parser);
+const out = join(process.cwd(), "src", "types", "fanuc.d.ts");
 
 writeFileSync(out, types);

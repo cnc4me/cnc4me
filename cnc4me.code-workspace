@@ -1,0 +1,25 @@
+{
+  "folders": [
+    {
+      "name": "📦 @cnc4me/fanuc-macro-b",
+      "path": "packages/fanuc-macro-b"
+    },
+    {
+      "name": "🚀 @cnc4me/macro-playground",
+      "path": "apps/website"
+    },
+    {
+      "name": "📦 @cnc4me/chevrotain-types-generator",
+      "path": "packages/chevrotain-types-generator"
+    },
+    {
+      "name": "📦 @cnc4me/monaco-gcode",
+      "path": "packages/monaco-gcode"
+    },
+    {
+      "name": "✨ @cnc4me/cnc4me",
+      "path": "."
+    },
+  ],
+  "settings": {}
+}

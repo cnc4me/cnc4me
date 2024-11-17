@@ -33,5 +33,6 @@
   },
   "engines": {
     "pnpm": "*"
-  }
+  },
+  "packageManager": "pnpm@9.13.2"
 }

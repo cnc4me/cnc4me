@@ -6,10 +6,8 @@
     "module": "ESNext"
   },
   "include": [
-    "src/*",
-    "tests/sample/*",
-    "tests/*",
-    "tests/sample/out/__generated__.d.ts"
+    "src/*.ts",
+    "tests"
   ],
   "references": [
     {

@@ -1,6 +1,5 @@
 /// <reference types="vitest" />
 import { defineConfig } from "vite";
-import { optimizeLodashImports } from "@optimize-lodash/rollup-plugin";
 
 export default defineConfig({
   root: ".",
@@ -18,6 +17,5 @@ export default defineConfig({
   test: {
     setupFiles: ["./tests/_vitest/setup.ts"]
   },
-  // @ts-expect-error
-  plugins: [optimizeLodashImports()]
+  plugins: []
 });
