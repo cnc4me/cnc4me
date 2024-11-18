@@ -1,4 +1,3 @@
-import type { MacroMemory, ParsedLineData } from "@cnc4me/fanuc-macro-b";
 import type { GCodeDarkTheme, GCodeLightTheme } from "@cnc4me/monaco-gcode";
 import type { editor } from "monaco-editor";
 
@@ -6,6 +5,9 @@ export type EditorTheme = GCodeDarkTheme | GCodeLightTheme;
 
 export type MonacoCodeEditor = editor.IStandaloneCodeEditor;
 
+/**
+ * @deprecated this is tedious to add new tabs...
+ */
 export type ViewStr = "home" | "macros" | "offsets" | "tools" | "debug";
 
 export interface OffsetRegister {
@@ -15,8 +17,3 @@ export interface OffsetRegister {
   diamGeom: number;
   diamWear: number;
 }
-
-export type {
-  MacroMemory as MacroMemoryType,
-  ParsedLineData as ParsedLineDataType
-};

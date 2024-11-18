@@ -2,9 +2,10 @@ import { Field, Label, Switch } from "@headlessui/react";
 import { OnChange, OnMount } from "@monaco-editor/react";
 import clsx from "clsx";
 import { useRouter } from "next/router";
-import React, { useEffect, useRef, useState } from "react";
+import React, { useContext, useEffect, useMemo, useRef, useState } from "react";
 import { match } from "ts-pattern";
 
+import { MacroRuntimeContext } from "../context/MacroRuntimeContext";
 import {
   useContentSearchParam,
   useEditorTheme,
@@ -21,21 +22,29 @@ import {
 import { MacroEditor } from "./editor/MacroEditor";
 import { ErrorPane } from "./ErrorPane";
 import Layout from "./layout";
-import { DebugView, HomeView, MacroView, OffsetView, ToolsView } from "./views";
+import {
+  DebugView,
+  HomeView,
+  MacroView,
+  OffsetView,
+  ParserView,
+  ToolsView
+} from "./views";
 
+import type { MonacoCodeEditor, ViewStr } from "../lib/types";
 import type {
-  MacroMemoryType,
-  MonacoCodeEditor,
-  ParsedLineDataType,
-  ViewStr
-} from "../lib/types";
-import type { RuntimeError } from "@cnc4me/fanuc-macro-b";
+  MacroMemory,
+  ParsedLineData,
+  RuntimeError
+} from "@cnc4me/fanuc-macro-b";
 
-const tabs: ViewStr[] = ["home", "macros", "offsets", "tools"];
+// @ts-expect-error Get rid of this type and handle tabs better
+const tabs: ViewStr[] = ["home", "parser", "macros", "offsets", "tools"];
 
 export default function App(): JSX.Element {
   const router = useRouter();
   const runtime = useMacroRuntime();
+
   const editorRef = useRef<MonacoCodeEditor>();
   const [enabled, setEnabled] = useState(false);
 
@@ -56,11 +65,14 @@ export default function App(): JSX.Element {
   const [editorTheme] = useEditorTheme("gcode-dark");
 
   const [errors, setErrors] = useState<RuntimeError[]>([]);
-  const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
+
+  // const [memory, setMemory] = useState<MacroMemoryType>(runtime.Memory);
+  const memory = useMemo(() => runtime.Memory, [runtime]);
+
   // eslint-disable-next-line @typescript-eslint/no-unused-vars
-  const [interpreterResult, setInterpreterResult] = useState<
-    ParsedLineDataType[]
-  >([]);
+  const [interpreterResult, setInterpreterResult] = useState<ParsedLineData[]>(
+    []
+  );
 
   const parseEditorContent = () => {
     const content = getEditorContents();
@@ -68,7 +80,6 @@ export default function App(): JSX.Element {
     try {
       const parsedLines = runtime.evalLines(content);
       setInterpreterResult(parsedLines);
-      setMemory(runtime.Memory);
       // setErrors(runtime.getErrors());
     } catch (err) {
       console.error(err);
@@ -123,11 +134,12 @@ export default function App(): JSX.Element {
   const CurrentView: React.FC<{ activeTab: ViewStr }> = ({ activeTab }) =>
     match<ViewStr>(activeTab)
       .with("home", () => <HomeView />)
-      .with("debug", () => <DebugView memory={memory} />)
-      .with("tools", () => <ToolsView memory={memory} />)
-      .with("macros", () => <MacroView memory={memory} />)
-      .with("offsets", () => <OffsetView memory={memory} />)
-      .otherwise(() => <h1 className="p-10 text-red-500">ERROR</h1>);
+      // .with("debug", () => <DebugView memory={memory} />)
+      .with("parser", () => <ParserView />)
+      .with("macros", () => <MacroView />)
+      .with("offsets", () => <OffsetView />)
+      .with("tools", () => <ToolsView />)
+      .otherwise(() => <h1 className="p-10 text-red-500">View Not Found</h1>);
 
   return (
     <Layout>

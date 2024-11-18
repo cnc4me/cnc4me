@@ -1,15 +1,19 @@
 import { MacroMemory, MacroValueArray } from "@cnc4me/fanuc-macro-b";
 import React, { useEffect, useState } from "react";
 
+import { useMacroRuntime } from "../../hooks";
 import { PagerButtons } from "../PagerButtons";
 import { ValueTable } from "../ValueTable";
-import { ViewHeading } from "./ViewHeading";
+import { ViewHeading } from "../ViewHeading";
 
 interface Props {
-  memory: MacroMemory;
+  // memory: MacroMemory;
 }
 
-export const MacroView: React.FC<Props> = ({ memory }) => {
+export const MacroView: React.FC<Props> = () => {
+  const runtime = useMacroRuntime();
+  const memory = runtime.Memory;
+
   const [pageCount, setPageCount] = useState(1);
   const [leftCol, setLeftCol] = useState<MacroValueArray>([]);
   const [rightCol, setRightCol] = useState<MacroValueArray>([]);
@@ -18,7 +22,10 @@ export const MacroView: React.FC<Props> = ({ memory }) => {
   const pageRight = () => setPageCount(pageCount + 1);
 
   const sliceRegisters = () => {
-    const macros = memory.toArray({ includeUnset: true }).slice(0, 1000);
+    const macros = runtime.Memory.toArray({ includeUnset: true }).slice(
+      0,
+      1000
+    );
     const offset = 20;
 
     if (pageCount === 1) {
@@ -43,7 +50,7 @@ export const MacroView: React.FC<Props> = ({ memory }) => {
 
   useEffect(() => {
     sliceRegisters();
-  }, [pageCount, memory]);
+  }, [pageCount, runtime.Memory]);
 
   return (
     <div className="container flex flex-col h-full">

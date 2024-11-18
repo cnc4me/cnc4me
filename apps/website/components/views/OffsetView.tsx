@@ -1,23 +1,26 @@
 import { MacroMemory, WorkCoordinateArray } from "@cnc4me/fanuc-macro-b";
 import React from "react";
 
+import { useMacroRuntime } from "../../hooks";
 import { Coordinates } from "../Coordinates";
-import { ViewHeading } from "./ViewHeading";
+import { ViewHeading } from "../ViewHeading";
 
 type GroupCoordsTuple = [group: number, coords: WorkCoordinateArray];
 
 interface Props {
-  memory: MacroMemory;
+  // memory: MacroMemory;
 }
 
-export const OffsetView: React.FC<Props> = ({ memory }) => {
+export const OffsetView: React.FC = () => {
+  const runtime = useMacroRuntime();
+
   const leftCol: GroupCoordsTuple[] = [53, 54, 55, 56].map(g => [
     g,
-    memory.getWorkCoordinateArray(g)
+    runtime.Memory.getWorkCoordinateArray(g)
   ]);
   const rightCol: GroupCoordsTuple[] = [57, 58, 59].map(g => [
     g,
-    memory.getWorkCoordinateArray(g)
+    runtime.Memory.getWorkCoordinateArray(g)
   ]);
 
   return (
