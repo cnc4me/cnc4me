@@ -1,18 +1,19 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../../src";
+import { MacroRuntime } from "../../../src";
 
 const code = `
 #1=ABS[5]
 #2=ABS[-5]`;
 
+const runtime = new MacroRuntime();
+const { Memory } = runtime;
+
 describe("function: ABS[]", () => {
-  const { runtime } = lines(code);
-  const parser = runtime.Parser;
-  const Memory = runtime.Memory;
+  runtime.evalLines(code);
 
   it("parses with no errors", () => {
-    expect(parser.errors).toHaveLength(0);
+    expect(runtime.hasErrors).toBeFalsy();
   });
 
   it("can calculate ABS[5]", () => {

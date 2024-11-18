@@ -15,6 +15,7 @@
   "main": "src/index.ts",
   "scripts": {
     "build": "vite build",
+    "coverage": "vitest run --coverage",
     "debug:insights": "cross-env DEBUG=macro:* tsx --watch ./demo/insights.demo.ts",
     "debug:runtime": "cross-env DEBUG=macro:* tsx --watch ./demo/runtime.demo.ts",
     "events": "tsx --watch ./demo/events.demo.ts",
@@ -23,7 +24,8 @@
     "repl": "tsx ./demo/repl.demo.ts",
     "runtime": "tsx --watch ./demo/runtime.demo.ts",
     "test": "vitest",
-    "test:mem": "vitest MacroMemory"
+    "test:mem": "vitest MacroMemory",
+    "test:ui": "vitest --ui"
   },
   "dependencies": {
     "chevrotain": "catalog:",
@@ -41,7 +43,9 @@
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@typescript-eslint/utils": "catalog:",
+    "@vitest/coverage-v8": "^2.1.5",
     "@vitest/expect": "catalog:",
+    "@vitest/ui": "2.1.5",
     "chance": "^1.1.8",
     "cross-env": "^7.0.3",
     "eslint": "catalog:",
@@ -51,6 +55,7 @@
     "eslint-plugin-simple-import-sort": "catalog:",
     "prettier": "catalog:",
     "rollup": "^4",
+    "rollup-plugin-define": "^1.0.1",
     "rollup-plugin-dts": "^6.1.1",
     "tsx": "catalog:",
     "typescript": "catalog:",

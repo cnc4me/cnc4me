@@ -44,7 +44,7 @@ import {
  * The order of tokens is important because token
  * matches are applied sequentially
  */
-export const tokenSet = [
+export const TOKEN_VOCABULARY = [
   Newline,
   WhiteSpace,
   Percent,

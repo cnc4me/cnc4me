@@ -1,10 +1,10 @@
+import { MacroRuntime } from "../../MacroRuntime";
 import {
   G10ParseResult,
   ParsedLineData,
   PossibleG10LineValues
 } from "../../types";
 import { hasG10 } from "../../utils";
-import { MacroRuntime } from "../MacroRuntime";
 
 /**
  * Parsing a string of text as a G10 line for values

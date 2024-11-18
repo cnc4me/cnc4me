@@ -1,6 +1,6 @@
 import { max, min, unique } from "radash";
 
-import { NcAddress } from "./NcAddress";
+import type { AddressedValue } from "./AddressedValue";
 
 export interface BaseInsight {
   ctx: string;
@@ -14,7 +14,7 @@ export class AddressInsight implements BaseInsight {
   /**
    * This the address to collect insights on, such as `X`, `Y`, `G10`, or `M6`
    */
-  constructor(address: NcAddress) {
+  constructor(address: AddressedValue) {
     this.value = address.value;
     this.ctx = address.prefix;
   }

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroLexer2 } from "../../src";
+import { MacroLexer } from "../../src";
 import {
   Address,
   Decimal,
@@ -20,14 +20,17 @@ function debugTokens(tokens: IToken[]) {
 }
 
 describe("lexing lines with the MarcoLexer2", () => {
-  const lexer = new MacroLexer2();
+  const lexer = new MacroLexer();
 
   it("can tokenize a G10 line", () => {
     const inputText = `G10 G90 L2 P1 X1.2 Y3.4 Z-5.6 B90.`;
-    const { tokens, errors } = lexer.tokenize(inputText);
 
-    expect(errors).toHaveLength(0);
-    expect(tokens).toHaveLength(15);
+    lexer.tokenize(inputText);
+
+    const { tokens } = lexer;
+
+    expect(lexer.getErrors()).toHaveLength(0);
+    expect(lexer.tokens).toHaveLength(15);
 
     expect(tokens[0].image).toBe("G10");
     expect(tokens[1].image).toBe("G90");
@@ -66,9 +69,12 @@ describe("lexing lines with the MarcoLexer2", () => {
     const inputText = `M22
     B-34.2
     M21`;
-    const { tokens, errors } = lexer.tokenize(inputText);
 
-    expect(errors).toHaveLength(0);
+    lexer.tokenize(inputText);
+
+    const { tokens } = lexer;
+
+    expect(lexer.getErrors()).toHaveLength(0);
     expect(tokens).toHaveLength(7);
 
     expect(tokens[0].image).toBe("M22");
@@ -90,9 +96,12 @@ describe("lexing lines with the MarcoLexer2", () => {
 
   it("can tokenize a line with variables and no spaces", () => {
     const inputText = `G43H#518Z1.0`;
-    const { tokens, errors } = lexer.tokenize(inputText);
 
-    expect(errors).toHaveLength(0);
+    lexer.tokenize(inputText);
+
+    const { tokens } = lexer;
+
+    expect(lexer.getErrors()).toHaveLength(0);
     expect(tokens).toHaveLength(6);
 
     expect(tokens[0].image).toBe("G43");
@@ -113,10 +122,13 @@ describe("lexing lines with the MarcoLexer2", () => {
   it("can tokenize a line with a variable assignment", () => {
     const inputText = "#500=2.5";
 
-    const { tokens, errors } = lexer.tokenize(inputText);
+    lexer.tokenize(inputText);
 
-    expect(errors).toHaveLength(0);
+    const { tokens } = lexer;
+
+    expect(lexer.getErrors()).toHaveLength(0);
     expect(tokens).toHaveLength(4);
+
     expect(tokens[0].image).toBe("#");
     expect(tokens[1].image).toBe("500");
     expect(tokens[2].image).toBe("=");

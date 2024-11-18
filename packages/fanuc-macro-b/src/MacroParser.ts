@@ -23,12 +23,12 @@ import {
   ProgramNumber,
   Then,
   Var
-} from "./tokens";
-import { tokenSet } from "./tokens/token-set";
+} from "./lib/tokens";
+import { TOKEN_VOCABULARY } from "./lib/tokens/vocab";
 
 export class MacroParser extends CstParser {
   constructor() {
-    super(tokenSet);
+    super(TOKEN_VOCABULARY);
     // debug("initializing");
     this.performSelfAnalysis();
   }

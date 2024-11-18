@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../../src";
+import { MacroRuntime } from "../../../src";
 
 const code = `
 #1=SQRT[2]
@@ -9,13 +9,14 @@ const code = `
 #4=SQRT[144]
 #5=SQRT[3173]`;
 
+const runtime = new MacroRuntime();
+const { Memory } = runtime;
+
 describe("function: SQRT[]", () => {
-  const { runtime } = lines(code);
-  const parser = runtime.Parser;
-  const Memory = runtime.Memory;
+  runtime.evalLines(code);
 
   it("parses with no errors", () => {
-    expect(parser.errors).toHaveLength(0);
+    expect(runtime.hasErrors).toBeFalsy();
   });
 
   it("can calculate SQRT[2]", () => {

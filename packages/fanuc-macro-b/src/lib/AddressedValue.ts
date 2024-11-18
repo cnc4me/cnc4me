@@ -1,11 +1,15 @@
 import { AddressedValueCstChildren } from "../types/fanuc";
 import { getImage, parseNumber } from "../utils";
 
-export class NcAddress {
+export class AddressedValue {
   value: number;
 
   private _address: string;
   private _isNegative: boolean;
+
+  static create(ctx: AddressedValueCstChildren): AddressedValue {
+    return new AddressedValue(ctx);
+  }
 
   get prefix() {
     return this._address;

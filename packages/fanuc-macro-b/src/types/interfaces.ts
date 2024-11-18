@@ -1,5 +1,10 @@
-import type { NcAddress } from "../lib/NcAddress";
+import type { AddressedValue } from "../lib";
 import type { IToken } from "chevrotain";
+
+export interface IMacroBase<E> {
+  hasErrors: boolean;
+  getErrors(): E[];
+}
 
 export interface ProgramIdentifier {
   programTitle: string;
@@ -39,7 +44,7 @@ export interface ParsedLineData {
   /**
    * Collection of all the non `G` & `M` codes on the line
    */
-  addresses: NcAddress[];
+  addresses: AddressedValue[];
   gCodeMap: Record<string, boolean>;
   mCodeMap: Record<string, boolean>;
   /**

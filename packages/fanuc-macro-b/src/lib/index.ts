@@ -1,12 +1,5 @@
+export * from "./AddressedValue";
 export * as Errors from "./errors";
 export * from "./Insights";
-export * from "./MacroEnvironment";
-export * from "./MacroInterpreter";
-export * from "./MacroLexer";
-export * from "./MacroLexer2";
-export * from "./MacroLogger";
-export * from "./MacroParser";
-export * from "./MacroRuntime";
-export * from "./MacroToolchain";
 export * from "./memory";
 export * as Tokens from "./tokens";

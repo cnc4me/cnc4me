@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../src";
+import { MacroRuntime } from "../../src";
 
 const code = `
 #1=1
@@ -14,13 +14,15 @@ const code = `
 #9=#7*#8
 #10=[[48/#9]+[8*#4]]/[#5+[[#4*3]/2]+3]`;
 
+const runtime = new MacroRuntime();
+
 describe("macros expressions", () => {
-  const { runtime } = lines(code);
-  const errors = runtime.getErrors();
+  runtime.evalLines(code);
+
   const mem = runtime.Memory;
 
   it("parses with no errors", () => {
-    expect(errors).toHaveLength(0);
+    expect(runtime.getErrors()).toHaveLength(0);
   });
 
   it("can interpret variable assignments", () => {

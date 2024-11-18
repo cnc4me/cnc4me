@@ -1,6 +1,6 @@
 import { expect, it } from "vitest";
 
-import { lines as parseLines } from "../../src";
+import { MacroRuntime } from "../../src";
 
 const testData: [expr: string, answer: number][] = [
   ["100*[5/25]", 20],
@@ -36,13 +36,17 @@ const testData: [expr: string, answer: number][] = [
   ["2+[3*4-[2*3]]", 8] // Nested brackets with subtraction inside
 ];
 
+const runtime = new MacroRuntime();
+
 it.each(testData)(`parsing '%s' should equal %s`, (expr, answer) => {
   const variable = 1;
-  const { runtime } = parseLines(`#${variable}=${expr}`);
+  runtime.reset();
+  runtime.evalLines(`#${variable}=${expr}`);
+
   const errors = runtime.getErrors();
 
   // The second param provides the actual runtime error in the failure message
-  expect(errors[0], errors[0]).toBeUndefined();
+  expect(errors[0], runtime.getErrorMessages()[0]).toBeUndefined();
   // if (errors.length > 0) {
   //   expect(runtime.Memory.read(1)).toBe(NaN);
   // } else {

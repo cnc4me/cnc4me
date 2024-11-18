@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../../src";
+import { MacroRuntime } from "../../../src";
 
 const code = `
 #1=FIX[5.251]
@@ -8,13 +8,14 @@ const code = `
 #3=FIX[0.001]
 #4=FIX[100]`;
 
+const runtime = new MacroRuntime();
+const { Memory } = runtime;
+
 describe("function: FIX[]", () => {
-  const { runtime } = lines(code);
-  const parser = runtime.Parser;
-  const Memory = runtime.Memory;
+  runtime.evalLines(code);
 
   it("parses with no errors", () => {
-    expect(parser.errors).toHaveLength(0);
+    expect(runtime.hasErrors).toBeFalsy();
   });
 
   it("can calculate FIX[5.251]", () => {

@@ -1,4 +1,5 @@
 /// <reference types="vitest" />
+import define from "rollup-plugin-define";
 import { defineConfig } from "vite";
 
 export default defineConfig({
@@ -15,7 +16,16 @@ export default defineConfig({
     }
   },
   test: {
-    setupFiles: ["./tests/_vitest/setup.ts"]
+    setupFiles: ["./tests/_vitest/setup.ts"],
+    coverage: {
+      provider: "v8"
+    }
   },
-  plugins: []
+  plugins: [
+    define({
+      replacements: {
+        "process.env.NODE_ENV": `"production"`
+      }
+    })
+  ]
 });

@@ -3,7 +3,11 @@ import { type CstNode, tokenMatcher } from "chevrotain";
 import mitt, { type Emitter } from "mitt";
 import { match } from "ts-pattern";
 
-import { INTERPRETER } from "../PackageConfig";
+import { AddressedValue, AddressInsight, InsightCollection } from "./lib";
+import { MacroMemory } from "./lib/memory";
+import { Plus, Product } from "./lib/tokens";
+import { MacroParser } from "./MacroParser";
+import { INTERPRETER } from "./PackageConfig";
 import {
   degreeToRadian,
   getImage,
@@ -14,12 +18,7 @@ import {
   stripFirstChar,
   unbox,
   unwrapComment
-} from "../utils";
-import { AddressInsight, InsightCollection } from "./Insights";
-import { MacroParser } from "./MacroParser";
-import { MacroMemory } from "./memory";
-import { NcAddress } from "./NcAddress";
-import { Plus, Product } from "./tokens";
+} from "./utils";
 
 import type {
   InterpretedProgram,
@@ -28,7 +27,7 @@ import type {
   ValidG10OffsetGroups,
   VariableRegister,
   WatcherValuePayload
-} from "../types";
+} from "./types";
 import type {
   AdditionExpressionCstChildren,
   AddressedValueCstChildren,
@@ -36,7 +35,6 @@ import type {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
-  ICstNodeVisitor,
   LineCstChildren,
   LineCstNode,
   LinesCstChildren,
@@ -47,7 +45,7 @@ import type {
   ValueLiteralCstChildren,
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
-} from "../types/fanuc";
+} from "./types/fanuc";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type InterpreterEvents = {
@@ -220,8 +218,8 @@ export class MacroInterpreter extends BaseVisitor {
   AddressedValue(
     ctx: AddressedValueCstChildren,
     gCodeFlags: Record<string, boolean> = {}
-  ): NcAddress {
-    const address = new NcAddress(ctx);
+  ) {
+    const address = AddressedValue.create(ctx);
     const insight = new AddressInsight(address);
 
     if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {

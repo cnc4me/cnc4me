@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { lines } from "../../../src";
+import { MacroRuntime } from "../../../src";
 
 const code = `
 #1=SIN[5]
@@ -10,13 +10,14 @@ const code = `
 #5=SIN[60]
 #6=SIN[90]`;
 
+const runtime = new MacroRuntime();
+const { Memory } = runtime;
+
 describe("function: SIN[]", () => {
-  const { runtime } = lines(code);
-  const parser = runtime.Parser;
-  const Memory = runtime.Memory;
+  runtime.evalLines(code);
 
   it("parses with no errors", () => {
-    expect(parser.errors).toHaveLength(0);
+    expect(runtime.hasErrors).toBeFalsy();
   });
 
   it("can calculate SIN[5]", () => {
