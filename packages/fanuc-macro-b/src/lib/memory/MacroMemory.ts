@@ -1,4 +1,4 @@
-import { __, match } from "ts-pattern";
+import { match, Pattern } from "ts-pattern";
 
 import { isLexingError, range } from "../../utils";
 import { parseG10 } from "./G10";
@@ -103,16 +103,16 @@ export class MacroMemory {
         const { B, X, Y, Z } = rest;
         this.setAuxWorkOffset(P, { B, X, Y, Z });
       })
-      .with({ L: TOOL.LENGTH_COMP, R: __.number }, ({ P, R }) => {
+      .with({ L: TOOL.LENGTH_COMP, R: Pattern.number }, ({ P, R }) => {
         this.setToolLengthComp(P, R);
       })
-      .with({ L: TOOL.LENGTH, R: __.number }, ({ P, R }) => {
+      .with({ L: TOOL.LENGTH, R: Pattern.number }, ({ P, R }) => {
         this.setToolLength(P, R);
       })
-      .with({ L: TOOL.DIAMETER_COMP, R: __.number }, ({ P, R }) => {
+      .with({ L: TOOL.DIAMETER_COMP, R: Pattern.number }, ({ P, R }) => {
         this.setToolDiameterComp(P, R);
       })
-      .with({ L: TOOL.DIAMETER, R: __.number }, ({ P, R }) => {
+      .with({ L: TOOL.DIAMETER, R: Pattern.number }, ({ P, R }) => {
         this.setToolDiameter(P, R);
       })
       .run();

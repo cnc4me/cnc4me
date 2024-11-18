@@ -1,4 +1,4 @@
-import { map, max, min, uniq } from "lodash";
+import { max, min, unique } from "radash";
 
 import { NcAddress } from "./NcAddress";
 
@@ -54,14 +54,14 @@ export class InsightCollection {
    * Get insight values, by context
    */
   values(ctx: string): number[] {
-    return map(this.get(ctx), "value");
+    return this.get(ctx).map(insight => insight.value);
   }
 
   /**
    * Get all unique values from an array of insight values, by context
    */
   uniqValues(ctx: string) {
-    return uniq(this.values(ctx));
+    return unique(this.values(ctx));
   }
 
   /**

@@ -23,15 +23,13 @@ import {
   ProgramNumber,
   Then,
   Var
-} from "./Tokens";
-import { tokenSet } from "./Tokens/token-set";
+} from "./tokens";
+import { tokenSet } from "./tokens/token-set";
 
 export class MacroParser extends CstParser {
   constructor() {
     super(tokenSet);
-
     // debug("initializing");
-
     this.performSelfAnalysis();
   }
 
@@ -143,6 +141,19 @@ export class MacroParser extends CstParser {
   });
 
   /**
+   * `bracketExpression` has the highest precedence and thus it appears
+   * in the "lowest" leaf in the expression ParseTree.
+   */
+  private atomicExpression = this.RULE("atomicExpression", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.bracketExpression) },
+      { ALT: () => this.SUBRULE(this.functionExpression) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) },
+      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+    ]);
+  });
+
+  /**
    *
    */
   private additionExpression = this.RULE("additionExpression", () => {
@@ -198,19 +209,6 @@ export class MacroParser extends CstParser {
     this.OR([
       { ALT: () => this.CONSUME(Then) },
       { ALT: () => this.CONSUME(GotoLine) }
-    ]);
-  });
-
-  /**
-   * `bracketExpression` has the highest precedence and thus it appears
-   * in the "lowest" leaf in the expression ParseTree.
-   */
-  private atomicExpression = this.RULE("atomicExpression", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.bracketExpression) },
-      { ALT: () => this.SUBRULE(this.functionExpression) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
     ]);
   });
 

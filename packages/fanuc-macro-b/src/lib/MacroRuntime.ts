@@ -2,6 +2,7 @@ import { ILexingError, IToken } from "chevrotain";
 import Emittery from "emittery";
 
 import { isLexingError, isParsingError, matchProgramNumber } from "../utils";
+import { InvalidProgramNumber, ProgramNumberNotFound } from "./errors";
 import { InsightCollection } from "./Insights";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer2 } from "./MacroLexer2";
@@ -22,13 +23,23 @@ import type {
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime {
-  private _events = new Emittery<RuntimeEvents>();
-  private _programs: Record<number, string> = {};
-  private _activeProgram = NaN;
   private _mem: MacroMemory;
   private _lexer: MacroLexer2;
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
+
+  private _events = new Emittery<RuntimeEvents>();
+  private _programs: Record<number, string> = {};
+  private _activeProgram: number | null = null;
+
+  constructor() {
+    // debug("initializing");
+    this._events = new Emittery<RuntimeEvents>();
+    this._mem = new MacroMemory();
+    this._lexer = new MacroLexer2();
+    this._parser = new MacroParser();
+    this._interpreter = new MacroInterpreter({ memory: this._mem });
+  }
 
   get Memory(): MacroMemory {
     return this._mem;
@@ -50,13 +61,14 @@ export class MacroRuntime {
     return this._interpreter.Insights;
   }
 
-  constructor() {
-    // debug("initializing");
-    this._events = new Emittery<RuntimeEvents>();
-    this._mem = new MacroMemory();
-    this._lexer = new MacroLexer2();
-    this._parser = new MacroParser();
-    this._interpreter = new MacroInterpreter({ memory: this._mem });
+  /**
+   * Reset the runtime.
+   */
+  reset(): void {
+    this._programs = {};
+    this._activeProgram = NaN;
+    this._mem.reset();
+    this._parser.reset();
   }
 
   /**
@@ -85,12 +97,10 @@ export class MacroRuntime {
   }
 
   /**
-   * Reset the runtime.
+   * Register a function to handle errors that occur in the runtime.
    */
-  reset(): void {
-    this._mem.reset();
-    this._parser.reset();
-    this._activeProgram = NaN;
+  onError(handler: (eventData: RuntimeError) => void) {
+    return this._events.on("error", handler);
   }
 
   /**
@@ -110,10 +120,171 @@ export class MacroRuntime {
   }
 
   /**
-   * Register a function to handle errors that occur in the runtime.
+   * Run the {@link MacroParser} on the active program.
    */
-  onError(handler: (eventData: RuntimeError) => void) {
-    return this._events.on("error", handler);
+  evalProgram(code: string): InterpretedProgram {
+    this._tokenizeForParsing(code);
+    // this._tokenizeActiveProgram();
+
+    const programCst = this._parser.program() as unknown as ProgramCstNode;
+
+    return this._interpreter.program(programCst.children);
+  }
+
+  /**
+   * Analyze a text in the context of being a valid NC program
+   */
+  evalLines(code: string): ParsedLineData[] {
+    this._tokenizeForParsing(code);
+
+    const cst = this._parser.lines();
+
+    return this._interpreter.lines(cst.children);
+  }
+
+  /**
+   * Check if a program has been loaded and exists in the runtime.
+   */
+  programIsLoaded(programNumber: MacroRuntime["_activeProgram"]): boolean {
+    if (programNumber === null) return false;
+    return !!this._programs[programNumber];
+  }
+
+  /**
+   * Set a program number as `active` in the runtime.
+   *
+   * @TODO add error handling to check if program is loaded
+   */
+  setActiveProgram(programNumber: number): boolean {
+    // debug(`Setting program #${programNumber} active`);
+    this._throwIfProgramNotLoaded(programNumber);
+    this._activeProgram = programNumber;
+    return true;
+  }
+
+  /**
+   * Load the parser's input
+   *
+   * @TODO this should take string, not tokens.
+   * @deprecated use loadParserTokens
+   */
+  setParserInput(tokens: IToken[]) {
+    this._parser.input = tokens;
+  }
+
+  /**
+   * Load the parser's input with tokens.
+   */
+  loadParserTokens(tokens: IToken[]) {
+    this._parser.input = tokens;
+  }
+
+  /**
+   * Return a program by number if loaded in memory.
+   */
+  getProgram(programNumber: number | string): string {
+    if (typeof programNumber === "number") {
+      this._throwIfProgramNotLoaded(programNumber);
+      return this._programs[programNumber];
+    }
+
+    if (!programNumber.startsWith("O")) {
+      throw new InvalidProgramNumber(programNumber);
+    }
+
+    const parsedProgramNumber = Number(programNumber.replace(/^O/, ""));
+    this._throwIfProgramNotLoaded(parsedProgramNumber);
+    return this._programs[parsedProgramNumber];
+  }
+
+  /**
+   * Returns the loaded programs indexed by their program numbers.
+   */
+  getPrograms() {
+    return this._programs;
+  }
+
+  /**
+   * Count of loaded programs.
+   */
+  getProgramCount(): number {
+    return Object.keys(this._programs).length;
+  }
+
+  /**
+   * Return the currently active program.
+   */
+  getActiveProgram(): string {
+    if (this._activeProgram === null) {
+      this._throwIfProgramNotLoaded(this._activeProgram);
+    }
+    return this.getProgram(this._activeProgram as number);
+  }
+
+  /**
+   * Get the currently active program number from the runtime.
+   *
+   * Returns the program number if exists, otherwise NaN to indicate error
+   */
+  getActiveProgramNumber(): number {
+    if (typeof this._activeProgram === "number") {
+      return this._activeProgram;
+    } else {
+      return NaN;
+    }
+  }
+
+  /**
+   * Load a Program into memory
+   *
+   * This method can create a program if given a string
+   */
+  loadProgram(input: string, options?: ProgramLoadOptions): void {
+    matchProgramNumber(input, {
+      NOMATCH: error => this._emitError(error),
+      MATCH: result => {
+        const programNumber = parseInt(result[1]);
+
+        this._programs[programNumber] = input;
+
+        if (options?.setActive) {
+          this.setActiveProgram(programNumber);
+          this._tokenizeActiveProgram();
+        }
+
+        return this._programs[programNumber];
+      }
+    });
+  }
+
+  /**
+   * Load a Program into memory
+   *
+   * This method can create a program if given a string
+   */
+  loadProgram2(input: string, options?: ProgramLoadOptions): void {
+    matchProgramNumber(input, {
+      NOMATCH: error => this._emitError(error),
+      MATCH: result => {
+        const programNumber = parseInt(result[1]);
+
+        this._programs[programNumber] = input;
+
+        if (options?.setActive) {
+          this.setActiveProgram(programNumber);
+          this._tokenizeActiveProgram();
+        }
+
+        return this._programs[programNumber];
+      }
+    });
+  }
+
+  /**
+   * Batch load programs into memory
+   */
+  loadPrograms(programs: string[]): void {
+    programs.forEach(program => this.loadProgram(program));
   }
 
   /**
@@ -150,119 +321,12 @@ export class MacroRuntime {
   }
 
   /**
-   * Run the {@link MacroParser} on the active program.
+   * Check if a program has been loaded and exists in the runtime.
    */
-  evalProgram(code: string): InterpretedProgram {
-    this._tokenizeForParsing(code);
-    // this._tokenizeActiveProgram();
-
-    const programCst = this._parser.program() as unknown as ProgramCstNode;
-
-    return this._interpreter.program(programCst.children);
-  }
-
-  /**
-   * Analyze a text in the context of being a valid NC program
-   */
-  evalLines(code: string): ParsedLineData[] {
-    this._tokenizeForParsing(code);
-
-    const cst = this._parser.lines();
-
-    return this._interpreter.lines(cst.children);
-  }
-
-  /**
-   * Set a program number as `active` in the runtime.
-   */
-  setActiveProgram(programNumber: number): void {
-    // debug(`Setting program #${programNumber} active`);
-    this._activeProgram = programNumber;
-  }
-
-  /**
-   * Load the parser's input
-   */
-  setParserInput(tokens: IToken[]) {
-    this._parser.input = tokens;
-  }
-
-  /**
-   * Return a program by number if loaded in memory.
-   */
-  getProgram(programNumber: number | string): string {
-    if (typeof programNumber === "string") {
-      if (programNumber.startsWith("O")) {
-        const num = programNumber.replace(/^O/, "");
-        return this._programs[parseInt(num)];
-      } else {
-        return this._programs[parseInt(programNumber)];
-      }
-    } else {
-      return this._programs[programNumber];
+  private _throwIfProgramNotLoaded(num: MacroRuntime["_activeProgram"]) {
+    if (!this.programIsLoaded(num)) {
+      throw new ProgramNumberNotFound(num);
     }
-  }
-
-  /**
-   * Returns the loaded programs indexed by their program numbers.
-   */
-  getPrograms() {
-    return this._programs;
-  }
-
-  /**
-   * Count of loaded programs.
-   */
-  getProgramCount(): number {
-    return Object.keys(this._programs).length;
-  }
-
-  /**
-   * Return the currently active program.
-   */
-  getActiveProgram(): string {
-    if (typeof this._activeProgram === "number") {
-      return this.getProgram(this._activeProgram);
-    } else {
-      return "No active program selected.";
-    }
-  }
-
-  /**
-   * Get the currently active program number from the runtime.
-   */
-  getActiveProgramNumber(): number {
-    return this._activeProgram;
-  }
-
-  /**
-   * Load a AnalyzedProgram into memory
-   *
-   * This method can create a program if given a string
-   */
-  loadProgram(input: string, options?: ProgramLoadOptions): void {
-    matchProgramNumber(input, {
-      NOMATCH: error => this._emitError(error),
-      MATCH: result => {
-        const programNumber = parseInt(result[1]);
-
-        this._programs[programNumber] = input;
-
-        if (options?.setActive) {
-          this.setActiveProgram(programNumber);
-          this._tokenizeActiveProgram();
-        }
-
-        return this._programs[programNumber];
-      }
-    });
-  }
-
-  /**
-   * Batch load programs into memory
-   */
-  loadPrograms(programs: string[]): void {
-    programs.forEach(program => this.loadProgram(program));
   }
 
   /**

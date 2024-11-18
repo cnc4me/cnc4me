@@ -1,6 +1,6 @@
 import { type ILexingResult, Lexer } from "chevrotain";
 
-import { tokenSet } from "./Tokens/token-set";
+import { tokenSet } from "./tokens/token-set";
 
 export class MacroLexer2 {
   private lexer: Lexer;

@@ -11,7 +11,7 @@ import {
   Minus,
   Newline,
   Var
-} from "../../src/lib/Tokens";
+} from "../../src/lib/tokens";
 
 import type { IToken } from "chevrotain";
 

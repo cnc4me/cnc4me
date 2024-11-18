@@ -19,7 +19,7 @@ import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroParser } from "./MacroParser";
 import { MacroMemory } from "./memory";
 import { NcAddress } from "./NcAddress";
-import { Plus, Product } from "./Tokens";
+import { Plus, Product } from "./tokens";
 
 import type {
   InterpretedProgram,
@@ -108,7 +108,7 @@ export class MacroInterpreter extends BaseVisitor {
   }
 
   /**
-   * Itterate over the {@link LineCstChildren} to extract the contents
+   * Iterate over the {@link LineCstChildren} to extract the contents
    */
   lines(ctx: LinesCstChildren): ParsedLineData[] {
     const _lines: ParsedLineData[] = [];
@@ -337,7 +337,7 @@ export class MacroInterpreter extends BaseVisitor {
   }
 
   additionExpression(ctx: AdditionExpressionCstChildren): number {
-    let result = this.visit(ctx.lhs);
+    let lhsValue = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as
     // optional(MANY === zero or more).
@@ -350,21 +350,21 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.AdditionOperator[idx];
 
           if (tokenMatcher(operator, Plus)) {
-            // debug(result, "+", rhsValue);
-            result += rhsValue;
+            // debug(lhsValue, "+", rhsValue);
+            lhsValue += rhsValue;
           } else {
-            // debug(result, "-", rhsValue);
-            result -= rhsValue;
+            // debug(lhsValue, "-", rhsValue);
+            lhsValue -= rhsValue;
           }
         }
       });
     }
 
-    return result;
+    return lhsValue;
   }
 
   multiplicationExpression(ctx: MultiplicationExpressionCstChildren): number {
-    let result = this.visit(ctx.lhs);
+    let lhsValue = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
     if (ctx.rhs) {
@@ -376,17 +376,17 @@ export class MacroInterpreter extends BaseVisitor {
           const operator = ctx.MultiplicationOperator[idx];
 
           if (tokenMatcher(operator, Product)) {
-            // debug(result, "*", rhsValue);
-            result *= rhsValue;
+            // debug(lhsValue, "*", rhsValue);
+            lhsValue *= rhsValue;
           } else {
-            // debug(result, "/", rhsValue);
-            result /= rhsValue;
+            // debug(lhsValue, "/", rhsValue);
+            lhsValue /= rhsValue;
           }
         }
       });
     }
 
-    return result;
+    return lhsValue;
   }
 
   /**

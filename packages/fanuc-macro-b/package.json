@@ -30,6 +30,7 @@
     "debug": "catalog:",
     "emittery": "^1.0.3",
     "mitt": "^3.0.1",
+    "radash": "^12.1.0",
     "ts-pattern": "^5.5.0"
   },
   "devDependencies": {

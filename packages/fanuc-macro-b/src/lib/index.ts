@@ -1,3 +1,4 @@
+export * as Errors from "./errors";
 export * from "./Insights";
 export * from "./MacroEnvironment";
 export * from "./MacroInterpreter";
@@ -8,4 +9,4 @@ export * from "./MacroParser";
 export * from "./MacroRuntime";
 export * from "./MacroToolchain";
 export * from "./memory";
-export * as Tokens from "./Tokens";
+export * as Tokens from "./tokens";
