@@ -2,6 +2,7 @@ import type {
   Monaco,
   MonacoLanguageBracket,
   MonacoTokenizerRule,
+  MonarchLanguage,
   MonarchLanguageBracket,
   NamedTokenThemeRule,
   ThemeData,
@@ -19,7 +20,7 @@ export function createMonarchLanguage<T extends string>(
     tokenizer: {
       root: rules
     }
-  } as Monaco.languages.IMonarchLanguage;
+  } as MonarchLanguage;
 }
 
 export function createTheme<T extends string>(

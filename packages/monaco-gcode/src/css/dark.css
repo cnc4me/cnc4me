@@ -1,0 +1,28 @@
+.number {
+  color: #FFE38A;
+}
+
+.g-code {
+  color: #02524f;
+}
+
+.m-code {
+  color: #5fe04f;
+}
+
+.z-move {
+  color: #fc2c2c;
+}
+
+.address {
+  color: #fcfc2c;
+}
+
+.macro-var {
+  color: #F1AAFF;
+}
+
+.comment {
+  color: #C09D70;
+  font-style: italic;
+}

@@ -7,9 +7,11 @@ export const gcodeDarkTheme = createTheme<GcodeRuleTokens>({
   inherit: true,
   rules: [
     { token: "number", foreground: "#FFE38A" },
-    { token: "macro-var", foreground: "#F1AAFF" },
     { token: "g-code", foreground: "#02524f" },
     { token: "m-code", foreground: "#5fe04f" },
+    { token: "z-move", foreground: "#fc2c2c" },
+    { token: "address", foreground: "#fcfc2c" },
+    { token: "macro-var", foreground: "#F1AAFF" },
     { token: "comment", foreground: "#C09D70", fontStyle: "italic" }
   ],
   colors: {}

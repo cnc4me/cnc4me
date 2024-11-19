@@ -5,23 +5,25 @@ import type * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 export { Monaco };
 
 export type GcodeThemeName = keyof typeof Themes;
+export type MonacoTokenizerRule = [match: RegExp, token: string];
 
-export type TokenizerRules<T> = [RegExp, T][];
-
+/**
+ * Aliased Types
+ */
+export type ThemeData = Monaco.editor.IStandaloneThemeData;
+export type TokenThemeRule = Monaco.editor.ITokenThemeRule;
 export type MonarchLanguage = Monaco.languages.IMonarchLanguage;
-
 export type MonarchLanguageBracket = Monaco.languages.IMonarchLanguageBracket;
 
-export type TokenThemeRule = Monaco.editor.ITokenThemeRule;
-
-export type ThemeData = Monaco.editor.IStandaloneThemeData;
+/**
+ * Generic Types
+ */
+export type TokenizerRules<T> = [RegExp, T][];
 
 export interface NamedTokenThemeRule<T extends string>
   extends Monaco.editor.ITokenThemeRule {
   token: T;
 }
-
-export type MonacoTokenizerRule = [match: RegExp, token: string];
 
 export type MonacoLanguageBracket<T extends string> = [
   open: string,
@@ -29,6 +31,9 @@ export type MonacoLanguageBracket<T extends string> = [
   token: T
 ];
 
+/**
+ * Type Utils
+ */
 export type ExtractBracketRuleTokens<
   T extends ReturnType<typeof createBracketRules>
 > = T[number]["token"];

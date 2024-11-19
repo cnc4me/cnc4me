@@ -20,8 +20,9 @@ type GcodeBracketRuleTokens = ExtractBracketRuleTokens<typeof brackets>;
 const rules = createLanguageRules([
   [/M\d+(\.\d+)?/, "m-code"],
   [/G\d+(\.\d+)?/, "g-code"],
+  [/Z/, "z-move"],
   [/[A-Z]-?\d+(\.\d+)?/, "address"],
-  [/#\d/, "macro-var"],
+  [/#\d+/, "macro-var"],
   [/\(.+\)/, "comment"],
   [/[\=\+\-\*\/]/, "operators"],
   [/(\d+(?:\.\d+)?)/, "number"]
