@@ -1,73 +1,66 @@
-import type { BaseParser } from "chevrotain";
-
-import { gcodeDarkTheme } from "./gcode-dark";
-import { gcodeLightTheme } from "./gcode-light";
-import { gcodeLanguage } from "./language";
 import type {
   Monaco,
-  MonacoLangDef,
-  MonacoThemeDef,
+  MonacoLanguageBracket,
+  MonacoTokenizerRule,
   MonarchLanguageBracket,
-  MonarchTokenizerRule
+  NamedTokenThemeRule,
+  ThemeData,
+  TokenizerRules,
+  TokenThemeRule
 } from "./types";
+import type { BaseParser } from "chevrotain";
 
-/**
- * Register a custom theme with a Monaco Editor instance
- */
-export function registerCustomTheme<T extends typeof Monaco>(
-  monaco: T,
-  themeName: string,
-  themeData: MonacoThemeDef
-): T {
-  monaco.editor.defineTheme(themeName, themeData);
-  return monaco;
-}
-
-/**
- * Register a custom language with a Monaco Editor instance
- */
-export function registerCustomLanguage<T extends typeof Monaco>(
-  monaco: T,
-  languageId: string,
-  languageDef: MonacoLangDef
-): T {
-  monaco.languages.register({ id: languageId });
-  monaco.languages.setMonarchTokensProvider(languageId, languageDef);
-  return monaco;
-}
-
-/**
- * Register the custom gcode language and themes
- */
-export function registerMonacoResources(monaco: typeof Monaco) {
-  monaco.languages.typescript.javascriptDefaults.setEagerModelSync(true);
-  registerCustomLanguage(monaco, "gcode", gcodeLanguage);
-  registerCustomTheme(monaco, "gcode-dark", gcodeDarkTheme);
-  registerCustomTheme(monaco, "gcode-light", gcodeLightTheme);
-}
-
-/**
- * Generate a Monarch language definition
- *
- * @todo look into this, and actually generate it
- */
-export function createMonarchLanguage(
+export function createMonarchLanguage<T extends string>(
   brackets: MonarchLanguageBracket[],
-  rules: MonarchTokenizerRule[]
-): Monaco.languages.IMonarchLanguage {
+  rules: TokenizerRules<T>
+) {
   return {
-    brackets: brackets.map(
-      x =>
-        ({
-          open: x[0],
-          close: x[1],
-          token: x[2]
-        } as Monaco.languages.IMonarchLanguageBracket)
-    ),
+    brackets,
     tokenizer: {
       root: rules
     }
+  } as Monaco.languages.IMonarchLanguage;
+}
+
+export function createTheme<T extends string>(
+  theme: ThemeData & { rules: NamedTokenThemeRule<T>[] }
+) {
+  return theme;
+}
+
+export function createThemeRule<T extends string>(rule: TokenThemeRule) {
+  const token = rule.token as T;
+  return Object.assign(rule, { token });
+}
+
+export function createThemeRules<T extends string>(rules: TokenThemeRule[]) {
+  return rules.map(rule => createThemeRule<T>(rule));
+}
+
+export function createLanguageRule<T extends string>(regex: RegExp, token: T) {
+  return [regex, token] as [RegExp, T];
+}
+
+export function createLanguageRules<T extends string>(
+  rules: TokenizerRules<T>
+) {
+  return rules.map(([r, t]) => createLanguageRule(r, t));
+}
+
+export function createBracketRule<T extends string>(
+  bracket: MonacoLanguageBracket<T>
+) {
+  return {
+    open: bracket[0],
+    close: bracket[1],
+    token: bracket[2]
   };
+}
+
+export function createBracketRules<T extends string>(
+  brackets: MonacoLanguageBracket<T>[]
+) {
+  return brackets.map(b => createBracketRule<T>(b));
 }
 
 /**
@@ -75,12 +68,10 @@ export function createMonarchLanguage(
  *
  * @todo look into this, and actually generate it
  */
-export function generateMonarchLanguageFromChevrotainParser<
-  T extends BaseParser
->(
+export function generateMonarchLanguageFromChevrotain<T extends BaseParser>(
   parser: T,
   brackets: Monaco.languages.IMonarchLanguageBracket[],
-  rules: MonarchTokenizerRule[]
+  rules: MonacoTokenizerRule[]
 ): Monaco.languages.IMonarchLanguage {
   // console.log(parser);
 
