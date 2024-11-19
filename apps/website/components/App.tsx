@@ -22,6 +22,7 @@ import {
 import { MacroEditor } from "./editor/MacroEditor";
 import { ErrorPane } from "./ErrorPane";
 import Layout from "./layout";
+import { LogsContainer } from "./LogsContainer";
 import {
   DebugView,
   HomeView,
@@ -141,6 +142,8 @@ export default function App(): JSX.Element {
       .with("tools", () => <ToolsView />)
       .otherwise(() => <h1 className="p-10 text-red-500">View Not Found</h1>);
 
+  console.log("Tacos");
+
   return (
     <Layout>
       <header className="flex flex-row font-bold text-purple-200 bg-violet-900">
@@ -212,13 +215,14 @@ export default function App(): JSX.Element {
             onMount={onEditorMount}
             onChange={onEditorChange}
           />
-          {/* <MacroEditor contents={editorBuffer} theme={editorTheme} onMount={onEditorMount} onChange={onEditorChange} /> */}
         </section>
         <aside className="flex-1 flex-grow min-h-100 bg-neutral-800">
-          <CurrentView activeTab={activeTab} />
+          <div className="flex flex-col">
+            <CurrentView activeTab={activeTab} />
+            <ErrorPane errors={errors} />
+          </div>
         </aside>
       </main>
-      <ErrorPane errors={errors} />
     </Layout>
   );
 }

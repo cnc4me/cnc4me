@@ -16,6 +16,7 @@
     "@heroicons/react": "^2.1.5",
     "@monaco-editor/react": "^4.6.0",
     "clsx": "^1.2.1",
+    "console-feed": "^3.6.0",
     "lodash.debounce": "^4.0.8",
     "lz-string": "^1.4.4",
     "monaco-editor": "^0.52.0",

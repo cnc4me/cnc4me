@@ -1,5 +1,6 @@
 import { DocumentTextIcon, LightBulbIcon } from "@heroicons/react/24/solid";
 
+import { EncodedLink } from "../EncodedLink";
 import { Link } from "../Link";
 
 const packages = [
@@ -7,7 +8,8 @@ const packages = [
     "@cnc4me/chrysalis",
     "A thin wrapper around the Monaco editor to enable easy customization."
   ],
-  [ //
+  [
+    //
     "@cnc4me/fanuc-macro-b",
     "A complete environment for Fanuc Macro B evaluation."
   ],
@@ -42,24 +44,39 @@ export const HomeView: React.FC = () => {
         <div className="pl-7">
           <ul className="list-disc">
             <li className="py-1 pl-4 text-violet-300">
-              <Link href="/?tab=macros&content=BQAgagggSgkhBCAZAoiCBldMDiA5AssrgCrogCUAUAMQCMAvAMwB0tALLQKwCcATAGyc2lSqAiJsyeFAgUavegG1aAal4BdAFSMRoSLAQoQ6AKrx0xGMROWA8rjJVqjetV4B6OrpDSIAYQBpZGIQZEhEEwg7BzlqNiU2TTd1AFodak4lfhVnHI13RTiU5O94ExhEYhSYXBAAMRNcP2jHGn56BHRFFN5mRk5aDRoAdnp0AEUoYkU2bnUaAA56KFtGgBFC2nnqbnoGgAVN9SA">
-                Macro Variables & Functions
-              </Link>
+              <EncodedLink
+                tab="macros"
+                label="Macro Variables & Functions"
+                content="BQAgagggSgkhBCAZAoiCBldMDiA5AssrgCrogCUAUAMQCMAvAMwB0tALLQKwCcATAGyc2lSqAiJsyeFAgUavegG1aAal4BdAFSMRoSLAQoQ6AKrx0xGMROWA8rjJVqjetV4B6OrpDSIAYQBpZGIQZEhEEwg7BzlqNiU2TTd1AFodak4lfhVnHI13RTiU5O94ExhEYhSYXBAAMRNcP2jHGn56BHRFFN5mRk5aDRoAdnp0AEUoYkU2bnUaAA56KFtGgBFC2nnqbnoGgAVN9SA"
+              />
             </li>
             <li className="py-1 pl-4 text-violet-300">
-              <Link href="/?tab=tools&content=BQAg8gSiBikgKmMAZc1oGUCi8MEoQAoAcQEYAGEYgTkuVNJAAVGIBmAOlICY2BWEhSq0Q9SixAQOAspRp1SbZqwC0HcuW4yh80T2WS1G0oLkj6jJt0l8ObUgDZup4QvHWpbAOzazCpVaS6uQ8Lrr01oHsXLy%2BrnqWShDcdrRsYeZCTEmkHBn%2BzEl2Pvl6kUUaACxAA">
-                G10 Lines with Tool Offsets
-              </Link>
+              <EncodedLink
+                tab="tools"
+                label="G10 Lines with Tool Offsets"
+                content="BQAg8gSiBikgKmMAZc1oGUCi8MEoQAoAcQEYAGEYgTkuVNJAAVGIBmAOlICY2BWEhSq0Q9SixAQOAspRp1SbZqwC0HcuW4yh80T2WS1G0oLkj6jJt0l8ObUgDZup4QvHWpbAOzazCpVaS6uQ8Lrr01oHsXLy%2BrnqWShDcdrRsYeZCTEmkHBn%2BzEl2Pvl6kUUaACxAA"
+              />
             </li>
             <li className="py-1 pl-4 text-violet-300">
-              <Link href="/?tab=offsets&content=BQAgogagggMiDiBGADCGBJAcmAyiAYgPIBKIA6iQNIiH745gAqeAlCAFBKrwCcqMAJhAAFRCAAaiAHQCAzABYArCACaPKQA4A7ADZlALQC0GqTq2LZIAEICtyKZxQI%2BaIcKHj5pufNWzNAkogRloyAsi%2BVnwOXM78bpbihv6IGjxaqgLSyLICBopSPDza1qn27EA">
-                G10 Lines with Work Offsets
-              </Link>
+              <EncodedLink
+                tab="offsets"
+                label="G10 Lines with Work Offsets"
+                content="BQAgogagggMiDiBGADCGBJAcmAyiAYgPIBKIA6iQNIiH745gAqeAlCAFBKrwCcqMAJhAAFRCAAaiAHQCAzABYArCACaPKQA4A7ADZlALQC0GqTq2LZIAEICtyKZxQI%2BaIcKHj5pufNWzNAkogRloyAsi%2BVnwOXM78bpbihv6IGjxaqgLSyLICBopSPDza1qn27EA"
+              />
             </li>
             <li className="py-1 pl-4 text-violet-300">
-              <Link href="/?tab=home&content=KQWAUA8gjATAzAFgAQAokBUASBJAykvJAQQDkkBRADSIFkAFAGXKQEpw0BhCGm8k9VuyRcefAWzCduvfoLDh0MAKxIaABgBsqKAHoYAImFEASgCFsAEWZwAYgwF8LNbAwYT1UbXsMcT5q0i29hQkTi5u4ADiampIkQCcsZFKyJQAdMpIAJppCOC4AOxKMapqcFEIcEiYmQBaUGkYMBpRJbVqaVDg6gAcrZ61ALS5SDYwHf3Zgw15YNGx9WndavHLSlHxnpEwPUjtS2A0cGrgQA">
-                Milling In Y
-              </Link>
+              <EncodedLink
+                tab="home"
+                label="Milling In Y"
+                content="KQWAUA8gjATAzAFgAQAokBUASBJAykvJAQQDkkBRADSIFkAFAGXKQEpw0BhCGm8k9VuyRcefAWzCduvfoLDh0MAKxIaABgBsqKAHoYAImFEASgCFsAEWZwAYgwF8LNbAwYT1UbXsMcT5q0i29hQkTi5u4ADiampIkQCcsZFKyJQAdMpIAJppCOC4AOxKMapqcFEIcEiYmQBaUGkYMBpRJbVqaVDg6gAcrZ61ALS5SDYwHf3Zgw15YNGx9WndavHLSlHxnpEwPUjtS2A0cGrgQA"
+              />
+            </li>
+            <li className="py-1 pl-4 text-violet-300">
+              <EncodedLink
+                tab="home"
+                label="Syntax Highlighting"
+                content="NwAgYgMgggag8gJQFwgLIEMBOAbAlgOwChQJ0BPAU0xAAsLcBzGgFxQAYA6AFmLQEkAcgA0UAJgDMHABwBOAOy9UggJpjJshaFRQhIkAFZOANi48tO1QeOneAcQr4q6ZhQAmIAO65mNEAGEAV0x0EABlF3QAWwBRfAYCChAuDgBGSRTeOAAFABU%2BOAEoCBAshDhbBChUEAARaNC-BD5c-IEQRH84VFRogRzCQlQUti4w0TY2QeH9KbYZMYnBqVEQUHQAIwBnAHtsAJcQCgAPZkwAzdxt-BBI7dcKQltRKVXabcjE9GxsEHQjik2jxSIAAWil9Bw2OAjBMoaBbgA3RI%2BRIAB2wzgAZttMJEQK5th5ruDIpEBrZgWBxlDouJCAB1AASfAg0RAAG0AMZXVzeS74L4AXUINTgIDpfDAHIAxMMaQBFEBsQUgWxwHJilLDR7qsXU3ihd6JWwAWm591oVAevRqA1ACAop3QnOYIBRIExuAxH3wzEeMhW0UmQxGYWDKS4UNC4bYClQUlGoF5mw22ESt2YOMBoFi7m2mNVZruDyAA"
+              />
             </li>
           </ul>
         </div>
