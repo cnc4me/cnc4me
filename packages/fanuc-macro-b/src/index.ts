@@ -3,7 +3,7 @@ export * from "./MacroInterpreter";
 export * from "./MacroLexer";
 export * from "./MacroLogger";
 export * from "./MacroParser";
-export * from "./MacroParser2";
+export * from "./MacroParserBase";
 export * from "./MacroRuntime";
 export * from "./PackageConfig";
 export * from "./types";

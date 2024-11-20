@@ -1,9 +1,11 @@
+/**
+ *
+ */
 const programNumberRegex = /[O|:](\d+)/y;
 
-interface RegExpExecArrayWithPayload extends RegExpExecArray {
-  payload?: unknown;
-}
-
+/**
+ *
+ */
 export function matchProgramNumber(text: string, startOffset: number) {
   let execResult: RegExpExecArrayWithPayload | null = null;
 
@@ -21,4 +23,8 @@ export function matchProgramNumber(text: string, startOffset: number) {
   }
 
   return execResult;
+}
+
+interface RegExpExecArrayWithPayload extends RegExpExecArray {
+  payload?: unknown;
 }

@@ -1,39 +1,44 @@
 import { createToken } from "chevrotain";
 
-import { BooleanOperator } from "./categories";
+import { BooleanOperator } from "./common";
+
+const SHARED_CONFIG = {
+  group: "Grouping",
+  categories: BooleanOperator
+};
 
 export const EqualTo = createToken({
   name: "EqualTo",
   pattern: /EQ/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });
 
 export const NotEqualTo = createToken({
   name: "NotEqualTo",
   pattern: /NE/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });
 
 export const LessThan = createToken({
   name: "LessThan",
   pattern: /LT/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });
 
 export const LessThanOrEq = createToken({
   name: "LessThanOrEq",
   pattern: /LE/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });
 
 export const GreaterThan = createToken({
   name: "GreaterThan",
   pattern: /GT/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });
 
 export const GreaterThanOrEq = createToken({
   name: "GreaterThanOrEq",
   pattern: /GE/,
-  categories: BooleanOperator
+  ...SHARED_CONFIG
 });

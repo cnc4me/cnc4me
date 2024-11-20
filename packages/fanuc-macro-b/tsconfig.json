@@ -10,6 +10,7 @@
   ],
   "include": [
     "src",
+    "scripts",
     "tests/_vitest/vitest.expect.d.ts"
   ],
   "references": [

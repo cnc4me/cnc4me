@@ -368,11 +368,13 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
 
   /**
    * Generate an array of {@link IToken} from an input string
+   * @todo do we really need this? what about piping?
    */
   private _lexAndLoadParser(input: string): boolean {
     this._lexer.tokenize(input);
     if (this._lexer.hasErrors) return false;
-    this._parser.input = this._lexer.tokens;
+    const tokens = this._lexer.getTokens();
+    this._parser.setInput(tokens);
     return true;
   }
 

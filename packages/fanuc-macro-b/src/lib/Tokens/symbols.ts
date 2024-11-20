@@ -1,57 +1,53 @@
 import { createToken } from "chevrotain";
 
-import { AdditionOperator, MultiplicationOperator } from "./categories";
+import { ControlFlowKeyword } from "./common";
 
-export const Plus = createToken({
-  name: "Plus",
-  pattern: "+",
-  categories: AdditionOperator
-});
+const SHARED_CONFIG = {
+  categories: ControlFlowKeyword
+};
 
-export const Minus = createToken({
-  name: "Minus",
-  pattern: "-",
-  categories: AdditionOperator
-});
-
-export const Divide = createToken({
-  name: "Divide",
-  pattern: "/",
-  categories: MultiplicationOperator
-});
-
-export const Product = createToken({
-  name: "Product",
-  pattern: "*",
-  categories: MultiplicationOperator
-});
-
+/**
+ * @todo this should be more complex and handle the variable number capture?
+ * @todo have it evaluate expressions into var numbers?
+ */
 export const Var = createToken({
   name: "Var",
-  pattern: "#"
-});
-
-export const Equals = createToken({
-  name: "Equals",
-  pattern: "="
-});
-
-export const Percent = createToken({
-  name: "Percent",
-  pattern: "%"
+  pattern: "#",
+  ...SHARED_CONFIG
 });
 
 export const Dot = createToken({
   name: "Dot",
-  pattern: "."
+  pattern: ".",
+  ...SHARED_CONFIG
 });
 
-export const Comma = createToken({
-  name: "Comma",
-  pattern: ","
+// export const Comma = createToken({
+//   name: "Comma",
+//   pattern: ",",
+//   ...SHARED_CONFIG
+// });
+
+export const Equals = createToken({
+  name: "Equals",
+  pattern: "=",
+  ...SHARED_CONFIG
+});
+
+export const Percent = createToken({
+  name: "Percent",
+  pattern: "%",
+  ...SHARED_CONFIG
 });
 
 export const Newline = createToken({
   name: "Newline",
-  pattern: "\n"
+  pattern: "\n",
+  ...SHARED_CONFIG
+});
+
+export const SemiColon = createToken({
+  name: "SemiColon",
+  pattern: ";",
+  ...SHARED_CONFIG
 });

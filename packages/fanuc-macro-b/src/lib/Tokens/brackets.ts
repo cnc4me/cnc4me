@@ -1,25 +1,32 @@
 import { createToken } from "chevrotain";
 
-import { Brackets } from "./categories";
+import { Grouping } from "./common";
+
+const SHARED_CONFIG = {
+  group: "Grouping",
+  categories: Grouping
+};
 
 export const OpenParen = createToken({
   name: "OpenParen",
-  pattern: "("
+  pattern: "(",
+  ...SHARED_CONFIG
 });
 
 export const CloseParen = createToken({
   name: "CloseParen",
-  pattern: ")"
+  pattern: ")",
+  ...SHARED_CONFIG
 });
 
 export const OpenBracket = createToken({
   name: "OpenBracket",
   pattern: "[",
-  categories: Brackets
+  ...SHARED_CONFIG
 });
 
 export const CloseBracket = createToken({
   name: "CloseBracket",
   pattern: "]",
-  categories: Brackets
+  ...SHARED_CONFIG
 });

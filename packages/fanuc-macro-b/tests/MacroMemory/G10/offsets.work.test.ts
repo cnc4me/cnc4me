@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseG10 } from "../../src/lib";
+import { parseG10 } from "../../../src/lib";
 
 /**
  * G10 Line Reference
