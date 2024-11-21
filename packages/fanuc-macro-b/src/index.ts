@@ -1,5 +1,7 @@
-import FanucMacroB from "./FanucMacroB";
+import * as E from "./errors";
+import * as T from "./tokens";
 
+export * from "./FanucMacroB";
 export * from "./lib";
 export * from "./MacroInterpreter";
 export * from "./MacroLexer";
@@ -10,4 +12,4 @@ export * from "./MacroParserBase";
 export * from "./MacroRuntime";
 export * from "./types";
 export * from "./utils";
-export { FanucMacroB };
+export { E, T };

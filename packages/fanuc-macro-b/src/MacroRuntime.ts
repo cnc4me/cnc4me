@@ -1,7 +1,7 @@
 import { ILexingError, type IRecognitionException, IToken } from "chevrotain";
 import Emittery from "emittery";
 
-import { InvalidProgramNumber, ProgramNumberNotFound } from "./lib/errors";
+import { InvalidProgramNumber, ProgramNumberNotFound } from "./errors";
 import { InsightCollection } from "./lib/Insights";
 import { ProgramNumber } from "./lib/ProgramNumber";
 import { MacroInterpreter } from "./MacroInterpreter";
@@ -82,12 +82,12 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
     return this._interpreter;
   }
 
-  get Insights(): InsightCollection {
-    return this._interpreter.Insights;
-  }
-
   get hasErrors() {
     return this.getErrors().length > 0;
+  }
+
+  getInsights(): InsightCollection {
+    return this._interpreter.getInsights();
   }
 
   /**

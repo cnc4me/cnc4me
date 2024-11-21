@@ -9,10 +9,10 @@ const code = `
 #4=SQRT[144]
 #5=SQRT[3173]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: SQRT[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

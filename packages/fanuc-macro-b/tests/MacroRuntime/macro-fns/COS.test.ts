@@ -10,10 +10,10 @@ const code = `
 #5=COS[60]
 #6=COS[90]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: COS[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

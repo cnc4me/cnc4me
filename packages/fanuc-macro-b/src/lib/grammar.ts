@@ -39,13 +39,13 @@ import {
   Var,
   While,
   WhiteSpace
-} from "./tokens";
+} from "../tokens";
 
 /**
  * The order of tokens is important because token
  * matches are applied sequentially
  */
-export const TOKEN_VOCABULARY = [
+export const FANUC_MACRO_B_GRAMMAR = [
   Newline,
   WhiteSpace,
   Comment,

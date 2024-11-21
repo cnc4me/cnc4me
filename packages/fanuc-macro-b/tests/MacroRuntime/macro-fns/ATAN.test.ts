@@ -7,10 +7,10 @@ const code = `
 #2=ATAN[${1 / Math.sqrt(3)}]
 #3=ATAN[${Math.sqrt(3)}]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: ATAN[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

@@ -10,10 +10,10 @@ const code = `
 #5=SIN[60]
 #6=SIN[90]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: SIN[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

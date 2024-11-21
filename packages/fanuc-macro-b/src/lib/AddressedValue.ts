@@ -1,5 +1,5 @@
 import { AddressedValueCstChildren } from "../types/fanuc";
-import { getImage, parseNumber } from "../utils";
+import { getImage, parseNumber, stripFirstChar } from "../utils";
 
 export class AddressedValue {
   value: number;
@@ -11,12 +11,8 @@ export class AddressedValue {
     return new AddressedValue(ctx);
   }
 
-  get prefix() {
-    return this._address;
-  }
-
-  get image() {
-    return `${this._address}${this.value}`;
+  static parseForValue(input: string): number {
+    return parseNumber(stripFirstChar(input));
   }
 
   constructor(ctx: AddressedValueCstChildren) {
@@ -30,5 +26,13 @@ export class AddressedValue {
     }
 
     return this;
+  }
+
+  get prefix() {
+    return this._address;
+  }
+
+  get image() {
+    return `${this._address}${this.value}`;
   }
 }

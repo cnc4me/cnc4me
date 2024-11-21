@@ -8,10 +8,10 @@ const code = `
 #3=FIX[0.001]
 #4=FIX[100]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: FIX[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

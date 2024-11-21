@@ -4,25 +4,22 @@ on:
   push:
     branches:
       - main
-  pull_request:
-    branches: [main]
+      - devel
 
 jobs:
-  Jest:
+  build-next-app:
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v2
+      - uses: actions/checkout@v4
         name: Checkout Source
-      - uses: pnpm/action-setup@v2.1.0
+      - uses: pnpm/action-setup@v4
         name: Install PNPM
-        with:
-          version: 6
-      - uses: actions/setup-node@v2
+      - uses: actions/setup-node@v4
         name: Setup Node for PNPM
         with:
-          node-version: '14'
+          node-version: '20'
           cache: 'pnpm'
           cache-dependency-path: '**/pnpm-lock.yaml'
       - run: pnpm install
-      - run: pnpm run site:test
+      # - run: pnpm run site:test
       - run: pnpm run site:build

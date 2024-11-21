@@ -15,6 +15,7 @@ import { MacroParser } from "../src";
 
 const parser = new MacroParser();
 const htmlText = generateHtml(parser);
-const out = join(process.cwd(), "diagram", "index.html");
+const out = join(process.cwd(), "diagrams", "FanucMacroB.html");
 
 writeFileSync(out, htmlText);
+console.log(`Wrote to file \x1b[33m${out.replace(process.cwd(), ".")}`);

@@ -6,10 +6,10 @@ const code = `
 #1=ABS[5]
 #2=ABS[-5]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: ABS[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

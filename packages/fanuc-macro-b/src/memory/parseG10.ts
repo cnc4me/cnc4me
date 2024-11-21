@@ -1,7 +1,7 @@
-import { MacroRuntime } from "../../MacroRuntime";
+import { MacroRuntime } from "../MacroRuntime";
 import { extractOffsets } from "./extractOffsets";
 
-import type { G10ParseResult } from "../../types";
+import type { G10ParseResult } from "../types";
 
 /**
  * Parsing a string of text as a G10 line for values

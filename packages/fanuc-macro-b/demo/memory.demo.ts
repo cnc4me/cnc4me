@@ -1,4 +1,4 @@
-import { MacroMemory } from "../src/lib";
+import { MacroMemory } from "../src";
 
 const mem = new MacroMemory();
 

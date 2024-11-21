@@ -4,10 +4,10 @@ import mitt from "mitt";
 import { match } from "ts-pattern";
 
 import { AddressedValue, AddressInsight, InsightCollection } from "./lib";
-import { Plus, Product } from "./lib/tokens";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
-import { INTERPRETER } from "./PackageConfig";
+import * as CONFIG from "./PackageConfig";
+import { Plus, Product } from "./tokens";
 import {
   degreeToRadian,
   getImage,
@@ -15,19 +15,10 @@ import {
   hasG10,
   parseNumber,
   radianToDegree,
-  stripFirstChar,
   unbox,
   unwrapComment
 } from "./utils";
 
-import type {
-  InterpretedProgram,
-  ParsedLineData,
-  ProgramIdentifier,
-  ValidG10OffsetGroups,
-  VariableRegister,
-  WatcherValuePayload
-} from "./types";
 import type {
   AdditionExpressionCstChildren,
   AddressedValueCstChildren,
@@ -35,18 +26,22 @@ import type {
   BracketExpressionCstChildren,
   ExpressionCstChildren,
   FunctionExpressionCstChildren,
+  InterpretedProgram,
   LineCstChildren,
-  LineCstNode,
   LinesCstChildren,
   MultiplicationExpressionCstChildren,
   NumericLiteralCstChildren,
+  ParsedLineData,
   ProgramCstChildren,
+  ProgramIdentifier,
   ProgramNumberLineCstChildren,
+  ValidG10OffsetGroups,
   ValueLiteralCstChildren,
   VariableAssignmentCstChildren,
-  VariableLiteralCstChildren
-} from "./types/fanuc";
-import type { CstNode } from "chevrotain";
+  VariableLiteralCstChildren,
+  VariableRegister,
+  WatcherValuePayload
+} from "./types";
 import type { Emitter } from "mitt";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
@@ -55,46 +50,27 @@ type InterpreterEvents = {
   M1: undefined;
 };
 
-type AnyNode = LineCstNode | CstNode;
-
-const parser = new MacroParser();
-const BaseVisitor = INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
-  ? parser.getBaseCstVisitorConstructorWithDefaults()
-  : parser.getBaseCstVisitorConstructor();
+const BaseCstVisitor = MacroParser.getBaseCstVisitor({
+  useConstructorDefaults: CONFIG.INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
+});
 
 /**
  * Macro Interpreter
  */
-export class MacroInterpreter extends BaseVisitor {
+export class MacroInterpreter extends BaseCstVisitor {
   public events: Emitter<InterpreterEvents> = mitt<InterpreterEvents>();
 
-  private _mem: MacroMemory;
+  #memory: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();
 
-  get Memory(): MacroMemory {
-    return this._mem;
-  }
-
-  set Memory(mem: MacroMemory) {
-    this._mem = mem;
-  }
-
-  get Insights(): InsightCollection {
-    return this._insights;
-  }
-
-  constructor(opts?: { memory: MacroMemory }) {
+  constructor(opts: { memory: MacroMemory }) {
     super();
-
-    // debug("initializing");
-
-    this._mem = opts?.memory ?? new MacroMemory();
+    this.#memory = opts.memory;
     this.validateVisitor();
   }
 
-  _visit(node: AnyNode) {
-    const nodeToVisit = node as CstNode;
-    return this.visit(nodeToVisit);
+  getInsights(): InsightCollection {
+    return this._insights;
   }
 
   /**
@@ -103,7 +79,7 @@ export class MacroInterpreter extends BaseVisitor {
   program(ctx: ProgramCstChildren): InterpretedProgram {
     const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
     const lines = this.lines(ctx.lines[0].children);
-    // const g10s = this._mem.
+    // const g10s = this._memory.
     return { ...prgId, lines };
   }
 
@@ -154,7 +130,7 @@ export class MacroInterpreter extends BaseVisitor {
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
       // debug(rawLineNumber);
-      parsed.N = parseInt(stripFirstChar(rawLineNumber));
+      parsed.N = AddressedValue.parseForValue(rawLineNumber);
     }
 
     if (ctx?.G_Code) {
@@ -200,7 +176,7 @@ export class MacroInterpreter extends BaseVisitor {
 
       // this.Insights["G10"].collect(ctx.);
       // const g10 = new G10Line(values);
-      this._mem.g10({
+      this.#memory.g10({
         L: addressMap["L"] as ValidG10OffsetGroups,
         P: addressMap["P"],
         R: addressMap["R"],
@@ -221,7 +197,7 @@ export class MacroInterpreter extends BaseVisitor {
     ctx: AddressedValueCstChildren,
     gCodeFlags: Record<string, boolean> = {}
   ) {
-    const address = AddressedValue.create(ctx);
+    const address = new AddressedValue(ctx);
     const insight = new AddressInsight(address);
 
     if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
@@ -248,7 +224,7 @@ export class MacroInterpreter extends BaseVisitor {
     const register = parseInt(getImage(ctx.Integer));
     const macro = {
       register,
-      value: this._mem.read(register) ?? NaN
+      value: this.#memory.read(register) ?? NaN
     };
 
     return macro;
@@ -298,11 +274,11 @@ export class MacroInterpreter extends BaseVisitor {
     //   this.varWatches[macro.register](payload);
     // }
 
-    this._mem.write(macro.register, value);
+    this.#memory.write(macro.register, value);
   }
 
   /**
-   *
+   * @todo why is this only addition?
    */
   expression(ctx: ExpressionCstChildren): number {
     const { children } = unbox(ctx.additionExpression);
@@ -310,14 +286,13 @@ export class MacroInterpreter extends BaseVisitor {
   }
 
   /**
-   * Evaluate one of the built-in functions proivided by the system
+   * Evaluate one of the built-in functions
    */
   functionExpression(ctx: FunctionExpressionCstChildren): number {
     const { children } = unbox(ctx.atomicExpression);
     const func = getImage(ctx.BuiltinFunctions);
     const value = this.atomicExpression(children);
 
-    // prettier-ignore
     const result = match(func)
       .with("LN", () => Math.log(value))
       .with("ABS", () => Math.abs(value))

@@ -1,5 +1,6 @@
 import { CstParser } from "chevrotain";
 
+import { FANUC_MACRO_B_GRAMMAR } from "./lib";
 import {
   AdditionOperator,
   Address,
@@ -23,12 +24,11 @@ import {
   ProgramNumber,
   Then,
   Var
-} from "./lib/tokens";
-import { TOKEN_VOCABULARY } from "./lib/vocab";
+} from "./tokens";
 
 export class MacroParserBase extends CstParser {
   constructor() {
-    super(TOKEN_VOCABULARY);
+    super(FANUC_MACRO_B_GRAMMAR);
     // debug("initializing");
     this.performSelfAnalysis();
   }

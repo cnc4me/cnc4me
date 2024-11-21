@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { MacroRuntime } from "../../src";
-import { ProgramNumberNotFound } from "../../src/lib/errors/RuntimeError";
+import { ProgramNumberNotFound } from "../../src/errors/runtime";
 
 const program1 = `%
 O0001 ( Program 1 )

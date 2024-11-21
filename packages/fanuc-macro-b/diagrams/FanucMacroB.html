@@ -317,33 +317,6 @@
   },
   {
     "type": "Rule",
-    "name": "ProgramNumberLine",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Terminal",
-        "name": "ProgramNumber",
-        "label": "ProgramNumber",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "Comment",
-        "label": "Comment",
-        "idx": 0,
-        "pattern": "\\(\\s*(.+?)\\s*\\)"
-      },
-      {
-        "type": "Terminal",
-        "name": "Newline",
-        "label": "Newline",
-        "idx": 0,
-        "pattern": "\n"
-      }
-    ]
-  },
-  {
-    "type": "Rule",
     "name": "expression",
     "orgText": "",
     "definition": [
@@ -351,6 +324,59 @@
         "type": "NonTerminal",
         "name": "additionExpression",
         "idx": 0
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "atomicExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "bracketExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "functionExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "NumericLiteral",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
       }
     ]
   },
@@ -425,10 +451,10 @@
     "definition": [
       {
         "type": "Terminal",
-        "name": "BuiltinFunctions",
-        "label": "BuiltinFunctions",
+        "name": "BuiltinFunction",
+        "label": "BuiltinFunction",
         "idx": 0,
-        "pattern": "SIN|ASIN|COS|ACOS|TAN|ATAN|SQRT|ABS|BIN|BCD|ROUND|FIX|FUP|LN|EXP"
+        "pattern": "ABS|ACOS|ASIN|ATAN|BCD|BIN|COS|EXP|FIX|FUP|LN|ROUND|SIN|SQRT|TAN"
       },
       {
         "type": "Terminal",
@@ -540,59 +566,6 @@
   },
   {
     "type": "Rule",
-    "name": "atomicExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Alternation",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "bracketExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "functionExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "NumericLiteral",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "VariableLiteral",
-                "idx": 0
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
     "name": "bracketExpression",
     "orgText": "",
     "definition": [
@@ -686,6 +659,33 @@
             "pattern": "\n"
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "ProgramNumberLine",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "ProgramNumber",
+        "label": "ProgramNumber",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "Comment",
+        "label": "Comment",
+        "idx": 0,
+        "pattern": "\\(\\s*(.+?)\\s*\\)"
+      },
+      {
+        "type": "Terminal",
+        "name": "Newline",
+        "label": "Newline",
+        "idx": 0,
+        "pattern": "\n"
       }
     ]
   }

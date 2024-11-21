@@ -9,10 +9,10 @@ const code = `
 #4=ACOS[${Math.sqrt(3) / 2}]
 #5=ACOS[.5]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: ACOS[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

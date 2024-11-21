@@ -13,6 +13,9 @@ export class MacroParser
   extends MacroParserBase
   implements IMacroBase<IRecognitionException>
 {
+  /**
+   * @deprecated should we allow static usage?
+   */
   static run(input: string) {
     const parser = new MacroParser();
 
@@ -38,12 +41,15 @@ export class MacroParser
     return instance;
   }
 
-  // constructor() {
-  //   super();
-  // }
+  static getBaseCstVisitor(opts: { useConstructorDefaults: boolean }) {
+    const parser = new MacroParserBase();
+    return opts.useConstructorDefaults
+      ? parser.getBaseCstVisitorConstructorWithDefaults()
+      : parser.getBaseCstVisitorConstructor();
+  }
 
-  setInput(tokens: IToken[]) {
-    this.input = tokens;
+  constructor() {
+    super();
   }
 
   get hasErrors() {
@@ -52,5 +58,9 @@ export class MacroParser
 
   getErrors(): IRecognitionException[] {
     return this.errors;
+  }
+
+  setInput(tokens: IToken[]) {
+    this.input = tokens;
   }
 }

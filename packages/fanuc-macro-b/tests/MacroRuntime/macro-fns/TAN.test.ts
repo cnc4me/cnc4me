@@ -10,10 +10,10 @@ const code = `
 #5=TAN[60]
 #6=TAN[135]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: TAN[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

@@ -14,7 +14,8 @@ classDiagram
   }
 
   class MacroMemory {
-    +store(): void
+    +read(): void
+    +write(): void
   }
 
   class MacroInterpreter {
@@ -22,9 +23,9 @@ classDiagram
   }
 
   class FanucMacroB {
-    +MacroLexer lexer
-    +MacroParser parser
-    +MacroInterpreter interpreter
+    -lexer: MacroLexer
+    -parser: MacroParser
+    -interpreter: MacroInterpreter
   }
 
   class MacroRuntime {

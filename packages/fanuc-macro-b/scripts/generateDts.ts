@@ -18,3 +18,4 @@ const types = generateTypes(parser);
 const out = join(process.cwd(), "src", "types", "fanuc.d.ts");
 
 writeFileSync(out, types);
+console.log(`Wrote to file \x1b[33m${out.replace(process.cwd(), ".")}`);

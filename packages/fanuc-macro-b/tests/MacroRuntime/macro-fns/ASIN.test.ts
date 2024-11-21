@@ -7,10 +7,10 @@ const code = `
 #2=ASIN[${Math.sqrt(2) / 2}]
 #3=ASIN[${Math.sqrt(3) / 2}]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: ASIN[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

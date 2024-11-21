@@ -1,8 +1,8 @@
 import { Lexer } from "chevrotain";
 
-import { TOKEN_VOCABULARY } from "./lib";
+import { InputUndefined } from "./errors";
+import { FANUC_MACRO_B_GRAMMAR } from "./lib";
 
-import type { MacroParser } from "./MacroParser";
 import type { IMacroBase } from "./types";
 import type {
   ILexerDefinitionError,
@@ -12,68 +12,55 @@ import type {
 } from "chevrotain";
 
 export class MacroLexer implements IMacroBase<ILexingError> {
-  private _lexer: Lexer;
-  private _input: string;
-  private _result!: ILexingResult;
+  #instance: Lexer;
+  #result!: ILexingResult;
+  #input = "";
 
-  /**
-   * Create and run an instance of the {@link MacroLexer}
-   */
-  static run(input: string): IToken[] {
-    const lexer = new MacroLexer();
-    lexer.setInput(input);
-    lexer.tokenize();
-    if (lexer.hasErrors) throw new Error(lexer.getErrors()[0].message);
-    return lexer.getTokens();
-  }
-
-  constructor() {
-    this._input = "";
-    this._lexer = new Lexer(TOKEN_VOCABULARY);
+  constructor(input?: string) {
+    this.#instance = new Lexer(FANUC_MACRO_B_GRAMMAR);
+    if (input) this.#input = input;
   }
 
   get hasErrors() {
-    return this._result?.errors.length > 0;
+    return this.#result?.errors.length > 0;
   }
 
   get hasDefinitionErrors() {
-    return this._lexer.lexerDefinitionErrors.length > 0;
+    return this.#instance.lexerDefinitionErrors.length > 0;
   }
 
   tokenize(text?: string, initialMode?: string): IToken[] {
-    this._input = text ?? "";
-    this._result = this._lexer.tokenize(this._input, initialMode);
-    return this._result.tokens;
+    if (text) this.#input = text;
+    if (this.#input === "") throw new InputUndefined();
+    this.#result = this.#instance.tokenize(this.#input, initialMode);
+    return this.#result.tokens;
+  }
+
+  reset(): void {
+    this.#input = "";
+    this.#result = { errors: [], groups: {}, tokens: [] };
   }
 
   /**
    * Load the Lexer with a string of input
    */
   setInput(input: string): void {
-    this._input = input;
+    this.#input = input;
   }
 
   getGroups(): ILexingResult["groups"] {
-    return this._result?.groups;
+    return this.#result?.groups;
   }
 
   getTokens(): IToken[] {
-    return this._result?.tokens;
+    return this.#result?.tokens;
   }
 
   getErrors(): ILexingError[] {
-    return this._result.errors;
+    return this.#result.errors;
   }
 
   getDefinitionErrors(): ILexerDefinitionError[] {
-    return this._lexer.lexerDefinitionErrors;
-  }
-
-  /**
-   * Clear the input and result of the {@link MacroLexer}
-   */
-  reset(): void {
-    this._input = "";
-    this._result = { errors: [], groups: {}, tokens: [] };
+    return this.#instance.lexerDefinitionErrors;
   }
 }

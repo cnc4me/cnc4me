@@ -1,4 +1,4 @@
-import { MacroRuntime } from "../src/lib/MacroRuntime";
+import { MacroRuntime } from "../src";
 
 const runtime = new MacroRuntime();
 

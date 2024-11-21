@@ -19,6 +19,11 @@ export default defineConfig({
     setupFiles: ["./tests/_vitest/setup.ts"],
     coverage: {
       provider: "v8"
+    },
+    poolOptions: {
+      forks: {
+        singleFork: true
+      }
     }
   },
   plugins: [

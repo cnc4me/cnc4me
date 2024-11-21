@@ -1,0 +1,36 @@
+erDiagram
+    MACRO_BASE {
+        boolean hasError
+        Error[] errors
+    }
+    MACRO_LEXER {
+        IToken[] tokens
+    }
+    MACRO_PARSER {
+        CstNode cstNode
+    }
+    MACRO_MEMORY {
+        void read
+        void write
+    }
+    MACRO_INTERPRETER {
+        ParsedLineData[] parsedLineData
+    }
+    FANUC_MACRO_B {
+        MacroLexer lexer
+        MacroParser parser
+        MacroInterpreter interpreter
+    }
+    MACRO_RUNTIME {
+        void execute
+    }
+
+    MACRO_LEXER ||--o| MACRO_BASE : implements
+    MACRO_PARSER ||--o| MACRO_BASE : implements
+    MACRO_INTERPRETER ||--o| MACRO_BASE : implements
+    MACRO_RUNTIME ||--o| MACRO_BASE : implements
+    MACRO_LEXER ||--|{ MACRO_PARSER : "produces tokens"
+    MACRO_PARSER ||--|{ MACRO_INTERPRETER : "produces CstNode"
+    MACRO_INTERPRETER ||--|{ FANUC_MACRO_B : "returns ParsedLineData[]"
+    FANUC_MACRO_B ||--o| MACRO_RUNTIME : uses
+    MACRO_MEMORY ||--o| MACRO_INTERPRETER : "variable registers"

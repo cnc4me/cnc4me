@@ -8,10 +8,10 @@ const code = `
 #3=FUP[0.001]
 #4=FUP[9.004]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: FUP[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {

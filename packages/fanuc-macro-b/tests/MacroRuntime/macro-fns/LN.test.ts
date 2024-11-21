@@ -8,10 +8,10 @@ const code = `
 #3=LN[49]
 #4=LN[144]`;
 
-const runtime = new MacroRuntime();
-const { Memory } = runtime;
-
 describe("function: LN[]", () => {
+  const runtime = new MacroRuntime();
+  const { Memory } = runtime;
+
   runtime.evalLines(code);
 
   it("parses with no errors", () => {
