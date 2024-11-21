@@ -1,0 +1,42 @@
+classDiagram
+  class MacroBase {
+    <<interface>>
+    +hasError: boolean
+    +getErrors(): Error[]
+  }
+
+  class MacroLexer {
+    +tokenize(): IToken[]
+  }
+
+  class MacroParser {
+    +parse(): CstNode
+  }
+
+  class MacroMemory {
+    +store(): void
+  }
+
+  class MacroInterpreter {
+    +interpret(): ParsedLineData[]
+  }
+
+  class FanucMacroB {
+    +MacroLexer lexer
+    +MacroParser parser
+    +MacroInterpreter interpreter
+  }
+
+  class MacroRuntime {
+    +execute(): void
+  }
+
+  MacroLexer --> MacroBase : implements
+  MacroParser --> MacroBase : implements
+  MacroInterpreter --> MacroBase : implements
+  MacroRuntime --> MacroBase : implements
+  MacroLexer --> MacroParser : produces tokens
+  MacroParser --> MacroInterpreter : produces CstNode
+  MacroInterpreter --> FanucMacroB : returns ParsedLineData[]
+  FanucMacroB <-- MacroRuntime : uses
+  MacroMemory --> MacroInterpreter : variable registers
