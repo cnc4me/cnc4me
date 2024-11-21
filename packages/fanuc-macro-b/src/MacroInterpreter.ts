@@ -1,11 +1,11 @@
 /* eslint-disable @typescript-eslint/no-unsafe-return */
-import { type CstNode, tokenMatcher } from "chevrotain";
-import mitt, { type Emitter } from "mitt";
+import { tokenMatcher } from "chevrotain";
+import mitt from "mitt";
 import { match } from "ts-pattern";
 
 import { AddressedValue, AddressInsight, InsightCollection } from "./lib";
-import { MacroMemory } from "./lib/memory";
 import { Plus, Product } from "./lib/tokens";
+import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { INTERPRETER } from "./PackageConfig";
 import {
@@ -46,6 +46,8 @@ import type {
   VariableAssignmentCstChildren,
   VariableLiteralCstChildren
 } from "./types/fanuc";
+import type { CstNode } from "chevrotain";
+import type { Emitter } from "mitt";
 
 // eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type InterpreterEvents = {

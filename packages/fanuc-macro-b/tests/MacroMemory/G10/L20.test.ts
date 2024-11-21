@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../../src/lib/memory/MacroMemory";
+import { MacroMemory } from "../../../src";
 import { getRandomAxisLocations } from "../../_vitest/helpers";
 
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
@@ -16,7 +16,7 @@ describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
     ${25} | ${7481} | ${7482} | ${7483} | ${7484}
     ${49} | ${7961} | ${7962} | ${7963} | ${7964}
   `(
-    "calling `G10 L20 P$P` sets #$xReg, #$yReg, #$zReg, #$bReg",
+    "interpret `G10 L20 P$P` sets #$xReg, #$yReg, #$zReg, #$bReg",
     ({ P, xReg, yReg, zReg, bReg }: Record<string, number>) => {
       const { X, Y, Z, B } = getRandomAxisLocations();
 

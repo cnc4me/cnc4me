@@ -11,7 +11,7 @@ import { generateHtml } from "@cnc4me/chevrotain-types-generator";
 import { writeFileSync } from "fs";
 import { join } from "path";
 
-import { MacroParser } from "../src/lib/MacroParser";
+import { MacroParser } from "../src";
 
 const parser = new MacroParser();
 const htmlText = generateHtml(parser);

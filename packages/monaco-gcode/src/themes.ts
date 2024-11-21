@@ -10,8 +10,10 @@ export const gcodeDarkTheme = createTheme<GcodeRuleTokens>({
     { token: "g-code", foreground: "#02524f" },
     { token: "m-code", foreground: "#5fe04f" },
     { token: "z-move", foreground: "#fc2c2c" },
+    { token: "operators", foreground: "#0f4fff" },
     { token: "address", foreground: "#fcfc2c" },
-    { token: "macro-var", foreground: "#F1AAFF" },
+    { token: "macro-var", foreground: "#aa0bac" },
+    { token: "keyword", foreground: "#F1AAFF", fontStyle: "italic" },
     { token: "comment", foreground: "#C09D70", fontStyle: "italic" }
   ],
   colors: {}

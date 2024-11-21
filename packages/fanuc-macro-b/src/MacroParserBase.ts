@@ -4,7 +4,7 @@ import {
   AdditionOperator,
   Address,
   BooleanOperator,
-  BuiltinFunctions,
+  BuiltinFunction,
   CloseBracket,
   Comment,
   Equals,
@@ -77,7 +77,7 @@ export class MacroParserBase extends CstParser {
    *
    * @example H#518, X1.2345, Z1., M1, G90
    */
-  private AddressedValue = this.RULE("AddressedValue", () => {
+  protected AddressedValue = this.RULE("AddressedValue", () => {
     this.CONSUME(Address);
     this.OPTION(() => {
       this.CONSUME(Minus);
@@ -94,7 +94,7 @@ export class MacroParserBase extends CstParser {
    *
    * @example 5, 1.2345, -1., 3000
    */
-  private NumericLiteral = this.RULE("NumericLiteral", () => {
+  protected NumericLiteral = this.RULE("NumericLiteral", () => {
     this.OPTION(() => {
       this.CONSUME(Minus);
     });
@@ -107,7 +107,7 @@ export class MacroParserBase extends CstParser {
    * @TODO variable expressions!
    * @example "#518" or "#152"
    */
-  private VariableLiteral = this.RULE("VariableLiteral", () => {
+  protected VariableLiteral = this.RULE("VariableLiteral", () => {
     this.CONSUME(Var);
     this.CONSUME(Integer);
   });
@@ -121,22 +121,10 @@ export class MacroParserBase extends CstParser {
       { ALT: () => this.SUBRULE(this.NumericLiteral) }
     ]);
   });
-
   /**
    *
    */
-  public ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
-    this.CONSUME(ProgramNumber);
-    // this.OPTION(() => {
-    this.CONSUME(Comment);
-    // });
-    this.CONSUME(Newline);
-  });
-
-  /**
-   *
-   */
-  private expression = this.RULE("expression", () => {
+  protected expression = this.RULE("expression", () => {
     this.SUBRULE(this.additionExpression);
   });
 
@@ -144,7 +132,7 @@ export class MacroParserBase extends CstParser {
    * `bracketExpression` has the highest precedence and thus it appears
    * in the "lowest" leaf in the expression ParseTree.
    */
-  private atomicExpression = this.RULE("atomicExpression", () => {
+  protected atomicExpression = this.RULE("atomicExpression", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.bracketExpression) },
       { ALT: () => this.SUBRULE(this.functionExpression) },
@@ -156,7 +144,7 @@ export class MacroParserBase extends CstParser {
   /**
    *
    */
-  private additionExpression = this.RULE("additionExpression", () => {
+  protected additionExpression = this.RULE("additionExpression", () => {
     this.SUBRULE(this.multiplicationExpression, { LABEL: "lhs" });
     this.MANY(() => {
       this.CONSUME(AdditionOperator);
@@ -167,7 +155,7 @@ export class MacroParserBase extends CstParser {
   /**
    *
    */
-  private multiplicationExpression = this.RULE(
+  protected multiplicationExpression = this.RULE(
     "multiplicationExpression",
     () => {
       this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
@@ -181,8 +169,8 @@ export class MacroParserBase extends CstParser {
   /**
    * Calling a Built-In function
    */
-  private functionExpression = this.RULE("functionExpression", () => {
-    this.CONSUME(BuiltinFunctions);
+  protected functionExpression = this.RULE("functionExpression", () => {
+    this.CONSUME(BuiltinFunction);
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.atomicExpression);
     this.CONSUME(CloseBracket);
@@ -191,7 +179,7 @@ export class MacroParserBase extends CstParser {
   /**
    * Making a comparison between two values
    */
-  private booleanExpression = this.RULE("booleanExpression", () => {
+  protected booleanExpression = this.RULE("booleanExpression", () => {
     this.SUBRULE(this.atomicExpression);
     this.CONSUME(BooleanOperator);
     this.SUBRULE2(this.atomicExpression);
@@ -200,7 +188,7 @@ export class MacroParserBase extends CstParser {
   /**
    * If expression to branch control flow
    */
-  private conditionalExpression = this.RULE("conditionalExpression", () => {
+  protected conditionalExpression = this.RULE("conditionalExpression", () => {
     this.CONSUME(If);
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.booleanExpression);
@@ -217,7 +205,7 @@ export class MacroParserBase extends CstParser {
    *
    * @example [#3 + 4.5]
    */
-  private bracketExpression = this.RULE("bracketExpression", () => {
+  protected bracketExpression = this.RULE("bracketExpression", () => {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.expression);
     this.CONSUME(CloseBracket);
@@ -231,7 +219,7 @@ export class MacroParserBase extends CstParser {
    *   #501 = [2 + 0.5]
    *   #502 = [#501 / 2]
    */
-  private variableAssignment = this.RULE("variableAssignment", () => {
+  protected variableAssignment = this.RULE("variableAssignment", () => {
     this.SUBRULE(this.VariableLiteral);
     this.CONSUME(Equals);
     this.SUBRULE(this.expression);
@@ -240,7 +228,7 @@ export class MacroParserBase extends CstParser {
   /**
    * Start of a valid NC File
    */
-  private StartOfFile = this.RULE("StartOfFile", () => {
+  protected StartOfFile = this.RULE("StartOfFile", () => {
     this.CONSUME(Percent);
     this.CONSUME(Newline);
   });
@@ -248,10 +236,21 @@ export class MacroParserBase extends CstParser {
   /**
    * End of a valid NC File
    */
-  private EndOfFile = this.RULE("EndOfFile", () => {
+  protected EndOfFile = this.RULE("EndOfFile", () => {
     this.CONSUME(Percent);
     this.OPTION(() => {
       this.CONSUME(Newline);
     });
+  });
+
+  /**
+   *
+   */
+  public ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
+    this.CONSUME(ProgramNumber);
+    // this.OPTION(() => {
+    this.CONSUME(Comment);
+    // });
+    this.CONSUME(Newline);
   });
 }

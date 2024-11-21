@@ -21,7 +21,9 @@ const CONTROL_FLOW_CASES: TestCaseData[] = [
   ["THEN", T.Then],
   ["DO", T.Do],
   ["WHILE", T.While],
-  ["GOTO1", T.GotoLine]
+  ["GOTO1", T.GotoLine],
+  ["GOTO162", T.GotoLine],
+  ["GOTO60102", T.GotoLine]
 ];
 
 const ADDRESS_CASES = "ABCDEFHIJKLPQRSTUVWXYZ" // Missing G,M,N,O on purpose, they are reserved
@@ -29,7 +31,7 @@ const ADDRESS_CASES = "ABCDEFHIJKLPQRSTUVWXYZ" // Missing G,M,N,O on purpose, th
   .map(ltr => [ltr, T.Address]) as TestCaseData[];
 
 const FUNCTION_CASES = FANUC_MACRO_B_FNS.map(
-  fn => [fn, T.BuiltinFunctions] as TestCaseData
+  fn => [fn, T.BuiltinFunction] as TestCaseData
 );
 
 const TEST_GROUPS: [label: string, cases: TestCaseData[]][] = [

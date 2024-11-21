@@ -15,7 +15,6 @@ const brackets = createBracketRules([
   ["{", "}", "delimiter.curly"],
   ["[", "]", "delimiter.brace"]
 ]);
-type GcodeBracketRuleTokens = ExtractBracketRuleTokens<typeof brackets>;
 
 const rules = createLanguageRules([
   [/M\d+(\.\d+)?/, "m-code"],
@@ -23,13 +22,15 @@ const rules = createLanguageRules([
   [/Z/, "z-move"],
   [/[A-Z]-?\d+(\.\d+)?/, "address"],
   [/#\d+/, "macro-var"],
-  [/\(.+\)/, "comment"],
+  [/\(.+\)|;.+/, "comment"],
   [/[\=\+\-\*\/]/, "operators"],
-  [/(\d+(?:\.\d+)?)/, "number"]
+  [/(\d+(?:\.\d+)?)/, "number"],
+  [/(WHILE|DO|IF|GOTO|END)/, "keyword"]
   // [/\[[a-zA-Z 0-9:]+\]/, "custom-date"]
 ]);
-type GcodeLanguageRuleTokens = ExtractLanguageRuleTokens<typeof rules>;
 
 export const gcodeLanguage = createMonarchLanguage(brackets, rules);
 
+type GcodeBracketRuleTokens = ExtractBracketRuleTokens<typeof brackets>;
+type GcodeLanguageRuleTokens = ExtractLanguageRuleTokens<typeof rules>;
 export type GcodeRuleTokens = GcodeBracketRuleTokens | GcodeLanguageRuleTokens;

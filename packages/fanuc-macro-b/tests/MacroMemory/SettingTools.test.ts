@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../src/lib/memory/MacroMemory";
+import { MacroMemory } from "../../src/MacroMemory";
 
 describe("testing the MacroMemory's *ToolOffset* methods", () => {
   const mem = new MacroMemory();

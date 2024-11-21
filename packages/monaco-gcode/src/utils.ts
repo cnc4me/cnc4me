@@ -9,7 +9,7 @@ import type {
   TokenizerRules,
   TokenThemeRule
 } from "./types";
-import type { BaseParser } from "chevrotain";
+import type { BaseParser, TokenType } from "chevrotain";
 
 export function createMonarchLanguage<T extends string>(
   brackets: MonarchLanguageBracket[],
@@ -69,7 +69,36 @@ export function createBracketRules<T extends string>(
  *
  * @todo look into this, and actually generate it
  */
-export function generateMonarchLanguageFromChevrotain<T extends BaseParser>(
+export function generateMonarchLanguageFromChevrotainTokens(
+  tokens: TokenType[],
+  brackets: Monaco.languages.IMonarchLanguageBracket[],
+  rules: MonacoTokenizerRule[]
+): Monaco.languages.IMonarchLanguage {
+  const mapped = tokens.map(tok => {
+    return {
+      token: tok.name,
+      group: tok.GROUP,
+      pattern: tok.PATTERN
+    };
+  });
+
+  return mapped;
+  return {
+    brackets,
+    tokenizer: {
+      root: rules
+    }
+  };
+}
+
+/**
+ * Given a Chevrotain parser, generate a Monarch language definition
+ *
+ * @todo look into this, and actually generate it
+ */
+export function generateMonarchLanguageFromChevrotainParser<
+  T extends BaseParser
+>(
   parser: T,
   brackets: Monaco.languages.IMonarchLanguageBracket[],
   rules: MonacoTokenizerRule[]

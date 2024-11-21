@@ -13,6 +13,16 @@ export class MacroParser
   extends MacroParserBase
   implements IMacroBase<IRecognitionException>
 {
+  static run(input: string) {
+    const parser = new MacroParser();
+
+    const tokens = MacroLexer.run(input);
+
+    parser.setInput(tokens);
+
+    return parser.lines();
+  }
+
   static create(options?: Partial<MacroParserInitOptions>) {
     const instance = new MacroParser();
 

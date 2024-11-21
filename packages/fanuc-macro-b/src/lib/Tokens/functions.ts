@@ -20,8 +20,8 @@ export const FANUC_MACRO_B_FNS = [
   "TAN"
 ] as const;
 
-export const BuiltinFunctions = createToken({
-  name: "BuiltinFunctions",
+export const BuiltinFunction = createToken({
+  name: "BuiltinFunction",
   pattern: new RegExp(FANUC_MACRO_B_FNS.join("|")),
   categories: Keyword
 });

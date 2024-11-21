@@ -4,8 +4,6 @@ import {
   WORK_OFFSET_ADDRESS_MAP
 } from "./offsets.const";
 
-export * from "./registers.const";
-
 export const RegisterMap = {
   ToolOffset: getToolOffsetRegister,
   WorkOffset: getWorkOffsetAxisRegister,

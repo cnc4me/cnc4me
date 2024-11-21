@@ -3,11 +3,11 @@ import Emittery from "emittery";
 
 import { InvalidProgramNumber, ProgramNumberNotFound } from "./lib/errors";
 import { InsightCollection } from "./lib/Insights";
-import { MacroMemory } from "./lib/memory";
+import { ProgramNumber } from "./lib/ProgramNumber";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
+import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
-import { ProgramNumber } from "./ProgramNumber";
 import { isLexingError, isParsingError } from "./utils";
 
 import type {
@@ -172,6 +172,8 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
 
   /**
    * Analyze a text in the context of being a valid NC program
+   * @todo this can fail and cst.children is undefined
+   * @deprecated
    */
   evalLines(code: string): ParsedLineData[] {
     this._lexAndLoadParser(code);
@@ -369,6 +371,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
   /**
    * Generate an array of {@link IToken} from an input string
    * @todo do we really need this? what about piping?
+   * @deprecated
    */
   private _lexAndLoadParser(input: string): boolean {
     this._lexer.tokenize(input);

@@ -1,10 +1,10 @@
 import { match, Pattern } from "ts-pattern";
 
-import { isLexingError, range } from "../../utils";
-import { parseG10 } from "./G10";
-import { OFFSET_GROUPS } from "./offsets.const";
-import { RegisterMap } from "./registers";
-import { GROUP_3 } from "./registers.const";
+import { OFFSET_GROUPS } from "./lib/memory/offsets.const";
+import { parseG10 } from "./lib/memory/parseG10";
+import { RegisterMap } from "./lib/memory/registers";
+import { GROUP_3 } from "./lib/memory/registers.const";
+import { isLexingError, range } from "./utils";
 
 import type {
   MacroValueArray,
@@ -14,7 +14,7 @@ import type {
   UpdatedValue,
   WorkCoordinateArray,
   WorkCoordinateHash
-} from "../../types";
+} from "./types";
 
 const { WORK, TOOL } = OFFSET_GROUPS;
 

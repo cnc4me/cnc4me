@@ -2,6 +2,7 @@ import { Lexer } from "chevrotain";
 
 import { TOKEN_VOCABULARY } from "./lib";
 
+import type { MacroParser } from "./MacroParser";
 import type { IMacroBase } from "./types";
 import type {
   ILexerDefinitionError,

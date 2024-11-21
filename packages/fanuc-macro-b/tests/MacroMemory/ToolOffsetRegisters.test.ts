@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../../src/lib/memory/MacroMemory";
-import { rand } from "../../_vitest/helpers";
+import { MacroMemory } from "../../src/MacroMemory";
+import { rand } from "../_vitest/helpers";
+
+import type { ValidG10OffsetGroups } from "@cnc4me/fanuc-macro-b/src";
 
 /**
  * G10 Line Reference
@@ -14,8 +16,6 @@ import { rand } from "../../_vitest/helpers";
  * ```
  */
 describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
-  const mem = new MacroMemory();
-
   it.each`
     register | L     | P      | R
     ${10001} | ${10} | ${1}   | ${rand(0, 12)}
@@ -40,10 +40,19 @@ describe("setting Tool Offset Registers with MacroMemory#g10()", () => {
     ${13248} | ${13} | ${248} | ${rand(-1, 1)}
   `(
     "call to `G10 L$L P$P R$R` sets #$register = $R",
-    ({ register, L, P, R }) => {
+    ({ register, L, P, R }: TestData) => {
+      const mem = new MacroMemory();
+
       mem.g10({ L, P, R });
 
       expect(mem.read(register)).toBe(R);
     }
   );
 });
+
+type TestData = {
+  register: number;
+  L: ValidG10OffsetGroups;
+  P: number;
+  R: number;
+};
