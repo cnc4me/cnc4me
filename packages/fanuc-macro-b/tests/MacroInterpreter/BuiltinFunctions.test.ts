@@ -2,9 +2,10 @@ import { describe, expect, it } from "vitest";
 
 import { FanucMacroB } from "../../src";
 
+const REGISTER = 1;
 const TEST_CASES: Array<[expr: string, output: number]> = [
-  ["ABS[5]", 5],
-  ["ABS[-5]", 5]
+  [`#${REGISTER}=ABS[5]`, 5],
+  [`#${REGISTER}=ABS[-5]`, 5]
 ];
 
 describe("Interpreting BuiltinFunctions", () => {

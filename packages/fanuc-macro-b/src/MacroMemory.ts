@@ -27,7 +27,7 @@ export class MacroMemory {
     ...range(5000, 14000)
   ];
 
-  private _vars: Record<number, number> = {};
+  #vars: Record<number, number> = {};
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
@@ -67,7 +67,7 @@ export class MacroMemory {
 
     return {
       prev,
-      curr: this._vars[register]
+      curr: this.#vars[register]
     };
   }
 
@@ -306,16 +306,16 @@ export class MacroMemory {
    * Create an array of all the set macro variables
    */
   // get forEach() {
-  //   return Object.entries(this._vars);
+  //   return Object.entries(this.#vars);
   // }
 
   /**
    * Create an array of all the set macro variables
    */
-  toArray(opts?: { includeUnset: boolean }): MacroValueArray {
+  entries(opts?: { includeUnset: boolean }): MacroValueArray {
     const values: MacroValueArray = [];
 
-    Object.entries(this._vars).forEach(([register, value]) => {
+    Object.entries(this.#vars).forEach(([register, value]) => {
       const valueIsNotSet = value === null || isNaN(value);
 
       if (value || (valueIsNotSet && opts?.includeUnset)) {
@@ -330,30 +330,30 @@ export class MacroMemory {
    * Collect all the set registers into a POJO for further processing
    */
   toObject(
-    opts?: Parameters<MacroMemory["toArray"]>[0]
+    opts?: Parameters<MacroMemory["entries"]>[0]
   ): Record<number, number> {
     const valueMap: Record<string, number> = {};
 
-    for (const [register, value] of this.toArray(opts)) {
-      valueMap[register] = value;
+    for (const [register, value] of this.entries(opts)) {
+      valueMap[`#${register}`] = value;
     }
 
     return valueMap;
   }
 
   /**
-   * Serialize all the set registers to a JSON string
+   * Serialize all the MacroMemory into a JSON string
    */
   serialize(): string {
-    return JSON.stringify(this._vars);
+    return JSON.stringify(this.#vars);
   }
 
   private _write(register: number, value: number) {
-    this._vars[register] = value;
+    this.#vars[register] = value;
   }
 
   private _read(register: number): number {
-    return this._vars[register] ?? NaN;
+    return this.#vars[register] ?? NaN;
   }
 
   /**
@@ -385,7 +385,7 @@ export class MacroMemory {
 
       return {
         ...locations,
-        [axis]: this._vars[reg]
+        [axis]: this.#vars[reg]
         // [axis]: this.read(reg)
       };
     }, {} as WorkCoordinateHash);
@@ -402,7 +402,7 @@ export class MacroMemory {
 
       return {
         ...locations,
-        [axis]: this._vars[reg]
+        [axis]: this.#vars[reg]
         // [axis]: this.read(reg)
       };
     }, {} as WorkCoordinateHash);

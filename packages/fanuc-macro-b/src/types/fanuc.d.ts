@@ -107,9 +107,9 @@ export interface AdditionExpressionCstNode extends CstNode {
 }
 
 export type AdditionExpressionCstChildren = {
-  lhs: MultiplicationExpressionCstNode[];
+  lhs: AtomicExpressionCstNode[];
   AdditionOperator?: IToken[];
-  rhs?: MultiplicationExpressionCstNode[];
+  rhs?: AtomicExpressionCstNode[];
 };
 
 export interface MultiplicationExpressionCstNode extends CstNode {

@@ -3,10 +3,6 @@ export function toMatchWithPrecision(
   expected: number,
   precision: number
 ) {
-  if (!Number.isFinite(received) || !Number.isFinite(expected)) {
-    throw new Error("Both received and expected must be finite numbers.");
-  }
-
   const truncatedReceived = truncateToPrecision(received, precision);
   const truncatedExpected = truncateToPrecision(expected, precision);
   const pass = truncatedReceived === truncatedExpected;

@@ -73,11 +73,25 @@ export class MacroParserBase extends CstParser {
   });
 
   /**
+   * Assigning a variable with a value
+   *
+   * @example
+   *   #500 = 12.3456
+   *   #501 = [2 + 0.5]
+   *   #502 = [#501 / 2]
+   */
+  variableAssignment = this.RULE("variableAssignment", () => {
+    this.SUBRULE(this.VariableLiteral);
+    this.CONSUME(Equals);
+    this.SUBRULE(this.expression);
+  });
+
+  /**
    * A single, capital letter followed by a macro variable
    *
    * @example H#518, X1.2345, Z1., M1, G90
    */
-  protected AddressedValue = this.RULE("AddressedValue", () => {
+  AddressedValue = this.RULE("AddressedValue", () => {
     this.CONSUME(Address);
     this.OPTION(() => {
       this.CONSUME(Minus);
@@ -94,7 +108,7 @@ export class MacroParserBase extends CstParser {
    *
    * @example 5, 1.2345, -1., 3000
    */
-  protected NumericLiteral = this.RULE("NumericLiteral", () => {
+  NumericLiteral = this.RULE("NumericLiteral", () => {
     this.OPTION(() => {
       this.CONSUME(Minus);
     });
@@ -107,7 +121,7 @@ export class MacroParserBase extends CstParser {
    * @TODO variable expressions!
    * @example "#518" or "#152"
    */
-  protected VariableLiteral = this.RULE("VariableLiteral", () => {
+  VariableLiteral = this.RULE("VariableLiteral", () => {
     this.CONSUME(Var);
     this.CONSUME(Integer);
   });
@@ -115,36 +129,26 @@ export class MacroParserBase extends CstParser {
   /**
    * Number or Macro variable
    */
-  protected ValueLiteral = this.RULE("ValueLiteral", () => {
+  ValueLiteral = this.RULE("ValueLiteral", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.VariableLiteral) },
       { ALT: () => this.SUBRULE(this.NumericLiteral) }
     ]);
   });
-  /**
-   *
-   */
-  protected expression = this.RULE("expression", () => {
-    this.SUBRULE(this.additionExpression);
-  });
-
-  /**
-   * `bracketExpression` has the highest precedence and thus it appears
-   * in the "lowest" leaf in the expression ParseTree.
-   */
-  protected atomicExpression = this.RULE("atomicExpression", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.bracketExpression) },
-      { ALT: () => this.SUBRULE(this.functionExpression) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
-    ]);
-  });
 
   /**
    *
    */
-  protected additionExpression = this.RULE("additionExpression", () => {
+  expression = this.RULE("expression", () => {
+    return this.SUBRULE(this.additionExpression);
+  });
+
+  /**
+   * Lowest precedence thus it is first in the rule chain
+   * The precedence of binary expressions is determined by how far down the Parse Tree
+   * The binary expression appears.
+   */
+  additionExpression = this.RULE("additionExpression", () => {
     this.SUBRULE(this.multiplicationExpression, { LABEL: "lhs" });
     this.MANY(() => {
       this.CONSUME(AdditionOperator);
@@ -155,21 +159,18 @@ export class MacroParserBase extends CstParser {
   /**
    *
    */
-  protected multiplicationExpression = this.RULE(
-    "multiplicationExpression",
-    () => {
-      this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
-      this.MANY(() => {
-        this.CONSUME(MultiplicationOperator);
-        this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
-      });
-    }
-  );
+  multiplicationExpression = this.RULE("multiplicationExpression", () => {
+    this.SUBRULE(this.atomicExpression, { LABEL: "lhs" });
+    this.MANY(() => {
+      this.CONSUME(MultiplicationOperator);
+      this.SUBRULE2(this.atomicExpression, { LABEL: "rhs" });
+    });
+  });
 
   /**
    * Calling a Built-In function
    */
-  protected functionExpression = this.RULE("functionExpression", () => {
+  functionExpression = this.RULE("functionExpression", () => {
     this.CONSUME(BuiltinFunction);
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.atomicExpression);
@@ -179,7 +180,7 @@ export class MacroParserBase extends CstParser {
   /**
    * Making a comparison between two values
    */
-  protected booleanExpression = this.RULE("booleanExpression", () => {
+  booleanExpression = this.RULE("booleanExpression", () => {
     this.SUBRULE(this.atomicExpression);
     this.CONSUME(BooleanOperator);
     this.SUBRULE2(this.atomicExpression);
@@ -188,7 +189,7 @@ export class MacroParserBase extends CstParser {
   /**
    * If expression to branch control flow
    */
-  protected conditionalExpression = this.RULE("conditionalExpression", () => {
+  conditionalExpression = this.RULE("conditionalExpression", () => {
     this.CONSUME(If);
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.booleanExpression);
@@ -201,34 +202,33 @@ export class MacroParserBase extends CstParser {
   });
 
   /**
+   * `bracketExpression` has the highest precedence and thus it appears
+   * in the "lowest" leaf in the expression ParseTree.
+   */
+  atomicExpression = this.RULE("atomicExpression", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.bracketExpression) },
+      { ALT: () => this.SUBRULE(this.functionExpression) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) },
+      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+    ]);
+  });
+
+  /**
    * Any expression wrapped in brackets
    *
    * @example [#3 + 4.5]
    */
-  protected bracketExpression = this.RULE("bracketExpression", () => {
+  bracketExpression = this.RULE("bracketExpression", () => {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.expression);
     this.CONSUME(CloseBracket);
   });
 
   /**
-   * Assigning a variable with a value
-   *
-   * @example
-   *   #500 = 12.3456
-   *   #501 = [2 + 0.5]
-   *   #502 = [#501 / 2]
-   */
-  protected variableAssignment = this.RULE("variableAssignment", () => {
-    this.SUBRULE(this.VariableLiteral);
-    this.CONSUME(Equals);
-    this.SUBRULE(this.expression);
-  });
-
-  /**
    * Start of a valid NC File
    */
-  protected StartOfFile = this.RULE("StartOfFile", () => {
+  StartOfFile = this.RULE("StartOfFile", () => {
     this.CONSUME(Percent);
     this.CONSUME(Newline);
   });
@@ -236,7 +236,7 @@ export class MacroParserBase extends CstParser {
   /**
    * End of a valid NC File
    */
-  protected EndOfFile = this.RULE("EndOfFile", () => {
+  EndOfFile = this.RULE("EndOfFile", () => {
     this.CONSUME(Percent);
     this.OPTION(() => {
       this.CONSUME(Newline);

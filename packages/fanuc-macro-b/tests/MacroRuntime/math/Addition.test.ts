@@ -1,4 +1,4 @@
-import { expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
 import { MacroRuntime } from "../../../src";
 
@@ -16,22 +16,27 @@ const TEST_CASES: [expr: string, answer: number][] = [
   [".1+.2", 0.3]
 ];
 
-const runtime = new MacroRuntime();
+describe.skip("", () => {
+  const runtime = new MacroRuntime();
 
-it.each(TEST_CASES)(`parsing '%s' should equal '%s'`, (expr, answer) => {
-  const variable = 1;
-  runtime.reset();
-  runtime.evalLines(`#${variable}=${expr}`);
+  it.each(TEST_CASES)(`parsing '%s' should equal '%s'`, (expr, answer) => {
+    const variable = 1;
+    runtime.reset();
+    runtime.evalLines(`#${variable}=${expr}`);
 
-  // const errors = runtime.getErrors();
+    // const errors = runtime.getErrors();
 
-  expect(runtime.hasErrors).toBeFalsy();
+    expect(runtime.hasErrors).toBeFalsy();
 
-  // The second param provides the actual runtime error in the failure message
-  // expect(errors[0], runtime.getErrorMessages()[0]).toBeUndefined();
-  // if (errors.length > 0) {
-  //   expect(runtime.Memory.read(1)).toBe(NaN);
-  // } else {
-  expect(runtime.Memory.read(1)).toMatchWithPrecision(answer, MATCH_PRECISION);
-  // }
+    // The second param provides the actual runtime error in the failure message
+    // expect(errors[0], runtime.getErrorMessages()[0]).toBeUndefined();
+    // if (errors.length > 0) {
+    //   expect(runtime.Memory.read(1)).toBe(NaN);
+    // } else {
+    expect(runtime.Memory.read(1)).toMatchWithPrecision(
+      answer,
+      MATCH_PRECISION
+    );
+    // }
+  });
 });

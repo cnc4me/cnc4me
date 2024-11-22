@@ -63,10 +63,14 @@ export class MacroInterpreter extends BaseCstVisitor {
   #memory: MacroMemory;
   private _insights: InsightCollection = new InsightCollection();
 
-  constructor(opts: { memory: MacroMemory }) {
+  constructor() {
     super();
-    this.#memory = opts.memory;
+    this.#memory = new MacroMemory();
     this.validateVisitor();
+  }
+
+  getMemory() {
+    return this.#memory;
   }
 
   getInsights(): InsightCollection {
@@ -286,31 +290,26 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Evaluate one of the built-in functions
+   * Evaluate an expression to get it's result
    */
-  functionExpression(ctx: FunctionExpressionCstChildren): number {
-    const { children } = unbox(ctx.atomicExpression);
-    const func = getImage(ctx.BuiltinFunctions);
-    const value = this.atomicExpression(children);
-
-    const result = match(func)
-      .with("LN", () => Math.log(value))
-      .with("ABS", () => Math.abs(value))
-      .with("FUP", () => Math.ceil(value))
-      .with("SQRT", () => Math.sqrt(value))
-      .with("FIX", () => Math.floor(value))
-      .with("ROUND", () => Math.round(value))
-      .with("SIN", () => Math.sin(degreeToRadian(value)))
-      .with("COS", () => Math.cos(degreeToRadian(value)))
-      .with("TAN", () => Math.tan(degreeToRadian(value)))
-      .with("ASIN", () => radianToDegree(Math.asin(value)))
-      .with("ACOS", () => radianToDegree(Math.acos(value)))
-      .with("ATAN", () => radianToDegree(Math.atan(value)))
-      .otherwise(() => NaN);
-
-    return result;
+  atomicExpression(ctx: AtomicExpressionCstChildren): number {
+    if (ctx.bracketExpression) {
+      return this.bracketExpression(ctx.bracketExpression[0].children);
+    } else if (ctx.NumericLiteral) {
+      return this.NumericLiteral(ctx.NumericLiteral[0].children);
+    } else if (ctx.functionExpression) {
+      return this.functionExpression(ctx.functionExpression[0].children);
+    } else if (ctx.VariableLiteral) {
+      const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
+      return macroVar.value;
+    } else {
+      return NaN;
+    }
   }
 
+  /**
+   * This handles subtraction as well
+   */
   additionExpression(ctx: AdditionExpressionCstChildren): number {
     let lhsValue = this.visit(ctx.lhs);
 
@@ -338,6 +337,9 @@ export class MacroInterpreter extends BaseCstVisitor {
     return lhsValue;
   }
 
+  /**
+   * This handles division as well
+   */
   multiplicationExpression(ctx: MultiplicationExpressionCstChildren): number {
     let lhsValue = this.visit(ctx.lhs);
 
@@ -373,20 +375,28 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Evaluate an expression to get it's result
+   * Evaluate one of the built-in functions
    */
-  atomicExpression(ctx: AtomicExpressionCstChildren): number {
-    if (ctx.bracketExpression) {
-      return this.bracketExpression(ctx.bracketExpression[0].children);
-    } else if (ctx.NumericLiteral) {
-      return this.NumericLiteral(ctx.NumericLiteral[0].children);
-    } else if (ctx.functionExpression) {
-      return this.functionExpression(ctx.functionExpression[0].children);
-    } else if (ctx.VariableLiteral) {
-      const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
-      return macroVar.value;
-    } else {
-      return NaN;
-    }
+  functionExpression(ctx: FunctionExpressionCstChildren): number {
+    const { children } = unbox(ctx.atomicExpression);
+    const func = getImage(ctx.BuiltinFunctions);
+    const value = this.atomicExpression(children);
+
+    const result = match(func)
+      .with("LN", () => Math.log(value))
+      .with("ABS", () => Math.abs(value))
+      .with("FUP", () => Math.ceil(value))
+      .with("SQRT", () => Math.sqrt(value))
+      .with("FIX", () => Math.floor(value))
+      .with("ROUND", () => Math.round(value))
+      .with("SIN", () => Math.sin(degreeToRadian(value)))
+      .with("COS", () => Math.cos(degreeToRadian(value)))
+      .with("TAN", () => Math.tan(degreeToRadian(value)))
+      .with("ASIN", () => radianToDegree(Math.asin(value)))
+      .with("ACOS", () => radianToDegree(Math.acos(value)))
+      .with("ATAN", () => radianToDegree(Math.atan(value)))
+      .otherwise(() => NaN);
+
+    return result;
   }
 }

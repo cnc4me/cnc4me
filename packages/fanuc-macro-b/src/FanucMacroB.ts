@@ -1,6 +1,5 @@
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
-import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 
 import type { ParsedLineData } from "./types";
@@ -12,16 +11,16 @@ import type { ParsedLineData } from "./types";
 export class FanucMacroB {
   lexer: MacroLexer;
   parser: MacroParser;
-  memory: MacroMemory;
   interpreter: MacroInterpreter;
 
   constructor() {
-    this.memory = new MacroMemory();
     this.lexer = new MacroLexer();
     this.parser = new MacroParser();
-    this.interpreter = new MacroInterpreter({
-      memory: this.memory
-    });
+    this.interpreter = new MacroInterpreter();
+  }
+
+  get memory() {
+    return this.interpreter.getMemory();
   }
 
   get hasErrors() {
