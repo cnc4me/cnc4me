@@ -136,7 +136,7 @@
                 "definition": [
                   {
                     "type": "NonTerminal",
-                    "name": "variableAssignment",
+                    "name": "VariableAssignment",
                     "idx": 0
                   }
                 ]
@@ -166,6 +166,30 @@
             ]
           }
         ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "VariableAssignment",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "VariableLiteral",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "Equals",
+        "label": "Equals",
+        "idx": 0,
+        "pattern": "="
+      },
+      {
+        "type": "NonTerminal",
+        "name": "expression",
+        "idx": 0
       }
     ]
   },
@@ -329,65 +353,12 @@
   },
   {
     "type": "Rule",
-    "name": "atomicExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Alternation",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "bracketExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "functionExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "NumericLiteral",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "VariableLiteral",
-                "idx": 0
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
     "name": "additionExpression",
     "orgText": "",
     "definition": [
       {
         "type": "NonTerminal",
-        "name": "atomicExpression",
+        "name": "multiplicationExpression",
         "idx": 0,
         "label": "lhs"
       },
@@ -404,7 +375,7 @@
           },
           {
             "type": "NonTerminal",
-            "name": "atomicExpression",
+            "name": "multiplicationExpression",
             "idx": 2,
             "label": "rhs"
           }
@@ -566,6 +537,59 @@
   },
   {
     "type": "Rule",
+    "name": "atomicExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "bracketExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "functionExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "NumericLiteral",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "bracketExpression",
     "orgText": "",
     "definition": [
@@ -587,30 +611,6 @@
         "label": "CloseBracket",
         "idx": 0,
         "pattern": "]"
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "variableAssignment",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "NonTerminal",
-        "name": "VariableLiteral",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "Equals",
-        "label": "Equals",
-        "idx": 0,
-        "pattern": "="
-      },
-      {
-        "type": "NonTerminal",
-        "name": "expression",
-        "idx": 0
       }
     ]
   },

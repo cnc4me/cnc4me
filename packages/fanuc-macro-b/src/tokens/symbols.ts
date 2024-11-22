@@ -7,8 +7,8 @@ const SHARED_CONFIG = {
 };
 
 /**
- * @todo this should be more complex and handle the variable number capture?
- * @todo have it evaluate expressions into var numbers?
+ * @TODO this should be more complex and handle the variable number capture?
+ * @TODO have it evaluate expressions into var numbers?
  */
 export const Var = createToken({
   name: "Var",

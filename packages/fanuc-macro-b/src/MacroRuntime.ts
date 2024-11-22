@@ -172,7 +172,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
 
   /**
    * Analyze a text in the context of being a valid NC program
-   * @todo this can fail and cst.children is undefined
+   * @TODO this can fail and cst.children is undefined
    * @deprecated
    */
   evalLines(code: string): ParsedLineData[] {
@@ -370,7 +370,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
 
   /**
    * Generate an array of {@link IToken} from an input string
-   * @todo do we really need this? what about piping?
+   * @TODO do we really need this? what about piping?
    * @deprecated
    */
   private _lexAndLoadParser(input: string): boolean {

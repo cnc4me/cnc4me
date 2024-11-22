@@ -8,14 +8,11 @@
 // eslint-disable-next-line @typescript-eslint/ban-ts-comment
 // @ts-ignore
 import { generateHtml } from "@cnc4me/chevrotain-types-generator";
-import { writeFileSync } from "fs";
-import { join } from "path";
 
 import { MacroParser } from "../src";
+import { joinCwd, writeFile } from "./helpers";
 
-const parser = new MacroParser();
-const htmlText = generateHtml(parser);
-const out = join(process.cwd(), "diagrams", "FanucMacroB.html");
+const htmlText = generateHtml(new MacroParser());
+const out = joinCwd("diagrams", "FanucMacroB.html");
 
-writeFileSync(out, htmlText);
-console.log(`Wrote to file \x1b[33m${out.replace(process.cwd(), ".")}`);
+writeFile(out, htmlText);

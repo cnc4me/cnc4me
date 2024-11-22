@@ -64,7 +64,7 @@ export class MacroParserBase extends CstParser {
         { ALT: () => this.CONSUME(Gcode) },
         { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
-        { ALT: () => this.SUBRULE(this.variableAssignment) },
+        { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.conditionalExpression) },
         { ALT: () => this.CONSUME(Comment) }
         // { ALT: () => this.SUBRULE(this.addresses) }
@@ -80,7 +80,7 @@ export class MacroParserBase extends CstParser {
    *   #501 = [2 + 0.5]
    *   #502 = [#501 / 2]
    */
-  variableAssignment = this.RULE("variableAssignment", () => {
+  VariableAssignment = this.RULE("VariableAssignment", () => {
     this.SUBRULE(this.VariableLiteral);
     this.CONSUME(Equals);
     this.SUBRULE(this.expression);

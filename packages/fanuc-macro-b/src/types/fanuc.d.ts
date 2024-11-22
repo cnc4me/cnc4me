@@ -32,9 +32,20 @@ export type LineCstChildren = {
   G_Code?: IToken[];
   M_Code?: IToken[];
   AddressedValue?: AddressedValueCstNode[];
-  variableAssignment?: VariableAssignmentCstNode[];
+  VariableAssignment?: VariableAssignmentCstNode[];
   conditionalExpression?: ConditionalExpressionCstNode[];
   Comment?: IToken[];
+};
+
+export interface VariableAssignmentCstNode extends CstNode {
+  name: "VariableAssignment";
+  children: VariableAssignmentCstChildren;
+}
+
+export type VariableAssignmentCstChildren = {
+  VariableLiteral: VariableLiteralCstNode[];
+  Equals: IToken[];
+  expression: ExpressionCstNode[];
 };
 
 export interface AddressedValueCstNode extends CstNode {
@@ -89,27 +100,15 @@ export type ExpressionCstChildren = {
   additionExpression: AdditionExpressionCstNode[];
 };
 
-export interface AtomicExpressionCstNode extends CstNode {
-  name: "atomicExpression";
-  children: AtomicExpressionCstChildren;
-}
-
-export type AtomicExpressionCstChildren = {
-  bracketExpression?: BracketExpressionCstNode[];
-  functionExpression?: FunctionExpressionCstNode[];
-  NumericLiteral?: NumericLiteralCstNode[];
-  VariableLiteral?: VariableLiteralCstNode[];
-};
-
 export interface AdditionExpressionCstNode extends CstNode {
   name: "additionExpression";
   children: AdditionExpressionCstChildren;
 }
 
 export type AdditionExpressionCstChildren = {
-  lhs: AtomicExpressionCstNode[];
+  lhs: MultiplicationExpressionCstNode[];
   AdditionOperator?: IToken[];
-  rhs?: AtomicExpressionCstNode[];
+  rhs?: MultiplicationExpressionCstNode[];
 };
 
 export interface MultiplicationExpressionCstNode extends CstNode {
@@ -159,6 +158,18 @@ export type ConditionalExpressionCstChildren = {
   GotoLine?: IToken[];
 };
 
+export interface AtomicExpressionCstNode extends CstNode {
+  name: "atomicExpression";
+  children: AtomicExpressionCstChildren;
+}
+
+export type AtomicExpressionCstChildren = {
+  bracketExpression?: BracketExpressionCstNode[];
+  functionExpression?: FunctionExpressionCstNode[];
+  NumericLiteral?: NumericLiteralCstNode[];
+  VariableLiteral?: VariableLiteralCstNode[];
+};
+
 export interface BracketExpressionCstNode extends CstNode {
   name: "bracketExpression";
   children: BracketExpressionCstChildren;
@@ -168,17 +179,6 @@ export type BracketExpressionCstChildren = {
   OpenBracket: IToken[];
   expression: ExpressionCstNode[];
   CloseBracket: IToken[];
-};
-
-export interface VariableAssignmentCstNode extends CstNode {
-  name: "variableAssignment";
-  children: VariableAssignmentCstChildren;
-}
-
-export type VariableAssignmentCstChildren = {
-  VariableLiteral: VariableLiteralCstNode[];
-  Equals: IToken[];
-  expression: ExpressionCstNode[];
 };
 
 export interface StartOfFileCstNode extends CstNode {
@@ -216,19 +216,19 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   program(children: ProgramCstChildren, param?: IN): OUT;
   lines(children: LinesCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
+  VariableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
   ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   expression(children: ExpressionCstChildren, param?: IN): OUT;
-  atomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   additionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   multiplicationExpression(children: MultiplicationExpressionCstChildren, param?: IN): OUT;
   functionExpression(children: FunctionExpressionCstChildren, param?: IN): OUT;
   booleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
   conditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
+  atomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   bracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
-  variableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
   StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
   EndOfFile(children: EndOfFileCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;

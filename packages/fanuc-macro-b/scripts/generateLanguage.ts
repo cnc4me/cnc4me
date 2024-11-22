@@ -1,7 +1,7 @@
 import { generateMonarchLanguageFromChevrotainTokens } from "@cnc4me/monaco-gcode";
 
-import { TOKEN_VOCABULARY } from "../src";
+import { FANUC_MACRO_B_GRAMMAR } from "../src";
 
-const lang = generateMonarchLanguageFromChevrotainTokens(TOKEN_VOCABULARY);
+const lang = generateMonarchLanguageFromChevrotainTokens(FANUC_MACRO_B_GRAMMAR);
 
 console.log(lang);

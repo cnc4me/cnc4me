@@ -67,7 +67,7 @@ export function createBracketRules<T extends string>(
 /**
  * Given a Chevrotain parser, generate a Monarch language definition
  *
- * @todo look into this, and actually generate it
+ * @TODO look into this, and actually generate it
  */
 export function generateMonarchLanguageFromChevrotainTokens(
   tokens: TokenType[],
@@ -94,7 +94,7 @@ export function generateMonarchLanguageFromChevrotainTokens(
 /**
  * Given a Chevrotain parser, generate a Monarch language definition
  *
- * @todo look into this, and actually generate it
+ * @TODO look into this, and actually generate it
  */
 export function generateMonarchLanguageFromChevrotainParser<
   T extends BaseParser

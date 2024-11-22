@@ -5,7 +5,7 @@ import type { G10ParseResult } from "../types";
 
 /**
  * Parsing a string of text as a G10 line for values
- * @todo make this lighter
+ * @TODO make this lighter
  */
 export function parseG10(preloadInput: string): G10ParseResult {
   const runtime = new MacroRuntime();

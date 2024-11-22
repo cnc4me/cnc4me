@@ -2,8 +2,10 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "strict": true,
+    "target": "ESNext",
+    // "noEmit": true,
     "composite": true,
-    "esModuleInterop": true
+    "esModuleInterop": true,
   },
   "files": [
     "vite.config.ts"
