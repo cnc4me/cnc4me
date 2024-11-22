@@ -1,4 +1,4 @@
-import { CstParser } from "chevrotain";
+import { CstParser, type IToken, type TokenType } from "chevrotain";
 
 import { FANUC_MACRO_B_GRAMMAR } from "./lib";
 import {
@@ -26,7 +26,15 @@ import {
   Var
 } from "./tokens";
 
-export class MacroParserBase extends CstParser {
+export class MacroParserRuleTree extends CstParser {
+  /**
+   * Utilize the generic to get the token name
+   * @link https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
+   */
+  public override CONSUME<S extends TokenType>(token: S) {
+    return super.CONSUME(token) as Omit<IToken, "tokenType"> & { tokenType: S };
+  }
+
   constructor() {
     super(FANUC_MACRO_B_GRAMMAR);
     // debug("initializing");
@@ -66,6 +74,7 @@ export class MacroParserBase extends CstParser {
         { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.conditionalExpression) },
+        { ALT: () => this.SUBRULE(this.expression) },
         { ALT: () => this.CONSUME(Comment) }
         // { ALT: () => this.SUBRULE(this.addresses) }
       ]);

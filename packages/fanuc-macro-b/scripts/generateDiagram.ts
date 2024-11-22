@@ -1,18 +1,10 @@
-/**
- * I don't know why the reference is not working in vscode
- * "@cnc4me/chevrotain-types-generator";
- *
- * but is actually working at runtime...
- */
+import { ChevrotainGenerator, MacroParser } from "../src";
+import { joinCwd, writeFile } from "./_helpers";
 
-// eslint-disable-next-line @typescript-eslint/ban-ts-comment
-// @ts-ignore
-import { generateHtml } from "@cnc4me/chevrotain-types-generator";
+const parser = new MacroParser();
+const generator = new ChevrotainGenerator(parser);
 
-import { MacroParser } from "../src";
-import { joinCwd, writeFile } from "./helpers";
+const outfile = joinCwd("diagrams", "FanucMacroB.html");
+const htmlText = generator.getHtml();
 
-const htmlText = generateHtml(new MacroParser());
-const out = joinCwd("diagrams", "FanucMacroB.html");
-
-writeFile(out, htmlText);
+writeFile(outfile, htmlText);

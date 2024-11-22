@@ -1,5 +1,4 @@
-import { createToken } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { BuiltinFunction } from "./functions";
 import { matchProgramNumber } from "./matchers";
 

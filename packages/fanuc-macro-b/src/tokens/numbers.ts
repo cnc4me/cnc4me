@@ -1,5 +1,4 @@
-import { createToken, Lexer } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { NumericValue } from "./common";
 
 export const Integer = createToken({

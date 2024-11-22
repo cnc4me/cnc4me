@@ -1,7 +1,7 @@
 import { ILexingError, type IRecognitionException, IToken } from "chevrotain";
 import Emittery from "emittery";
 
-import { InvalidProgramNumber, ProgramNumberNotFound } from "./errors";
+import { InvalidProgramNumber, ProgramNumberNotFound } from "./errors/runtime";
 import { InsightCollection } from "./lib/Insights";
 import { ProgramNumber } from "./lib/ProgramNumber";
 import { MacroInterpreter } from "./MacroInterpreter";
@@ -11,31 +11,21 @@ import { MacroParser } from "./MacroParser";
 import { isLexingError, isParsingError } from "./utils";
 
 import type {
-  IMacroBase,
+  ErrorProducer,
   InterpretedProgram,
+  MacroCombinedError,
+  MacroRuntimeInitOptions,
   ParsedLineData,
-  ProgramCstNode,
   ProgramLoadOptions,
-  RuntimeError,
   RuntimeEvents,
   RuntimeOutput
 } from "./types";
-
-export interface MacroRuntimeInitOptions {
-  // autoExec: boolean;
-  preloadInput: string;
-}
-
-type MessyRuntimeErrorsFixMe =
-  | ILexingError
-  | IRecognitionException
-  | RuntimeError;
+import type { CST } from "./types/CST";
 
 /*
  * MacroRuntime Class to hold multiple programs in memory
  */
-export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
-  private _mem: MacroMemory;
+export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   private _lexer: MacroLexer;
   private _parser: MacroParser;
   private _interpreter: MacroInterpreter;
@@ -44,30 +34,12 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
   private _programs: Record<number, string> = {};
   private _activeProgram: number | null = null;
 
-  static create(options?: Partial<MacroRuntimeInitOptions>) {
-    const runtime = new MacroRuntime();
-
-    // if (options?.preloadInput) {
-    //   runtime.Lexer.tokenize(options.preloadInput);
-    //   if (!runtime.Lexer.hasErrors) {
-    //     runtime.loadParserTokens(tokens);
-    //   }
-    // }
-
-    return runtime;
-  }
-
-  constructor() {
+  constructor(opts?: Partial<MacroRuntimeInitOptions>) {
     // debug("initializing");
     this._events = new Emittery<RuntimeEvents>();
-    this._mem = new MacroMemory();
     this._lexer = new MacroLexer();
     this._parser = new MacroParser();
-    this._interpreter = new MacroInterpreter({ memory: this._mem });
-  }
-
-  get Memory(): MacroMemory {
-    return this._mem;
+    this._interpreter = new MacroInterpreter();
   }
 
   get Lexer(): MacroLexer {
@@ -82,8 +54,12 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
     return this._interpreter;
   }
 
+  get Memory(): MacroMemory {
+    return this._interpreter.getMemory();
+  }
+
   get hasErrors() {
-    return this.getErrors().length > 0;
+    return this._lexer.hasErrors || this._parser.hasErrors;
   }
 
   getInsights(): InsightCollection {
@@ -96,8 +72,8 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
   reset(): void {
     this._programs = {};
     this._activeProgram = NaN;
-    this._mem.reset();
     this._parser.reset();
+    this._interpreter.getMemory().reset();
   }
 
   /**
@@ -108,7 +84,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
 
     this._tokenizeActiveProgram();
 
-    const programCst = this._parser.program() as unknown as ProgramCstNode;
+    const programCst = this._parser.program() as unknown as CST.ProgramCstNode;
 
     /**
      * @TODO ERROR HANDLING!!!!
@@ -128,22 +104,19 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
   /**
    * Register a function to handle errors that occur in the runtime.
    */
-  onError(handler: (eventData: RuntimeError) => void) {
+  onError(handler: (eventData: MacroCombinedError) => void) {
     return this._events.on("error", handler);
   }
 
   /**
    * Retrieve Parser and Lexer errors
+   * @deprecated use the getErrors method on FanucMacroB when implemented in the class
    */
   getErrors() {
-    const errors: MessyRuntimeErrorsFixMe[] = [];
-    if (this._parser.errors.length > 0) {
-      errors.push(...this._parser.errors);
-    }
-    if (this._lexer.hasErrors) {
-      errors.push(...this._lexer.getErrors());
-    }
-    return errors;
+    return [
+      ...this._parser.getErrors(), //
+      ...this._lexer.getErrors()
+    ];
   }
 
   /**
@@ -165,7 +138,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
     this._lexAndLoadParser(code);
     // this._tokenizeActiveProgram();
 
-    const programCst = this._parser.program() as unknown as ProgramCstNode;
+    const programCst = this._parser.program() as unknown as CST.ProgramCstNode;
 
     return this._interpreter.program(programCst.children);
   }
@@ -242,30 +215,10 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
    */
   loadProgram(input: string, options?: ProgramLoadOptions): void {
     ProgramNumber.match(input, {
-      NOMATCH: error => this._emitError(error),
-      MATCH: result => {
-        const programNumber = Number(result[1]);
-
-        this._programs[programNumber] = input;
-
-        if (options?.setActive) {
-          this.setActiveProgram(programNumber);
-          this._tokenizeActiveProgram();
-        }
-
-        return this._programs[programNumber];
-      }
-    });
-  }
-
-  /**
-   * Load a Program into memory
-   *
-   * This method can create a program if given a string
-   */
-  loadProgram2(input: string, options?: ProgramLoadOptions): void {
-    ProgramNumber.match(input, {
-      NOMATCH: error => this._emitError(error),
+      NOMATCH: err => {
+        const error = new Error(err);
+        this._emitError(error);
+      },
       MATCH: result => {
         const programNumber = Number(result[1]);
 
@@ -355,7 +308,7 @@ export class MacroRuntime implements IMacroBase<MessyRuntimeErrorsFixMe> {
   /**
    * Helper to emit errors
    */
-  private _emitError(error: string | RuntimeError): false {
+  private _emitError(error: MacroCombinedError): false {
     void this._events.emit("error", error);
     return false;
   }

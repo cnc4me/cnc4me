@@ -1,13 +1,9 @@
 import { max, min, unique } from "radash";
 
+import type { IBaseInsight } from "../types";
 import type { AddressedValue } from "./AddressedValue";
 
-export interface BaseInsight {
-  ctx: string;
-  value: number;
-}
-
-export class AddressInsight implements BaseInsight {
+export class AddressInsight implements IBaseInsight {
   ctx: string;
   value: number;
 

@@ -1,5 +1,6 @@
-import { createToken, Lexer } from "chevrotain";
+import { Lexer } from "chevrotain";
 
+import { createToken } from "./_helpers";
 // export const Identifier = createToken({
 //   name: "Identifier",
 //   pattern: /[A-Z]\w+/

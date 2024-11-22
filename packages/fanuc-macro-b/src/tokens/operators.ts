@@ -1,5 +1,4 @@
-import { createToken } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { AdditionOperator, MultiplicationOperator } from "./common";
 import { Decimal } from "./numbers";
 

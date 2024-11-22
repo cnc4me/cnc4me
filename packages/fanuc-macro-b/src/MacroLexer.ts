@@ -1,17 +1,12 @@
 import { Lexer } from "chevrotain";
 
-import { InputUndefined } from "./errors";
+import { InputUndefined, LexingError } from "./errors/lexer";
 import { FANUC_MACRO_B_GRAMMAR } from "./lib";
 
-import type { IMacroBase } from "./types";
-import type {
-  ILexerDefinitionError,
-  ILexingError,
-  ILexingResult,
-  IToken
-} from "chevrotain";
+import type { ErrorProducer } from "./types";
+import type { ILexerDefinitionError, ILexingResult, IToken } from "chevrotain";
 
-export class MacroLexer implements IMacroBase<ILexingError> {
+export class MacroLexer implements ErrorProducer<LexingError> {
   #instance: Lexer;
   #result!: ILexingResult;
   #input = "";
@@ -36,11 +31,6 @@ export class MacroLexer implements IMacroBase<ILexingError> {
     return this.#result.tokens;
   }
 
-  reset(): void {
-    this.#input = "";
-    this.#result = { errors: [], groups: {}, tokens: [] };
-  }
-
   /**
    * Load the Lexer with a string of input
    */
@@ -56,11 +46,16 @@ export class MacroLexer implements IMacroBase<ILexingError> {
     return this.#result?.tokens;
   }
 
-  getErrors(): ILexingError[] {
-    return this.#result.errors;
+  getErrors(): LexingError[] {
+    return this.#result.errors.map(err => new LexingError(err));
   }
 
   getDefinitionErrors(): ILexerDefinitionError[] {
     return this.#instance.lexerDefinitionErrors;
+  }
+
+  reset(): void {
+    this.#input = "";
+    this.#result = { errors: [], groups: {}, tokens: [] };
   }
 }

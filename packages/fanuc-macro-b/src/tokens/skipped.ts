@@ -1,8 +1,7 @@
-import { createToken, Lexer } from "chevrotain";
+import { Lexer } from "chevrotain";
 
-/**
- * Skipped tokens
- */
+import { createToken } from "./_helpers";
+
 export const WhiteSpace = createToken({
   name: "WhiteSpace",
   pattern: /[\s\t\r]+/,

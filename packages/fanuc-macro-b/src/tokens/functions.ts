@@ -1,5 +1,4 @@
-import { createToken } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { Keyword } from "./common";
 
 export const FANUC_MACRO_B_FNS = [

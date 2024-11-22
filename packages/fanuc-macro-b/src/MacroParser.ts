@@ -1,66 +1,29 @@
-import {
-  createSyntaxDiagramsCode,
-  generateCstDts,
-  type GenerateDtsOptions,
-  type ICreateSyntaxDiagramsConfig,
-  type IRecognitionException,
-  type IToken
-} from "chevrotain";
+import { ParsingError } from "./errors/parser";
+import { MacroParserRuleTree } from "./MacroParserRuleTree";
 
-import { MacroParserBase } from "./MacroParserBase";
-
-import type { IMacroBase } from "./types";
-
-export type MacroParserInitOptions = {
-  preloadString: string;
-  preloadTokens: IToken[];
-};
+import type { ErrorProducer } from "./types";
+import type { IToken } from "chevrotain";
 
 export class MacroParser
-  extends MacroParserBase
-  implements IMacroBase<IRecognitionException>
+  extends MacroParserRuleTree
+  implements ErrorProducer<ParsingError>
 {
   static getBaseCstVisitor(opts: { useConstructorDefaults: boolean }) {
-    const parser = new MacroParserBase();
+    const parser = new MacroParserRuleTree();
     return opts.useConstructorDefaults
       ? parser.getBaseCstVisitorConstructorWithDefaults()
       : parser.getBaseCstVisitorConstructor();
-  }
-
-  constructor() {
-    super();
   }
 
   get hasErrors() {
     return this.errors.length > 0;
   }
 
-  getErrors(): IRecognitionException[] {
-    return this.errors;
+  getErrors() {
+    return this.errors.map(err => new ParsingError(err));
   }
 
   setInput(tokens: IToken[]) {
     this.input = tokens;
-  }
-
-  generateCstDts(
-    config?: GenerateDtsOptions & { convertExportToDeclare?: boolean }
-  ) {
-    const defaults: GenerateDtsOptions = {
-      includeVisitorInterface: true,
-      visitorInterfaceName: "ICstNodeVisitor"
-    };
-    const ast = this.getGAstProductions();
-    const content = generateCstDts(ast, { ...defaults, ...config });
-    if (config?.convertExportToDeclare) {
-      return content.replaceAll("export", "declare");
-    }
-    return content;
-  }
-
-  generateHtml(config?: ICreateSyntaxDiagramsConfig): string {
-    const serialAst = this.getSerializedGastProductions();
-
-    return createSyntaxDiagramsCode(serialAst, config);
   }
 }

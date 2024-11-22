@@ -1,9 +1,9 @@
 import type { AddressedValue } from "../lib";
 import type { IToken } from "chevrotain";
 
-export interface IMacroBase<E> {
-  hasErrors: boolean;
-  getErrors(): E[];
+export interface IBaseInsight {
+  ctx: string;
+  value: number;
 }
 
 export interface ProgramIdentifier {

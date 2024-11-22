@@ -1,5 +1,4 @@
-import { createToken } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { ControlFlowKeyword } from "./common";
 
 const SHARED_CONFIG = {
@@ -21,12 +20,6 @@ export const Dot = createToken({
   pattern: ".",
   ...SHARED_CONFIG
 });
-
-// export const Comma = createToken({
-//   name: "Comma",
-//   pattern: ",",
-//   ...SHARED_CONFIG
-// });
 
 export const Equals = createToken({
   name: "Equals",
@@ -51,3 +44,9 @@ export const SemiColon = createToken({
   pattern: ";",
   ...SHARED_CONFIG
 });
+
+// export const Comma = createToken({
+//   name: "Comma",
+//   pattern: ",",
+//   ...SHARED_CONFIG
+// });

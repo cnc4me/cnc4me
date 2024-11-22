@@ -1,11 +1,17 @@
-import { ILexingError, IRecognitionException } from "chevrotain";
+import type { MacroLexerError } from "../errors/lexer";
+import type { MacroParserError } from "../errors/parser";
+import type { MacroInterpreter } from "../MacroInterpreter";
 
-import type { MacroInterpreter } from "../lib";
+export interface MacroRuntimeInitOptions {
+  // autoExec: boolean;
+  preloadInput: string;
+}
 
 export interface ProgramLoadOptions {
   setActive: boolean;
 }
-export type RuntimeError = string | ILexingError | IRecognitionException;
+
+export type MacroCombinedError = MacroLexerError | MacroParserError;
 
 export interface RuntimeOutput {
   beginExec: Date;
@@ -15,5 +21,5 @@ export interface RuntimeOutput {
 
 export interface RuntimeEvents {
   close: undefined; // No arg event
-  error: RuntimeError;
+  error: MacroCombinedError;
 }

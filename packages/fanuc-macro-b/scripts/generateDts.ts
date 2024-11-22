@@ -1,8 +1,10 @@
-import { MacroParser } from "../src";
-import { joinCwd, writeFile } from "./helpers";
+import { ChevrotainGenerator, MacroParser } from "../src";
+import { joinCwd, writeFile } from "./_helpers";
 
 const parser = new MacroParser();
-const types = parser.generateCstDts();
-const out = joinCwd("src", "types", "fanuc.d.ts");
+const generator = new ChevrotainGenerator(parser);
 
-writeFile(out, types);
+const outfile = joinCwd("src", "types", "fanuc.d.ts");
+const types = generator.getCstDts({ convertExportToDeclare: true });
+
+writeFile(outfile, types);

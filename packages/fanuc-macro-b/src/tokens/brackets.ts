@@ -1,5 +1,4 @@
-import { createToken } from "chevrotain";
-
+import { createToken } from "./_helpers";
 import { Grouping } from "./common";
 
 const SHARED_CONFIG = {

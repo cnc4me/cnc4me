@@ -1,4 +1,4 @@
-/// <reference types="./types/fanuc.d.ts">
+/* eslint-disable @typescript-eslint/no-unsafe-assignment */
 /* eslint-disable @typescript-eslint/no-unsafe-return */
 import { tokenMatcher } from "chevrotain";
 import mitt from "mitt";
@@ -20,32 +20,17 @@ import {
   unwrapComment
 } from "./utils";
 
-// import type {
-//   AdditionExpressionCstChildren,
-//   AddressedValueCstChildren,
-//   AtomicExpressionCstChildren,
-//   BracketExpressionCstChildren,
-//   ExpressionCstChildren,
-//   FunctionExpressionCstChildren,
-//   InterpretedProgram,
-//   LineCstChildren,
-//   LinesCstChildren,
-//   MultiplicationExpressionCstChildren,
-//   NumericLiteralCstChildren,
-//   ParsedLineData,
-//   ProgramCstChildren,
-//   ProgramIdentifier,
-//   ProgramNumberLineCstChildren,
-//   ValidG10OffsetGroups,
-//   ValueLiteralCstChildren,
-//   VariableAssignmentCstChildren,
-//   VariableLiteralCstChildren,
-//   VariableRegister,
-//   WatcherValuePayload
-// } from "./types";
+import type {
+  InterpretedProgram,
+  ParsedLineData,
+  ProgramIdentifier,
+  ValidG10OffsetGroups,
+  VariableRegister,
+  WatcherValuePayload
+} from "./types";
+import type { CST } from "./types/CST";
 import type { Emitter } from "mitt";
 
-// eslint-disable-next-line @typescript-eslint/consistent-type-definitions
 type InterpreterEvents = {
   M0: undefined;
   M1: undefined;
@@ -81,7 +66,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Root Node for valid NC Programs
    */
-  program(ctx: ProgramCstChildren): InterpretedProgram {
+  program(ctx: CST.ProgramCstChildren): InterpretedProgram {
     const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
     const lines = this.lines(ctx.lines[0].children);
     // const g10s = this._memory.
@@ -91,17 +76,12 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Iterate over the {@link LineCstChildren} to extract the contents
    */
-  lines(ctx: LinesCstChildren): ParsedLineData[] {
-    const _lines: ParsedLineData[] = [];
+  lines(ctx: CST.LinesCstChildren): ParsedLineData[] {
+    const _lines = [];
 
     if (ctx.Line) {
       for (const line of ctx.Line) {
-        /** @TODO Fix this */
-        // @ts-expect-error Something with the types
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
-        const visited = this.visit(line);
-        /** @TODO Fix this */
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
+        const visited: ParsedLineData = this.visit(line);
         _lines.push(visited);
       }
     }
@@ -112,7 +92,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Get the Program title and number
    */
-  ProgramNumberLine(ctx: ProgramNumberLineCstChildren): ProgramIdentifier {
+  ProgramNumberLine(ctx: CST.ProgramNumberLineCstChildren): ProgramIdentifier {
     const token = unbox(ctx.ProgramNumber);
     const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
 
@@ -126,7 +106,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Get the complete contents of a line of G code
    */
-  Line(ctx: LineCstChildren): ParsedLineData {
+  Line(ctx: CST.LineCstChildren): ParsedLineData {
     const parsed: ParsedLineData = {
       N: NaN,
       gCodes: [],
@@ -205,7 +185,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Parse all possible info out of this address
    */
   AddressedValue(
-    ctx: AddressedValueCstChildren,
+    ctx: CST.AddressedValueCstChildren,
     gCodeFlags: Record<string, boolean> = {}
   ) {
     const address = new AddressedValue(ctx);
@@ -221,7 +201,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * A plain number, signed
    */
-  NumericLiteral(ctx: NumericLiteralCstChildren): number {
+  NumericLiteral(ctx: CST.NumericLiteralCstChildren): number {
     const value = getImage(ctx.NumericValue);
     const minus = ctx.Minus ? "-" : "";
 
@@ -231,7 +211,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * A Macro Variable, defined as a `#` and a number
    */
-  VariableLiteral(ctx: VariableLiteralCstChildren): VariableRegister {
+  VariableLiteral(ctx: CST.VariableLiteralCstChildren): VariableRegister {
     const register = parseInt(getImage(ctx.Integer));
     const macro = {
       register,
@@ -244,7 +224,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * If a number, then the visit the node, otherwise evaluate the macro var
    */
-  ValueLiteral(ctx: ValueLiteralCstChildren) {
+  ValueLiteral(ctx: CST.ValueLiteralCstChildren) {
     let value = NaN;
 
     if (ctx.VariableLiteral) {
@@ -264,7 +244,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Update a macro variable regsiter with a value
    */
-  VariableAssignment(ctx: VariableAssignmentCstChildren) {
+  VariableAssignment(ctx: CST.VariableAssignmentCstChildren) {
     const varLitChildren = unbox(ctx.VariableLiteral).children;
     const macro = this.VariableLiteral(varLitChildren);
     const payload: WatcherValuePayload = {
@@ -291,7 +271,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * @TODO why is this only addition?
    */
-  expression(ctx: ExpressionCstChildren): number {
+  expression(ctx: CST.ExpressionCstChildren): number {
     const { children } = unbox(ctx.additionExpression);
     return this.additionExpression(children);
   }
@@ -299,7 +279,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Evaluate an expression to get it's result
    */
-  atomicExpression(ctx: AtomicExpressionCstChildren): number {
+  atomicExpression(ctx: CST.AtomicExpressionCstChildren): number {
     if (ctx.bracketExpression) {
       return this.bracketExpression(ctx.bracketExpression[0].children);
     } else if (ctx.NumericLiteral) {
@@ -317,10 +297,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * This handles subtraction as well
    */
-  additionExpression(ctx: AdditionExpressionCstChildren): number {
-    /** @TODO Fix this */
-    // @ts-expect-error Something with the types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  additionExpression(ctx: CST.AdditionExpressionCstChildren): number {
     let lhsValue = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as
@@ -328,9 +305,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (ctx.rhs) {
       ctx.rhs.forEach((rhsOperand, idx) => {
         // there will be one operator for each rhs operand
-        /** @TODO Fix this */
-        // @ts-expect-error Something with the types
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const rhsValue = this.visit(rhsOperand);
 
         if (ctx?.AdditionOperator) {
@@ -353,19 +327,15 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * This handles division as well
    */
-  multiplicationExpression(ctx: MultiplicationExpressionCstChildren): number {
-    /** @TODO Fix this */
-    // @ts-expect-error Something with the types
-    // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
+  multiplicationExpression(
+    ctx: CST.MultiplicationExpressionCstChildren
+  ): number {
     let lhsValue = this.visit(ctx.lhs);
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
     if (ctx.rhs) {
       ctx.rhs.forEach((rhsOperand, idx) => {
         // there will be one operator for each rhs operand
-        /** @TODO Fix this */
-        // @ts-expect-error Something with the types
-        // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment
         const rhsValue = this.visit(rhsOperand);
 
         if (ctx?.MultiplicationOperator) {
@@ -388,7 +358,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Ignore the brackets and return the children
    */
-  bracketExpression(ctx: BracketExpressionCstChildren) {
+  bracketExpression(ctx: CST.BracketExpressionCstChildren) {
     const { children } = unbox(ctx.expression);
     return this.expression(children);
   }
@@ -396,9 +366,9 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Evaluate one of the built-in functions
    */
-  functionExpression(ctx: FunctionExpressionCstChildren): number {
+  functionExpression(ctx: CST.FunctionExpressionCstChildren): number {
     const { children } = unbox(ctx.atomicExpression);
-    const func = getImage(ctx.BuiltinFunctions);
+    const func = getImage(ctx.BuiltinFunction);
     const value = this.atomicExpression(children);
 
     const result = match(func)

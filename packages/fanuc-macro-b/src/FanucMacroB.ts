@@ -2,13 +2,19 @@ import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
 
-import type { ParsedLineData } from "./types";
+import type { MacroLexerError } from "./errors/lexer";
+import type { MacroParserError } from "./errors/parser";
+import type { ErrorProducer, ParsedLineData } from "./types";
+import type { IToken } from "chevrotain";
 
 /**
  * This class wraps the functionality for:
  * tokenizing -> parsing -> interpreting
+ * @todo use this instead of loading the MacroRuntime with the individual pieces
  */
-export class FanucMacroB {
+export class FanucMacroB
+  implements ErrorProducer<MacroLexerError | MacroParserError>
+{
   lexer: MacroLexer;
   parser: MacroParser;
   interpreter: MacroInterpreter;
@@ -23,8 +29,19 @@ export class FanucMacroB {
     return this.interpreter.getMemory();
   }
 
+  /**
+   * If either the {@link MacroLexer} or {@link MacroParser} encountered errors
+   * then this property will be `true`
+   */
   get hasErrors() {
     return this.lexer.hasErrors || this.parser.hasErrors;
+  }
+
+  /**
+   * Tokenize a string of gcode
+   */
+  tokenize(input: string): IToken[] {
+    return this.lexer.tokenize(input);
   }
 
   /**
@@ -41,11 +58,11 @@ export class FanucMacroB {
     };
   }
 
-  /**
-   * Tokenize a string of gcode
-   */
-  tokenize(input: string) {
-    return this.lexer.tokenize(input);
+  getErrors() {
+    return [
+      ...this.lexer.getErrors(), //
+      ...this.parser.getErrors() //
+    ];
   }
 }
 
