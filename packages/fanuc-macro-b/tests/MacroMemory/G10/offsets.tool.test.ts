@@ -1,7 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { parseG10 } from "../../../src/lib";
-import { OFFSET_GROUPS } from "../../../src/lib/memory";
+import { OFFSET_GROUPS, parseG10 } from "../../../src";
 
 /**
  * G10 Line Reference

@@ -1,6 +1,12 @@
 import { describe, expect, it } from "vitest";
 
-import { RegisterMap } from "../src/lib";
+import { RegisterMap } from "../src";
+
+type TestCaseValues = Record<
+  "register" | "group" | "toolNum" | "axis",
+  number
+> &
+  Record<"axis", string>;
 
 describe("testing methods for composing memory addresses", () => {
   it.each`
@@ -12,7 +18,7 @@ describe("testing methods for composing memory addresses", () => {
     ${11299} | ${11} | ${299}
   `(
     "RegisterMap.ToolOffset($group, $toolNum) = $register",
-    ({ register, group, toolNum }) => {
+    ({ register, group, toolNum }: TestCaseValues) => {
       const address = RegisterMap.ToolOffset(group, toolNum);
 
       expect(address).toBe(register);
@@ -29,7 +35,7 @@ describe("testing methods for composing memory addresses", () => {
     ${5323}  | ${6}  | ${"Z"}
   `(
     "RegisterMap.WorkOffset($group, $axis) = $register",
-    ({ register, group, axis }) => {
+    ({ register, group, axis }: TestCaseValues) => {
       const address = RegisterMap.WorkOffset(group, axis);
 
       expect(address).toBe(register);
@@ -45,7 +51,7 @@ describe("testing methods for composing memory addresses", () => {
     ${7964}  | ${49} | ${"B"}
   `(
     "RegisterMap.AuxWorkOffset($group, $axis) = $register",
-    ({ register, group, axis }) => {
+    ({ register, group, axis }: TestCaseValues) => {
       const address = RegisterMap.AuxWorkOffset(group, axis);
 
       expect(address).toBe(register);

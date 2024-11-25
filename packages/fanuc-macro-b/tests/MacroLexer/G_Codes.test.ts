@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { Gcode, MacroLexer, range } from "../../src";
+import { MacroLexer, range, T } from "../../src";
 
 const lexer = new MacroLexer();
 
@@ -29,6 +29,6 @@ describe.each(TEST_CASES)(`can tokenize the string "%s" as a G Code`, input => {
   });
 
   it("matches the correct token type", () => {
-    expect(tokens[0]).toMatchToken(Gcode);
+    expect(tokens[0]).toMatchToken(T.Gcode);
   });
 });

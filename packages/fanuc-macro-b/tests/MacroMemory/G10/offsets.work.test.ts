@@ -1,11 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import {
-  extractOffsets,
-  FanucMacroB,
-  MacroMemory,
-  parseG10
-} from "../../../src";
+import { extractOffsets, FanucMacroB, parseG10 } from "../../../src";
 
 /**
  * G10 Line Reference
@@ -21,12 +16,14 @@ const G10_LINES = {
   G54_1_P7: "G10 L20 P7 X5.0023 Y12.3225 Z5.5201 B90."
 };
 
+const fmb = new FanucMacroB();
+
 describe("use parseG10() to extract Work Offsets", () => {
   it(`can get values for G54 via ${G10_LINES.G54}`, () => {
     /**
-     * MOVE THIS
+     * @todo MOVE THIS
      */
-    const { error, result } = FanucMacroB.eval(G10_LINES.G54);
+    const { error, result } = fmb.eval(G10_LINES.G54);
     const g10 = extractOffsets(result[0]);
 
     expect(error).toStrictEqual([]);

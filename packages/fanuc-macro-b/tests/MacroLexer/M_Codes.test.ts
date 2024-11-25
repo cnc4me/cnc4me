@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { MacroLexer, Mcode } from "../../src";
+import { MacroLexer, T } from "../../src";
 
 const lexer = new MacroLexer();
 
@@ -30,7 +30,7 @@ describe.each(TEST_CASES)(
     });
 
     it("matches the correct token type", () => {
-      expect(tokens[0]).toMatchToken(Mcode);
+      expect(tokens[0]).toMatchToken(T.Mcode);
     });
   }
 );

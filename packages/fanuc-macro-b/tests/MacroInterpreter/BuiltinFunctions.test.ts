@@ -31,6 +31,9 @@ const TEST_CASES: Array<[expr: string, output: number]> = [
   [`ATAN[${1 / SQUARE_ROOT_THREE}]`, 30],
   [`ATAN[${SQUARE_ROOT_THREE}]`, 60],
 
+  // Exponents
+  [`EXP[3]`, 9],
+
   // Cosine
   [`COS[5]`, 0.99619],
   [`COS[15]`, 0.965925],

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroMemory } from "../../src/MacroMemory";
+import { MacroMemory } from "../../src";
 import { rand } from "../_vitest/helpers";
 
 import type { ValidG10OffsetGroups } from "@cnc4me/fanuc-macro-b/src";

@@ -38,6 +38,6 @@ describe("macros expressions", () => {
     expect(mem.read(7)).toBe(5555.5);
     expect(mem.read(8)).toBe(6);
     expect(mem.read(9)).toBe(33333);
-    expect(mem.read(10)).toMatchWithinTolerance(15.4014);
+    expect(mem.read(10)).toBeCloseTo(15.4014);
   });
 });
