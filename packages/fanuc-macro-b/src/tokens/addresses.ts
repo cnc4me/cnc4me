@@ -1,6 +1,7 @@
-import { createToken } from "./_helpers";
 import { BuiltinFunction } from "./functions";
 import { matchProgramNumber } from "./matchers";
+import { Modulus } from "./operators";
+import { createToken } from "./token.utils";
 
 export const Gcode = createToken({
   name: "G_Code",
@@ -28,5 +29,12 @@ export const ProgramNumber = createToken({
 export const Address = createToken({
   name: "Address",
   pattern: /[A-Z]/,
-  longer_alt: [BuiltinFunction, Gcode, Mcode, LineNumber, ProgramNumber]
+  longer_alt: [
+    BuiltinFunction,
+    Modulus,
+    Gcode,
+    Mcode,
+    LineNumber,
+    ProgramNumber
+  ]
 });

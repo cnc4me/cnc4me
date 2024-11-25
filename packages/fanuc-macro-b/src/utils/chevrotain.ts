@@ -5,7 +5,7 @@ import { unbox } from "./common";
 /**
  * Get the element from a context
  */
-export function elem<T extends CstChildrenDictionary, M extends keyof T>(
+export function getElem<T extends CstChildrenDictionary, M extends keyof T>(
   ctx: T,
   childNode: M
 ): CstElement {
@@ -15,10 +15,7 @@ export function elem<T extends CstChildrenDictionary, M extends keyof T>(
 /**
  * Get the children from a node if they are present, otherwise return the node
  */
-export function children<T extends CstNode[]>(
-  cstNodeArr: T
-): CstChildrenDictionary {
-  const { children } = unbox(cstNodeArr);
-
-  return children;
+export function getChildren<T extends CstNode[]>(cstNodeArr: T) {
+  const node = unbox(cstNodeArr);
+  return node.children;
 }

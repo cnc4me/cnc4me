@@ -7,8 +7,8 @@
   "license": "MIT",
   "main": "./src/index.ts",
   "scripts": {
-    "test": "jest --runInBand",
-    "repl": "tsnd ./demo/repl.ts"
+    "test": "vitest",
+    "repl": "tsx ./demo/repl.ts"
   },
   "dependencies": {
     "@cnc4me/fanuc-macro-b": "workspace:*",
@@ -16,24 +16,17 @@
     "bandersnatch": "^1.9.0"
   },
   "devDependencies": {
-    "@cnc4me/jest-matchers": "workspace:*",
-    "@swc/core": "^1.2.159",
-    "@swc/jest": "^0.2.20",
-    "@types/jest": "^27.4.1",
-    "@types/node": "^17.0.21",
-    "@typescript-eslint/eslint-plugin": "^5.15.0",
-    "@typescript-eslint/parser": "^5.15.0",
-    "chevrotain": "^10.1.2",
-    "eslint": "^8.11.0",
-    "eslint-config-prettier": "^8.5.0",
-    "eslint-plugin-import": "^2.25.4",
-    "eslint-plugin-jest": "^26.1.2",
-    "eslint-plugin-prettier": "^4.0.0",
-    "eslint-plugin-simple-import-sort": "^7.0.0",
-    "jest": "^27.5.1",
-    "jest-extended": "^2.0.0",
-    "prettier": "^2.6.0",
-    "ts-node-dev": "^1.1.8",
-    "typescript": "^4.6.2"
+    "@types/node": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "chevrotain": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:"
   }
 }

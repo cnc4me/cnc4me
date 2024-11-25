@@ -1,5 +1,7 @@
-export * from "./G10";
-export * from "./generics";
-export * from "./interfaces";
-export * from "./memory";
-export * from "./runtime";
+export { MacroBuiltinFunctionNames } from "../tokens/functions";
+export type * as GeneratedTypes from "./fanuc";
+export type * from "./G10";
+export type * from "./generics";
+export type * from "./interfaces";
+export type * from "./memory";
+export type * from "./runtime";

@@ -1,0 +1,15 @@
+const INTERPRETER = {
+  USE_CONSTRUCTOR_WITH_DEFAULTS: true
+} as const;
+
+const MEMORY = {
+  UPPER_TOOL_NUMBER_LIMIT: 299
+} as const;
+
+/**
+ * @todo use envvars?
+ */
+export const CONFIG = {
+  MEMORY,
+  INTERPRETER
+};

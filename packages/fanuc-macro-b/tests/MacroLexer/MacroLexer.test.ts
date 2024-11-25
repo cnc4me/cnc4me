@@ -1,17 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import {
-  Address,
-  Decimal,
-  Equals,
-  Gcode,
-  Integer,
-  MacroLexer,
-  Mcode,
-  Minus,
-  Newline,
-  Var
-} from "../../src";
+import { MacroLexer, T } from "../../src";
 
 const lexer = new MacroLexer();
 
@@ -49,21 +38,21 @@ describe("lexing lines with the MarcoLexer", () => {
     });
 
     it("matches the correct token types", () => {
-      expect(tokens[0]).toMatchToken(Gcode);
-      expect(tokens[1]).toMatchToken(Gcode);
-      expect(tokens[2]).toMatchToken(Address);
-      expect(tokens[3]).toMatchToken(Integer);
-      expect(tokens[4]).toMatchToken(Address);
-      expect(tokens[5]).toMatchToken(Integer);
-      expect(tokens[6]).toMatchToken(Address);
-      expect(tokens[7]).toMatchToken(Decimal);
-      expect(tokens[8]).toMatchToken(Address);
-      expect(tokens[9]).toMatchToken(Decimal);
-      expect(tokens[10]).toMatchToken(Address);
-      expect(tokens[11]).toMatchToken(Minus);
-      expect(tokens[12]).toMatchToken(Decimal);
-      expect(tokens[13]).toMatchToken(Address);
-      expect(tokens[14]).toMatchToken(Decimal);
+      expect(tokens[0]).toMatchToken(T.Gcode);
+      expect(tokens[1]).toMatchToken(T.Gcode);
+      expect(tokens[2]).toMatchToken(T.Address);
+      expect(tokens[3]).toMatchToken(T.Integer);
+      expect(tokens[4]).toMatchToken(T.Address);
+      expect(tokens[5]).toMatchToken(T.Integer);
+      expect(tokens[6]).toMatchToken(T.Address);
+      expect(tokens[7]).toMatchToken(T.Decimal);
+      expect(tokens[8]).toMatchToken(T.Address);
+      expect(tokens[9]).toMatchToken(T.Decimal);
+      expect(tokens[10]).toMatchToken(T.Address);
+      expect(tokens[11]).toMatchToken(T.Minus);
+      expect(tokens[12]).toMatchToken(T.Decimal);
+      expect(tokens[13]).toMatchToken(T.Address);
+      expect(tokens[14]).toMatchToken(T.Decimal);
     });
   });
 
@@ -92,13 +81,13 @@ describe("lexing lines with the MarcoLexer", () => {
     });
 
     it("matches the correct token types", () => {
-      expect(tokens[0]).toMatchToken(Mcode);
-      expect(tokens[1]).toMatchToken(Newline);
-      expect(tokens[2]).toMatchToken(Address);
-      expect(tokens[3]).toMatchToken(Minus);
-      expect(tokens[4]).toMatchToken(Decimal);
-      expect(tokens[5]).toMatchToken(Newline);
-      expect(tokens[6]).toMatchToken(Mcode);
+      expect(tokens[0]).toMatchToken(T.Mcode);
+      expect(tokens[1]).toMatchToken(T.Newline);
+      expect(tokens[2]).toMatchToken(T.Address);
+      expect(tokens[3]).toMatchToken(T.Minus);
+      expect(tokens[4]).toMatchToken(T.Decimal);
+      expect(tokens[5]).toMatchToken(T.Newline);
+      expect(tokens[6]).toMatchToken(T.Mcode);
     });
   });
 
@@ -116,12 +105,12 @@ describe("lexing lines with the MarcoLexer", () => {
     });
 
     it("matches the correct token types", () => {
-      expect(tokens[0]).toMatchToken(Gcode);
-      expect(tokens[1]).toMatchToken(Address);
-      expect(tokens[2]).toMatchToken(Var);
-      expect(tokens[3]).toMatchToken(Integer);
-      expect(tokens[4]).toMatchToken(Address);
-      expect(tokens[5]).toMatchToken(Decimal);
+      expect(tokens[0]).toMatchToken(T.Gcode);
+      expect(tokens[1]).toMatchToken(T.Address);
+      expect(tokens[2]).toMatchToken(T.Var);
+      expect(tokens[3]).toMatchToken(T.Integer);
+      expect(tokens[4]).toMatchToken(T.Address);
+      expect(tokens[5]).toMatchToken(T.Decimal);
     });
 
     it("has the correct number of tokens", () => {
@@ -152,10 +141,10 @@ describe("lexing lines with the MarcoLexer", () => {
     });
 
     it("matches the correct token types", () => {
-      expect(tokens[0]).toMatchToken(Var);
-      expect(tokens[1]).toMatchToken(Integer);
-      expect(tokens[2]).toMatchToken(Equals);
-      expect(tokens[3]).toMatchToken(Decimal);
+      expect(tokens[0]).toMatchToken(T.Var);
+      expect(tokens[1]).toMatchToken(T.Integer);
+      expect(tokens[2]).toMatchToken(T.Equals);
+      expect(tokens[3]).toMatchToken(T.Decimal);
     });
   });
 });

@@ -1,9 +1,7 @@
-import { createToken } from "./_helpers";
-import { ControlFlowKeyword } from "./common";
+import { ControlFlowKeyword } from "./token.categories";
+import { createToken } from "./token.utils";
 
-const SHARED_CONFIG = {
-  categories: ControlFlowKeyword
-};
+const categories = ControlFlowKeyword;
 
 /**
  * @TODO this should be more complex and handle the variable number capture?
@@ -12,41 +10,41 @@ const SHARED_CONFIG = {
 export const Var = createToken({
   name: "Var",
   pattern: "#",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Dot = createToken({
   name: "Dot",
   pattern: ".",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Equals = createToken({
   name: "Equals",
   pattern: "=",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Percent = createToken({
   name: "Percent",
   pattern: "%",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Newline = createToken({
   name: "Newline",
   pattern: "\n",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const SemiColon = createToken({
   name: "SemiColon",
   pattern: ";",
-  ...SHARED_CONFIG
+  categories
 });
 
 // export const Comma = createToken({
 //   name: "Comma",
 //   pattern: ",",
-//   ...SHARED_CONFIG
+//   categories
 // });

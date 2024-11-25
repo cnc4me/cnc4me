@@ -22,7 +22,7 @@
     window.serializedGrammar = [
   {
     "type": "Rule",
-    "name": "program",
+    "name": "Program",
     "orgText": "",
     "definition": [
       {
@@ -37,7 +37,7 @@
       },
       {
         "type": "NonTerminal",
-        "name": "lines",
+        "name": "Lines",
         "idx": 0
       },
       {
@@ -49,7 +49,7 @@
   },
   {
     "type": "Rule",
-    "name": "lines",
+    "name": "Lines",
     "orgText": "",
     "definition": [
       {
@@ -146,17 +146,7 @@
                 "definition": [
                   {
                     "type": "NonTerminal",
-                    "name": "conditionalExpression",
-                    "idx": 0
-                  }
-                ]
-              },
-              {
-                "type": "Alternative",
-                "definition": [
-                  {
-                    "type": "NonTerminal",
-                    "name": "expression",
+                    "name": "ConditionalExpression",
                     "idx": 0
                   }
                 ]
@@ -198,7 +188,281 @@
       },
       {
         "type": "NonTerminal",
-        "name": "expression",
+        "name": "Expression",
+        "idx": 0
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "ConditionalExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "If",
+        "label": "If",
+        "idx": 0,
+        "pattern": "IF"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "AtomicBooleanExpression",
+        "idx": 0
+      },
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "Then",
+                "label": "Then",
+                "idx": 0,
+                "pattern": "THEN"
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "Terminal",
+                "name": "GotoLine",
+                "label": "GotoLine",
+                "idx": 0,
+                "pattern": "GOTO[1-9][0-9]*"
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "AtomicBooleanExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "OpenBracket",
+        "label": "OpenBracket",
+        "idx": 0,
+        "pattern": "["
+      },
+      {
+        "type": "NonTerminal",
+        "name": "BooleanExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "CloseBracket",
+        "label": "CloseBracket",
+        "idx": 0,
+        "pattern": "]"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "BooleanExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "AtomicExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "BooleanOperator",
+        "label": "BooleanOperator",
+        "idx": 0,
+        "pattern": "NOT_APPLICABLE"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "AtomicExpression",
+        "idx": 2
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "AdditionExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "MultiplicationExpression",
+        "idx": 0,
+        "label": "lhs"
+      },
+      {
+        "type": "Repetition",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "AdditionOperator",
+            "label": "AdditionOperator",
+            "idx": 0,
+            "pattern": "NOT_APPLICABLE"
+          },
+          {
+            "type": "NonTerminal",
+            "name": "MultiplicationExpression",
+            "idx": 2,
+            "label": "rhs"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "MultiplicationExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "AtomicExpression",
+        "idx": 0,
+        "label": "lhs"
+      },
+      {
+        "type": "Repetition",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "MultiplicationOperator",
+            "label": "MultiplicationOperator",
+            "idx": 0,
+            "pattern": "NOT_APPLICABLE"
+          },
+          {
+            "type": "NonTerminal",
+            "name": "AtomicExpression",
+            "idx": 2,
+            "label": "rhs"
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "FunctionExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "BuiltinFunction",
+        "label": "BuiltinFunction",
+        "idx": 0,
+        "terminalLabel": "FunctionName",
+        "pattern": "ABS|ACOS|ASIN|ATAN|BCD|BIN|COS|EXP|FIX|FUP|LN|ROUND|SIN|SQRT|TAN"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "BracketExpression",
+        "idx": 0
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "BracketExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "OpenBracket",
+        "label": "OpenBracket",
+        "idx": 0,
+        "pattern": "["
+      },
+      {
+        "type": "NonTerminal",
+        "name": "Expression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "CloseBracket",
+        "label": "CloseBracket",
+        "idx": 0,
+        "pattern": "]"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "AtomicExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Alternation",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "FunctionExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "BracketExpression",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "NumericLiteral",
+                "idx": 0
+              }
+            ]
+          },
+          {
+            "type": "Alternative",
+            "definition": [
+              {
+                "type": "NonTerminal",
+                "name": "VariableLiteral",
+                "idx": 0
+              }
+            ]
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "Expression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "NonTerminal",
+        "name": "AdditionExpression",
         "idx": 0
       }
     ]
@@ -249,7 +513,7 @@
             "definition": [
               {
                 "type": "NonTerminal",
-                "name": "VariableLiteral",
+                "name": "BracketExpression",
                 "idx": 0
               }
             ]
@@ -259,7 +523,7 @@
             "definition": [
               {
                 "type": "NonTerminal",
-                "name": "bracketExpression",
+                "name": "VariableLiteral",
                 "idx": 0
               }
             ]
@@ -346,281 +610,6 @@
             ]
           }
         ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "expression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "NonTerminal",
-        "name": "additionExpression",
-        "idx": 0
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "additionExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "NonTerminal",
-        "name": "multiplicationExpression",
-        "idx": 0,
-        "label": "lhs"
-      },
-      {
-        "type": "Repetition",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Terminal",
-            "name": "AdditionOperator",
-            "label": "AdditionOperator",
-            "idx": 0,
-            "pattern": "NOT_APPLICABLE"
-          },
-          {
-            "type": "NonTerminal",
-            "name": "multiplicationExpression",
-            "idx": 2,
-            "label": "rhs"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "multiplicationExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "NonTerminal",
-        "name": "atomicExpression",
-        "idx": 0,
-        "label": "lhs"
-      },
-      {
-        "type": "Repetition",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Terminal",
-            "name": "MultiplicationOperator",
-            "label": "MultiplicationOperator",
-            "idx": 0,
-            "pattern": "NOT_APPLICABLE"
-          },
-          {
-            "type": "NonTerminal",
-            "name": "atomicExpression",
-            "idx": 2,
-            "label": "rhs"
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "functionExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Terminal",
-        "name": "BuiltinFunction",
-        "label": "BuiltinFunction",
-        "idx": 0,
-        "pattern": "ABS|ACOS|ASIN|ATAN|BCD|BIN|COS|EXP|FIX|FUP|LN|ROUND|SIN|SQRT|TAN"
-      },
-      {
-        "type": "Terminal",
-        "name": "OpenBracket",
-        "label": "OpenBracket",
-        "idx": 0,
-        "pattern": "["
-      },
-      {
-        "type": "NonTerminal",
-        "name": "atomicExpression",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "CloseBracket",
-        "label": "CloseBracket",
-        "idx": 0,
-        "pattern": "]"
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "booleanExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "NonTerminal",
-        "name": "atomicExpression",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "BooleanOperator",
-        "label": "BooleanOperator",
-        "idx": 0,
-        "pattern": "NOT_APPLICABLE"
-      },
-      {
-        "type": "NonTerminal",
-        "name": "atomicExpression",
-        "idx": 2
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "conditionalExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Terminal",
-        "name": "If",
-        "label": "If",
-        "idx": 0,
-        "pattern": "IF"
-      },
-      {
-        "type": "Terminal",
-        "name": "OpenBracket",
-        "label": "OpenBracket",
-        "idx": 0,
-        "pattern": "["
-      },
-      {
-        "type": "NonTerminal",
-        "name": "booleanExpression",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "CloseBracket",
-        "label": "CloseBracket",
-        "idx": 0,
-        "pattern": "]"
-      },
-      {
-        "type": "Alternation",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "Terminal",
-                "name": "Then",
-                "label": "Then",
-                "idx": 0,
-                "pattern": "THEN"
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "Terminal",
-                "name": "GotoLine",
-                "label": "GotoLine",
-                "idx": 0,
-                "pattern": "GOTO[1-9][0-9]*"
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "atomicExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Alternation",
-        "idx": 0,
-        "definition": [
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "bracketExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "functionExpression",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "NumericLiteral",
-                "idx": 0
-              }
-            ]
-          },
-          {
-            "type": "Alternative",
-            "definition": [
-              {
-                "type": "NonTerminal",
-                "name": "VariableLiteral",
-                "idx": 0
-              }
-            ]
-          }
-        ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "bracketExpression",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Terminal",
-        "name": "OpenBracket",
-        "label": "OpenBracket",
-        "idx": 0,
-        "pattern": "["
-      },
-      {
-        "type": "NonTerminal",
-        "name": "expression",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "CloseBracket",
-        "label": "CloseBracket",
-        "idx": 0,
-        "pattern": "]"
       }
     ]
   },

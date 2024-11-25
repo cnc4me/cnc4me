@@ -1,31 +1,28 @@
-import { createToken } from "./_helpers";
-import { Grouping } from "./common";
+import { Fences } from "./token.categories";
+import { createToken } from "./token.utils";
 
-const SHARED_CONFIG = {
-  group: "Grouping",
-  categories: Grouping
-};
+const categories = Fences;
 
 export const OpenParen = createToken({
   name: "OpenParen",
   pattern: "(",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const CloseParen = createToken({
   name: "CloseParen",
   pattern: ")",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const OpenBracket = createToken({
   name: "OpenBracket",
   pattern: "[",
-  ...SHARED_CONFIG
+  categories
 });
 
 export const CloseBracket = createToken({
   name: "CloseBracket",
   pattern: "]",
-  ...SHARED_CONFIG
+  categories
 });

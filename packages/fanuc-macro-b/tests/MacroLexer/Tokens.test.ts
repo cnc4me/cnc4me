@@ -48,8 +48,8 @@ describe.each(TEST_GROUPS)(`tokenizing %s tokens`, (_, cases) => {
     lexer.reset();
 
     const tokens = lexer.tokenize(input);
-    it(`produces <${tokenType.name}>
-      token with no errors`, () => {
+
+    it(`produces <${tokenType.name}> token`, () => {
       expect(lexer.hasErrors).toBeFalsy();
       expect(tokens[0]).toMatchToken(tokenType);
       expect(tokens[0].image).toBe(input);

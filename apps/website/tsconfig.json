@@ -11,23 +11,23 @@
       "dom.iterable",
       "esnext"
     ],
-    "module": "esnext",
+    "module": "ESNext",
     "moduleResolution": "node",
     "noEmit": true,
     "resolveJsonModule": true,
     "skipLibCheck": true,
     "strict": true,
-    "target": "es5",
+    "target": "ESNext",
     "types": [
       "mousetrap"
     ]
   },
+  "exclude": [
+    "node_modules"
+  ],
   "include": [
     "pages",
     "lib",
     "components"
-  ],
-  "exclude": [
-    "node_modules"
   ]
 }

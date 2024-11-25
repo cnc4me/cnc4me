@@ -14,7 +14,7 @@
     "test": "vitest"
   },
   "dependencies": {
-    "chevrotain": "^10.5.0",
+    "chevrotain": "catalog:",
     "monaco-editor": "^0.52.0"
   }
 }

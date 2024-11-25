@@ -39,6 +39,9 @@
     },
     {
       "path": "./packages/chevrotain-types-generator"
+    },
+    {
+      "path": "./packages/chevrotain-live"
     }
   ],
   "include": [

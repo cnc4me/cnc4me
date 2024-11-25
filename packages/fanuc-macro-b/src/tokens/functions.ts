@@ -1,5 +1,5 @@
-import { createToken } from "./_helpers";
-import { Keyword } from "./common";
+import { createToken } from "./token.utils";
+import { Keyword } from "./token.categories";
 
 export const FANUC_MACRO_B_FNS = [
   "ABS",
@@ -25,4 +25,4 @@ export const BuiltinFunction = createToken({
   categories: Keyword
 });
 
-export type FanucMacroFunctionName = (typeof FANUC_MACRO_B_FNS)[number];
+export type MacroBuiltinFunctionNames = (typeof FANUC_MACRO_B_FNS)[number];

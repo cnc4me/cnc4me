@@ -14,7 +14,7 @@ export function toMatchToken(received: IToken, tokType: TokenType) {
     return {
       pass: false,
       message: () =>
-        `matcher for token "${received.tokenType.name}" was undefined.`
+        `Expected value for <${received.tokenType.name}> token was undefined.`
     };
   }
   return {

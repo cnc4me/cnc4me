@@ -6,8 +6,6 @@ import type { TokenType } from "chevrotain";
 
 interface CustomMatchers<R = unknown> {
   toMatchToken: (tokType: TokenType) => R;
-  toMatchWithPrecision: (received: number, precision: number) => R;
-  toMatchWithinTolerance: (received: number, tolerance?: number) => R;
 }
 
 declare module "vitest" {

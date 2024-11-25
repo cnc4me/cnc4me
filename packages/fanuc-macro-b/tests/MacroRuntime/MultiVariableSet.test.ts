@@ -38,7 +38,7 @@ describe.skip("evaluating many expressions into multiple variables", () => {
     expect(mem.read(6)).toBe(10);
     expect(mem.read(7)).toBe(16);
     expect(mem.read(8)).toBe(32);
-    expect(mem.read(9)).toMatchWithPrecision(0.642857, 5);
+    expect(mem.read(9)).toBeCloseTo(0.642857, 5);
     // expect(mem.read(10)).toMatchWithinTolerance(1.6);
   });
 });

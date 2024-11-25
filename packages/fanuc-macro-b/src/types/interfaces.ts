@@ -19,10 +19,10 @@ export interface InterpretedProgram extends ProgramIdentifier {
   lines: ParsedLineData[];
 }
 
-export interface VariableRegister {
-  register: number;
-  value: number;
-}
+// export interface VariableRegister {
+//   register: number;
+//   value: number;
+// }
 
 export interface ParsedLineData {
   /**

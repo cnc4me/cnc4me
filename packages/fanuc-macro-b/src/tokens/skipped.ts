@@ -1,6 +1,6 @@
 import { Lexer } from "chevrotain";
 
-import { createToken } from "./_helpers";
+import { createToken } from "./token.utils";
 
 export const WhiteSpace = createToken({
   name: "WhiteSpace",

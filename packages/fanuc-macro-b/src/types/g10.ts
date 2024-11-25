@@ -1,5 +1,5 @@
-import type { MacroRuntime } from "../lib";
-import type { RuntimeError } from "./runtime";
+import type { MacroRuntime } from "../MacroRuntime";
+import type { MacroCombinedError } from "./runtime";
 
 export type ValidG10WorkOffsetGroup = 2 | 20;
 
@@ -34,6 +34,6 @@ export type PossibleG10LineValues = G10ToolOffsets | G10WorkOffsets;
 
 export interface G10ParseResult {
   runtime: MacroRuntime;
-  error: RuntimeError[];
+  error: MacroCombinedError[];
   result: PossibleG10LineValues;
 }

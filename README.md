@@ -5,16 +5,3 @@ Welcome to the monorepo with all the tooling that powers the [Macro Playground](
 ## Motivation
 
 I have always wanted to be able to debug macro programs offline from a CNC machine, so therefore, I need an interpreter! I have never attempted something like this, but let's do it! :rocket:
-
-## Packages
-
-| Repo                                                                                       | Description                                            |
-| ------------------------------------------------------------------------------------------ | ------------------------------------------------------ |
-| [@cnc4me/macro-playground](https://github.com/cnc4me/macro-playground)                     | Macro Playground Website                               |
-| [@cnc4me/fanuc-macro-b](https://github.com/cnc4me/fanuc-macro-b)                           | Fanuc Macro B Lexer, Parser, & Interpreter             |
-| [@cnc4me/jest-matchers](https://github.com/cnc4me/jest-matchers)                           | Custom Jest Matchers for testing                       |
-| [@cnc4me/chevrotain-jest-extension](https://github.com/cnc4me/chevrotain-jest-extension)   | Custom Jest matchers for testing Chevrotain components |
-| [@cnc4me/chevrotain-types-generator](https://github.com/cnc4me/chevrotain-types-generator) | Generate TypeScript types from a Chevrotain parser     |
-| [@cnc4me/chrysalis](https://github.com/cnc4me/chrysalis)                                   | Helper functions for customizing the Monaco Editor     |
-| [@cnc4me/monaco-theme-gcode](https://github.com/cnc4me/monaco-theme-gcode)                 | Custom syntax highlighting for the Monaco Editor       |
-| [@cnc4me/monaco-language-gcode](https://github.com/cnc4me/monaco-language-gcode)           | Custom Language for the Monaco Editor                  |

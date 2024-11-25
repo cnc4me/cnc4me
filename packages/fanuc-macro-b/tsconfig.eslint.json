@@ -2,7 +2,7 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "types": [
-      "vitest",
+      "vitest/globals",
       "./src/types/fanuc.d.ts"
     ]
   },

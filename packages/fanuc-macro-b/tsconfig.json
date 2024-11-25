@@ -6,6 +6,7 @@
     // "noEmit": true,
     "composite": true,
     "esModuleInterop": true,
+    "outDir": "dist"
   },
   "files": [
     "vite.config.ts"

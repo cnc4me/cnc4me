@@ -1,41 +1,34 @@
-import { createToken } from "./_helpers";
-import { ControlFlowKeyword } from "./common";
+import { ControlFlowKeyword, Keyword } from "./token.categories";
+import { createToken } from "./token.utils";
 
-/**
- * 11/20/2024 - Learned that applying a group to tokens
- * moves them from result.tokens to result.groups[GROUP]
- */
-const SHARED_CONFIG = {
-  // group: "ControlFlow",
-  categories: ControlFlowKeyword
-};
+const categories = [ControlFlowKeyword, Keyword];
 
 export const GotoLine = createToken({
   name: "GotoLine",
   pattern: /GOTO[1-9][0-9]*/,
-  ...SHARED_CONFIG
+  categories
 });
 
 export const If = createToken({
   name: "If",
   pattern: /IF/,
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Then = createToken({
   name: "Then",
   pattern: /THEN/,
-  ...SHARED_CONFIG
+  categories
 });
 
 export const Do = createToken({
   name: "Do",
   pattern: /DO/,
-  ...SHARED_CONFIG
+  categories
 });
 
 export const While = createToken({
   name: "While",
   pattern: /WHILE/,
-  ...SHARED_CONFIG
+  categories
 });

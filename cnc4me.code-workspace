@@ -1,25 +1,29 @@
 {
   "folders": [
     {
-      "name": "📦 @cnc4me/fanuc-macro-b",
-      "path": "packages/fanuc-macro-b"
+      "name": "✨ @cnc4me/cnc4me",
+      "path": "."
     },
     {
       "name": "🚀 @cnc4me/macro-playground",
       "path": "apps/website"
     },
     {
+      "name": "📦 @cnc4me/chevrotain-live",
+      "path": "packages/chevrotain-live"
+    },
+    {
       "name": "📦 @cnc4me/chevrotain-types-generator",
       "path": "packages/chevrotain-types-generator"
     },
     {
-      "name": "📦 @cnc4me/monaco-gcode",
-      "path": "packages/monaco-gcode"
+      "name": "📦 @cnc4me/fanuc-macro-b",
+      "path": "packages/fanuc-macro-b"
     },
     {
-      "name": "✨ @cnc4me/cnc4me",
-      "path": "."
-    },
+      "name": "📦 @cnc4me/monaco-gcode",
+      "path": "packages/monaco-gcode"
+    }
   ],
   "settings": {
     "files.exclude": {
@@ -29,7 +33,7 @@
       "**/CVS": true,
       "**/.DS_Store": true,
       "**/Thumbs.db": true,
-      "**/node_modules": true
+      "**/node_modules": false
     }
   }
 }

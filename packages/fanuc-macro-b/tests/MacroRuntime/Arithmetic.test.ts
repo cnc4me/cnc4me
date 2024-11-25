@@ -54,6 +54,6 @@ it.each(TEST_CASES)(`parsing '%s' should equal '%s'`, (expr, answer) => {
   // if (errors.length > 0) {
   //   expect(runtime.Memory.read(1)).toBe(NaN);
   // } else {
-  expect(runtime.Memory.read(1)).toMatchWithPrecision(answer, MATCH_PRECISION);
+  expect(runtime.Memory.read(1)).toBeCloseTo(answer, MATCH_PRECISION);
   // }
 });
