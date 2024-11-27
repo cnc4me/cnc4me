@@ -1,27 +1,31 @@
-import { degreeToRadian, radianToDegree } from "../utils";
+const LN = (x: number) => Math.log(x);
+const ABS = (x: number) => Math.abs(x);
+const FUP = (x: number) => Math.ceil(x);
+const SQRT = (x: number) => Math.sqrt(x);
+const FIX = (x: number) => Math.floor(x);
+const ROUND = (x: number) => Math.round(x);
+const BCD = (x: number) => decimalToBCD(x);
+const BIN = (x: number) => decimalToBin(x);
+const EXP = (x: number) => Math.pow(Math.E, x);
+const SIN = (x: number) => Math.sin(degreeToRadian(x));
+const COS = (x: number) => Math.cos(degreeToRadian(x));
+const TAN = (x: number) => Math.tan(degreeToRadian(x));
+const ASIN = (x: number) => radianToDegree(Math.asin(x));
+const ACOS = (x: number) => radianToDegree(Math.acos(x));
+const ATAN = (x: number) => radianToDegree(Math.atan(x));
 
-export const LN = (input: number) => Math.log(input);
-export const ABS = (input: number) => Math.abs(input);
-export const FUP = (input: number) => Math.ceil(input);
-export const SQRT = (input: number) => Math.sqrt(input);
-export const FIX = (input: number) => Math.floor(input);
-export const ROUND = (input: number) => Math.round(input);
-export const SIN = (input: number) => Math.sin(degreeToRadian(input));
-export const COS = (input: number) => Math.cos(degreeToRadian(input));
-export const TAN = (input: number) => Math.tan(degreeToRadian(input));
-export const ASIN = (input: number) => radianToDegree(Math.asin(input));
-export const ACOS = (input: number) => radianToDegree(Math.acos(input));
-export const ATAN = (input: number) => radianToDegree(Math.atan(input));
-
+/**
+ * These are built in language functions for Fanuc Macro B
+ */
 export const STDLIB = {
   ABS,
   ACOS,
   ASIN,
   ATAN,
-  BCD: (x: number) => x, // @TODO Implement BCD
-  BIN: (x: number) => x, // @TODO Implement BIN
+  BCD,
+  BIN,
   COS,
-  EXP: (x: number) => x, // @TODO Implement EXP
+  EXP,
   FIX,
   FUP,
   LN,
@@ -31,14 +35,22 @@ export const STDLIB = {
   TAN
 } as const;
 
-// export function stdlib(func: MacroBuiltinFunctionNames, input: number): number {
-//   if (typeof input !== "number") {
-//     throw new Error(
-//       "There was an error evaluting the builtinFn into a number."
-//     );
-//   }
+function degreeToRadian(degrees: number): number {
+  return (degrees * Math.PI) / 180;
+}
 
-//   export const result = STDLIB[func](input);
+function radianToDegree(radians: number): number {
+  return (180 / Math.PI) * radians;
+}
 
-//   return result;
-// }
+function decimalToBCD(value: number): number {
+  const digits = value.toString().split("");
+  const binary = digits.map(digit =>
+    parseInt(digit, 10).toString(2).padStart(4, "0")
+  );
+  return parseInt(binary.join(""));
+}
+
+function decimalToBin(value: number): number {
+  return Number(value.toString(2));
+}

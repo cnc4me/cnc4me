@@ -1,6 +1,15 @@
 import { IToken } from "chevrotain";
 
 /**
+ * Generate an array of integers, including start and finish.
+ */
+export function range(start: number, end: number) {
+  end = end + 1; // include the end
+  const length = (end - start) / 1;
+  return Array.from({ length }, (_, i) => start + i);
+}
+
+/**
  * Get a single value from a possible array with one element
  *
  * If passed an array, then return arr[0].
@@ -45,27 +54,4 @@ export function stripFirstChar(address: string): string {
  */
 export function parseNumber(value: string): number {
   return value.includes(".") ? parseFloat(value) : parseInt(value);
-}
-
-/**
- * Generate an array of integers, including start and finish.
- */
-export function range(start: number, end: number) {
-  end = end + 1; // include the end
-  const length = (end - start) / 1;
-  return Array.from({ length }, (_, i) => start + i);
-}
-
-/**
- * Convert Degrees to Radians
- */
-export function degreeToRadian(degrees: number): number {
-  return (degrees * Math.PI) / 180;
-}
-
-/**
- * Convert Radians to Degrees
- */
-export function radianToDegree(radians: number): number {
-  return (180 / Math.PI) * radians;
 }

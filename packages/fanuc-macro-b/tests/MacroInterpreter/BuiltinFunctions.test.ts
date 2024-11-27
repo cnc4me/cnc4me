@@ -8,7 +8,11 @@ const SQUARE_ROOT_THREE = Math.sqrt(3);
 const ROOT_TWO__OVER_TWO = SQUARE_ROOT_TWO / 2;
 const ROOT_THREE__OVER_TWO = SQUARE_ROOT_THREE / 2;
 
-const TEST_CASES: Array<[expr: string, output: number]> = [
+const E_TO_THE_X_POWER = (x: number) => Math.pow(Math.E, x);
+
+const TRIG_TEST_CASES: TestCases = [];
+
+const TEST_CASES: TestCases = [
   // Absolute Value
   [`ABS[5]`, 5],
   [`ABS[-5]`, 5],
@@ -31,8 +35,25 @@ const TEST_CASES: Array<[expr: string, output: number]> = [
   [`ATAN[${1 / SQUARE_ROOT_THREE}]`, 30],
   [`ATAN[${SQUARE_ROOT_THREE}]`, 60],
 
-  // Exponents
-  [`EXP[3]`, 9],
+  // To Binary
+  [`BIN[1]`, 1],
+  [`BIN[2]`, 10],
+  [`BIN[3]`, 11],
+  [`BIN[4]`, 100],
+  [`BIN[5]`, 101],
+  [`BIN[22]`, 10110],
+  [`BIN[121]`, 1111001],
+  [`BIN[999]`, 1111100111],
+
+  // To Binary Coded Decimal
+  // [`BCD[1]`, 1],
+  // [`BCD[2]`, 10],
+  // [`BCD[3]`, 11],
+  // [`BCD[4]`, 100],
+  // [`BCD[5]`, 101],
+  // [`BCD[22]`, 10110],
+  // [`BCD[121]`, 1111001],
+  // [`BCD[999]`, 1111100111],
 
   // Cosine
   [`COS[5]`, 0.99619],
@@ -41,6 +62,12 @@ const TEST_CASES: Array<[expr: string, output: number]> = [
   [`COS[45]`, 0.707106],
   [`COS[60]`, 0.5],
   [`COS[90]`, 0],
+
+  // Exponents
+  [`EXP[2]`, E_TO_THE_X_POWER(2)],
+  [`EXP[3]`, E_TO_THE_X_POWER(3)],
+  [`EXP[21]`, E_TO_THE_X_POWER(21)],
+  [`EXP[100]`, E_TO_THE_X_POWER(100)],
 
   // Round Down (Math.floor)
   [`FIX[5.987]`, 5],
@@ -94,3 +121,5 @@ describe("Interpreting BuiltinFunctions", () => {
     expect(result).toBeCloseTo(output, 4);
   });
 });
+
+type TestCases = Array<[expr: string, output: number]>;

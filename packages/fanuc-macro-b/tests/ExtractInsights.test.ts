@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { FanucMacroB } from "../../src";
+import { FanucMacroB } from "../src";
 
 const code = `%
 O1234 (example)
