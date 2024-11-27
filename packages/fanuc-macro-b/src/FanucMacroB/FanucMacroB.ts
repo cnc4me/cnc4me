@@ -1,3 +1,4 @@
+import { extractOffsets } from "../memory";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
@@ -127,6 +128,17 @@ export class FanucMacroB
       error: null,
       // @ts-expect-error additionExpression is missing?
       result: this.interpreter.VariableAssignment(cst?.children) // @todo fix this type error
+    };
+  }
+
+  /**
+   * @todo think about this...
+   */
+  evalG10(input: string) {
+    const { error, result } = this.eval(input);
+    return {
+      error,
+      result: extractOffsets(result[0])
     };
   }
 

@@ -1,11 +1,12 @@
 import { match, Pattern } from "ts-pattern";
 
-import { M, parseG10, RegisterMap } from "../memory";
+import { M, RegisterMap } from "../memory";
 import { isLexingError, range } from "../utils";
 
 import type {
+  G10ToolOffsets,
+  G10WorkOffsets,
   MacroValueArray,
-  PossibleG10LineValues,
   ToolOffsetArray,
   ToolOffsetDict,
   UpdatedValue,
@@ -46,12 +47,12 @@ export class MacroMemory {
     return value;
   }
 
-  /**
-   * Read a range of values from a starting register
-   */
-  readBlocks(from: number, count: number): number[] {
-    return range(from, from + count).map(i => this.read(i));
-  }
+  // /**
+  //  * Read a range of values from a starting register
+  //  */
+  // readBlocks(from: number, count: number): number[] {
+  //   return range(from, from + count).map(i => this.read(i));
+  // }
 
   /**
    * Write  a value to a register
@@ -86,17 +87,15 @@ export class MacroMemory {
   /**
    * Evaluate a G10 line to extract values
    */
-  g10(g10: PossibleG10LineValues) {
+  g10(g10: G10ToolOffsets | G10WorkOffsets) {
     // debug("[ G10 ]", g10);
 
     return match(g10)
       .with({ L: WORK.COMMON }, ({ P, ...rest }) => {
-        const { B, X, Y, Z } = rest;
-        this.setCommonWorkOffset(P, { B, X, Y, Z });
+        this.setCommonWorkOffset(P, rest);
       })
       .with({ L: WORK.AUX }, ({ P, ...rest }) => {
-        const { B, X, Y, Z } = rest;
-        this.setAuxWorkOffset(P, { B, X, Y, Z });
+        this.setAuxWorkOffset(P, rest);
       })
       .with({ L: TOOL.LENGTH_COMP, R: Pattern.number }, ({ P, R }) => {
         this.setToolLengthComp(P, R);
@@ -111,27 +110,6 @@ export class MacroMemory {
         this.setToolDiameter(P, R);
       })
       .run();
-  }
-
-  /**
-   * Evaluate and read into memory offsets from a G10 line
-   */
-  evalG10(input: string) {
-    const { error, result } = parseG10(input);
-
-    if (error.length > 0) {
-      const firstError = error[0];
-
-      if (typeof firstError === "string") {
-        throw Error(firstError);
-      } else if (isLexingError(firstError)) {
-        throw new Error(firstError.message);
-      } else {
-        throw new Error(firstError.message);
-      }
-    }
-
-    this.g10(result);
   }
 
   /**

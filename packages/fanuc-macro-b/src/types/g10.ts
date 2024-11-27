@@ -1,4 +1,3 @@
-import type { MacroRuntime } from "../MacroRuntime";
 import type { MacroCombinedError } from "./runtime";
 
 export type ValidG10WorkOffsetGroup = 2 | 20;
@@ -10,30 +9,29 @@ export type ValidG10OffsetGroups =
   | ValidG10ToolOffsetGroup;
 
 interface G10LineBase {
-  readonly L: number;
-  readonly P: number;
-  readonly MODE?: number;
+  L: number;
+  P: number;
+  MODE?: number; // @TODO what is this for?
 }
 
 export interface G10WorkOffsets extends G10LineBase {
-  readonly L: ValidG10WorkOffsetGroup;
-  // readonly L: number;
-  readonly X?: number;
-  readonly Y?: number;
-  readonly Z?: number;
-  readonly B?: number;
+  L: ValidG10WorkOffsetGroup;
+  //  L: number;
+  X?: number;
+  Y?: number;
+  Z?: number;
+  B?: number;
 }
 
 export interface G10ToolOffsets extends G10LineBase {
-  readonly L: ValidG10ToolOffsetGroup;
+  L: ValidG10ToolOffsetGroup;
   // readonly L: number;
-  readonly R?: number;
+  R?: number;
 }
 
 export type PossibleG10LineValues = G10ToolOffsets | G10WorkOffsets;
 
 export interface G10ParseResult {
-  runtime: MacroRuntime;
   error: MacroCombinedError[];
   result: PossibleG10LineValues;
 }

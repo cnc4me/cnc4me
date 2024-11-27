@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { extractOffsets, FanucMacroB, parseG10 } from "../../../src";
+import { FanucMacroB } from "../../src";
 
 /**
  * G10 Line Reference
@@ -18,16 +18,12 @@ const G10_LINES = {
 
 const fmb = new FanucMacroB();
 
-describe("use parseG10() to extract Work Offsets", () => {
+describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
   it(`can get values for G54 via ${G10_LINES.G54}`, () => {
-    /**
-     * @todo MOVE THIS
-     */
-    const { error, result } = fmb.eval(G10_LINES.G54);
-    const g10 = extractOffsets(result[0]);
+    const { error, result } = fmb.evalG10(G10_LINES.G54);
 
-    expect(error).toStrictEqual([]);
-    expect(g10).toMatchObject({
+    expect(error).toBeFalsy();
+    expect(result).toMatchObject({
       L: 2,
       P: 1,
       X: 7.5,
@@ -38,9 +34,9 @@ describe("use parseG10() to extract Work Offsets", () => {
   });
 
   it(`can get values for G55 via ${G10_LINES.G55}`, () => {
-    const { error, result } = parseG10(G10_LINES.G55);
+    const { error, result } = fmb.evalG10(G10_LINES.G55);
 
-    expect(error).toStrictEqual([]);
+    expect(error).toBeFalsy();
     expect(result).toMatchObject({
       L: 2,
       P: 2,
@@ -52,9 +48,9 @@ describe("use parseG10() to extract Work Offsets", () => {
   });
 
   it(`can get values for G54.1 P7 via ${G10_LINES.G54_1_P7}`, () => {
-    const { error, result } = parseG10(G10_LINES.G54_1_P7);
+    const { error, result } = fmb.evalG10(G10_LINES.G54_1_P7);
 
-    expect(error).toStrictEqual([]);
+    expect(error).toBeFalsy();
     expect(result).toMatchObject({
       L: 20,
       P: 7,
