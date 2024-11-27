@@ -2,6 +2,7 @@
  * All tokens are exported in the lib folder's index as `T`
  */
 export * from "./addresses";
+export * from "./bitwise";
 export * from "./boolean";
 export * from "./brackets";
 export * from "./control-flow";

@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { program } from "../../src";
+import { FanucMacroB } from "../../src";
 
 const code = `%
 O1234 (example)
@@ -37,14 +37,18 @@ G91 G28 Z0.
 M30
 %`;
 
-describe.skip("address Insights", () => {
-  const { errors, insights } = program(code);
+describe("address Insights", () => {
+  const fmb = new FanucMacroB();
+
+  fmb.evalProgram(code);
+
+  const insights = fmb.interpreter.getInsights();
 
   it("runs without errors", () => {
-    expect(errors).toHaveLength(0);
+    expect(fmb.hasErrors).toBeFalsy();
   });
 
-  it.skip("extracts insights about G10 lines", () => {
+  it("extracts insights about G10 lines", () => {
     expect(insights.get("G10")).toHaveLength(1);
   });
 
