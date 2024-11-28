@@ -1,7 +1,7 @@
 import { match, Pattern } from "ts-pattern";
 
 import { M, RegisterMap } from "../memory";
-import { isLexingError, range } from "../utils";
+import { range } from "../utils";
 
 import type {
   G10ToolOffsets,
@@ -11,7 +11,7 @@ import type {
   ToolOffsetDict,
   UpdatedValue,
   WorkCoordinateArray,
-  WorkCoordinateHash
+  WorkCoordinateRecord
 } from "../types";
 
 const { WORK, TOOL } = M.OFFSET_GROUPS;
@@ -20,7 +20,8 @@ const { WORK, TOOL } = M.OFFSET_GROUPS;
  * A Representaion of a CNC machines' macro memory.
  */
 export class MacroMemory {
-  static REGISTERS: number[] = [
+  static ZERO = 0;
+  static REGISTERS = [
     ...range(1, 33),
     ...range(100, 199),
     ...range(500, 9999),
@@ -28,39 +29,40 @@ export class MacroMemory {
     ...range(5000, 14000)
   ];
 
-  #vars: Record<number, number> = {};
+  #vars: VariableDictionary = {};
+
+  /**
+   * @TODO this will be fun! implement a stack for sub-programs and loops
+   * @TODO we will also need a level counter? or can that be derived...
+   */
+  #stack: VariableDictionary[] = [];
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
+   * @TODO have a way to initialize code groups
    */
   constructor() {
-    this.write(M.GROUP_3, 90);
-    this.reset();
+    // this.write(M.GROUP_3, 90);
+    //
+    this.clearAll();
   }
 
   /**
    * Read a value from a register
    */
   read(register: number): number {
-    const value = this._read(register);
+    const value = this.#read(register);
     // debug(`[READ ] #${register}= ${value}`);
     return value;
   }
-
-  // /**
-  //  * Read a range of values from a starting register
-  //  */
-  // readBlocks(from: number, count: number): number[] {
-  //   return range(from, from + count).map(i => this.read(i));
-  // }
 
   /**
    * Write  a value to a register
    */
   write(register: number, value: number): UpdatedValue {
-    const prev = this._read(register);
+    const prev = this.#read(register);
 
-    this._write(register, value);
+    this.#write(register, value);
 
     // debug(`[WRITE] #${register}= ${value}`);
 
@@ -74,14 +76,16 @@ export class MacroMemory {
    * Clear a register value by writing `NaN`
    */
   clear(register: number): void {
-    this._write(register, NaN);
+    this.#write(register, MacroMemory.ZERO);
   }
 
   /**
    * Clear all registers to reset the memory
    */
-  reset(): void {
-    MacroMemory.REGISTERS.forEach(idx => this.clear(idx));
+  clearAll(): void {
+    for (const register of MacroMemory.REGISTERS) {
+      this.clear(register);
+    }
   }
 
   /**
@@ -116,19 +120,19 @@ export class MacroMemory {
    * Get work coordinates as labeled axis locations for a common work offset
    * (G53, G54, G55, G56, G57, G58, G59)
    */
-  getWorkCoordinateHash(gOffset: number): WorkCoordinateHash {
+  getWorkCoordinateRecord(gOffset: number): WorkCoordinateRecord {
     if (gOffset < 53 || gOffset > 59) {
       throw Error(`${gOffset} is not a valid Work Coordinate Group`);
     }
 
-    return this._getCommonWorkOffsetWorkCoordinateHash(gOffset);
+    return this.#getCommonWorkOffsetWorkCoordinateRecord(gOffset);
   }
 
   /**
    * Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
    */
   getWorkCoordinateArray(gOffset: number): WorkCoordinateArray {
-    const { X, Y, Z, B } = this.getWorkCoordinateHash(gOffset);
+    const { X, Y, Z, B } = this.getWorkCoordinateRecord(gOffset);
 
     return [X, Y, Z, B];
   }
@@ -136,19 +140,19 @@ export class MacroMemory {
   /**
    * Get auxiliary work coordinates for a G54.1 `P` group
    */
-  getAuxWorkCoordinateHash(pGroup: number): WorkCoordinateHash {
+  getAuxWorkCoordinateRecord(pGroup: number): WorkCoordinateRecord {
     if (pGroup < 1 || pGroup > 299) {
       throw Error(`${pGroup} is not a valid Aux Work Coordinate Group`);
     }
 
-    return this._getAuxWorkOffsetWorkCoordinateHash(pGroup);
+    return this.#getAuxWorkOffsetWorkCoordinateRecord(pGroup);
   }
 
   /**
    * Get auxiliary work coordinates for a G54.1 `P` group
    */
   getAuxWorkCoordinateArray(pGroup: number): WorkCoordinateArray {
-    const { X, Y, Z, B } = this._getAuxWorkOffsetWorkCoordinateHash(pGroup);
+    const { X, Y, Z, B } = this.#getAuxWorkOffsetWorkCoordinateRecord(pGroup);
 
     return [X, Y, Z, B];
   }
@@ -178,14 +182,14 @@ export class MacroMemory {
    * Tool Length Offset Group (L11)
    */
   setToolLength(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH, value);
+    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH, value);
   }
 
   /**
    * Get Tool Length value by tool number
    */
   getToolLength(toolNum: number) {
-    return this._getToolOffsetValueByGroup(
+    return this.#getToolOffsetValueByGroup(
       toolNum,
       M.OFFSET_GROUPS.TOOL.LENGTH
     );
@@ -195,14 +199,14 @@ export class MacroMemory {
    * Tool Length Compensation Offset Group (L10)
    */
   setToolLengthComp(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH_COMP, value);
+    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH_COMP, value);
   }
 
   /**
    * Get Tool Length Comp value by tool number
    */
   getToolLengthComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(
+    return this.#getToolOffsetValueByGroup(
       toolNum,
       M.OFFSET_GROUPS.TOOL.LENGTH_COMP
     );
@@ -212,14 +216,14 @@ export class MacroMemory {
    * Tool Diameter Offset Group (L13)
    */
   setToolDiameter(toolNum: number, value: number) {
-    this._setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.DIAMETER, value);
+    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.DIAMETER, value);
   }
 
   /**
    * Get Tool diameter value by tool number
    */
   getToolDiameter(toolNum: number) {
-    return this._getToolOffsetValueByGroup(
+    return this.#getToolOffsetValueByGroup(
       toolNum,
       M.OFFSET_GROUPS.TOOL.DIAMETER
     );
@@ -229,7 +233,7 @@ export class MacroMemory {
    * Tool Diameter Compensation. Offset Group (L12)
    */
   setToolDiameterComp(toolNum: number, value: number) {
-    this._setToolOffsetValue(
+    this.#setToolOffsetValue(
       toolNum,
       M.OFFSET_GROUPS.TOOL.DIAMETER_COMP,
       value
@@ -240,7 +244,7 @@ export class MacroMemory {
    * Get Tool Diameter Comp value by tool number
    */
   getToolDiameterComp(toolNum: number) {
-    return this._getToolOffsetValueByGroup(
+    return this.#getToolOffsetValueByGroup(
       toolNum,
       M.OFFSET_GROUPS.TOOL.DIAMETER_COMP
     );
@@ -252,7 +256,7 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setCommonWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
+  setCommonWorkOffset(group: number, locations: Partial<WorkCoordinateRecord>) {
     // debug("[O-SET]", `G${group + 53}=`, locations);
 
     Object.entries(locations).forEach(([axis, value]) => {
@@ -268,7 +272,7 @@ export class MacroMemory {
    * G10 line sets:  `G10 G90 L2 P1 X0 Y0 Z0 B0`
    * Use in program: `G54 X0 Y0`
    */
-  setAuxWorkOffset(group: number, locations: Partial<WorkCoordinateHash>) {
+  setAuxWorkOffset(group: number, locations: Partial<WorkCoordinateRecord>) {
     // debug("[O-SET]", `G54.1 P${group}=`, locations);
 
     Object.entries(locations).forEach(([axis, value]) => {
@@ -281,14 +285,7 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  // get forEach() {
-  //   return Object.entries(this.#vars);
-  // }
-
-  /**
-   * Create an array of all the set macro variables
-   */
-  entries(opts?: { includeUnset: boolean }): MacroValueArray {
+  toArray(opts?: { includeUnset: boolean }): MacroValueArray {
     const values: MacroValueArray = [];
 
     Object.entries(this.#vars).forEach(([register, value]) => {
@@ -306,36 +303,33 @@ export class MacroMemory {
    * Collect all the set registers into a POJO for further processing
    */
   toObject(
-    opts?: Parameters<MacroMemory["entries"]>[0]
+    opts?: Parameters<MacroMemory["toArray"]>[0]
   ): Record<number, number> {
-    const valueMap: Record<string, number> = {};
-
-    for (const [register, value] of this.entries(opts)) {
-      valueMap[`#${register}`] = value;
-    }
-
-    return valueMap;
+    return Object.fromEntries(this.toArray(opts));
   }
 
   /**
    * Serialize all the MacroMemory into a JSON string
    */
-  serialize(): string {
+  toJSON(): string {
     return JSON.stringify(this.#vars);
   }
 
-  private _write(register: number, value: number) {
+  #write(register: number, value: number) {
     this.#vars[register] = value;
   }
 
-  private _read(register: number): number {
-    return this.#vars[register] ?? NaN;
+  /**
+   * If a register is not set then it returns `0`
+   */
+  #read(register: number): number {
+    return this.#vars[register] ?? MacroMemory.ZERO;
   }
 
   /**
    * Set the group value for a tool by number
    */
-  private _setToolOffsetValue(toolNum: number, group: number, value: number) {
+  #setToolOffsetValue(toolNum: number, group: number, value: number) {
     const reg = RegisterMap.ToolOffset(group, toolNum);
 
     this.write(reg, value);
@@ -344,7 +338,7 @@ export class MacroMemory {
   /**
    * Get a tool offset value by number and group.
    */
-  private _getToolOffsetValueByGroup(toolNum: number, group: number): number {
+  #getToolOffsetValueByGroup(toolNum: number, group: number): number {
     const reg = RegisterMap.ToolOffset(group, toolNum);
 
     return this.read(reg);
@@ -353,9 +347,9 @@ export class MacroMemory {
   /**
    * Get set axis locations for a given work offset
    */
-  private _getCommonWorkOffsetWorkCoordinateHash(
+  #getCommonWorkOffsetWorkCoordinateRecord(
     commonOffset: number
-  ): WorkCoordinateHash {
+  ): WorkCoordinateRecord {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = RegisterMap.WorkOffset(commonOffset - 53, axis);
 
@@ -364,15 +358,13 @@ export class MacroMemory {
         [axis]: this.#vars[reg]
         // [axis]: this.read(reg)
       };
-    }, {} as WorkCoordinateHash);
+    }, {} as WorkCoordinateRecord);
   }
 
   /**
    * Get set axis locations for a given work offset
    */
-  private _getAuxWorkOffsetWorkCoordinateHash(
-    pGroup: number
-  ): WorkCoordinateHash {
+  #getAuxWorkOffsetWorkCoordinateRecord(pGroup: number): WorkCoordinateRecord {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = RegisterMap.AuxWorkOffset(pGroup, axis);
 
@@ -381,6 +373,8 @@ export class MacroMemory {
         [axis]: this.#vars[reg]
         // [axis]: this.read(reg)
       };
-    }, {} as WorkCoordinateHash);
+    }, {} as WorkCoordinateRecord);
   }
 }
+
+type VariableDictionary = Record<number, number>;

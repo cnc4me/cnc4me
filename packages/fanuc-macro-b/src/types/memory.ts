@@ -1,6 +1,6 @@
 export type MacroValueArray = [register: number, value: number][];
 
-export interface WorkCoordinateHash {
+export interface WorkCoordinateRecord {
   X: number;
   Y: number;
   Z: number;

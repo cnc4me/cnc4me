@@ -1,11 +1,12 @@
 import { extractOffsets } from "../memory";
+import { range } from "../utils";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
 
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";
-import type { ErrorProducer, ParsedLineData } from "../types";
+import type { ErrorProducer, MacroValueArray, ParsedLineData } from "../types";
 import type { IToken } from "chevrotain";
 
 /**
@@ -56,6 +57,21 @@ export class FanucMacroB
       ...this.lexer.getErrors(), //
       ...this.parser.getErrors() //
     ];
+  }
+
+  /**
+   * Returns an object where the keys are variable register numbers
+   * and the value is it's currently set value.
+   */
+  getMemory(opts?: Partial<GetMemoryOptions>): Record<number, number> {
+    if (opts?.range) {
+      const entries: MacroValueArray = [];
+      range(...opts.range).forEach(register => {
+        entries.push([register, this.memory.read(register)]);
+      });
+      return Object.fromEntries(entries);
+    }
+    return this.memory.toObject();
   }
 
   /**
@@ -158,4 +174,8 @@ export class FanucMacroB
 type EvalResult = {
   error: Error[] | null;
   result: ParsedLineData[];
+};
+
+type GetMemoryOptions = {
+  range: [start: number, end: number];
 };
