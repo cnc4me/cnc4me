@@ -22,11 +22,11 @@ G91 G28 Z0.
 M30
 %`;
 
-const runtime = new MacroRuntime();
-
-beforeEach(() => runtime.reset());
-
 describe("parsing a simple program with the MacroRuntime", () => {
+  const runtime = new MacroRuntime();
+
+  beforeEach(() => runtime.reset());
+
   it("loads a program", () => {
     runtime.loadProgram(SAMPLE_CODE);
     expect(runtime.getProgramCount()).toBe(1);

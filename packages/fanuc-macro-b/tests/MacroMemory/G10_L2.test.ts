@@ -32,7 +32,7 @@ describe("setting work offsets with MacroMemory#g10()", () => {
       mem.g10(input);
 
       it("has the correct axis values", () => {
-        const offsets = mem.getWorkCoordinateHash(offsetCode);
+        const offsets = mem.getWorkCoordinateRecord(offsetCode);
 
         expect(offsets.X).toBe(X);
         expect(offsets.Y).toBe(Y);

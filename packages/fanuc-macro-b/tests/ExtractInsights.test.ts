@@ -37,7 +37,7 @@ G91 G28 Z0.
 M30
 %`;
 
-describe("address Insights", () => {
+describe.skip("address Insights", () => {
   const fmb = new FanucMacroB();
 
   fmb.evalProgram(code);

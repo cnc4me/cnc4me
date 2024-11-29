@@ -1,6 +1,6 @@
-import { expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { MacroRuntime } from "../../src";
+import { FanucMacroB } from "../../src";
 
 const MATCH_PRECISION = 6;
 
@@ -38,22 +38,15 @@ const TEST_CASES: [expr: string, answer: number][] = [
   ["2+[3*4-[2*3]]", 8] // Nested brackets with subtraction inside
 ];
 
-const runtime = new MacroRuntime();
+describe("interpreting expressions into a variable", () => {
+  it.each(TEST_CASES)(`parsing '%s' should equal '%s'`, (expr, answer) => {
+    const fmb = new FanucMacroB();
 
-it.each(TEST_CASES)(`parsing '%s' should equal '%s'`, (expr, answer) => {
-  const variable = 1;
-  runtime.reset();
-  runtime.evalLines(`#${variable}=${expr}`);
+    const variable = 1;
 
-  // const errors = runtime.getErrors();
+    fmb.eval(`#${variable}=${expr}`);
 
-  expect(runtime.hasErrors).toBeFalsy();
-
-  // The second param provides the actual runtime error in the failure message
-  // expect(errors[0], runtime.getErrorMessages()[0]).toBeUndefined();
-  // if (errors.length > 0) {
-  //   expect(runtime.Memory.read(1)).toBe(NaN);
-  // } else {
-  expect(runtime.Memory.read(1)).toBeCloseTo(answer, MATCH_PRECISION);
-  // }
+    expect(fmb.hasErrors).toBeFalsy();
+    expect(fmb.memory.read(1)).toBeCloseTo(answer, MATCH_PRECISION);
+  });
 });

@@ -26,16 +26,13 @@ M107
 G0 G90 G56 ( IN LINE COMMENT )
 M30
 %`;
-const runtime = new MacroRuntime();
-
-beforeEach(() => runtime.reset());
 
 describe("parsing a simple program with the MacroRuntime", () => {
-  beforeEach(() => {
-    runtime.loadProgram(program1);
-    runtime.loadProgram(program2);
-    runtime.loadProgram(program3);
-  });
+  const runtime = new MacroRuntime();
+
+  runtime.loadProgram(program1);
+  runtime.loadProgram(program2);
+  runtime.loadProgram(program3);
 
   it("loads multiple programs", () => {
     expect(runtime.getProgramCount()).toBe(3);
@@ -52,6 +49,8 @@ describe("parsing a simple program with the MacroRuntime", () => {
 });
 
 describe("errors trying to use a program number that does not exist", () => {
+  const runtime = new MacroRuntime();
+
   it("cannot activate an undefined program", () => {
     expect(runtime.getProgramCount()).toBe(0);
     expect(() => runtime.setActiveProgram(9999)).toThrow(ProgramNumberNotFound);
