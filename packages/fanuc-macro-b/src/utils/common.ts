@@ -55,3 +55,19 @@ export function stripFirstChar(address: string): string {
 export function parseNumber(value: string): number {
   return value.includes(".") ? parseFloat(value) : parseInt(value);
 }
+
+/**
+ * Parse a program number from a string or number.
+ */
+export function parseProgramNumber(programNumber: number | string): number {
+  if (typeof programNumber === "string") {
+    if (programNumber.startsWith("O")) {
+      const num = programNumber.replace(/^O/, "");
+      return parseInt(num);
+    } else {
+      return parseInt(programNumber);
+    }
+  } else {
+    return programNumber;
+  }
+}

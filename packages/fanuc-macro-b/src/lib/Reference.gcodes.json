@@ -1,0 +1,405 @@
+[
+  {
+    "code": "G00",
+    "function": "Positioning (rapid traverse)",
+    "group": "01",
+    "modal": true
+  },
+  {
+    "code": "G01",
+    "function": "Linear interpolation (cutting feed)",
+    "group": "01",
+    "modal": true
+  },
+  {
+    "code": "G02",
+    "function": "Circular interpolation CW or helical interpolation CW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G03",
+    "function": "Circular interpolation CCW or helical interpolation CCW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G02.2",
+    "function": "Involute interpolation CW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G03.2",
+    "function": "Involute interpolation CCW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G02.3",
+    "function": "Exponential interpolation CW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G03.3",
+    "function": "Exponential interpolation CCW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G02.4",
+    "function": "Three-dimensional coordinate conversion CW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G03.4",
+    "function": "Three-dimensional coordinate conversion CCW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G04",
+    "function": "Dwell",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G05",
+    "function": "AI contour control (high-precision contour control compatible command)",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G05.1",
+    "function": "AI contour control / Nano smoothing / Smooth interpolation",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G05.4",
+    "function": "HRV3,4 on/off",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G06.2",
+    "function": "NURBS interpolation",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G07",
+    "function": "Hypothetical axis interpolation",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G07.1",
+    "function": "Cylindrical interpolation",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G107",
+    "function": "Cylindrical interpolation",
+    "group": "01",
+    "modal": false,
+    "alias_of": "G07.1"
+  },
+  {
+    "code": "G08",
+    "function": "AI contour control (advanced preview control compatible command)",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G09",
+    "function": "Exact stop",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G10",
+    "function": "Programmable data input",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G10.6",
+    "function": "Tool retract and recover",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G10.9",
+    "function": "Programmable switching of diameter/radius specification",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G11",
+    "function": "Programmable data input mode cancel",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G12.1",
+    "function": "Polar coordinate interpolation mode",
+    "group": "21",
+    "modal": false
+  },
+  {
+    "code": "G13.1",
+    "function": "Polar coordinate interpolation cancel mode",
+    "group": "21",
+    "modal": false
+  },
+  {
+    "code": "G15",
+    "function": "Polar coordinates command cancel",
+    "group": "17",
+    "modal": false
+  },
+  {
+    "code": "G16",
+    "function": "Polar coordinates command",
+    "group": "17",
+    "modal": false
+  },
+  {
+    "code": "G17",
+    "function": "XpYp plane selection",
+    "group": "02",
+    "modal": false
+  },
+  {
+    "code": "G18",
+    "function": "ZpXp plane selection",
+    "group": "02",
+    "modal": false
+  },
+  {
+    "code": "G19",
+    "function": "YpZp plane selection",
+    "group": "02",
+    "modal": false
+  },
+  {
+    "code": "G20 (G70)",
+    "function": "Input in inch",
+    "group": "06",
+    "modal": false
+  },
+  {
+    "code": "G21 (G71)",
+    "function": "Input in mm",
+    "group": "06",
+    "modal": false
+  },
+  {
+    "code": "G22",
+    "function": "Stored stroke check function on",
+    "group": "04",
+    "modal": false
+  },
+  {
+    "code": "G23",
+    "function": "Stored stroke check function off",
+    "group": "04",
+    "modal": false
+  },
+  {
+    "code": "G25",
+    "function": "Spindle speed fluctuation detection off",
+    "group": "19",
+    "modal": false
+  },
+  {
+    "code": "G26",
+    "function": "Spindle speed fluctuation detection on",
+    "group": "19",
+    "modal": false
+  },
+  {
+    "code": "G27",
+    "function": "Reference position return check",
+    "group": "19",
+    "modal": false
+  },
+  {
+    "code": "G28",
+    "function": "Automatic return to reference position",
+    "group": "19",
+    "modal": false
+  },
+  {
+    "code": "G29",
+    "function": "Movement from reference position",
+    "group": "19",
+    "modal": false
+  },
+  {
+    "code": "G30",
+    "function": "2nd, 3rd and 4th reference position return",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G30.1",
+    "function": "Floating reference position return",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G31",
+    "function": "Skip function",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G31.8",
+    "function": "EGB-axis skip",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G33",
+    "function": "Threading",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G35",
+    "function": "Variable lead threading",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G36",
+    "function": "Circular threading CCW",
+    "group": "01",
+    "modal": false
+  },
+  {
+    "code": "G37",
+    "function": "Automatic tool length measurement",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G38",
+    "function": "Cutter or tool nose radius compensation: preserve vector",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G39",
+    "function": "Cutter or tool nose radius compensation: corner circular interpolation",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G40",
+    "function": "Cutter or tool nose radius compensation: cancel",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G41",
+    "function": "Cutter or tool nose radius compensation: left",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G41.2",
+    "function": "Cutter compensation for 5-axis machining: left (type 1)",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G41.3",
+    "function": "Cutter compensation for 5-axis machining: left (leading edge offset)",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G42",
+    "function": "Cutter or tool nose radius compensation: right",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G42.2",
+    "function": "Cutter compensation for 5-axis machining: right (type 1)",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G43",
+    "function": "Tool length compensation +",
+    "group": "08",
+    "modal": false
+  },
+  {
+    "code": "G44",
+    "function": "Tool length compensation -",
+    "group": "08",
+    "modal": false
+  },
+  {
+    "code": "G50",
+    "function": "Scaling cancel",
+    "group": "11",
+    "modal": false
+  },
+  {
+    "code": "G51",
+    "function": "Scaling",
+    "group": "11",
+    "modal": false
+  },
+  {
+    "code": "G52",
+    "function": "Local coordinate system setting",
+    "group": null,
+    "modal": false
+  },
+  {
+    "code": "G53",
+    "function": "Machine coordinate system setting",
+    "group": "00",
+    "modal": false
+  },
+  {
+    "code": "G54",
+    "function": "Workpiece coordinate system 1 selection",
+    "group": "14",
+    "modal": false
+  },
+  {
+    "code": "G55",
+    "function": "Workpiece coordinate system 2 selection",
+    "group": "14",
+    "modal": false
+  },
+  {
+    "code": "G56",
+    "function": "Workpiece coordinate system 3 selection",
+    "group": "14",
+    "modal": false
+  },
+  {
+    "code": "G59",
+    "function": "Workpiece coordinate system 6 selection",
+    "group": "14",
+    "modal": false
+  },
+  {
+    "code": "G60",
+    "function": "Single direction positioning",
+    "group": null,
+    "modal": false
+  }
+]

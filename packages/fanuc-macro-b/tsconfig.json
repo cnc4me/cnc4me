@@ -2,24 +2,23 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "strict": true,
+    "outDir": "dist",
     "target": "ESNext",
     // "noEmit": true,
     "composite": true,
     "esModuleInterop": true,
-    "outDir": "dist"
+    "resolveJsonModule": true
   },
   "files": [
-    "vite.config.ts"
+    "vite.config.ts",
+    "tests/_vitest/vitest.expect.d.ts"
   ],
   "include": [
     "src",
-    "scripts",
-    "tests/_vitest/vitest.expect.d.ts"
+    "tests",
+    "src/lib/*.json"
   ],
   "references": [
-    {
-      "path": "./tsconfig.lib.json"
-    },
     {
       "path": "./tsconfig.eslint.json"
     }

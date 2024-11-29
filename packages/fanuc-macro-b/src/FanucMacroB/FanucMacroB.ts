@@ -19,13 +19,17 @@ export class FanucMacroB
 {
   #tokens: IToken[];
 
-  options = {
-    debug: false
-  };
   lexer: MacroLexer;
   parser: MacroParser;
   interpreter: MacroInterpreter;
 
+  options = {
+    debug: false
+  };
+
+  /**
+   * @TODO fix this flag here, move it global?
+   */
   constructor(options?: Partial<{ debug: boolean }>) {
     this.#tokens = [];
     this.lexer = new MacroLexer();
@@ -63,7 +67,7 @@ export class FanucMacroB
    * Returns an object where the keys are variable register numbers
    * and the value is it's currently set value.
    */
-  getMemory(opts?: Partial<GetMemoryOptions>): Record<number, number> {
+  getCurrentMemory(opts?: Partial<GetMemoryOptions>): Record<number, number> {
     if (opts?.range) {
       const entries: MacroValueArray = [];
       range(...opts.range).forEach(register => {

@@ -1,10 +1,12 @@
 import { IToken } from "chevrotain";
 import Emittery from "emittery";
 
+import { LexingError } from "../errors/lexer";
+import { ParsingError } from "../errors/parser";
 import { InvalidProgramNumber, ProgramNumberNotFound } from "../errors/runtime";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
-import { isLexingError, isParsingError } from "../utils";
+import { FanucMacroB } from "./FanucMacroB";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
@@ -26,9 +28,7 @@ import type { CST } from "../types/CST";
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
-  private _lexer: MacroLexer;
-  private _parser: MacroParser;
-  private _interpreter: MacroInterpreter;
+  #fmb: FanucMacroB;
 
   private _events = new Emittery<RuntimeEvents>();
   private _programs: Record<number, string> = {};
@@ -36,34 +36,42 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   constructor(opts?: Partial<MacroRuntimeInitOptions>) {
     // debug("initializing");
-    this._events = new Emittery<RuntimeEvents>();
-    this._lexer = new MacroLexer();
-    this._parser = new MacroParser();
-    this._interpreter = new MacroInterpreter();
+    this.#fmb = new FanucMacroB();
   }
 
   get Lexer(): MacroLexer {
-    return this._lexer;
+    return this.#fmb.lexer;
   }
 
   get Parser(): MacroParser {
-    return this._parser;
+    return this.#fmb.parser;
   }
 
   get Interpreter(): MacroInterpreter {
-    return this._interpreter;
+    return this.#fmb.interpreter;
   }
 
   get Memory(): MacroMemory {
-    return this._interpreter.getMemory();
+    return this.#fmb.memory;
   }
 
   get hasErrors() {
-    return this._lexer.hasErrors || this._parser.hasErrors;
+    return this.Lexer.hasErrors || this.Parser.hasErrors;
+  }
+
+  /**
+   * Retrieve Parser and Lexer errors
+   * @deprecated use the getErrors method on FanucMacroB when implemented in the class
+   */
+  getErrors() {
+    return [
+      ...this.Parser.getErrors(), //
+      ...this.Lexer.getErrors()
+    ];
   }
 
   getInsights(): InsightCollection {
-    return this._interpreter.getInsights();
+    return this.Interpreter.getInsights();
   }
 
   /**
@@ -72,8 +80,8 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   reset(): void {
     this._programs = {};
     this._activeProgram = NaN;
-    this._parser.reset();
-    this._interpreter.getMemory().reset();
+    this.Parser.reset();
+    this.Interpreter.getMemory().clearAll();
   }
 
   /**
@@ -84,16 +92,16 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
     this._tokenizeActiveProgram();
 
-    const programCst = this._parser.Program() as unknown as CST.ProgramCstNode;
+    const programCst = this.Parser.Program() as unknown as CST.ProgramCstNode;
 
     /**
      * @TODO ERROR HANDLING!!!!
      */
-    if (this._parser.errors.length > 0) {
+    if (this.Parser.errors.length > 0) {
       // void this._events.emit("error", this.Parser.errors);
     }
 
-    const result = this._interpreter.Program(programCst.children);
+    const result = this.Interpreter.Program(programCst.children);
 
     return {
       beginExec,
@@ -109,22 +117,11 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   }
 
   /**
-   * Retrieve Parser and Lexer errors
-   * @deprecated use the getErrors method on FanucMacroB when implemented in the class
-   */
-  getErrors() {
-    return [
-      ...this._parser.getErrors(), //
-      ...this._lexer.getErrors()
-    ];
-  }
-
-  /**
    * Retrieve a record of errors
    */
   getErrorMessages(): string[] {
     return this.getErrors().map(err => {
-      if (isLexingError(err) || isParsingError(err)) {
+      if (err instanceof LexingError || err instanceof ParsingError) {
         return err.message;
       }
       return err;
@@ -138,9 +135,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     this._lexAndLoadParser(code);
     // this._tokenizeActiveProgram();
 
-    const programCst = this._parser.Program() as unknown as CST.ProgramCstNode;
+    const programCst = this.Parser.Program() as unknown as CST.ProgramCstNode;
 
-    return this._interpreter.Program(programCst.children);
+    return this.Interpreter.Program(programCst.children);
   }
 
   /**
@@ -151,9 +148,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   evalLines(code: string): ParsedLineData[] {
     this._lexAndLoadParser(code);
 
-    const cst = this._parser.Lines();
+    const cst = this.Parser.Lines();
 
-    return this._interpreter.Lines(cst.children);
+    return this.Interpreter.Lines(cst.children);
   }
 
   /**
@@ -180,31 +177,6 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     // debug(`Setting program #${programNumber} active`);
     this._throwIfProgramNotLoaded(programNumber);
     this._activeProgram = programNumber;
-    return true;
-  }
-
-  /**
-   * Load the parser's input
-   *
-   * @TODO this should take string, not tokens.
-   * @deprecated use loadParserTokens
-   */
-  setParserInput(tokens: IToken[]) {
-    this._parser.input = tokens;
-  }
-
-  /**
-   * Load the parser's input with tokens.
-   */
-  loadParserTokens(tokens: IToken[]) {
-    this._parser.input = tokens;
-  }
-
-  /**
-   * Sugar method for tokenizing and setting the parser in one step
-   */
-  loadParser(input: string): boolean {
-    this._lexAndLoadParser(input);
     return true;
   }
 
@@ -254,7 +226,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       throw new InvalidProgramNumber(programNumber);
     }
 
-    const parsedProgramNumber = Number(programNumber.replace(/^O/, ""));
+    const parsedProgramNumber = Number(programNumber.replace(/^O/, "")); // @TODO this will need to handle ":" eventually
     this._throwIfProgramNotLoaded(parsedProgramNumber);
     return this._programs[parsedProgramNumber];
   }
@@ -323,41 +295,16 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   /**
    * Generate an array of {@link IToken} from an input string
-   * @TODO do we really need this? what about piping?
-   * @deprecated
+   *
+   * @TODO use the below...v
+   *
+   * @deprecated this same method is on FanucMacroB right?
    */
   private _lexAndLoadParser(input: string): boolean {
-    this._lexer.tokenize(input);
-    if (this._lexer.hasErrors) return false;
-    const tokens = this._lexer.getTokens();
-    this._parser.setInput(tokens);
+    this.Lexer.tokenize(input);
+    if (this.Lexer.hasErrors) return false;
+    const tokens = this.Lexer.getTokens();
+    this.Parser.setInput(tokens);
     return true;
   }
-
-  /**
-   * Parse a program number from a string or number.
-   */
-  private _parseProgramNumber(programNumber: number | string): number {
-    if (typeof programNumber === "string") {
-      if (programNumber.startsWith("O")) {
-        const num = programNumber.replace(/^O/, "");
-        return parseInt(num);
-      } else {
-        return parseInt(programNumber);
-      }
-    } else {
-      return programNumber;
-    }
-  }
-
-  /**
-   * Run the parser by named rule
-   */
-  // private _interpret<T>(code: string, rule: TopLevelParserRules): T {
-  //   this._lexAndLoadParser(code);
-
-  //   const cst = this.Parser[rule]();
-
-  //   return this.Interpreter.visit(cst) as T;
-  // }
 }

@@ -1,0 +1,12 @@
+[
+  {
+    "code": "M00",
+    "function": "Program Stop",
+    "group": "01"
+  },
+  {
+    "code": "M01",
+    "function": "Optional Program Stop",
+    "group": "01"
+  }
+]
