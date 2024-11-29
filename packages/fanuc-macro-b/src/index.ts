@@ -1,8 +1,9 @@
+import * as Errors from "./errors";
 import * as T from "./tokens";
+import * as Utils from "./utils";
 
 export * from "./FanucMacroB";
 export * from "./lib";
 export * from "./memory";
 export * from "./types";
-export * from "./utils";
-export { T };
+export { Errors, T, Utils };

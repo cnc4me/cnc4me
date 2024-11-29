@@ -6,14 +6,15 @@ import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
 import type { ErrorProducer } from "../types";
 import type { ILexerDefinitionError, ILexingResult, IToken } from "chevrotain";
 
+const _lexer = new Lexer(FANUC_MACRO_B_GRAMMAR);
+
 export class MacroLexer implements ErrorProducer<LexingError> {
   #instance: Lexer;
   #result!: ILexingResult;
   #input = "";
 
-  constructor(input?: string) {
-    this.#instance = new Lexer(FANUC_MACRO_B_GRAMMAR);
-    if (input) this.#input = input;
+  constructor() {
+    this.#instance = _lexer;
   }
 
   get hasErrors() {

@@ -1,7 +1,6 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { describe, expect, it } from "vitest";
 
-import { MacroRuntime } from "../../src";
-import { ProgramNumberNotFound } from "../../src/errors/runtime";
+import { Errors, MacroRuntime } from "../../src";
 
 const program1 = `%
 O0001 ( Program 1 )
@@ -53,14 +52,18 @@ describe("errors trying to use a program number that does not exist", () => {
 
   it("cannot activate an undefined program", () => {
     expect(runtime.getProgramCount()).toBe(0);
-    expect(() => runtime.setActiveProgram(9999)).toThrow(ProgramNumberNotFound);
+    expect(() => runtime.setActiveProgram(9999)).toThrow(
+      Errors.ProgramNumberNotFound
+    );
 
     // expect(runtime.setActiveProgram(9999)).toBe(NaN);
   });
 
   it("cannot get the active program if none is active", () => {
     expect(runtime.getProgramCount()).toBe(0);
-    expect(() => runtime.getActiveProgram()).toThrow(ProgramNumberNotFound);
+    expect(() => runtime.getActiveProgram()).toThrow(
+      Errors.ProgramNumberNotFound
+    );
     // expect(runtime.setActiveProgram(9999)).toBe(NaN);
   });
 });

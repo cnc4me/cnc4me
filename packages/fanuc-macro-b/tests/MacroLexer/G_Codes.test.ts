@@ -1,12 +1,12 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { MacroLexer, range, T } from "../../src";
+import { MacroLexer, T, Utils } from "../../src";
 
 const lexer = new MacroLexer();
 
 const TEST_CASES = [
-  ...range(1, 9).map(n => [`G${n}`]), // Single Digit
-  ...range(54, 59).map(n => [`G${n}`]), // Work Offsets
+  ...Utils.range(1, 9).map(n => [`G${n}`]), // Single Digit
+  ...Utils.range(54, 59).map(n => [`G${n}`]), // Work Offsets
   ["G200"], // Three Digit
   ["G54.1"] // With Decimal
 ];

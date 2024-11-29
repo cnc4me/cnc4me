@@ -1,5 +1,4 @@
-import { extractOffsets } from "../memory";
-import { range } from "../utils";
+import { extractOffsets, range } from "../utils";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";

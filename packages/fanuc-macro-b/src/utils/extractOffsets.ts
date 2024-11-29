@@ -1,5 +1,5 @@
 import { ParsedLineData, PossibleG10LineValues } from "../types";
-import { hasG10 } from "../utils";
+import { hasG10 } from "./flags";
 
 /**
  * Check for `G10` and extract axis values from {@link ParsedLineData}

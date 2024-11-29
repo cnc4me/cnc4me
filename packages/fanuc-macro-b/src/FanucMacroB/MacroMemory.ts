@@ -1,6 +1,6 @@
 import { match, Pattern } from "ts-pattern";
 
-import { M, RegisterMap } from "../memory";
+import { OFFSET_GROUPS, RegisterMap } from "../memory";
 import { range } from "../utils";
 
 import type {
@@ -14,7 +14,7 @@ import type {
   WorkCoordinateRecord
 } from "../types";
 
-const { WORK, TOOL } = M.OFFSET_GROUPS;
+const { WORK, TOOL } = OFFSET_GROUPS;
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -182,24 +182,21 @@ export class MacroMemory {
    * Tool Length Offset Group (L11)
    */
   setToolLength(toolNum: number, value: number) {
-    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH, value);
+    this.#setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.LENGTH, value);
   }
 
   /**
    * Get Tool Length value by tool number
    */
   getToolLength(toolNum: number) {
-    return this.#getToolOffsetValueByGroup(
-      toolNum,
-      M.OFFSET_GROUPS.TOOL.LENGTH
-    );
+    return this.#getToolOffsetValueByGroup(toolNum, OFFSET_GROUPS.TOOL.LENGTH);
   }
 
   /**
    * Tool Length Compensation Offset Group (L10)
    */
   setToolLengthComp(toolNum: number, value: number) {
-    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.LENGTH_COMP, value);
+    this.#setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.LENGTH_COMP, value);
   }
 
   /**
@@ -208,7 +205,7 @@ export class MacroMemory {
   getToolLengthComp(toolNum: number) {
     return this.#getToolOffsetValueByGroup(
       toolNum,
-      M.OFFSET_GROUPS.TOOL.LENGTH_COMP
+      OFFSET_GROUPS.TOOL.LENGTH_COMP
     );
   }
 
@@ -216,7 +213,7 @@ export class MacroMemory {
    * Tool Diameter Offset Group (L13)
    */
   setToolDiameter(toolNum: number, value: number) {
-    this.#setToolOffsetValue(toolNum, M.OFFSET_GROUPS.TOOL.DIAMETER, value);
+    this.#setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.DIAMETER, value);
   }
 
   /**
@@ -225,7 +222,7 @@ export class MacroMemory {
   getToolDiameter(toolNum: number) {
     return this.#getToolOffsetValueByGroup(
       toolNum,
-      M.OFFSET_GROUPS.TOOL.DIAMETER
+      OFFSET_GROUPS.TOOL.DIAMETER
     );
   }
 
@@ -233,11 +230,7 @@ export class MacroMemory {
    * Tool Diameter Compensation. Offset Group (L12)
    */
   setToolDiameterComp(toolNum: number, value: number) {
-    this.#setToolOffsetValue(
-      toolNum,
-      M.OFFSET_GROUPS.TOOL.DIAMETER_COMP,
-      value
-    );
+    this.#setToolOffsetValue(toolNum, OFFSET_GROUPS.TOOL.DIAMETER_COMP, value);
   }
 
   /**
@@ -246,7 +239,7 @@ export class MacroMemory {
   getToolDiameterComp(toolNum: number) {
     return this.#getToolOffsetValueByGroup(
       toolNum,
-      M.OFFSET_GROUPS.TOOL.DIAMETER_COMP
+      OFFSET_GROUPS.TOOL.DIAMETER_COMP
     );
   }
 
