@@ -1,7 +1,21 @@
 import * as MemoryOffsetConstants from "./offsets.const";
+import {
+  getAuxWorkOffsetAxisRegister,
+  getToolOffsetRegister,
+  getWorkOffsetAxisRegister
+} from "./registers";
 import * as MemoryRegisterConstants from "./registers.const";
 
-export * from "./offsets.const";
+export { BinaryRegister } from "./BinaryRegister";
 export * from "./registers";
 
-export { MemoryOffsetConstants, MemoryRegisterConstants };
+export const MemoryConstants = {
+  ...MemoryOffsetConstants,
+  ...MemoryRegisterConstants
+};
+
+export const RegisterMap = {
+  ToolOffset: getToolOffsetRegister,
+  WorkOffset: getWorkOffsetAxisRegister,
+  AuxWorkOffset: getAuxWorkOffsetAxisRegister
+};

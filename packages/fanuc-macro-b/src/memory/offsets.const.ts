@@ -1,6 +1,3 @@
-type G10LabelToOffsetGroupMap = typeof TOOL_OFFSET_GROUP &
-  typeof WORK_OFFSET_GROUP;
-
 /**
  * Mapping of tool offsets related G10 line "L" groups to their names.
  */
@@ -63,3 +60,6 @@ export const WORK_OFFSET_ADDRESS_MAP: Record<number, number> = {
   5: 5300 /* G58 */,
   6: 5320 /* G59 */
 } as const;
+
+type G10LabelToOffsetGroupMap = typeof TOOL_OFFSET_GROUP &
+  typeof WORK_OFFSET_GROUP;

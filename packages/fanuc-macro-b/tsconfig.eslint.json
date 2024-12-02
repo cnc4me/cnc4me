@@ -3,6 +3,7 @@
   "compilerOptions": {
     "types": [
       "vitest/globals",
+      "vitest/importMeta",
       "./src/types/fanuc.d.ts"
     ]
   },

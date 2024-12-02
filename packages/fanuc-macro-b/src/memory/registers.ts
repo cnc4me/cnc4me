@@ -4,12 +4,6 @@ import {
   WORK_OFFSET_ADDRESS_MAP
 } from "./offsets.const";
 
-export const RegisterMap = {
-  ToolOffset: getToolOffsetRegister,
-  WorkOffset: getWorkOffsetAxisRegister,
-  AuxWorkOffset: getAuxWorkOffsetAxisRegister
-};
-
 /**
  * Compose a tool offset register number by group and tool num.
  */

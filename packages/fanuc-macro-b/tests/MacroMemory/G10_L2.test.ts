@@ -1,7 +1,9 @@
 import { describe, expect, it } from "vitest";
 
-import { type G10WorkOffsets, MacroMemory, OFFSET_GROUPS } from "../../src";
+import { MacroMemory, MemoryConstants } from "../../src";
 import { getRandomAxisLocations } from "../_vitest/helpers";
+
+import type { G10WorkOffsets } from "../../src";
 
 const TEST_CASES = [
   { workOffset: "G53", P: 0, offsetCode: 53, baseAddress: 5200 },
@@ -21,7 +23,7 @@ describe("setting work offsets with MacroMemory#g10()", () => {
     ({ P, offsetCode, baseAddress }) => {
       const { X, Y, Z, B } = getRandomAxisLocations();
       const input = {
-        L: OFFSET_GROUPS.WORK.COMMON,
+        L: MemoryConstants.OFFSET_GROUPS.WORK.COMMON,
         P,
         X,
         Y,

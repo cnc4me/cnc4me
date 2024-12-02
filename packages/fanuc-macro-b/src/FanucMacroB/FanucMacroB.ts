@@ -8,11 +8,6 @@ import type { MacroParserError } from "../errors/parser";
 import type { ErrorProducer, MacroValueArray, ParsedLineData } from "../types";
 import type { IToken } from "chevrotain";
 
-/**
- * This class wraps the functionality for:
- * tokenizing -> parsing -> interpreting
- * @todo use this instead of loading the MacroRuntime with the individual pieces
- */
 export class FanucMacroB
   implements ErrorProducer<MacroLexerError | MacroParserError>
 {
@@ -66,7 +61,9 @@ export class FanucMacroB
    * Returns an object where the keys are variable register numbers
    * and the value is it's currently set value.
    */
-  getCurrentMemory(opts?: Partial<GetMemoryOptions>): Record<number, number> {
+  getSetMemoryRegisters(
+    opts?: Partial<GetMemoryOptions>
+  ): Record<number, number> {
     if (opts?.range) {
       const entries: MacroValueArray = [];
       range(...opts.range).forEach(register => {
@@ -145,19 +142,6 @@ export class FanucMacroB
       error: null,
       // @ts-expect-error program type is wonky
       result: this.interpreter.Program(cst?.children) // @todo fix this type error
-    };
-  }
-
-  /**
-   * Invoke the {@link MacroInterpreter} starting from `VariableAssignment()`
-   */
-  evalVariableAssignment(input: string) {
-    this._tokenizeAndLoadParser(input);
-    const cst = this.parser.VariableAssignment();
-    return {
-      error: null,
-      // @ts-expect-error additionExpression is missing?
-      result: this.interpreter.VariableAssignment(cst?.children) // @todo fix this type error
     };
   }
 

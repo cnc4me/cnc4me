@@ -4,6 +4,7 @@
     "strict": true,
     "outDir": "dist",
     "target": "ESNext",
+    "module": "ESNext",
     // "noEmit": true,
     "composite": true,
     "esModuleInterop": true,

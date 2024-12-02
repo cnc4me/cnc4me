@@ -1,3 +1,10 @@
+// Timing for displaying an alarm
+// In stored stroke check 1/2/3, parameter BFA (bit 7 of No. 1300)
+// selects whether an alarm is displayed immediately before the tool
+// enters the forbidden area or immediately after the tool has entered the
+// forbidden area.
+export const FORBIDDEN_AREA_ALARM_TIMING = 1300; // bit 7
+
 /**
  * Microtimer
  *
