@@ -1,0 +1,3597 @@
+[
+  {
+    "description": "A TH error was detected during reading from an input device. The read code that caused the TH error and how many statements it is from the block can be verified in the diagnostics screen",
+    "message": "TH ERROR",
+    "number": "0001"
+  },
+  {
+    "description": "An error was detected during the single-block TV error. The TV check can be suppressed by setting TVC parameter No. 0000#0 to “0”",
+    "message": "TV ERROR",
+    "number": "0002"
+  },
+  {
+    "description": "Data entered with more digits than permitted in the NC instruction word. The number of permissible digits varies according to the function and the word",
+    "message": "TOO MANY DIGIT",
+    "number": "0003"
+  },
+  {
+    "description": "NC word(s) address + numerical value not in word format. This alarm is also generated when a custom macro does not contain a reserved word, or does not conform to the syntax",
+    "message": "INVALID BREAK POINT OF WORDS",
+    "number": "0004"
+  },
+  {
+    "description": "NC word(s) address + numerical value not in word format. This alarm is also generated when a custom macro does not contain a reserved word, or does not conform to the syntax",
+    "message": "NO DATA AFTER ADDRESS",
+    "number": "0005"
+  },
+  {
+    "description": "A minus sign (-) was specified at an NC instruction word or system variable where no minus signal may be specified",
+    "message": "ILLEGAL USE OF MINUS SIGN",
+    "number": "0006"
+  },
+  {
+    "description": "A decimal point (.) was specified at an address where no decimal point may be specified, or two decimal points were specified",
+    "message": "ILLEGAL USE OF DECIMAL POINT",
+    "number": "0007"
+  },
+  {
+    "description": "An illegal address was specified, or parameter 1020 is not set",
+    "message": "IMPROPER NC-ADDRESS",
+    "number": "0009"
+  },
+  {
+    "description": "An unusable G code is specified",
+    "message": "IMPROPER G-CODE",
+    "number": "0010"
+  },
+  {
+    "description": "The cutting feedrate instructed by an F code has been set to 0. This alarm is also generated if the F code instructed for the S code is set extremely small in a rigid tapping instruction as the tool cannot cut at the programmed lead",
+    "message": "FEED ZERO ( COMMAND )",
+    "number": "0011"
+  },
+  {
+    "description": "A synchronous feed is specified without the option for threading / synchronous feed. Modify the program",
+    "message": "CAN NOT COMMAND G95",
+    "number": "0014"
+  },
+  {
+    "description": "A move command was specified for more axes than can be controlled by simultaneous axis control. Either add on the simultaneous axis control extension option, or divide the number of programmed move axes into two blocks",
+    "message": "TOO MANY SIMULTANEOUS AXES",
+    "number": "0015"
+  },
+  {
+    "description": "An arc was specified for which the difference in the radius at the start and end points exceeds the value set in parameter No. 2410. Check arc center codes I, J and K in the program. The tool path when parameter No. 2410 is set to a large value is spiral",
+    "message": "OVER TOLERANCE OF RADIUS",
+    "number": "0020"
+  },
+  {
+    "description": "The plane selection instructions G17 to G19 are in error. Reprogram so that same 3 basic parallel axes are not specified simultaneously. This alarm is also generated when an axis that should not be specified for plane machining is specified, for example, for circular interpolation or involute interpolation. To enable programming of 3 or more axes, the helical interpolation option must be added to each of the relevant axes",
+    "message": "ILLEGAL PLANE SELECT",
+    "number": "0021"
+  },
+  {
+    "description": "The command for circular interpolation lacks arc radius R or coordinate I, J, or K of the distance between the start point to the center of the arc",
+    "message": "R OR I,J,K COMMAND NOT FOUND",
+    "number": "0022"
+  },
+  {
+    "description": "F0 (rapid traverse in inverse feed or feed specified by an F code with 1-digit number) was specified during circular interpolation (G02, G03) or involute interpolation (G02.2, G03.2)",
+    "message": "CIRCLE CUT IN RAPID (F0)",
+    "number": "0025"
+  },
+  {
+    "description": "No axis is specified in G43 and G44 blocks for the tool length offset type C. Offset is not canceled but another axis is offset for the tool length offset type C. Multiple axes were specified for the same block when the tool length compensation type is C",
+    "message": "NO AXES COMMANDED IN G43/G44",
+    "number": "0027"
+  },
+  {
+    "description": "The plane selection instructions G17 to G19 are in error. Reprogram so that same 3 basic parallel axes are not specified simultaneously. This alarm is also generated when an axis that should not be specified for plane machining is specified, for example, for circular interpolation or involute interpolation. To enable programming of 3 or more axes, the helical interpolation option must be added to each of the relevant axes",
+    "message": "ILLEGAL PLANE SELECT",
+    "number": "0028"
+  },
+  {
+    "description": "Illegal offset No",
+    "message": "ILLEGAL OFFSET VALUE",
+    "number": "0029"
+  },
+  {
+    "description": "An illegal offset No. was specified. This alarm is also generated when the tool shape offset No. exceeds the maximum number of tool offset sets in the case of tool offset memory B",
+    "message": "ILLEGAL OFFSET NUMBER",
+    "number": "0030"
+  },
+  {
+    "description": "The relevant data input or option could not be found for the L No. of G10. No data setting address such as P or R was specified. An address command not concerned with data setting was specified. An address varies with the L No. The sign or decimal point of the specified address is in error, or the specified address is out of range",
+    "message": "ILLEGAL P COMMAND IN G10",
+    "number": "0031"
+  },
+  {
+    "description": "In setting an offset amount by G10 or in writing an offset amount by system variables, the offset amount was excessive",
+    "message": "ILLEGAL OFFSET VALUE IN G10",
+    "number": "0032"
+  },
+  {
+    "description": "The intersection cannot be obtained by the intersection calculation in cutter or tool-nose radius compensation. Modify the program",
+    "message": "NO INTERSECTION AT CUTTER COMPENSATION",
+    "number": "0033"
+  },
+  {
+    "description": "In cutter or tool-nose radius compensation, a startup or cancellation is performed in the G02 or G03 mode. Modify the program",
+    "message": "NO CIRC ALLOWED IN STUP/EXT BLK",
+    "number": "0034"
+  },
+  {
+    "description": "by address Q",
+    "message": "CAN NOT COMMANDED G31",
+    "number": "0035"
+  },
+  {
+    "description": "The compensation plane G17/G18/G19 was changed during cutter or tool-nose radius compensation. Modify the program",
+    "message": "CAN NOT CHANGE PLANE IN G41/G42",
+    "number": "0037"
+  },
+  {
+    "description": "Overcutting will occur in cutter compensation C because the arc start point or end point coincides with the arc center. Modify the program",
+    "message": "INTERFERENCE IN CIRCULAR BLOCK",
+    "number": "0038"
+  },
+  {
+    "description": "Chamfering or corner R was specified with a start-up, a cancel, or switching between G41 and G42 in G41 and G42 commands (cutter compensation or tool nose radius compensation). The program may cause overcutting to occur in chamfering or corner R. Modify the program",
+    "message": "CHF/CNR NOT ALLOWED IN G41,G42",
+    "number": "0039"
+  },
+  {
+    "description": "In cutter or tool-nose radius compensation, excessive cutting may occur. Modify the program",
+    "message": "INTERFERENCE IN CUTTER COMPENSATION",
+    "number": "0041"
+  },
+  {
+    "description": "Tool offset (G45 to G48) is commanded in tool compensation or three-dimensional cutter compensation. Modify the program",
+    "message": "G45/G48 NOT ALLOWED IN CRC",
+    "number": "0042"
+  },
+  {
+    "description": "On a system with a DRILL-MATE ATC installed, M06 is not specified in a block that specifies a T code. Alternatively, a T code beyond the allowable range is specified",
+    "message": "ILLEGAL T-CODE COMMAND",
+    "number": "0043"
+  },
+  {
+    "description": "One of G27 to G30 is commanded in canned cycle mode. Modify the program",
+    "message": "G27-G30 NOT ALLOWED IN FIXED CYC",
+    "number": "0044"
+  },
+  {
+    "description": "In a high-speed peck drilling cycle (G73) or peck drilling cycle (G83), the amount of each-time cutting is not specified by address Q, or Q0 is specified. Modify the program",
+    "message": "ADDRESS Q NOT FOUND (G73/G83)",
+    "number": "0045"
+  },
+  {
+    "description": "A command for a return to the second, third or fourth reference position is error. (The address P command is in error.) Although an option for a return to the third or fourth reference position was not set, 3 or 4 was specified in address P",
+    "message": "ILLEGAL REFERENCE RETURN COMMAND",
+    "number": "0046"
+  },
+  {
+    "description": "Two or more parallel axes (in parallel with a basic axis) have been specified upon start-up of three-dimensional tool compensation or three-dimensional coordinate conversion",
+    "message": "ILLEGAL AXIS SELECT",
+    "number": "0047"
+  },
+  {
+    "description": "Start-up of three-dimensional tool compensation or three-dimensional coordinate conversion has been attempted, but the three basic axes used when Xp, Yp, or Zp is omitted are not set in parameter No. 1022",
+    "message": "BASIC 3 AXIS NOT FOUND",
+    "number": "0048"
+  },
+  {
+    "description": "When three-dimensional coordinate conversion (G68 or G69) was specified, the tool compensation was not canceled. Or, programs of three-dimensional coordinate conversion (G68, G69) and tool compensation (G43, G44 or G49) were not nested. Or, the three-dimensional coordinate conversion was specified during the tool length compensation and another tool length compensation was specified",
+    "message": "ILLEGAL COMMAND(G68,G69)",
+    "number": "0049"
+  },
+  {
+    "description": "Chamfering or corner R is commanded in the thread cutting block. Modify the program",
+    "message": "CHF/CNR NOT ALLOWED IN THRD BLK",
+    "number": "0050"
+  },
+  {
+    "description": "Improper movement or the move distance was specified in the block next to the chamfering or corner R block. Modify the program",
+    "message": "MISSING MOVE AFTER CNR/CHF",
+    "number": "0051"
+  },
+  {
+    "description": "The block next to the chamfering or corner R block is not G01 (or vertical line). Modify the program",
+    "message": "CODE IS NOT G01 AFTER CHF/CNR",
+    "number": "0052"
+  },
+  {
+    "description": "In the chamfering and corner R commands, two or more of I, J, K and R are specified",
+    "message": "TOO MANY ADDRESS COMMANDS",
+    "number": "0053"
+  },
+  {
+    "description": "A block in which chamfering in the specified angle or the corner R was specified includes a taper command. Modify the program",
+    "message": "NO TAPER ALLOWED AFTER CHF/CNR",
+    "number": "0054"
+  },
+  {
+    "description": "In chamfering or corner R block, the move distance is less than chamfer or corner R amount. Modify the program",
+    "message": "MISSING MOVE VALUE IN CHF/CNR",
+    "number": "0055"
+  },
+  {
+    "description": "In direct dimension drawing programming, both an end point and an angle were specified in the block next to the block in which only an angle was specified (Aa). Modify the program",
+    "message": "NO END POINT & ANGLE IN CHF/CNR",
+    "number": "0056"
+  },
+  {
+    "description": "Block end point is not calculated correctly in direct dimension drawing programming. Modify the program",
+    "message": "NO SOLUTION OF BLOCK END",
+    "number": "0057"
+  },
+  {
+    "description": "Block end point is not found in direct dimension drawing programming. Modify the program",
+    "message": "END POINT NOT FOUND",
+    "number": "0058"
+  },
+  {
+    "description": "[External data input/output] The specified number could not be found for program number and sequence number searches. Although input/output of a pot number of tool data or offset input was requested, no tool number was input after power on. The tool data corresponding to the entered tool number could not be found. [External workpiece number search] The program corresponding to the specified workpiece number could not be found. [Program restart] In the program restart sequence number specification, the specified sequence number could not be found",
+    "message": "SEQUENCE NUMBER NOT FOUND",
+    "number": "0060"
+  },
+  {
+    "description": "Address P or Q is not specified in multiple repetitive cycle (G70, G71, G72, or G73) command",
+    "message": "P OR Q COMMAND IS NOT IN THE MULTIPLE REPETIVE CYCLES BLOCK",
+    "number": "0061"
+  },
+  {
+    "description": "A zero or a negative value was specified in a multiple repetitive canned rough-cutting cycle (G71 or G72) as the depth of cut",
+    "message": "THE CUTTING AMOUNT IS ILLEGAL IN THE ROUGH CUTTING CYCLE",
+    "number": "0062"
+  },
+  {
+    "description": "The sequence number specified by addresses P and Q in multiple repetitive cycle (G70, G71, G72, or G73) command cannot be searched",
+    "message": "THE BLOCK OF A SPECIFIED SEQUENCE NUMBER IS NOT FOUND",
+    "number": "0063"
+  },
+  {
+    "description": "In a shape program for the multiple repetitive canned rough-cutting cycle (G71 or G72), the command for the first plane axis was not a monotonous increase or decrease",
+    "message": "THE FINISHING SHAPE IS NOT A MONOTONOUS CHANGE(FIRST AXES)",
+    "number": "0064"
+  },
+  {
+    "description": "In the first block of the shape program specified by P of the multiple repetitive canned cycle (G70, G71, G72, or G73), G00 or G01 was not specified",
+    "message": "G00/G01 IS NOT IN THE FIRST BLOCK OF SHAPE PROGRAM",
+    "number": "0065"
+  },
+  {
+    "description": "An unavailable command was found in a multiple repetitive canned cycle (G70, G71, G72, or G73) command block",
+    "message": "UNAVAILABLE COMMAND IS IN THE MULTIPLE REPETIVE CYCLES BLOCK",
+    "number": "0066"
+  },
+  {
+    "description": "A multiple repetitive canned cycle (G70, G71, G72, or G73) command is not registered in a tape memory area",
+    "message": "THE MULTIPLE REPETIVE CYCLES IS NOT IN THE PART PROGRAM STORAGE",
+    "number": "0067"
+  },
+  {
+    "description": "In a shape program in the multiple repetitive canned cycle (G70, G71, G72, or G73), a command for the chamfering or corner R in the last block is terminated in the middle",
+    "message": "LAST BLOCK OF SHAPE PROGRAM IS AN ILLEGAL COMMAND",
+    "number": "0069"
+  },
+  {
+    "description": "The memory area is insufficient. Delete any unnecessary programs, then retry",
+    "message": "NO PROGRAM SPACE IN MEMORY",
+    "number": "0070"
+  },
+  {
+    "description": "Check the data",
+    "message": "DATA NOT FOUND",
+    "number": "0071"
+  },
+  {
+    "description": "The number of programs to be stored exceeded 63 (basic), 125 (option), 200 (option), 400 (option) or 1000 (option). Delete unnecessary programs and execute program registration again",
+    "message": "DATA NOT FOUND",
+    "number": "0072"
+  },
+  {
+    "description": "The commanded program number has already been used. Change the program number or delete unnecessary programs and execute program registration again",
+    "message": "PROGRAM NUMBER ALREADY IN USE",
+    "number": "0073"
+  },
+  {
+    "description": "The program number is other than 1 to 9999. Modify the program number",
+    "message": "PROGRAM NUMBER ALREADY IN USE",
+    "number": "0074"
+  },
+  {
+    "description": "An attempt was made to register a program whose number was protected. In program matching, the password for the encoded program was not correct",
+    "message": "PROTECT",
+    "number": "0075"
+  },
+  {
+    "description": "The specified program is not found in the subprogram call, macro call or graphic copy. The M, G, T or S codes are called by a P instruction other than that in an M98, G65, G66, G66.1 or interrupt type custom macro, and a program is called by a No. 2 auxiliary function code. This alarm is also generated when a program is not found by these calls",
+    "message": "PROGRAM NOT FOUND",
+    "number": "0076"
+  },
+  {
+    "description": "The total number of subprogram and macro calls exceeds the permissible range. Another subprogram call was executed during an external memory subprogram call",
+    "message": "TOO MANY SUB,MACRO NESTING",
+    "number": "0077"
+  },
+  {
+    "description": "The specified sequence No. was not found during sequence number search. The sequence No. specified as the jump destination in GOTO-- and M99P-- was not found",
+    "message": "SEQUENCE NUMBER NOT FOUND",
+    "number": "0078"
+  },
+  {
+    "description": "The program in memory does not match the program stored on tape. Multiple programs cannot be matched continuously when parameter No. 2200#3 is set to “1”. Set parameter No. 2200#3 to “0” before executing a match",
+    "message": "PROGRAM NOT MATCH",
+    "number": "0079"
+  },
+  {
+    "description": "When the tool length measurement function (G37) is performed, a measuring position reached signal goes 1 in front of the area determined by the ε value specified in parameter No.6254. Alternatively, the signal does not go 1. When the automatic tool compensation function (G36, G37) is used, a measuring position reached signals (XAE1, XAE2) does not go 1 within the range determined by the ε value specified in parameters No.6254 and No.6255",
+    "message": "G37 MEASURING POSITION REACHED SIGNAL IS NOT PROPERLY INPUT",
+    "number": "0080"
+  },
+  {
+    "description": "The tool length measurement function (G37) is specified without specifying an H code. Correct the program. The automatic tool compensation function (G36, G37) is specified without specifying an T code. Correct the program",
+    "message": "G37 OFFSET NO. UNASSIGNED",
+    "number": "0081"
+  },
+  {
+    "description": "The tool length measurement function (G37) is specified together with an H code in the same block. Correct the program. The automatic tool compensation function (G36, G37) is specified together with an T code in the same block. Correct the program",
+    "message": "G37 SPECIFIED WITH H CODE",
+    "number": "0082"
+  },
+  {
+    "description": "An error has been found in axis specification of the tool length measurement function (G37). Alternatively, a move command is specified as an incremental command. Correct the program. An error has been found in axis specification of the automatic tool compensation function (G36, G37). Alternatively, a command is specified as an incremental command. Correct the program",
+    "message": "G37 IMPROPER AXIS COMMAND",
+    "number": "0083"
+  },
+  {
+    "description": "The next character was received from the I/O device connected to reader/punch interface 1 before it could read a previously received character",
+    "message": "OVERRUN ERROR",
+    "number": "0085"
+  },
+  {
+    "description": "During I/O process by reader/punch interface 1, the data set ready input signal of the I/O device (DR) was OFF. Possible causes are an I/O device not turn on, a broken cable, and a defective printed circuit board",
+    "message": "DR OFF",
+    "number": "0086"
+  },
+  {
+    "description": "During a read by reader/punch interface 1, although a read stop command was issued, more than 10 characters were input. The I/O device or printed circuit board was defective",
+    "message": "BUFFER OVERFLOW",
+    "number": "0087"
+  },
+  {
+    "description": "Rotate the motor manually at least one turn, and set the zero position of the absolute position detector after turning the CNC and servo amplifier off and then on again",
+    "message": "REFERENCE RETURN INCOMPLETE",
+    "number": "0090"
+  },
+  {
+    "description": "Manual return to the reference position cannot be performed when automatic operation is halted. Perform the manual return to the reference position when automatic operation is stopped or reset",
+    "message": "MANUAL REFERENCE POSITION RETURN IS NOT PERFORMED IN FEED HOLD",
+    "number": "0091"
+  },
+  {
+    "description": "The axis specified in G27 has not returned to zero. Reprogram so that the axis returns to zero",
+    "message": "ZERO RETURN CHECK (G27) ERROR",
+    "number": "0092"
+  },
+  {
+    "description": "P type cannot be specified when the program is restarted. (After the automatic operation was interrupted, the coordinate system setting operation was performed.) Perform the correct operation according to the User's manual",
+    "message": "P TYPE NOT ALLOWED (COORD CHG)",
+    "number": "0094"
+  },
+  {
+    "description": "P type cannot be specified when the program is restarted. (After the automatic operation was interrupted, the external workpiece offset amount changed.) Perform the correct operation according to the User's manual",
+    "message": "P TYPE NOT ALLOWED (EXT OFS CHG)",
+    "number": "0095"
+  },
+  {
+    "description": "P type cannot be specified when the program is restarted. (After the automatic operation was interrupted, the workpiece offset amount changed.) Perform the correct operation according to the User's manual",
+    "message": "P TYPE NOT ALLOWED (WRK OFS CHG)",
+    "number": "0096"
+  },
+  {
+    "description": "P type cannot be directed when the program is restarted. (After power ON, after emergency stop or alarms 0094 to 0097 reset, no automatic operation is performed.) Perform automatic operation",
+    "message": "P TYPE NOT ALLOWED (AUTO EXEC)",
+    "number": "0097"
+  },
+  {
+    "description": "A command of the program restart was specified without the reference position return operation after power ON or emergency stop, and G28 was found during search. Perform the reference position return",
+    "message": "G28 FOUND IN SEQUENCE RETURN",
+    "number": "0098"
+  },
+  {
+    "description": "After completion of search in program restart, a move command is given with MDI",
+    "message": "MDI EXEC NOT ALLOWED AFT. SEARCH",
+    "number": "0099"
+  },
+  {
+    "description": "The power turned off while rewriting the memory by program edit operation. If this alarm has occurred, press <RESET> while pressing <PROG>, and only the program being edited will be deleted. Register the deleted program",
+    "message": "PLEASE CLEAR MEMORY",
+    "number": "0101"
+  },
+  {
+    "description": "A value other than 0 or 1 was specified after P in the G08 code, or no value was specified",
+    "message": "FORMAT ERROR IN G08",
+    "number": "0109"
+  },
+  {
+    "description": "An integer went out of range during arithmetic calculations",
+    "message": "OVERFLOW :INTEGER",
+    "number": "0110"
+  },
+  {
+    "description": "A decimal point (floating point number format data) went out of range during arithmetic calculations",
+    "message": "OVERFLOW :FLOATING",
+    "number": "0111"
+  },
+  {
+    "description": "An attempt was made to divide by zero in a custom macro",
+    "message": "ZERO DIVIDE",
+    "number": "0112"
+  },
+  {
+    "description": "A function which cannot be used in custom macro is commanded. Modify the program",
+    "message": "IMPROPER COMMAND",
+    "number": "0113"
+  },
+  {
+    "description": "The format used in an expression in a custom macro statement is in error. The parameter tape format is in error",
+    "message": "ILLEGAL EXPRESSION FORMAT",
+    "number": "0114"
+  },
+  {
+    "description": "A number that cannot be used for a local variable, common variable, or system variable in a custom macro is specified. In the EGB axis skip function (G31.8), a non-existent custom macro variable number is specified. Or, the number of custom macro variables used to store skip positions is not sufficient",
+    "message": "VARIABLE NO. OUT OF RANGE",
+    "number": "0115"
+  },
+  {
+    "description": "An attempt was made in a custom macro to use on the left side of an expression a variable that can only be used on the right side of an expression",
+    "message": "WRITE PROTECTED VARIABLE",
+    "number": "0116"
+  },
+  {
+    "description": "Too many brackets “[ ]” were nested in a custom macro. The nesting level including function brackets is 5",
+    "message": "TOO MANY BRACKET NESTING",
+    "number": "0118"
+  },
+  {
+    "description": "The value of an argument in a custom macro function is out of range",
+    "message": "ARGUMENT VALUE OUT OF RANGE",
+    "number": "0119"
+  },
+  {
+    "description": "Too many macro calls were nested in a custom macro",
+    "message": "TOO MANY MACRO NESTING",
+    "number": "0122"
+  },
+  {
+    "description": "A GOTO statement or WHILE-DO statement was found in the main program in the MDI or DNC mode",
+    "message": "ILLEGAL MODE FOR GOTO/WHILE/DO",
+    "number": "0123"
+  },
+  {
+    "description": "The END instruction corresponding to the DO instruction was missing in a custom macro",
+    "message": "MISSING END STATEMENT",
+    "number": "0124"
+  },
+  {
+    "description": "The format used in a macro statement in a custom macro is in error",
+    "message": "MACRO STATEMENT FORMAT ERROR",
+    "number": "0125"
+  },
+  {
+    "description": "DO and END Nos. in a custom macro are in error, or exceed the permissible range (valid range: 1 to 3)",
+    "message": "ILLEGAL LOOP NUMBER",
+    "number": "0126"
+  },
+  {
+    "description": "An NC statement and macro statement were specified in the same block",
+    "message": "DUPLICATE NC,MACRO STATEMENT",
+    "number": "0127"
+  },
+  {
+    "description": "The specified sequence No. could not be found for sequence number search. The sequence No. specified as the jump destination in GOTO-- and M99P-- could not be found",
+    "message": "ILLEGAL MACRO SEQUENCE NUMBER",
+    "number": "0128"
+  },
+  {
+    "description": "G is used as an argument in a custom macro call. G can be specified as an argument only in an every-block call (G66.1)",
+    "message": "USE 'G' AS ARGUMENT",
+    "number": "0129"
+  },
+  {
+    "description": "The NC command and the PMC axis control command were conflicted. Modify the program or ladder",
+    "message": "NC AND PMC AXIS ARE CONFLICTED",
+    "number": "0130"
+  },
+  {
+    "description": "The spindle positioning axis and another axis are specified in the same block",
+    "message": "SPOS AXIS - OTHER AXIS SAME TIME",
+    "number": "0136"
+  },
+  {
+    "description": "The spindle positioning axis and another axis are specified in the same block",
+    "message": "M-CODE & MOVE CMD IN SAME BLK",
+    "number": "0137"
+  },
+  {
+    "description": "The total distribution amount of the CNC and PMC is too large during superimposed control for PMC axis control",
+    "message": "SUPERIMPOSED DATA OVERFLOW",
+    "number": "0138"
+  },
+  {
+    "description": "The PMC axis was selected for the axis for which the PMC axis is being controlled",
+    "message": "CANNOT CHANGE PMC CONTROL AXIS",
+    "number": "0139"
+  },
+  {
+    "description": "In the background, an attempt was made to select or delete the program being selected in the foreground. Perform the correct operation for the background edition",
+    "message": "PROGRAM NUMBER ALREADY IN USE",
+    "number": "0140"
+  },
+  {
+    "description": "G51 (Scaling ON) is commanded in the three-dimensional tool offset mode. Modify the program",
+    "message": "CAN NOT COMMAND G51 IN 3-D OFFSET",
+    "number": "0141"
+  },
+  {
+    "description": "The scaling rate is 0 times or 10000 times or more. Modify the setting of the scaling rate. (G51P_ … or G51I_J_K_ … or parameter (No. 5411 or 5421))",
+    "message": "ILLEGAL SCALE RATE",
+    "number": "0142"
+  },
+  {
+    "description": "An overflow occurred in the storage length of the CNC internal data. This alarm is also generated when the result of internal calculation of scaling, coordinate rotation and cylindrical interpolation overflows the data storage. It also is generated during input of the manual intervention amount",
+    "message": "COMMAND DATA OVERFLOW",
+    "number": "0143"
+  },
+  {
+    "description": "The coordinate rotation plane and arc or cutter compensation C plane must be the same. Modify the program",
+    "message": "ILLEGAL PLANE SELECTED",
+    "number": "0144"
+  },
+  {
+    "description": "The axis No. of plane selection parameter No. 5460 (linear axis) and No. 5461(axis of rotation) in the polar coordinate interpolation mode is out of range (1 to number of controlled axes)",
+    "message": "ILLEGAL USE OF G12.1/G13.1",
+    "number": "0145"
+  },
+  {
+    "description": "The modal G code group contains an illegal G code in the polar coordinate interpolation mode or when a mode was canceled. Only the following G codes are allowed: G40, G50, G69.1 An illegal G code was specified while in the polar coordinate interpolation mode. The following C codes are not allowed: G27, G28, G30, G30.1, G31 to G31.4, G37 to G387.3, G52, G92, G53, G17 to G19, G81 to G89, G68 In the 01 group, G codes other than G01, G02, G03, G02.2 and G03.2 cannot be specified",
+    "message": "ILLEGAL USE OF G-CODE",
+    "number": "0146"
+  },
+  {
+    "description": "Automatic corner override deceleration rate is out of the settable range of judgement angle. Modify the parameters (No.1710 to No.1714)",
+    "message": "SETTING ERROR",
+    "number": "0148"
+  },
+  {
+    "description": "H99 or D99 is specified when no tool management data number is assigned to the spindle position. Correct the program",
+    "message": "NOT USING TOOL IN LIFE GROUP",
+    "number": "0154"
+  },
+  {
+    "description": "A waiting M-code is in error. <1> When different M codes are specified for path 1 and path 2 as waiting M codes without a P command. <2> When the waiting M codes are not identical even though the P commands are identical <3> When the waiting M codes are identical and the P commands are not identical (This occurs when a P command is specified with binary value.) <4> When the number lists in the P commands contain a different number even though the waiting M codes are identical (This occurs when a P command is specified by combining path numbers.) <5> When a waiting M code without a P command (2-path waiting) and a waiting M code with a P command (3-or-more-path waiting) were specified at the same time <6> When a waiting M code without a P command was specified for 3 or more paths",
+    "message": "MISMATCH WAITING M-CODE",
+    "number": "0160"
+  },
+  {
+    "description": "P in a waiting M-code is incorrect. <1> When address P is negative <2> When a P value inappropriate for the system configuration was specified <3> When a waiting M code without a P command (2-path waiting) was specified in the system having 3 or more paths",
+    "message": "ILLEGAL P OF WAITING M-CODE",
+    "number": "0161"
+  },
+  {
+    "description": "G68 and G69 are not independently commanded in balance cut. An illegal value is commanded in a balance cut combination (address P)",
+    "message": "ILLEGAL COMMAND IN G68/G69",
+    "number": "0163"
+  },
+  {
+    "description": "Incorrect tool figure data in interference check. Set correct data, or select correct tool figure data",
+    "message": "ILLEGAL TOOL GEOMETRY DATA",
+    "number": "0169"
+  },
+  {
+    "description": "An axis which cannot perform cylindrical interpolation was specified. More than one axis was specified in a G07.1 block. An attempt was made to cancel cylindrical interpolation for an axis that was not in the cylindrical interpolation mode. For the cylindrical interpolation axis, set not “0” but one of 5, 6 or 7 (parallel axis specification) to parameter No. 1022 to instruct the arc with axis of rotation (ROT parameter No. 1006#1 is set to “1” and parameter No. 1260 is set) ON",
+    "message": "ILLEGAL G07.1 AXIS",
+    "number": "0175"
+  },
+  {
+    "description": "A G code was specified that cannot be specified in the cylindrical interpolation mode. This alarm also is generated when an 01 group G code was in the G00 mode or code G00 was instructed. Cancel the cylindrical interpolation mode before instructing code G00",
+    "message": "ILLEGAL G-CODE USE(G07.1 MODE)",
+    "number": "0176"
+  },
+  {
+    "description": "The number of controlled axes set by the parameter No. 7510 exceeds the maximum number. Modify the parameter setting value",
+    "message": "PARAM. (NO.7510) SETTING ERROR",
+    "number": "0179"
+  },
+  {
+    "description": "An illegal value was specified in P in a G96 block or parameter No. 5844",
+    "message": "ILLEGAL AXIS SELECTED (G96)",
+    "number": "0190"
+  },
+  {
+    "description": "A Cs contour control mode, spindle positioning command, or rigid tapping mode was specified during the spindle synchronous control mode or simple spindle synchronous control mode",
+    "message": "SPINDLE COMMAND IN SYNCHRO-MODE",
+    "number": "0194"
+  },
+  {
+    "description": "The program specified a movement along the Cs-axis when the Cs contour control switching signal was off",
+    "message": "C-AXIS COMMANDED IN SPINDLE MODE",
+    "number": "0197"
+  },
+  {
+    "description": "Undefined macro word was used. Modify the custom macro",
+    "message": "MACRO WORD UNDEFINED",
+    "number": "0199"
+  },
+  {
+    "description": "In the rigid tap, an S value was out of range or was not specified. The parameter (Nos. 5241 to 5243) setting is an S value which can be specified for the rigid tap. Correct the parameters or modify the program",
+    "message": "ILLEGAL S CODE COMMAND",
+    "number": "0200"
+  },
+  {
+    "description": "The command F code for a cutting feedrate is a zero. If the value of F command is much smaller than that of the S command, when a rigid tap command is specified, this alarm is generated. This is because cutting is not possible by the lead specified by the program",
+    "message": "FEEDRATE NOT FOUND IN RIGID TAP",
+    "number": "0201"
+  },
+  {
+    "description": "In the rigid tap, spindle distribution value is too large. (System error)",
+    "message": "POSITION LSI OVERFLOW",
+    "number": "0202"
+  },
+  {
+    "description": "In the rigid tap, position for a rigid M code (M29) or an S command is incorrect. Modify the program",
+    "message": "PROGRAM MISS AT RIGID TAPPING",
+    "number": "0203"
+  },
+  {
+    "description": "In the rigid tap, an axis movement is specified between the rigid M code (M29) block and G84 (or G74) block. Modify the program",
+    "message": "ILLEGAL AXIS OPERATION",
+    "number": "0204"
+  },
+  {
+    "description": "Although a rigid M code (M29) is specified in rigid tapping, the rigid mode DI signal (DGN G061.0) is not ON during execution of the G84 (or G74) block. Check the PMC ladder diagram to find the reason why the DI signal is not turned on",
+    "message": "RIGID MODE DI SIGNAL OFF",
+    "number": "0205"
+  },
+  {
+    "description": "Plane changeover was instructed in the rigid mode. Modify the program",
+    "message": "CAN NOT CHANGE PLANE (RIGID TAP)",
+    "number": "0206"
+  },
+  {
+    "description": "The specified distance was too short or too long in rigid tapping",
+    "message": "RIGID DATA MISMATCH",
+    "number": "0207"
+  },
+  {
+    "description": "repetitive canned cycle",
+    "message": "CAN NOT COMMAND M198/M99",
+    "number": "0210"
+  },
+  {
+    "description": "The direct drawing dimensions programming is commanded for the plane other than the Z-X plane. Correct the program",
+    "message": "ILLEGAL PLANE SELECT",
+    "number": "0212"
+  },
+  {
+    "description": "In feed axis synchronization control, the following errors occurred during the synchronous operation",
+    "message": "ILLEGAL COMMAND IN SYNCHRO-MODE",
+    "number": "0213"
+  },
+  {
+    "description": "Coordinate system is set or tool compensation of the shift type is executed in the synchronous control. Correct the program",
+    "message": "ILLEGAL COMMAND IN SYNCHRO-MODE",
+    "number": "0214"
+  },
+  {
+    "description": "G51.2 is further commanded in the G51.2 mode. Modify the program",
+    "message": "DUPLICATE G51.2(COMMANDS)",
+    "number": "0217"
+  },
+  {
+    "description": "P or Q is not commanded in the G51.2 block, or the command value is out of the range. Modify the program. For a polygon turning between spindles, more information as to why this alarm occurred is indicated in DGN No. 471",
+    "message": "NOT FOUND P/Q COMMAND",
+    "number": "0218"
+  },
+  {
+    "description": "G51.2 and 50.2 were specified in the same block for other commands. Modify the program in another block",
+    "message": "COMMAND G51.2/G50.2 INDEPENDENTLY",
+    "number": "0219"
+  },
+  {
+    "description": "In the synchronous operation, movement is commanded by the NC program or PMC axis control interface for the synchronous axis. Modify the program or check the PMC ladder",
+    "message": "ILLEGAL COMMAND IN SYNCHR-MODE",
+    "number": "0220"
+  },
+  {
+    "description": "Polygon machining synchronous operation and axis control or balance cutting are executed at a time. Modify the program",
+    "message": "ILLEGAL COMMAND IN SYNCHR-MODE",
+    "number": "0221"
+  },
+  {
+    "description": "Input and output are executed at a time in the background edition. Execute a correct operation",
+    "message": "DNC OP. NOT ALLOWED IN BG-EDIT",
+    "number": "0222"
+  },
+  {
+    "description": "Reference position return has not been performed before the automatic operation starts. Perform reference position return only when the parameter ZRNx (No. 1005#0) is set to 0",
+    "message": "ZERO RETURN NOT FINISHED",
+    "number": "0224"
+  },
+  {
+    "description": "Errors occurred in the specified format at the programmable-parameter input",
+    "message": "ILLEGAL FORMAT IN G10 L52",
+    "number": "0231"
+  },
+  {
+    "description": "Three or more axes were specified as helical axes in the helical interpolation mode. Five or more axes were specified as helical axes in the helical interpolation B mode",
+    "message": "TOO MANY HELICAL AXIS COMMAND",
+    "number": "0232"
+  },
+  {
+    "description": "When an attempt was made to use a unit such as that connected via the RS-232-C interface, other users were using it",
+    "message": "DEVICE BUSY",
+    "number": "0233"
+  },
+  {
+    "description": "While punching was being performed with the function for controlling external I/O units ,background editing was performed",
+    "message": "BP/S ALARM",
+    "number": "0239"
+  },
+  {
+    "description": "Background editing was performed during MDI operation",
+    "message": "BP/S ALARM",
+    "number": "0240"
+  },
+  {
+    "description": "The end point of an involute curve on the currently selected plane, or the center coordinate instruction I, J or K of the corresponding basic circle, or basic circle radius R was not specified",
+    "message": "ILLEGAL FORMAT IN G02.2/G03.2",
+    "number": "0241"
+  },
+  {
+    "description": "An illegal value was specified in the involute curve. The coordinate instruction I, J or K of the basic circle on the currently selected plane or the basic circle radius R is “0”, or the start and end points are not inside the basic circle",
+    "message": "ILLEGAL COMMAND IN G02.2/G03.2",
+    "number": "0242"
+  },
+  {
+    "description": "The end point is not positioned on the involute curve that passes through the start point, and this error exceeds the permissible error limit (parameter No. 2510)",
+    "message": "OVER TOLERANCE OF END POINT",
+    "number": "0243"
+  },
+  {
+    "description": "In torque control, the total permissible move value specified as a parameter is exceeded",
+    "message": "P/S ALARM",
+    "number": "0244"
+  },
+  {
+    "description": "One of the G codes, G50, G10, and G04, which cannot be specified in the same block as a T code, was specified with a T code",
+    "message": "T-CODE NOT ALLOWED IN THIS BLOCK",
+    "number": "0245"
+  },
+  {
+    "description": "When an encrypted program is output, EIA is set for the output code. Specify ISO",
+    "message": "THE MISTAKE IS FOUND IN THE OUTPUT CODE OF DATA",
+    "number": "0247"
+  },
+  {
+    "description": "A Z-axis move command was performed in the same block for M06 command",
+    "message": "TOOL CHANGE ILLEGAL Z AXIS COMMAND",
+    "number": "0250"
+  },
+  {
+    "description": "An unusable T code was specified in M06Txx",
+    "message": "TOOL CHANGE ILLEGAL T COMMAND",
+    "number": "0251"
+  },
+  {
+    "description": "A binary operation was specified during advanced preview control mode",
+    "message": "G05 CAN NOT BE COMMANDED",
+    "number": "0253"
+  },
+  {
+    "description": "An illegal G code was specified during scaling. Modify the program. For the T system, one of the following functions is specified during scaling, this alarm is generated. (Specify G codes for systems B and C in that order.)",
+    "message": "ILLEGAL COMMAND IN SCALING",
+    "number": "0300"
+  },
+  {
+    "description": "Although parameter No. 1012#0 (IDGx) was set to 1 to inhibit the reference position from being set again for a return to the reference position without a dog, an attempt was made to perform a manual return to the reference position",
+    "message": "RESETTING OF REFERENCE RETURN IS INHIBITED",
+    "number": "0301"
+  },
+  {
+    "description": "The reference position could not be set for a return to the reference position without a dog. Possible causes are: of a manual return to the reference position",
+    "message": "SETTING THE REFERENCE POSITION WITHOUT DOG IS NOT PERFORMED",
+    "number": "0302"
+  },
+  {
+    "description": "When the setting of a reference position at any position was possible in Cs contour control (parameter CRF (No. 3700#0) = 1), a G00 command was issued for the Cs contour axis without a return to the reference position after the serial spindle was switched to Cs contour control mode. Perform a reference position return with a G28 command before issuing a G00 command",
+    "message": "REFERENCE POSITION RETURN IS NOT PERFORMED",
+    "number": "0303"
+  },
+  {
+    "description": "Although a reference position was not set, an automatic return to the reference position (G28) was commanded",
+    "message": "G28 IS COMMANDED WITHOUT ZERO RETURN",
+    "number": "0304"
+  },
+  {
+    "description": "Although a G28 (automatic return to the reference position), G30 (return to the second, third, or fourth reference position), or G30/1 (return to the floating reference position) command was not issued after power-up, G29 (return from the reference position) was commanded",
+    "message": "INTERMEDIATE POSITION IS NOT ASSIGNED",
+    "number": "0305"
+  },
+  {
+    "description": "The correspondence between the moving axis and the I, J, or K command is incorrect in a block in which chamfering is specified",
+    "message": "MISMATCH AXIS WITH CNR/CHF",
+    "number": "0306"
+  },
+  {
+    "description": "An attempt was made to set a butt-type reference position for an axis for which to use the function to set a reference position without a dog",
+    "message": "CAN NOT START REFERENCE RETURN WITH MECHANICAL STOPPER SETTING",
+    "number": "0307"
+  },
+  {
+    "description": "G72.1 was specified again during G72.1 rotation copying",
+    "message": "G72.1 NESTING ERROR",
+    "number": "0308"
+  },
+  {
+    "description": "G72.2 was specified again during G72.2 parallel copying",
+    "message": "G72.2 NESTING ERROR",
+    "number": "0309"
+  },
+  {
+    "description": "The specified file could not be found during a subprogram or macro call",
+    "message": "FILE NOT FOUND",
+    "number": "0310"
+  },
+  {
+    "description": "An invalid format was specified to call a subprogram or macro using a file name",
+    "message": "CALLED BY FILE NAME FORMAT ERROR",
+    "number": "0311"
+  },
+  {
+    "description": "Direct input of drawing dimensions was commanded in an invalid format. An attempt was made to specify an invalid G code during direct input of drawing dimensions. Two or more blocks not to be moved exist in consecutive commands that specify direct input of drawing dimensions. Although non-use of commas (,) (parameter No. 3405#4 = 1) was specified for direct input of drawing dimensions, a comma was specified",
+    "message": "ILLEGAL COMMAND IN DIRECT DRAWING DIMENSIONS PROGRAMMING",
+    "number": "0312"
+  },
+  {
+    "description": "The variable-lead threading increment specified in address K exceeds the specified maximum value in variable-lead threading. Or, a negative lead value was specified",
+    "message": "ILLEGAL LEAD COMMAND",
+    "number": "0313"
+  },
+  {
+    "description": "An axis was specified invalidly in polygon turning. For polygon turning: A tool rotation axis is not specified. (Parameter No. 7610) For polygon turning between spindles: Valid spindles are not specified. (Parameter Nos. 7640 to 7643)",
+    "message": "ILLEGAL SETTING OF POLYGONAL AXIS",
+    "number": "0314"
+  },
+  {
+    "description": "An invalid tool tip angle is specified in a multiple repetitive canned threading cycle (G76)",
+    "message": "ILLEGAL NOSE ANGLE COMMAND IS IN THE THREAD CUTTING CYCLE",
+    "number": "0315"
+  },
+  {
+    "description": "An minimum depth of cut higher than the thread height is specified in a multiple repetitive canned threading cycle (G76)",
+    "message": "ILLEGAL CUTTING AMOUNT IS IN THE THREAD CUTTING CYCLE",
+    "number": "0316"
+  },
+  {
+    "description": "A zero or a negative value is specified in a multiple repetitive canned threading cycle (G76) as the thread height or the depth of cut",
+    "message": "ILLEGAL THREAD COMMAND IS IN THE THREAD CUTTING CYCLE",
+    "number": "0317"
+  },
+  {
+    "description": "Although an escape directions is set in a multiple repetitive canned cutting-off cycle (G74 or G75), a negative value is specified for ∆d",
+    "message": "ILLEGAL RELIEF AMOUNT IS IN THE DRILLING CYCLE",
+    "number": "0318"
+  },
+  {
+    "description": "Although the ∆i or ∆k travel distance is set to 0 in a multiple repetitive canned cutting-off cycle (G74 or G75), a value other than 0 us specified for a U or W",
+    "message": "THE END POINT COMMAND IS ILLEGAL IN THE DRILLING CYCLE",
+    "number": "0319"
+  },
+  {
+    "description": "A negative value is specified in a multiple repetitive canned cutting-off cycle (G74 or G75) as ∆i or ∆k (travel distance/the depth of cut)",
+    "message": "ILLEGAL MOVEMENT AMOUNT/CUTTING AMOUNT IS IN THE DRILLING CYCLE",
+    "number": "0320"
+  },
+  {
+    "description": "A zero or a negative value is specified in a multiple repetitive canned closed loop cycle (G73) as a repeated time",
+    "message": "ILLEGAL REPEATED TIME IS IN THE PATTERN REPEATING CYCLE",
+    "number": "0321"
+  },
+  {
+    "description": "An invalid shape which is over the cycle starting point is specified in a shape program for a multiple repetitive canned rough-cutting cycle (G71 or G72)",
+    "message": "FINISHING SHAPE WHICH OVER OF STARTING POINT",
+    "number": "0322"
+  },
+  {
+    "description": "Type II is specified in the first block of the shape program specified by P in a multiple repetitive canned rough-cutting cycle (G71 or G72). Z (W) command is for G71. X (U) command is for G72",
+    "message": "THE FIRST BLOCK OF SHAPE PROGRAM IS A COMMAND OF TYPE II",
+    "number": "0323"
+  },
+  {
+    "description": "An interruption type macro was issued during the multiple repetitive canned cycle (G70, G71, G72, or G73)",
+    "message": "THE INTERRUPTION TYPE MACRO WAS DONE IN THE MULTIPLE REPETIVE CYCLES",
+    "number": "0324"
+  },
+  {
+    "description": "An usable command was issued in a shape program for a multiple repetitive canned cycle (G70, G71, G72, or G73)",
+    "message": "UNAVAILABLE COMMAND IS IN SHAPE PROGRAM",
+    "number": "0325"
+  },
+  {
+    "description": "In a shape program in the multiple repetitive canned cycle (G70, G71, G72, or G73), a command for direct input of drawing dimensions in the last block is terminated in the middle",
+    "message": "LAST BLOCK OF SHAPE PROGRAM IS A DIRECT DRAWING DIMENSIONS",
+    "number": "0326"
+  },
+  {
+    "description": "A multiple repetitive canned cycle (G70, G71, G72, or G73) was commanded in a modal state in which a multiple repetitive canned cycle could not be commanded",
+    "message": "MODAL THAT MULTIPLE REPETIVE CYCLES CANNOT BE DONE",
+    "number": "0327"
+  },
+  {
+    "description": "The specification for the blank side for a tool-nose radius compensation (G41 or G42) is incorrect in a multiple repetitive canned cycle (G71 or G72)",
+    "message": "ILLEGAL WORK POSITION IS IN THE TOOL NOSE RADIUS COMPENSATION",
+    "number": "0328"
+  },
+  {
+    "description": "In a shape program for the multiple repetitive canned rough-cutting cycle (G71 or G72), the command of the second plane axis was not a monotonous increase or decrease",
+    "message": "THE FINISHING SHAPE IS NOT A MONOTONOUS CHANGE(SECOND AXES)",
+    "number": "0329"
+  },
+  {
+    "description": "An axis other than the plane is specified n a canned cycle(G90, G92, or G94)",
+    "message": "ILLEGAL AXIS COMMAND IS IN THE TURNING CANNED CYCLE",
+    "number": "0330"
+  },
+  {
+    "description": "An illegal value is specified for an AX[] axis number",
+    "message": "ILLEGAL AXIS NUMBER IN AX[]",
+    "number": "0331"
+  },
+  {
+    "description": "An illegal value is specified for an AXNUM[] axis address",
+    "message": "ILLEGAL AXIS ADDRESS IN AXNUM[]",
+    "number": "0332"
+  },
+  {
+    "description": "Multiple spindle commands could be found in the same block in using an expansion spindle name. Only one spindle could be commanded in the same block",
+    "message": "TOO MANY SPINDLE COMMANDS",
+    "number": "0333"
+  },
+  {
+    "description": "An offset data which was out of the effective range was specified. (malfunction prevention function)",
+    "message": "OFFSET IS OUT OF EFFECTIVE RANGE",
+    "number": "0334"
+  },
+  {
+    "description": "Multiple M codes are commanded simultaneously in a block for a wait function with peripheral devices by an M code",
+    "message": "PLURAL M CODE",
+    "number": "0335"
+  },
+  {
+    "description": "For a tool length compensation C, an attempt was made to command the offset to other axes without canceling the offset. Or, for a tool length compensation C, multiple axes are specified in G43 or G44 block",
+    "message": "TOOL COMPENSATION COMMANDED MORE TWO AXES",
+    "number": "0336"
+  },
+  {
+    "description": "The command value exceeded the maximum amount of incremental. (malfunction prevention function)",
+    "message": "EXCESS MAXIMUM INCREMENTAL VALUE",
+    "number": "0337"
+  },
+  {
+    "description": "An incorrect value was detected in a check sum. (malfunction prevention function)",
+    "message": "CHECK SUM ERROR",
+    "number": "0338"
+  },
+  {
+    "description": "With manual absolute turned on, an attempt was made to restart the operation in nano smoothing mode after performing the manual interaction",
+    "message": "ILLEGAL RESTART (NANO SMOOTHING)",
+    "number": "0340"
+  },
+  {
+    "description": "There are more blocks than can be commanded consecutively in nano smoothing mode",
+    "message": "TOO MANY COMMAND BLOCK (NANO SMOOTHING)",
+    "number": "0341"
+  },
+  {
+    "description": "A custom macro interrupt was enabled in nano smoothing mode. Or, nano smoothing mode was commanded with a custom macro interrupt enabled",
+    "message": "CUSTOM MACRO INTERRUPT ENABLE IN NANO SMOOTHING",
+    "number": "0342"
+  },
+  {
+    "description": "G43, G44, or G49 was commanded during a nano smoothing",
+    "message": "ILLEGAL COMMAND IN NANO SMOOTHING",
+    "number": "0343"
+  },
+  {
+    "description": "An illegal command or operation by which a nano smoothing could not be continued was performed",
+    "message": "CANNOT CONTINUE NANO SMOOTHING",
+    "number": "0344"
+  },
+  {
+    "description": "A tool change position on the Z-axis is incorrect",
+    "message": "TOOL CHANGE ILLEGAL Z AXIS POS",
+    "number": "0345"
+  },
+  {
+    "description": "A tool change position is not set",
+    "message": "TOOL CHANGE ILLEGAL TOOL NUM",
+    "number": "0346"
+  },
+  {
+    "description": "Tool changing is commanded twice or more in the same block",
+    "message": "TOOL CHANGE ILLEGAL COMMAND IN SAME BLK",
+    "number": "0347"
+  },
+  {
+    "description": "A tool change spindle on the Z-axis is not set",
+    "message": "TOOL CHANGE Z AXIS POS NOT ESTABLISHED",
+    "number": "0348"
+  },
+  {
+    "description": "A tool change spindle stop is not stopped",
+    "message": "TOOL CHANGE SPINDLE NOT STOP",
+    "number": "0349"
+  },
+  {
+    "description": "An illegal synchronization control axis number (parameter No. 8180) is set",
+    "message": "PARAMETER OF THE INDEX OF THE SYNCHRONOUS CONTROL AXIS SET ERROR",
+    "number": "0350"
+  },
+  {
+    "description": "While the axis being subject to synchronization control was moving, an attempt was made to start or cancel the synchronization control by a synchronization control axis selection signal",
+    "message": "BECAUSE THE AXIS IS MOVING, THE SYNC CONTROL IS CAN'T BE USED",
+    "number": "0351"
+  },
+  {
+    "description": "This error occurred when: great-grandchild for a parent-child-grandchild relation",
+    "message": "SYNCHRONOUS CONTROL AXIS COMPOSITION ERROR",
+    "number": "0352"
+  },
+  {
+    "description": "This error occurred when: parameter No. 8162#7MUMx is set to 1",
+    "message": "THE INSTRUCTION WAS DONE FOR THE AXIS WHICH WAS NOT ABLE TO MOVE",
+    "number": "0353"
+  },
+  {
+    "description": "This error occurred when G28 was specified to the master axis being parking during synchronization control, but an axis reference position is not set for the slave axis",
+    "message": "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN SYNC MODE",
+    "number": "0354"
+  },
+  {
+    "description": "An illegal composite control axis number (parameter No. 8183) is specified",
+    "message": "PARAMETER OF THE INDEX OF THE COMPOSITE CONTROL AXIS SET ERROR",
+    "number": "0355"
+  },
+  {
+    "description": "While the axis being subject to composite control was moving, an attempt was made to start or cancel the composite control by a composite control axis selection signal",
+    "message": "BECAUSE THE AXIS IS MOVING, THE COMP CONTROL IS CAN'T BE USED",
+    "number": "0356"
+  },
+  {
+    "description": "This error occurred when an attempt was made to perform composite control for the axis during a synchronization, composition, or superposition",
+    "message": "COMPOSITE CONTROL AXIS COMPOSITION ERROR",
+    "number": "0357"
+  },
+  {
+    "description": "This error occurred when G28 was specified to the composite axis during composite control, but a reference position is not set to the other part of the composition",
+    "message": "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN COMP MODE",
+    "number": "0359"
+  },
+  {
+    "description": "An illegal superposition control axis number (parameter No. 8186) is specified",
+    "message": "PARAMETER OF THE INDEX OF THE SUPERPOS CONTROL AXIS SET ERROR",
+    "number": "0360"
+  },
+  {
+    "description": "While the axis being subject to superposition control was moving, an attempt was made to start or cancel the superposition control by a superposition control axis selection signal",
+    "message": "BECAUSE THE AXIS IS MOVING, THE SUPERPOS CONTROL IS CAN'T BE USED",
+    "number": "0361"
+  },
+  {
+    "description": "This error occurred when: great-grandchild for a parent-child-grandchild relation",
+    "message": "SUPERPOSITION CONTROL AXIS COMPOSITION ERROR",
+    "number": "0362"
+  },
+  {
+    "description": "This error occurred when G28 was specified to the superposition control slave axis during superposition control",
+    "message": "THE G28 WAS INSTRUCTED IN TO THE SUPERPOS CONTROL SLAVE AXIS",
+    "number": "0363"
+  },
+  {
+    "description": "This error occurred when G53 was specified to the slave axis being moved during superposition control",
+    "message": "THE G53 WAS INSTRUCTED IN TO THE SUPERPOS CONTROL SLAVE AXIS",
+    "number": "0364"
+  },
+  {
+    "description": "The maximum control axis number or maximum control spindle number which could be used within a path was exceeded. (For a loader path, this alarm is generated if the number of axis per path is set to 5 or greater.)",
+    "message": "TOO MANY MAXIMUM SV/SP AXIS NUMBER PER PATH",
+    "number": "0365"
+  },
+  {
+    "description": "When the turret change tools method was selected (parameter No. 5040#3 (TCT) = 0), G43, G43.1, G43.4, G43.5, or G43.7 was commanded",
+    "message": "IMPROPER G-CODE IN TURRET METHOD",
+    "number": "0366"
+  },
+  {
+    "description": "A three-dimensional coordinate conversion was commanded during synchronization control when the parameter PKUx (No.8162#2) was 0",
+    "message": "3-D CONV. WAS COMMANDED IN SYNC MODE AS THE PARAMETER PKUx(NO.8162#2) IS 0",
+    "number": "0367"
+  },
+  {
+    "description": "When the ATC change tools method was selected (parameter No. 5040#3 (TCT) = 1) during G43, G43.1, G43.4, or G43.5 mode, G43.7 was commanded. Or, G43, G43.1, G43.4, or G43.5 was commanded during G43.7 mode",
+    "message": "OFFSET REMAIN AT OFFSET COMMAND",
+    "number": "0368"
+  },
+  {
+    "description": "instruction is out of range. The torque Q range is 1 to 99",
+    "message": "G31 FORMAT ERROR",
+    "number": "0369"
+  },
+  {
+    "description": "The specified address P value for G31 is out of range. The address P range is 1 to 4 in a multistage skip function. The specified address Q value for G04 is out of range. The address Q range is 1 to 4 in a multistage skip function. Or, P1-4 for G31, or Q1-4 for G04 was commanded without a multistage skip function option",
+    "message": "G31P/G04Q ERROR",
+    "number": "0370"
+  },
+  {
+    "description": "In a command format for a programmable parameter input, an attempt was made to change the parameter for an encryption (No. 3220), key (No. 3221), or protection range (No.3222 or No.3223) as a \"the encryption function for the key and program.\" Modify the program",
+    "message": "ILLEGAL FORMAT IN G10 OR L50",
+    "number": "0371"
+  },
+  {
+    "description": "An attempt was made to perform an automatic return to the reference position on the orthogonal axis before the completion of a return to the reference position on the angular axis. However, this attempt failed because a manual return to the reference position during angular axis control or an automatic return to the reference position after power-up was not commanded. First, return to the reference position on the angular axis, then return to the reference position on the orthogonal axis",
+    "message": "REFERENCE RETURN INCOMPLETE",
+    "number": "0372"
+  },
+  {
+    "description": "In the skip commands (G31, G31P1 to G31P4) and dwell commands (G04, G04Q1 to G04Q4), the same high-speed signal is selected in different paths",
+    "message": "ILLEGAL HIGH-SPEED SKIP SIGNAL",
+    "number": "0373"
+  },
+  {
+    "description": "G10L75 or G10L76 data was registered during the following data registration: Command G10L75 or G10L76 again after the above operation is completed",
+    "message": "ILLEGAL REGISTRATION OF TOOL MANAGER(G10)",
+    "number": "0374"
+  },
+  {
+    "description": "Angular axis control is disabled for this axis configuration. superposition control mode1)",
+    "message": "CAN NOT ANGULAR CONTROL(SYNC:MIX:OVL)",
+    "number": "0375"
+  },
+  {
+    "description": "(Parameter No.1815#5 is set to “1”. )",
+    "message": "SERIAL DCL: ILLEGAL PARAMETER",
+    "number": "0376"
+  },
+  {
+    "description": "There is no DI/DO variable that has a specified signal address (alphabet, number)",
+    "message": "ILLEGAL RTM DI/DO VAR",
+    "number": "0387"
+  },
+  {
+    "description": "Bits other than bits 0 to 7 cannot be specified with a DI/DO signal",
+    "message": "ILLEGAL RTM SIGNAL BIT",
+    "number": "0389"
+  },
+  {
+    "description": "The number of branches supported with real time custom macros was exceeded",
+    "message": "RTM BRANCH OVER",
+    "number": "0391"
+  },
+  {
+    "description": "Many reserved words (ZONCE, ZEDGE, ZWHILE, ZDO, ZEND, G65, M99) for RTM control were used in a real time macro command",
+    "message": "TOO MANY SENTENCE CONTROL",
+    "number": "0392"
+  },
+  {
+    "description": "In a real time macro command, there is no data to be assigned",
+    "message": "NO SENTENCE CONTROL",
+    "number": "0393"
+  },
+  {
+    "description": "The matching of reserved words (ZONCE, ZEDGE, ZWHILE, ZDO, ZEND, G65, M99) for RTM control is incorrect",
+    "message": "ILLEGAL SENTENCE CONTROL",
+    "number": "0394"
+  },
+  {
+    "description": "Control code G65 or M99 for calling a subprogram or returning from a subprogram is not coded correctly",
+    "message": "ILLEGAL NC WORD CONTROL",
+    "number": "0395"
+  },
+  {
+    "description": "In other than a real time macro command, a reserved word (ZONCE, ZEDGE, ZWHILE, ZDO, or ZEND) for RTM control is used",
+    "message": "ILLEGAL RTM SENTENCE CONTROL",
+    "number": "0396"
+  },
+  {
+    "description": "There is no buffer available for real time macro commands. Too many blocks read in advance are buffered as triggers used by real time macro commands",
+    "message": "RTM BUFFER OVER",
+    "number": "0397"
+  },
+  {
+    "description": "In blocks read in advance, there are too many real time macro commands with the same ID",
+    "message": "'ID OVER IN BUFFER",
+    "number": "0398"
+  },
+  {
+    "description": "An attempt was made to execute real time macro commands with the same ID by using the same NC statement as a trigger",
+    "message": "'ID EXECUTION IN SAME TIME",
+    "number": "0399"
+  },
+  {
+    "description": "Too many one-shot real time macro commands are specified",
+    "message": "ONESHOT CMDOVER",
+    "number": "0400"
+  },
+  {
+    "description": "The number of real time macro commands that can be executed simultaneously was exceeded",
+    "message": "EXEC CMD NUM OVER IN SAME TIME",
+    "number": "0401"
+  },
+  {
+    "description": "A token, variable, or function that is not supported by the real time custom macro function was detected",
+    "message": "ILLEGAL TOKEN FOR RTM",
+    "number": "0402"
+  },
+  {
+    "description": "An attempt was made to access a protected variable",
+    "message": "ACCESS TO RTM PROTECT VAR",
+    "number": "0403"
+  },
+  {
+    "description": "An error related to a real time macro command occurred",
+    "message": "RTM ERROR",
+    "number": "0404"
+  },
+  {
+    "description": "The storage size of the real time macro area is insufficient",
+    "message": "CODE AREA SHORTAGE",
+    "number": "0406"
+  },
+  {
+    "description": "In the compile mode, an attempt was made to set the compile mode again",
+    "message": "DOULE SLASH IN RTM MODE",
+    "number": "0407"
+  },
+  {
+    "description": "The absolute command cannot be specified",
+    "message": "G90 IS NOT PERMITTED",
+    "number": "0408"
+  },
+  {
+    "description": "An invalid axis number is specified",
+    "message": "ILLEGAL AXIS NO",
+    "number": "0409"
+  },
+  {
+    "description": "An intermediate point other than 0 is specified with G28",
+    "message": "MIDDLE POINT IS NOT ZERO",
+    "number": "0410"
+  },
+  {
+    "description": "The maximum number of axes that can be controlled simultaneously was exceeded",
+    "message": "SIMULTANEOUSLY AXES OVER",
+    "number": "0411"
+  },
+  {
+    "description": "An unusable G code was used",
+    "message": "ILLEGAL G CODE",
+    "number": "0412"
+  },
+  {
+    "description": "An unusable address was used",
+    "message": "ILLEGAL ADDRESS",
+    "number": "0413"
+  },
+  {
+    "description": "An invalid PMC axis number is specified",
+    "message": "ILLEGAL PMC AXIS NO",
+    "number": "0414"
+  },
+  {
+    "description": "The group to which the specified axis belongs is already in used",
+    "message": "GROUP IS IN USE",
+    "number": "0415"
+  },
+  {
+    "description": "The specified axis cannot be used",
+    "message": "UNABLE TO USE THE AXIS",
+    "number": "0416"
+  },
+  {
+    "description": "The specified axis is placed in the inoperative state",
+    "message": "AXIS IS UNABLE TO MOVE",
+    "number": "0417"
+  },
+  {
+    "description": "An incorrect feedrate is set",
+    "message": "ILLEGAL FEED SETTING",
+    "number": "0418"
+  },
+  {
+    "description": "A travel distance beyond the specifiable range is specified",
+    "message": "ILLEGAL DISTANCE SETTING",
+    "number": "0419"
+  },
+  {
+    "description": "A subprogram is specified not by using a constant",
+    "message": "CONSTANT NUMBER P",
+    "number": "0420"
+  },
+  {
+    "description": "With G65, an invalid argument, L, is used",
+    "message": "ILLEGAL ARGUMENT G54",
+    "number": "0421"
+  },
+  {
+    "description": "With G65, an invalid argument is used",
+    "message": "ILLEGAL ARGUMENT G54",
+    "number": "0422"
+  },
+  {
+    "description": "The option for PMC axis control is missing",
+    "message": "NO PMC AXIS CONTROL OPTION",
+    "number": "0423"
+  },
+  {
+    "description": "Multiple axes are using one group",
+    "message": "MULTIPLE AXES IN ONE GROUP",
+    "number": "0424"
+  },
+  {
+    "description": "One axis is using multiple groups",
+    "message": "ONE AXIS USE MULTIPLE GROU",
+    "number": "0425"
+  },
+  {
+    "description": "When retract was started in a threading block, a retract command had been issued for the long axis direction of threading",
+    "message": "ILLEGAL COMMAND IN G10.6",
+    "number": "0429"
+  },
+  {
+    "description": "Address O or N is not followed by a number",
+    "message": "ILLEGAL FORMAT OF PROGRAM NO",
+    "number": "1014"
+  },
+  {
+    "description": "EOB (End of Block) code is missing at the end of a program input in the MDI mode",
+    "message": "EOB NOT FOUND",
+    "number": "1016"
+  },
+  {
+    "description": "A M99 was commanded during main program when the parameter AMM (No. 7712#4) = 1 was set",
+    "message": "M99 IN MAIN PROGRAM",
+    "number": "1018"
+  },
+  {
+    "description": "The manual intervention compensation request signal MIGET became “1” when a advanced block was found during automatic operation. To input the manual intervention compensation during automatic operation, a sequence for manipulating the manual intervention compensation request signal MIGET is required in an M code instruction without buffering",
+    "message": "COMMAND IN BUFFERING MODE",
+    "number": "1059"
+  },
+  {
+    "description": "An attempt was made in the foreground to execute a program being edited in the background. The currently edited program cannot be executed, so end editing and restart program execution",
+    "message": "PROGRAM IN USE",
+    "number": "1077"
+  },
+  {
+    "description": "The program of the specified file No. is not registered in an external device. (external device subprogram call)",
+    "message": "PROGRAM FILE NOT FOUND",
+    "number": "1079"
+  },
+  {
+    "description": "Another external device subprogram call was made from a subprogram after the subprogram called by the external device subprogram call",
+    "message": "DUPLICATE DEVICE SUB PROGRAM CALL",
+    "number": "1080"
+  },
+  {
+    "description": "The external device subprogram call is not possible in this mode",
+    "message": "EXT DEVICE SUB PROGRAM CALL MODE ERROR",
+    "number": "1081"
+  },
+  {
+    "description": "More than one subprogram call instruction was specified in the same block",
+    "message": "DUPLICATE SUB-CALL WORD",
+    "number": "1091"
+  },
+  {
+    "description": "More than one macro call instruction was specified in the same block",
+    "message": "DUPLICATE MACRO-CALL WORD",
+    "number": "1092"
+  },
+  {
+    "description": "An address other than O, N, P or L was specified in the same block as M99 during the macro modal call state",
+    "message": "DUPLICATE NC-WORD & M99",
+    "number": "1093"
+  },
+  {
+    "description": "More than ten sets of I, J and K arguments were specified in the type-II arguments (A, B, C, I, J, K, I, J, K, ...) for custom macros",
+    "message": "TOO MANY TYPE-2 ARGUMENT",
+    "number": "1095"
+  },
+  {
+    "description": "An illegal variable name was specified. A code that cannot be specified as a variable name was specified. [#_OFSxx] does not match the tool offset memory option configuration",
+    "message": "ILLEGAL VARIABLE NAME",
+    "number": "1096"
+  },
+  {
+    "description": "The specified variable name is too long",
+    "message": "TOO LONG VARIABLE NAME",
+    "number": "1097"
+  },
+  {
+    "description": "The specified variable name cannot be used as it is not registered",
+    "message": "NO VARIABLE NAME",
+    "number": "1098"
+  },
+  {
+    "description": "A suffix was not specified to a variable name that required a suffix enclosed by [ ]. A suffix was specified to a variable name that did not require a suffix enclosed by [ ]. The value enclosed by the specified [ ] was out of range",
+    "message": "ILLLEGAL SUFFIX [ ]",
+    "number": "1099"
+  },
+  {
+    "description": "Call mode cancel (G67) was specified even though macro continuous-state call mode (G66) was not in effect",
+    "message": "CANCEL WITHOUT MODAL CALL",
+    "number": "1100"
+  },
+  {
+    "description": "An interrupt was made in a state where a custom macro interrupt containing a move instruction could not be executed",
+    "message": "ILLEGAL CNC STATEMENT IRT",
+    "number": "1101"
+  },
+  {
+    "description": "An attempt was made in a custom macro to use on the right side of an expression a variable that can only be used on the left side of an expression",
+    "message": "READ PROTECTED VARIABLE",
+    "number": "1115"
+  },
+  {
+    "description": "The specified argument in the argument function (ATAN, POW) is in error",
+    "message": "ILLEGAL ARGUMENT FORMAT",
+    "number": "1120"
+  },
+  {
+    "description": "The DO instruction corresponding to the END instruction was missing in a custom macro",
+    "message": "MISSING DO STATEMENT",
+    "number": "1124"
+  },
+  {
+    "description": "The description of the expression in a custom macro statement contains an error. A parameter program format error. The screen displayed to enter periodic maintenance data or item selection menu (machine) data does not match the data type",
+    "message": "ILLEGAL EXPRESSION FORMAT",
+    "number": "1125"
+  },
+  {
+    "description": "The jump destination sequence No. in a custom macro statement GOTO instruction was out of range (valid range: 1 to 99999999)",
+    "message": "SEQUENCE NUMBER OUT OF RANGE",
+    "number": "1128"
+  },
+  {
+    "description": "The number of left brackets ([) is less than the number of right brackets (]) in a custom macro statement",
+    "message": "MISSING OPEN BRACKET",
+    "number": "1131"
+  },
+  {
+    "description": "The number of right brackets (]) is less than the number of left brackets ([) in a custom macro statement",
+    "message": "MISSING CLOSE BRACKET",
+    "number": "1132"
+  },
+  {
+    "description": "An equal sign (=) is missing in the arithmetic calculation instruction in a custom macro statement",
+    "message": "MISSING '='",
+    "number": "1133"
+  },
+  {
+    "description": "A delimiter (,) is missing in a custom macro statement",
+    "message": "MISSING ','",
+    "number": "1134"
+  },
+  {
+    "description": "The format used in the IF statement in a custom macro is in error",
+    "message": "IF STATEMENT FORMAT ERROR",
+    "number": "1137"
+  },
+  {
+    "description": "The format used in the WHILE statement in a custom macro is in error",
+    "message": "WHILE STATEMENT FORMAT ERROR",
+    "number": "1138"
+  },
+  {
+    "description": "The format used in the SETVN statement in a custom macro is in error",
+    "message": "SETVN STATEMENT FORMAT ERROR",
+    "number": "1139"
+  },
+  {
+    "description": "The SETVN statement in a custom macro contacts a character that cannot be used in a variable name",
+    "message": "ILLEGAL CHARACTER IN VAR. NAME",
+    "number": "1141"
+  },
+  {
+    "description": "The variable name used in a SETVN statement in a custom macro exceeds 8 characters",
+    "message": "TOO LONG V-NAME (SETVN)",
+    "number": "1142"
+  },
+  {
+    "description": "The format used in the BPRINT statement or DPRINT statement is in error",
+    "message": "BPRNT/DPRNT STATEMENT FORMAT ERROR",
+    "number": "1143"
+  },
+  {
+    "description": "The G10 L No. contains no relevant data input or corresponding option. Data setting address P or R is not specified. An address not relating to the data setting is specified. Which address to specify varies according to the L No. The sign, decimal point or range of the specified address are in error",
+    "message": "G10 FORMAT ERROR",
+    "number": "1144"
+  },
+  {
+    "description": "The response to a G10.1 instruction was not received from the PMC within the specified time limit",
+    "message": "G10.1 TIME OUT",
+    "number": "1145"
+  },
+  {
+    "description": "The G10.1 instruction format is in error",
+    "message": "G10.1 FORMAT ERROR",
+    "number": "1146"
+  },
+  {
+    "description": "The format of the G31.9 or G31.8 block is erroneous in the following cases:",
+    "message": "G31.9/G31.8 FORMAT ERROR",
+    "number": "1152"
+  },
+  {
+    "description": "G31.9 cannot be specified in this modal state. This alarm is also generated when G31.9 is specified when a group 07 G code (e.g. cutter compensation) is not canceled",
+    "message": "CANNOT USE G31.9",
+    "number": "1153"
+  },
+  {
+    "description": "An overflow occurred in the position data within the CNC. This alarm is also generated if the target position of a command exceeds the maximum stroke as a result of calculation such as coordinate conversion, offset, or introduction of a manual intervention amount",
+    "message": "COMMAND DATA OVERFLOW",
+    "number": "1160"
+  },
+  {
+    "description": "All of the axis specified for automatic operation are parked",
+    "message": "ALL PARALLEL AXES IN PARKING",
+    "number": "1180"
+  },
+  {
+    "description": "An illegal axis was specified for drilling in a canned cycle for drilling. If the zero point of the drilling axis is not specified or parallel axes are specified in a block containing a G code in a canned cycle, simultaneously specify the parallel axes for the drilling axis",
+    "message": "ILLEGAL DRILLING AXIS SELECTED",
+    "number": "1196"
+  },
+  {
+    "description": "The grid position could not be calculated during grid reference position return using the grid system as the one-revolution signal was not received before leaving the deceleration dog. This alarm is also generated when the tool does not reach a feedrate that exceeds the servo error amount preset to parameter No. 1841 before the deceleration limit switch is left (deceleration signal *DEC returns to “1”)",
+    "message": "PULSCODER INVALID ZERO RETURN",
+    "number": "1200"
+  },
+  {
+    "description": "F codes in the inverse time specification mode (G93) are not handled as modal, and must be specified in individual blocks",
+    "message": "NO F COMMAND AT G93",
+    "number": "1202"
+  },
+  {
+    "description": "An attempt was made to execute an instruction that uses the spindle although the spindle to be controlled has not been set correctly",
+    "message": "ILLEGAL SPINDLE SELECT",
+    "number": "1223"
+  },
+  {
+    "description": "An illegal G code was specified in the three-dimensional tool offset mode",
+    "message": "ILLEGAL COMMAND IN 3-D OFFSET",
+    "number": "1282"
+  },
+  {
+    "description": "When bit 0 (ONI) of parameter No. 6029 is set to 1, I, J, and K commands are specified without the decimal point in three-dimensional tool compensation mode",
+    "message": "ILLEGAL IJK IN 3-D OFFSET",
+    "number": "1283"
+  },
+  {
+    "description": "An error occurred during inch/metric switching",
+    "message": "ILLEGAL INCH/METRIC CONVERSION",
+    "number": "1298"
+  },
+  {
+    "description": "The axis No. address was specified even though the parameter is not an axis-type while loading parameters or pitch error compensation data from a tape or by entry of the G10 parameter. Axis No. cannot be specified in pitch error compensation data",
+    "message": "ILLEGAL ADDRESS",
+    "number": "1300"
+  },
+  {
+    "description": "The axis No. was not specified even though the parameter is an axis-type while loading parameters or pitch error compensation data from a tape or by entry of the G10 parameter. Or, data No. address N, or setting data address P or R are not specified",
+    "message": "MISSING ADDRESS",
+    "number": "1301"
+  },
+  {
+    "description": "A non-existent data No. was found while loading parameters or pitch error compensation data from a tape or by entry of the G10 parameter. An invalid address R value is specified in a pattern program for each machining purpose on the high-speed high-precision setting screen. This alarm is also generated when illegal word values are found",
+    "message": "ILLEGAL DATA NUMBER",
+    "number": "1302"
+  },
+  {
+    "description": "An axis No. address exceeding the maximum number of controlled axes was found while loading parameters from a tape or by entry of the G10 parameter",
+    "message": "ILLEGAL AXIS NUMBER",
+    "number": "1303"
+  },
+  {
+    "description": "Data with too many digits was found while loading parameters or pitch error compensation data from a tape",
+    "message": "TOO MANY DIGIT",
+    "number": "1304"
+  },
+  {
+    "description": "Out-of-range data was found while loading parameters or pitch error compensation data from a tape. The values of the data setting addresses corresponding to L Nos. during data input by G10 was out of range. This alarm is also generated when NC programming words contain out-of-range values",
+    "message": "DATA OUT OF RANGE",
+    "number": "1305"
+  },
+  {
+    "description": "A parameter which requires an axis to be specified was found without an axis No. (address A) while loading parameters from a tape",
+    "message": "MISSING AXIS NUMBER",
+    "number": "1306"
+  },
+  {
+    "description": "Data with an illegal sign was found while loading parameters or pitch error compensation data from a tape, or by entry of the G10 parameter. A sign was specified to an address that does not support the use of signs",
+    "message": "ILLEGAL USE OF MINUS SIGN",
+    "number": "1307"
+  },
+  {
+    "description": "An address not followed by a numeric value was found while loading parameters or pitch error compensation data from a tape",
+    "message": "MISSING DATA",
+    "number": "1308"
+  },
+  {
+    "description": "An machine group No. address exceeding the maximum number of controlled machine groups was found while loading parameters from a tape or by entry of the G10 parameter",
+    "message": "ILLEGAL MACHINE GROUP NUMBER",
+    "number": "1329"
+  },
+  {
+    "description": "An spindle No. address exceeding the maximum number of controlled spindles was found while loading parameters from a tape or by entry of the G10 parameter",
+    "message": "ILLEGAL SPINDLE NUMBER",
+    "number": "1330"
+  },
+  {
+    "description": "An path No. address exceeding the maximum number of controlled path was found while loading parameters from a tape or by entry of the G10 parameter",
+    "message": "ILLEGAL PATH NUMBER",
+    "number": "1331"
+  },
+  {
+    "description": "Could not load data while loading parameters, pitch error compensation data and work coordinate data from tape",
+    "message": "DATA WRITE LOCK ERROR",
+    "number": "1332"
+  },
+  {
+    "description": "Could not write data while loading data from tape",
+    "message": "DATA WRITE ERROR",
+    "number": "1333"
+  },
+  {
+    "description": "Illegal parameter setting. (Set value is out of range.)",
+    "message": "PARAMETER OUT OF RANGE (TLAC)",
+    "number": "1360"
+  },
+  {
+    "description": "Illegal parameter setting. (axis of rotation setting)",
+    "message": "PARAMTER SETTING ERROR 1 (TLAC)",
+    "number": "1361"
+  },
+  {
+    "description": "Illegal parameter setting (tool axis setting)",
+    "message": "PARAMETER SETTING ERROR 2 (TLAC)",
+    "number": "1362"
+  },
+  {
+    "description": "Out-of-range data was set during setting of the three-dimensional handle feed parameter",
+    "message": "PARAMETER SETTING ERROR (DM3H-1)",
+    "number": "1370"
+  },
+  {
+    "description": "An illegal axis of rotation was set during setting of the three-dimensional handle feed parameter",
+    "message": "PARAMETER SETTING ERROR (DM3H-2)",
+    "number": "1371"
+  },
+  {
+    "description": "An illegal master axis was set during setting of the three-dimensional handle feed parameter",
+    "message": "PARAMETAR SETTING ERROR (DM3H-3)",
+    "number": "1372"
+  },
+  {
+    "description": "An illegal parallel axis or twin table was set during setting of the three-dimensional handle feed parameter",
+    "message": "PARAMETER SETTING ERROR (DM3H-4)",
+    "number": "1373"
+  },
+  {
+    "description": "A parameter setting related to normal direction control is illegal. The axis number of a normal direction controlled axis is set in parameter No. 5480, but that axis number is in the range of the number of controlled axes. The axis set as a normal direction controlled axis is not set as a rotation axis (ROTx, bit 0 of parameter No. 1006) = 1 and No.1022=0). Set the feedrate at which to insert rotation about a normal direction controlled axis in parameter No. 5481, in the range of 1 to 15000 mm/min",
+    "message": "G40.1 -G42.1 PARAMETER MISS",
+    "number": "1470"
+  },
+  {
+    "description": "A function to which the same code as this M code is set exists. (index table indexing)",
+    "message": "DUPLICATE M-CODE (INDEX TABLE REVERSING)",
+    "number": "1508"
+  },
+  {
+    "description": "A function to which the same code as this M code is set exists. (spindle positioning, orientation)",
+    "message": "DUPLICATE M-CODE (SPOS AXIS ORIENTATION)",
+    "number": "1509"
+  },
+  {
+    "description": "A function to which the same code as this M code is set exists. (spindle positioning, positioning)",
+    "message": "DUPLICATE M-CODE (SPOS AXIS POSITIONING)",
+    "number": "1510"
+  },
+  {
+    "description": "A function to which the same code as this M code is set exists. (spindle positioning, mode cancel)",
+    "message": "DUPLICATE M-CODE (SPOS AXIS RELEASE)",
+    "number": "1511"
+  },
+  {
+    "description": "When the feedrate instruction contains valid data below the decimal point, the alarm is set and the F code contains valid data below the decimal point",
+    "message": "ILLEGAL USE OF DECIMAL POINT (F-CODE)",
+    "number": "1531"
+  },
+  {
+    "description": "When the feedrate instruction contains valid data below the decimal point, the alarm is set and the E code contains valid data below the decimal point",
+    "message": "ILLEGAL USE OF DECIMAL POINT (E-CODE)",
+    "number": "1532"
+  },
+  {
+    "description": "The feedrate for the hole drilling axis calculated from the F and S codes is too slow in the feed per single rotation mode (G95)",
+    "message": "ADDRESS F UNDERFLOW (G95)",
+    "number": "1533"
+  },
+  {
+    "description": "The feedrate for the hole drilling axis calculated from the F and S codes is too fast in the feed per single rotation mode (G95)",
+    "message": "ADDRESS F OVERFLOW (G95)",
+    "number": "1534"
+  },
+  {
+    "description": "The feedrate for the hole drilling axis calculated from the E and S codes is too slow in the feed per single rotation mode (G95)",
+    "message": "ADDRESS E UNDERFLOW (G95)",
+    "number": "1535"
+  },
+  {
+    "description": "The feedrate for the hole drilling axis calculated from the E and S codes is too fast in the feed per single rotation mode (G95)",
+    "message": "ADDRESS E OVERFLOW (G95)",
+    "number": "1536"
+  },
+  {
+    "description": "The speed obtained by applying override to the F instruction is too slow",
+    "message": "ADDRESS F UNDERFLOW (OVERRIDE)",
+    "number": "1537"
+  },
+  {
+    "description": "The speed obtained by applying override to the F instruction is too fast",
+    "message": "ADDRESS F OVERFLOW (OVERRIDE)",
+    "number": "1538"
+  },
+  {
+    "description": "The speed obtained by applying override to the E instruction is too slow",
+    "message": "ADDRESS E UNDERFLOW (OVERRIDE)",
+    "number": "1539"
+  },
+  {
+    "description": "The speed obtained by applying override to the E instruction is too fast",
+    "message": "ADDRESS E OVERFLOW (OVERRIDE)",
+    "number": "1540"
+  },
+  {
+    "description": "“0” has been instructed as the S code",
+    "message": "S-CODE ZERO",
+    "number": "1541"
+  },
+  {
+    "description": "“0” has been instructed as the feedrate (E code)",
+    "message": "FEED ZERO (E-CODE)",
+    "number": "1542"
+  },
+  {
+    "description": "The gear ratio between the spindle and position coder, or the set position coder number of pulses is illegal in the spindle positioning function",
+    "message": "ILLEGAL GEAR SETTING",
+    "number": "1543"
+  },
+  {
+    "description": "The S command exceeds the maximum spindle rotation number",
+    "message": "S-CODE OVER MAX",
+    "number": "1544"
+  },
+  {
+    "description": "The spindle positioning axis/Cs contour control axis was specified during switching of the controlled axis mode",
+    "message": "ILLGAL AXIS MODE",
+    "number": "1548"
+  },
+  {
+    "description": "The specified angle of rotation is not an integer multiple of the minimum indexing angle",
+    "message": "ILLEGAL INDEXING ANGLE",
+    "number": "1561"
+  },
+  {
+    "description": "The index table indexing axis and another axis have been specified in the same block",
+    "message": "INDEX TABLE AXIS - OTHER AXIS SAME TIME",
+    "number": "1564"
+  },
+  {
+    "description": "Index table indexing was specified during axis movement or on an axis for which the index table indexing sequence was not completed",
+    "message": "INDEX TABLE AXIS DUPLICATE AXIS COMMAND",
+    "number": "1567"
+  },
+  {
+    "description": "When an attempt was made to read a program, the specified password did not match the password on the tape and the password on tape was not equal to 0. When an attempt was made to punch an encrypted tape, the password was not in the range 0 to 99999999. The password parameter is No. 2210",
+    "message": "ENCODE ALARM (PSWD&KEY)",
+    "number": "1580"
+  },
+  {
+    "description": "When an attempt was made to punch an encrypted tape, the punch code parameter was set to EIA. Set parameter ISO (No. 0000#1) to “0”. An incorrect instruction was specified for program encryption or protection. This alarm is generated if an attempt is made to perform program editing, deletion, or range-specified punch-out in the protected range in the lock state. Or, a program outside the protected range is specified in rage specification punch-out in the unlock state. The protected range is defined from the program No. preset by parameter No. 3222 up to the program No. preset to parameter No. 3223. When both parameters are set to “0”, the protected range becomes O9000 to O9999",
+    "message": "ENCODE ALARM (PARAMETER)",
+    "number": "1581"
+  },
+  {
+    "description": "A TH error was detected during reading from an input device. The read code that caused the TH error and how many statements it is from the block can be verified in the diagnostics screen",
+    "message": "TH ERROR",
+    "number": "1590"
+  },
+  {
+    "description": "An error was detected during the single-block TV error. The TV check can be suppressed by setting TVC parameter No. 0000#0 to “0”",
+    "message": "TV ERROR",
+    "number": "1591"
+  },
+  {
+    "description": "The EOR (End of Record) code is specified in the middle of a block. This alarm is also generated when the percentage at the end of the NC program is read. For the program restart function, this alarm is generated if a specified block is not found",
+    "message": "END OF RECORD",
+    "number": "1592"
+  },
+  {
+    "description": "Error in setting a parameter related to the EGB 7710 is not specified",
+    "message": "EGB PARAMETER SETTING ERROR",
+    "number": "1593"
+  },
+  {
+    "description": "Error in the format of the block of an EGB command specified for the master or slave axis",
+    "message": "EGB FORMAT ERROR",
+    "number": "1594"
+  },
+  {
+    "description": "During synchronization with the EGB, a command that must not be issued is issued",
+    "message": "ILL-COMMAND IN EGB MODE",
+    "number": "1595"
+  },
+  {
+    "description": "An overflow occurred in the calculation of the synchronization coefficient",
+    "message": "EGB OVERFLOW",
+    "number": "1596"
+  },
+  {
+    "description": "Format error in the G80 or G81 block in EGB automatic phase synchronization",
+    "message": "EGB AUTO PHASE FORMAT ERROR",
+    "number": "1597"
+  },
+  {
+    "description": "Error in the setting of a parameter related to EGB automatic phase synchronization",
+    "message": "EGB AUTO PHASE PARAMETER SETTING ERROR",
+    "number": "1598"
+  },
+  {
+    "description": "[I/O Device] An attempt was made to specify an illegal command during I/O processing on an I/O device. [G30 Zero Return] The P address Nos. for instructing No. 2 to No. 4 zero return are each out of the range 2 to 4. [Single Rotation Dwell] The specified spindle rotation is “0” when single rotation dwell is specified. [Three-dimensional Tool Offset] A G code that cannot be specified was specified in the three-dimensional tool offset mode. Scaling instruction G51, skip cutting G31 and automatic tool length measurement G37 were specified",
+    "message": "ILLEGAL COMMAND",
+    "number": "1805"
+  },
+  {
+    "description": "An operation not possible on the I/O device that is currently selected in the setting was specified. This alarm is also generated when file rewind is instructed even though the I/O device is not a FANUC Cassette",
+    "message": "DEVICE TYPE MISS MATCH",
+    "number": "1806"
+  },
+  {
+    "description": "An I/O interface option that has not yet been added on was specified. The external I/O device and baud rate, stop bit and protocol selection settings are erroneous",
+    "message": "PARAMETER SETTING ERROR",
+    "number": "1807"
+  },
+  {
+    "description": "An attempt was made to open a device that is being accessed",
+    "message": "DEVICE DOUBLE OPENED",
+    "number": "1808"
+  },
+  {
+    "description": "Specified direction tool length compensation parameters are incorrect. A move instruction for a axis of rotation was specified in the specified direction tool length compensation mode",
+    "message": "ILLEGAL COMMAND IN G41/G42",
+    "number": "1809"
+  },
+  {
+    "description": "The stop bit of the character received from the I/O device connected to reader/punch interface 1 was not detected",
+    "message": "FRAMING ERROR(1)",
+    "number": "1823"
+  },
+  {
+    "description": "The data set ready input signal DR of the I/O device connected to reader/punch interface 2 turned OFF",
+    "message": "DR OFF(2)",
+    "number": "1830"
+  },
+  {
+    "description": "The next character was received from the I/O device connected to reader/punch interface 2 before it could read a previously received character",
+    "message": "OVERRUN ERROR(2)",
+    "number": "1832"
+  },
+  {
+    "description": "The stop bit of the character received from the I/O device connected to reader/punch interface 2 was not detected",
+    "message": "FRAMING ERROR(2)",
+    "number": "1833"
+  },
+  {
+    "description": "The NC received more than 10 characters of data from the I/O device connected to reader/punch interface 2 even though the NC sent a stop code (DC3) during data reception",
+    "message": "BUFFER OVERFLOW(2)",
+    "number": "1834"
+  },
+  {
+    "description": "An illegal command was issued in G54.3 block",
+    "message": "ILLEGAL COMMAND IN G54.3",
+    "number": "1889"
+  },
+  {
+    "description": "An illegal parameter (Nos. 6068 to 6076) was specified for fixture offset",
+    "message": "ILLEGAL PARAMETER IN G54.2",
+    "number": "1898"
+  },
+  {
+    "description": "An error occurred during device driver control",
+    "message": "V-DEVICE DRIVER ERROR (OPEN)",
+    "number": "1912"
+  },
+  {
+    "description": "Illegal memory card accessing This alarm is also generated during reading when reading is executed up to the end of the file without detection of the EOR code",
+    "message": "ACCESS ERROR (MEMORY CARD)",
+    "number": "1960"
+  },
+  {
+    "description": "The memory card is not ready",
+    "message": "NOT READY (MEMORY CARD)",
+    "number": "1961"
+  },
+  {
+    "description": "The memory card has run out of space",
+    "message": "CARD FULL (MEMORY CARD)",
+    "number": "1962"
+  },
+  {
+    "description": "The memory card is write-protected",
+    "message": "CARD PROTECTED (MEMORY CARD)",
+    "number": "1963"
+  },
+  {
+    "description": "The memory card could not be mounted",
+    "message": "NOT MOUNTED (MEMORY CARD)",
+    "number": "1964"
+  },
+  {
+    "description": "The file could not be generated in the root directory for the memory card",
+    "message": "DIRECTORY FULL (MEMORY CARD)",
+    "number": "1965"
+  },
+  {
+    "description": "The specified file could not be found on the memory card",
+    "message": "FILE NOT FOUND (MEMORY CARD)",
+    "number": "1966"
+  },
+  {
+    "description": "The memory card is write-protected",
+    "message": "FILE PROTECTED (MEMORY CARD)",
+    "number": "1967"
+  },
+  {
+    "description": "Illegal memory card file name",
+    "message": "ILLEGAL FILE NAME (MEMORY CARD)",
+    "number": "1968"
+  },
+  {
+    "description": "Check the file name",
+    "message": "ILLEGAL FORMAT (MEMORY CARD)",
+    "number": "1969"
+  },
+  {
+    "description": "This memory card cannot be handled",
+    "message": "ILLEGAL CARD (MEMORY CARD)",
+    "number": "1970"
+  },
+  {
+    "description": "An error occurred during memory card erase",
+    "message": "ERASE ERROR (MEMORY CARD)",
+    "number": "1971"
+  },
+  {
+    "description": "The memory card battery is low",
+    "message": "BATTERY LOW (MEMORY CARD)",
+    "number": "1972"
+  },
+  {
+    "description": "A file having the same name already exists on the memory card",
+    "message": "FILE ALREADY EXIST",
+    "number": "1973"
+  },
+  {
+    "description": "The axis specified by the smooth interpolation (G5.1Q2) is illegal",
+    "message": "SPL:ILLEGAL AXIS COMMAND",
+    "number": "1990"
+  },
+  {
+    "description": "The end point and the 2 previous point are the same in generation of the 3-dimensional tool offset vector by the end point for smooth interpolation",
+    "message": "SPL:CAN'T MAKE VECTOR",
+    "number": "1993"
+  },
+  {
+    "description": "The parameter settings (parameter Nos. 6080 to 6089) for determining the relationship between the axis of rotation and the rotation plane are incorrect",
+    "message": "ILLEGAL PARAMETER IN G41.2/G42.2",
+    "number": "1995"
+  },
+  {
+    "description": "The parameter settings (parameter Nos. 6080 to 6089) for determining the relationship between the axis of rotation and the rotation plane are incorrect",
+    "message": "ILLEGAL PARAMETER IN G41.3",
+    "number": "1999"
+  },
+  {
+    "description": "Knot has not been specified, or a block not related to NURBS interpolation was specified in the NURBS interpolation mode",
+    "message": "NO KNOT COMMAND (NURBS)",
+    "number": "2002"
+  },
+  {
+    "description": "An axis not specified as a control point was specified in the No. 1 block",
+    "message": "ILLEGAL AXIS COMMAND (NURBS)",
+    "number": "2003"
+  },
+  {
+    "description": "There is an insufficient number of knot individual blocks",
+    "message": "ILLEGAL KNOT",
+    "number": "2004"
+  },
+  {
+    "description": "The NURBS interpolation mode was turned OFF even though NURBS interpolation was not completed",
+    "message": "ILLEGAL CANCEL (NURBS)",
+    "number": "2005"
+  },
+  {
+    "description": "A mode that cannot be paired with the NURBS interpolation mode was specified",
+    "message": "ILLEGAL MODE (NURBS)",
+    "number": "2006"
+  },
+  {
+    "description": "Nested knots for each level can be specified for the start and end points",
+    "message": "ILLEGAL MULTI-KNOT",
+    "number": "2007"
+  },
+  {
+    "description": "An attempt was made to enter a custom macro common variable not existing in the system",
+    "message": "#200-#499ILLEGAL P-CODE MACRO COMMON INPUT(NO OPTION)",
+    "number": "2051"
+  },
+  {
+    "description": "The variable name cannot be entered. The SETVN command cannot be used with the P-CODE macro common variables #500 to #549",
+    "message": "#500-#549P-CODE MACRO COMMON SELECT(CANNOT USE SETVN)",
+    "number": "2052"
+  },
+  {
+    "description": "An attempt was made to enter a P-CODE-only variable not existing in the system",
+    "message": "THE NUMBER OF #30000 IS UNMATCH",
+    "number": "2053"
+  },
+  {
+    "description": "An attempt was made to enter an extended P-CODE-only variable not existing in the system",
+    "message": "THE NUMBER OF #40000 IS UNMATCH",
+    "number": "2054"
+  },
+  {
+    "description": "The parameter for the pivot tool length compensation is incorrect",
+    "message": "ILLEGAL PARAMETER IN G43.4/G43.5",
+    "number": "2060"
+  },
+  {
+    "description": "An illegal command was specified in tool center point control. axis was not perpendicular to the plane",
+    "message": "ILLEGAL COMMAND IN G43.4/G43.5",
+    "number": "2061"
+  },
+  {
+    "description": "The real value for a output buffer is in error",
+    "message": "ILLEGAL REAL VALUE OF OBUF :",
+    "number": "4010"
+  },
+  {
+    "description": "The number of words in a block exceeds the maximum. The maximum is 26 words. However, this figure varies according to NC options. Divide the instruction word into two blocks",
+    "message": "TOO MANY WORD IN ONE BLOCK",
+    "number": "5006"
+  },
+  {
+    "description": "Due to compensation, point of intersection calculation, interpolation or similar reasons, a movement distance that exceeds the maximum permissible distance was specified. Check the programmed coordinates or compensation amounts",
+    "message": "TOO LARGE DISTANCE",
+    "number": "5007"
+  },
+  {
+    "description": "The dry run feedrate parameter No. 1410 or maximum cutting feedrate parameter No. 1422 for each axis has been set to 0",
+    "message": "PARAMETER ZERO (DRY RUN)",
+    "number": "5009"
+  },
+  {
+    "description": "The EOR (End of Record) code is specified in the middle of a block. This alarm is also generated when the percentage at the end of the NC program is read",
+    "message": "END OF RECORD",
+    "number": "5010"
+  },
+  {
+    "description": "The maximum cutting feedrate parameter No. 1430 has been set to 0",
+    "message": "PARAMETER ZERO (CUT MAX)",
+    "number": "5011"
+  },
+  {
+    "description": "A transfer could not be made because of no trace data",
+    "message": "TRACE DATA NOT FOUND",
+    "number": "5014"
+  },
+  {
+    "description": "No rotation axis was found in a handle feed in the tool axis direction or in the tool axis right angle direction",
+    "message": "NO ROTATION AXIS",
+    "number": "5015"
+  },
+  {
+    "description": "M codes which belonged to the same group were specified in a block. Alternatively, an M code which must be specified without other M codes in the block was specified in a block with other M codes",
+    "message": "ILLEGAL COMBINATION OF M CODES",
+    "number": "5016"
+  },
+  {
+    "description": "In G51.2 mode, the speed of the spindle or polygon synchronous axis either exceeds the clamp value or is too small. The specified rotation speed ratio thus cannot be maintained. For polygon turning between spindles: More information as to why this alarm occurred is indicated in DGN No. 471",
+    "message": "POLYGON SPINDLE SPEED ERROR",
+    "number": "5018"
+  },
+  {
+    "description": "The setting of parameter No. 7310 for specifying the order of the axes on which to move to the machining restart position in a dry run is invalid. The valid range is from 1 to the number of controlled axes",
+    "message": "PARAMETER OF RESTART ERROR",
+    "number": "5020"
+  },
+  {
+    "description": "Three-dimensional coordinate conversion has been specified three or more times. To perform another coordinate conversion, perform cancellation, then specify the coordinate conversion",
+    "message": "TOO MANY G68 NESTING",
+    "number": "5043"
+  },
+  {
+    "description": "Errors for three-dimensional coordinate conversion command are: three-dimensional coordinate conversion command block",
+    "message": "G68 FORMAT ERROR",
+    "number": "5044"
+  },
+  {
+    "description": "The setting of a parameter related to straightness compensation contains an error. Possible causes include: or too small",
+    "message": "ILLEGAL PARAMETER (S-COMP)",
+    "number": "5046"
+  },
+  {
+    "description": "During chopping, a move command has been issued for the chopping axis",
+    "message": "ILL-COMMAND IN G81.1 MODE",
+    "number": "5050"
+  },
+  {
+    "description": "A command for switching the major axis has been specified for circular threading. Alternatively, a command for setting the length of the major axis to 0 has been specified for circular threading",
+    "message": "G35/G36 FORMAT ERROR",
+    "number": "5058"
+  },
+  {
+    "description": "The axis parameter setting to perform an exponential interpolation is in error. Parameter No. 5641: A liner axis number for performing an exponential interpolation Parameter No. 5642: A rotation axis number for performing an exponential interpolation The settable value is 1 to the number of control axes, but it must not be duplicated",
+    "message": "ILLEGAL PARAMETER IN G02.3/G03.3",
+    "number": "5060"
+  },
+  {
+    "description": "The exponential interpolation command (G02.3/G03.3) has a format error. The command range for address I or J is -89.0 to -1.0 or +1.0 to +89.0. No I or J is specified or out-of -range value is specified. No address R, or 0 is specified",
+    "message": "ILLEGAL FORMAT IN G02.3/G03.3",
+    "number": "5061"
+  },
+  {
+    "description": "The value specified in an exponential interpolation command (G02.3/03.3) is illegal. A value that does not allow exponential interpolation is specified. (For example, the value for In is 0 or negative.)",
+    "message": "ILLEGAL COMMAND IN G02.3/G03.3",
+    "number": "5062"
+  },
+  {
+    "description": "Circular interpolation has been specified on a plane consisting of axes having different increment systems",
+    "message": "DIFFERRENT AXIS UNIT",
+    "number": "5064"
+  },
+  {
+    "description": "Axes having different increment systems have been specified in the same DI/DO group for PMC axis control. Modify the setting of parameter No. 8010",
+    "message": "DIFFERRENT AXIS UNIT(PMC AXIS)",
+    "number": "5065"
+  },
+  {
+    "description": "A sequence number from 7000 to 7999 was read during the search for the next number in a restart program for the back or restart function",
+    "message": "RESTART ILLEGAL SEQUENCE NUMBER",
+    "number": "5066"
+  },
+  {
+    "description": "No travel axis was specified. Two or more travel axes were specified",
+    "message": "FORMAT ERROR IN G31P90",
+    "number": "5068"
+  },
+  {
+    "description": "No decimal point has been specified for an address requiring a decimal point",
+    "message": "NO DECIMAL POINT",
+    "number": "5073"
+  },
+  {
+    "description": "The same address has been specified two or more times in a single block. Alternatively, two or more G codes in the same group have been specified in a single block",
+    "message": "ADDRESS DUPLICATION ERROR",
+    "number": "5074"
+  },
+  {
+    "description": "A block for specifying smooth interpolation contains a syntax error",
+    "message": "SMOOTH IPL ERROR 1",
+    "number": "5085"
+  },
+  {
+    "description": "There is an error in the specification of the rank",
+    "message": "ILLEGAL ORDER (NURBS)",
+    "number": "5115"
+  },
+  {
+    "description": "Monotone increasing of knots is not observed",
+    "message": "ILLEGAL KNOT VALUE (NURBS)",
+    "number": "5116"
+  },
+  {
+    "description": "The first control point is incorrect. Or, it does not provide a continuity from the previous block",
+    "message": "ILLEGAL 1ST CONTROL POINT (NURBS)",
+    "number": "5117"
+  },
+  {
+    "description": "After manual intervention with manual absolute mode set to on, NURBS interpolation was restarted",
+    "message": "ILLEGAL RESTART (NURBS)",
+    "number": "5118"
+  },
+  {
+    "description": "A spiral interpolation or conical interpolation command has an error. Specifically, this error is caused by one of the following:",
+    "message": "ILLEGAL COMMAND IN SPIRAL",
+    "number": "5122"
+  },
+  {
+    "description": "The difference between a specified end point and the calculated end point exceeds the allowable range (parameter 3471)",
+    "message": "OVER TOLERANCE OF END POINT IN SPIRAL",
+    "number": "5123"
+  },
+  {
+    "description": "A spiral interpolation or conical interpolation was specified in any of the following modes:",
+    "message": "CAN NOT COMMAND SPIRAL",
+    "number": "5124"
+  },
+  {
+    "description": "In the PMC superposition axis control, the NC command and The PMC axis control command were conflicted. Modify the program and the ladder",
+    "message": "NC AND SUPERIMPOSE AXIS CONFLICT",
+    "number": "5130"
+  },
+  {
+    "description": "The PMC axis control and three-dimensional coordinate conversion or a polar coordinate interpolation were specified simultaneously",
+    "message": "NC COMMAND IS NOT COMPATIBLE",
+    "number": "5131"
+  },
+  {
+    "description": "The superposition axis was selected for the axis for which the PMC superposition axis is being controlled",
+    "message": "CANNOT CHANGE SUPERIMPOSED AXIS",
+    "number": "5132"
+  },
+  {
+    "description": "For a one-contact input touch sensor used with the tool compensation amount measurement value direct input B function, stored pulse directions are not unified. Alternatively, the tool is moving along two axes (X-axis and Z-axis) simultaneously",
+    "message": "DIRECTION CAN NOT BE JUDGED",
+    "number": "5195"
+  },
+  {
+    "description": "During HPCC or during the execution of a 5-axis-related function, an unavailable function was used",
+    "message": "ILLEGAL AXIS OPERATION",
+    "number": "5196"
+  },
+  {
+    "description": "In case of distance coded linear scale I/F, the reference point auto setting parameter (No.1819#2) is set to \"1\". Move the machine to reference position by manual operation and execute manual reference return",
+    "message": "REFERENCE POINT ADJUSTMENT MODE",
+    "number": "5220"
+  },
+  {
+    "description": "Cutter compensation or tool nose radius compensation was specified in MDI mode. (Depending on the setting of the parameter MCR (No. 5008#4))",
+    "message": "G41/G42 NOT ALLOWED IN MDI MODE",
+    "number": "5257"
+  },
+  {
+    "description": "The touch panel is not connected correctly, or the touch panel cannot be initialized when the power is turned on. Correct the cause then turn on the power again",
+    "message": "TOUCH PANEL ERROR",
+    "number": "5303"
+  },
+  {
+    "description": "In a spindle select function by address P for a multiple spindle control, (No. 3702#1) is 1",
+    "message": "ILLEGAL SPINDLE NUMBER",
+    "number": "5305"
+  },
+  {
+    "description": "One of formats in G10L75, G10L76, or G10L77 to G11 commands is in error, or the command value is out of data range. Modify the program",
+    "message": "ILLEGAL COMMAND IN G10 L75/76/77",
+    "number": "5312"
+  },
+  {
+    "description": "A tool with the specified tool-type number could not be found. Modify the program or register the tool",
+    "message": "TOOL TYPE NUMBER NOT FOUND",
+    "number": "5316"
+  },
+  {
+    "description": "The lives of all tools with the specified tool-type number have expired. Replace the tool",
+    "message": "ALL TOOL LIFE IS OVER",
+    "number": "5317"
+  },
+  {
+    "description": "In any of the following states, diameter/radius specification was switched:",
+    "message": "DIA./RAD. MODE CAN'T BE SWITCHED ",
+    "number": "5320"
+  },
+  {
+    "description": "A subprogram call which is not a single block was commanded during canned cycle mode",
+    "message": "M98 AND NC COMMAND IN SAME BLOCK",
+    "number": "5329"
+  },
+  {
+    "description": "This alarm is issued when interference with another tool is caused by a data modification based on G10 data input or file reading or when an attempt is made to modify the tool figure data of a tool registered in the cartridge",
+    "message": "TOOL INTERFERENCE CHECK ERROR",
+    "number": "5360"
+  },
+  {
+    "description": "Tools stored in the cartridge are interfering with each other. Reregister the tools in the cartridge, or modify the tool management data or tool figure data. If this alarm is issued, no tool interference check is made when tools are registered in the cartridge management table. Moreover, empty pot search operation does not operate normally. If this alarm is issued, the power must be turned off before operation is continued",
+    "message": "ILLEGAL MAGAZINE DATA",
+    "number": "5361"
+  },
+  {
+    "description": "is 0 or 180 degrees at the time of startup",
+    "message": "G41.3 ILLEGAL START_UP",
+    "number": "5408"
+  },
+  {
+    "description": "A parameter related to tool center point control is illegal",
+    "message": "ILLEGAL PARAMETER IN G43.4/G43.5",
+    "number": "5420"
+  },
+  {
+    "description": "An illegal command was specified in tool center point control. axis was not perpendicular to the plane",
+    "message": "ILLEGAL COMMAND IN G43.4/G43.5",
+    "number": "5421"
+  },
+  {
+    "description": "An attempt was made to make a movement at an axis feedrate exceeding the maximum cutting feedrate by tool center point control",
+    "message": "EXCESS VELOCITY IN G43.4/G43.5",
+    "number": "5422"
+  },
+  {
+    "description": "The offset number is incorrect",
+    "message": "ILLEGAL OFFSET VALUE",
+    "number": "5425"
+  },
+  {
+    "description": "In a modal state in which three-dimensional circular interpolation cannot be specified, a three-dimensional circular interpolation (G02.4/G03.4) is specified. Alternatively, in three-dimensional circular interpolation mode, a code that cannot be specified is specified",
+    "message": "ILLEGAL COMMAND IN 3-D CIR",
+    "number": "5430"
+  },
+  {
+    "description": "A three-dimensional circular interpolation command (G02.4/G03.4) is incorrect",
+    "message": "G02.4/G03.4 FORMAT ERROR",
+    "number": "5432"
+  },
+  {
+    "description": "In three-dimensional circular interpolation mode (G02.4/G03.4), manual intervention was made when the manual absolute switch was on",
+    "message": "MANUAL INTERVENTION IN G02.4/G03.4 (ABS ON)",
+    "number": "5433"
+  },
+  {
+    "description": "Illegal parameter setting. (Set value is out of range.)",
+    "message": "PARAMETER OUT OF RANGE (TLAC)",
+    "number": "5435"
+  },
+  {
+    "description": "Illegal parameter setting. (axis of rotation setting)",
+    "message": "ILLEGAL PARAMETER SETTING OF ROTARY AXIS(TLAC)",
+    "number": "5436"
+  },
+  {
+    "description": "Illegal parameter setting. (master axis of rotation setting)",
+    "message": "ILLEGAL PARAMETER SETTING OF MASTER ROTARY AXIS(TLAC)",
+    "number": "5437"
+  },
+  {
+    "description": "Corner circular interpolation (G39) of cutter compensation or tool nose radius compensation is not specified alone but is specified with a move command",
+    "message": "CAN NOT COMMAND MOTION IN G39",
+    "number": "5445"
+  },
+  {
+    "description": "Because there is no interference evade vector, the interference check evade function of cutter compensation or tool nose radius compensation cannot evade interference",
+    "message": "NO AVOIDANCE AT G41/G42",
+    "number": "5446"
+  },
+  {
+    "description": "The interference check evade function of cutter compensation or tool nose radius compensation determines that an evade operation will lead to danger",
+    "message": "DANGEROUS AVOIDANCE AT G41/G42",
+    "number": "5447"
+  },
+  {
+    "description": "In the interference check evade function of cutter compensation or tool nose radius compensation, a further interference occurs for an already created interference evade vector",
+    "message": "INTERFERENCE TO AVD. AT G41/G42",
+    "number": "5448"
+  },
+  {
+    "description": "Tilted working plane command G68.2 was specified more than once. To perform another coordinate conversion, perform cancellation, then specify the coordinate conversion",
+    "message": "TOO MANY G68.2 NESTING",
+    "number": "5456"
+  },
+  {
+    "description": "A G68.2 format error occurred",
+    "message": "G68.2 FORMAT ERROR",
+    "number": "5457"
+  },
+  {
+    "description": "G53.1 was specified before the G68.2 command",
+    "message": "ILLEGAL USE OF G53.1",
+    "number": "5458"
+  },
+  {
+    "description": "5-axis machining (type 2) is specified when the programming coordinate system is the workpiece coordinate system",
+    "message": "MACHINE PARAMETER INCORRECT",
+    "number": "5459"
+  },
+  {
+    "description": "other is canceled earlier",
+    "message": "ILLEGAL USE OF TRC FOR 5-AXIS MACHINE",
+    "number": "5460"
+  },
+  {
+    "description": "A move command other than G00 or G01 was performed during cutter compensation for 5-axis machining in a mixed-type machine",
+    "message": "ILLEGAL USE OF G41.2/G42.2/G41.5/G42.5",
+    "number": "5461"
+  },
+  {
+    "description": "A parameter related to cutter compensation for 5-axis machining is illegal. parameter No. 19501, and parameter Nos. No.1671 and 1672",
+    "message": "ILLEGAL PARAMETER IN TRC FOR 5-AXIS MACHINE",
+    "number": "5463"
+  },
+  {
+    "description": "The parameter setting is enabled (PWE, one bit of parameter No. 8000 is set to “1”). To set the parameter, turn this parameter ON. Otherwise, set to OFF",
+    "message": "PARAMETER ENABLE SWITCH ON",
+    "number": "SW0100"
+  },
+  {
+    "description": "In feed axis synchronization control, the amount of compensation for synchronization exceeded the parameter (No. 8325) setting value. This alarm occurs only for a slave axis",
+    "message": "SYNC ALIGNMENT ERROR",
+    "number": "SV0001"
+  },
+  {
+    "description": "In feed axis synchronization control, the amount of synchronization error exceeded the parameter (No. 8332) setting value. When the synchronization is not completed after power-up, the determination is made by the parameter value (No. 8332) multiplied by the parameter (No. 8330) multiplier. This alarm occurs only for a slave axis only",
+    "message": "SYNC EXCESS ERROR ALARM 2",
+    "number": "SV0002"
+  },
+  {
+    "description": "Since as axis in synchronization, composition, or superposition mode caused a servo alarm, the mode could not be continued, If one of the axes in a mode causes a servo alarm, all axes relating to the axis enter the servo-off state. This alarm is generated to enable the cause of the servo-off state to be checked",
+    "message": "SYNCHRONOUS/COMPOSITE/SUPERI MPOSED CONTROL MODE CAN'T BE CONTINUED",
+    "number": "SV0003"
+  },
+  {
+    "description": "The amount of positional deviation during torque limit skip command operation exceeded the limit value of the parameter No.6287",
+    "message": "EXCESS ERROR (G31)",
+    "number": "SV0004"
+  },
+  {
+    "description": "In feed axis synchronization control, for synchronization, the difference value of the machine coordinate between a master and slave axes exceeded the parameter (No. 8314) setting value. This alarm occurs for a master or slave axis",
+    "message": "SYNC EXCESS ERROR (MCN)",
+    "number": "SV0005"
+  },
+  {
+    "description": "Since the absolute-position detector caused a communication error, the correct machine position could not be obtained. (data transfer error) The absolute-position detector, cable, or servo interface module is thought to be defective",
+    "message": "APC ALARM: COMMUNICATION ERROR",
+    "number": "SV0301"
+  },
+  {
+    "description": "Since the absolute-position detector caused an overtime error, the correct machine position could not be obtained. (data transfer error) The absolute-position detector, cable, or servo interface module is thought to be defective",
+    "message": "APC ALARM: OVER TIME ERROR",
+    "number": "SV0302"
+  },
+  {
+    "description": "Since the absolute-position detector caused a framing error, the correct machine position could not be obtained. (data transfer error) The absolute-position detector, cable, or servo interface module is thought to be defective",
+    "message": "APC ALARM: FRAMING ERROR",
+    "number": "SV0303"
+  },
+  {
+    "description": "Since the absolute-position detector caused a parity error, the correct machine position could not be obtained. (data transfer error) The absolute-position detector, cable, or servo interface module is thought to be defective",
+    "message": "APC ALARM: PARITY ERROR",
+    "number": "SV0304"
+  },
+  {
+    "description": "Since the absolute-position detector caused a pulse error, the correct machine position could not be obtained. The absolute-position detector, or cable is thought to be defective",
+    "message": "APC ALARM: PULSE ERROR",
+    "number": "SV0305"
+  },
+  {
+    "description": "Since the amount of positional deviation overflowed, the correct machine position could not be obtained. Check to see the parameter No. 2084 or No. 2085",
+    "message": "APC ALARM: OVER FLOW ERROR",
+    "number": "SV0306"
+  },
+  {
+    "description": "Since the machine moved excessively, the correct machine position could not be obtained",
+    "message": "APC ALARM: MOVEMENT EXCESS ERROR",
+    "number": "SV0307"
+  },
+  {
+    "description": "The checksum alarm occurred on the built-in Pulsecoder",
+    "message": "ABNORMAL CHECKSUM(INT)",
+    "number": "SV0360"
+  },
+  {
+    "description": "The phase data abnormal alarm occurred on the built-in Pulsecoder",
+    "message": "ABNORMAL PHASE DATA(INT)",
+    "number": "SV0361"
+  },
+  {
+    "description": "The speed count abnormal alarm occurred on the built-in Pulsecoder",
+    "message": "ABNORMAL REV. DATA(INT)",
+    "number": "SV0362"
+  },
+  {
+    "description": "The clock alarm occurred on the built-in Pulsecoder",
+    "message": "ABNORMAL CLOCK(INT)",
+    "number": "SV0363"
+  },
+  {
+    "description": "A digital servo soft detected an abnormality on the built in Pulsecoder",
+    "message": "SOFT PHASE ALARM(INT)",
+    "number": "SV0364"
+  },
+  {
+    "description": "The digital servo software detected abnormal data on the built-in Pulsecoder",
+    "message": "BROKEN LED(INT)",
+    "number": "SV0365"
+  },
+  {
+    "description": "A pulse error occurred on the built-in Pulsecoder",
+    "message": "PULSE MISS(INT)",
+    "number": "SV0366"
+  },
+  {
+    "description": "A count error occurred on the built-in Pulsecoder",
+    "message": "COUNT MISS(INT)",
+    "number": "SV0367"
+  },
+  {
+    "description": "The communications data could not be received from the built-in Pulsecoder",
+    "message": "SERIAL DATA ERROR(INT)",
+    "number": "SV0368"
+  },
+  {
+    "description": "A CRC error or stop bit error occurred in the communications data from the built-in Pulsecoder",
+    "message": "DATA TRANS. ERROR(INT)",
+    "number": "SV0369"
+  },
+  {
+    "description": "Separate detector error",
+    "message": "BROKEN LED(EXT)",
+    "number": "SV0380"
+  },
+  {
+    "description": "An abnormal alarm in the position data occurred on the separate linear scale",
+    "message": "ABNORMAL PHASE (EXT)",
+    "number": "SV0381"
+  },
+  {
+    "description": "A count error occurred on the separate detector",
+    "message": "COUNT MISS(EXT)",
+    "number": "SV0382"
+  },
+  {
+    "description": "A pulse error occurred on the separate detector",
+    "message": "PULSE MISS(EXT)",
+    "number": "SV0383"
+  },
+  {
+    "description": "The digital servo software detected abnormal data on the separate detector",
+    "message": "SOFT PHASE ALARM(EXT)",
+    "number": "SV0384"
+  },
+  {
+    "description": "The communications data could not be received from the separate detector",
+    "message": "SERIAL DATA ERROR(EXT)",
+    "number": "SV0385"
+  },
+  {
+    "description": "A CRC error or stop bit error occurred in the communications data from the standalone detector",
+    "message": "DATA TRANS. ERROR(EXT)",
+    "number": "SV0386"
+  },
+  {
+    "description": "An abnormality occurred on a separate detector. For more information, contact the scale manufacturer",
+    "message": "ABNORMAL ENCODER(EXT)",
+    "number": "SV0387"
+  },
+  {
+    "description": "Although the ready signal (PRDY) of the position control was ON, the ready signal (VRDY) of the velocity control was OFF",
+    "message": "IMPROPER V_READY OFF",
+    "number": "SV0401"
+  },
+  {
+    "description": "Although the ready signal (PRDY) of the position control was OFF, the ready signal (VRDY) of the velocity control was ON",
+    "message": "IMPROPER V_READY ON",
+    "number": "SV0404"
+  },
+  {
+    "description": "The difference value of the amount of positional deviation for the synchronization axis exceeded the setting value. (during synchronization control only)",
+    "message": "EXCESS ERROR",
+    "number": "SV0407"
+  },
+  {
+    "description": "An abnormal load was detected on the servo motor, or during Cs axis or spindle positioning. The alarm can be canceled by RESET",
+    "message": "DETECT ABNORMAL TORQUE",
+    "number": "SV0409"
+  },
+  {
+    "description": "The amount of positional deviation during stopping exceeded the parameter (No. 1829) setting value. In a dual check safety function, an alarm occurs during safety monitoring (when the safety monitoring start signal SEV or SEP is 1), but the alarm cannot be canceled by a reset",
+    "message": "EXCESS ERROR (STOP)",
+    "number": "SV0410"
+  },
+  {
+    "description": "The amount of positional deviation during traveling became excessive than the parameter setting value. (Generally, in the parameter No.1828, the dual check safety function during safety monitoring (when he safety monitoring start signal SEV or SEP is 1) is the parameter No. 1838.) In a dual check safety function, an alarm occurs during safety monitoring, but the alarm cannot be canceled by a reset",
+    "message": "EXCESS ERROR (MOVING)",
+    "number": "SV0411"
+  },
+  {
+    "description": "The counter for the amount of positional deviation overflowed",
+    "message": "LSI OVERFLOW",
+    "number": "SV0413"
+  },
+  {
+    "description": "The velocity exceeding the travel velocity limit was commanded",
+    "message": "MOTION VALUE OVERFLOW",
+    "number": "SV0415"
+  },
+  {
+    "description": "A digital serve parameter setting is incorrect",
+    "message": "ILL DGTL SERVO PARAMETER",
+    "number": "SV0417"
+  },
+  {
+    "description": "In feed axis synchronization control, for synchronization, the difference value of torque between a master and slave axes exceeded the parameter (No. 2031) setting value. This alarm occurs for a master axis",
+    "message": "SYNC TORQUE EXCESS",
+    "number": "SV0420"
+  },
+  {
+    "description": "The difference between the feedback from the semi and full sides exceeded the setting of parameter No.1729",
+    "message": "EXCESS ERROR(SEMI-FULL)",
+    "number": "SV0421"
+  },
+  {
+    "description": "In torque control, the commanded permissible velocity was exceeded",
+    "message": "EXCESS VELOCITY IN TORQUE",
+    "number": "SV0422"
+  },
+  {
+    "description": "In torque control, the total permissible move value specified as a parameter was exceeded",
+    "message": "EXCESS ERROR IN TORQUE",
+    "number": "SV0423"
+  },
+  {
+    "description": "The servo motor has overheated",
+    "message": "SV MOTOR OVERHEAT",
+    "number": "SV0430"
+  },
+  {
+    "description": "PSM : Overheat  series SVU : Overheat",
+    "message": "CNV. OVERLOAD",
+    "number": "SV0431"
+  },
+  {
+    "description": "PSM : The control power supply voltage has dropped. PSMR : The control power supply voltage has dropped.  series SVU : The control power supply voltage has dropped",
+    "message": "CNV. LOW VOLT CONTROL",
+    "number": "SV0432"
+  },
+  {
+    "description": "PSM : Low DC link voltage PSMR : Low DC link voltage  series SVU : Low DC link voltage  series SVU : Low DC link voltage",
+    "message": "CNV. LOW VOLT DC LINK",
+    "number": "SV0433"
+  },
+  {
+    "description": "SVM : Low control power voltage",
+    "message": "INV. LOW VOLT CONTROL",
+    "number": "SV0434"
+  },
+  {
+    "description": "SVM : Low DC link voltage",
+    "message": "INV. LOW VOLT DC LINK",
+    "number": "SV0435"
+  },
+  {
+    "description": "The digital servo software detected a software thermal (OVC)",
+    "message": "SOFTTHERMAL(OVC)",
+    "number": "SV0436"
+  },
+  {
+    "description": "PSM : Overcurrent on input circuit section",
+    "message": "CNV. OVERCURRENT POWER",
+    "number": "SV0437"
+  },
+  {
+    "description": "SVM : Motor overcurrent  series SVU : Motor overcurrent  series SVU : Motor overcurrent",
+    "message": "INV. ABNORMAL CURRENT",
+    "number": "SV0438"
+  },
+  {
+    "description": "PSM : The DC link voltage is too high. PSMR : The DC link voltage is too high.  series SVU : The DC link voltage is too high",
+    "message": "CNV. OVER VOLT DC LINK",
+    "number": "SV0439"
+  },
+  {
+    "description": "PSMR : Excessive generative discharge  series SVU : Excessive generative discharge, or abnormal error in generative power circuit",
+    "message": "CNV. EX DECELERATION POW",
+    "number": "SV0440"
+  },
+  {
+    "description": "The digital servo software detected an abnormality in the motor current detection circuit",
+    "message": "ABNORMAL CURRENT OFFSET",
+    "number": "SV0441"
+  },
+  {
+    "description": "PSM : The spare charge circuit for the DC link is abnormal. PSMR : The spare charge circuit for the DC link is abnormal",
+    "message": "CNV. CHARGE FAILURE",
+    "number": "SV0442"
+  },
+  {
+    "description": "PSM : Internal cooling fan failure. PSMR : Internal cooling fan failure.  series SVU : Internal cooling fan failure",
+    "message": "CNV. COOLING FAN FAILURE",
+    "number": "SV0443"
+  },
+  {
+    "description": "SVM : Internal cooling fan failure",
+    "message": "INV. COOLING FAN FAILURE",
+    "number": "SV0444"
+  },
+  {
+    "description": "The digital servo software detected a disconnected Pulsecoder",
+    "message": "SOFT DISCONNECT ALARM",
+    "number": "SV0445"
+  },
+  {
+    "description": "The hardware detected a disconnected built-in Pulsecoder",
+    "message": "HARD DISCONNECT ALARM",
+    "number": "SV0446"
+  },
+  {
+    "description": "The hardware detected a disconnected separate detector",
+    "message": "HARD DISCONNECT(EXT)",
+    "number": "SV0447"
+  },
+  {
+    "description": "The sign of the feedback signal from the standalone detector is opposite to that from the feedback signal from the built-on Pulsecoder",
+    "message": "UNMATCHED FEEDBACK ALARM",
+    "number": "SV0448"
+  },
+  {
+    "description": "SVM : The IPM (Intelligent Power Module) detected an alarm.  series SVU : The IPM (Intelligent Power Module) detected an alarm",
+    "message": "INV. IPM ALARM",
+    "number": "SV0449"
+  },
+  {
+    "description": "Software disconnection alarm of the  Pulsecoder. Turn off the power to the CNC, then remove and insert the Pulsecoder cable. If this alarm is issued again, replace the Pulsecoder",
+    "message": "SPC SOFT DISCONNECT ALARM",
+    "number": "SV0453"
+  },
+  {
+    "description": "The magnetic pole detection function terminated abnormally. The magnetic pole could not be detected because the motor did not run",
+    "message": "ILLEGAL ROTOR POS DETECT",
+    "number": "SV0454"
+  },
+  {
+    "description": "An attempt was made to set the current loop that could not be set. The amplifier pulse module in use does not comply with HIGH SPEED HRV. Or, requirements to control are not satisfied in the system",
+    "message": "ILLEGAL CURRENT LOOP",
+    "number": "SV0456"
+  },
+  {
+    "description": "The specified current loop differs from the actual current loop",
+    "message": "CURRENT LOOP ERROR",
+    "number": "SV0458"
+  },
+  {
+    "description": "For two axes whose servo axis numbers (parameter No. 1023) are consecutively even and odd numbers, HIGH SPEED HRV control is possible for one axis and impossible for the other",
+    "message": "HI HRV SETTING ERROR",
+    "number": "SV0459"
+  },
+  {
+    "description": "The FSSB connection was discontinued. Probable causes are:",
+    "message": "FSSB DISCONNECT",
+    "number": "SV0460"
+  },
+  {
+    "description": "The correct data could not be received on a slave side because of the FSSB communication error",
+    "message": "SEND CNC DATA FAILED",
+    "number": "SV0462"
+  },
+  {
+    "description": "The correct data could not be received in the servo software because of the FSSB communication error",
+    "message": "SEND SLAVE DATA FAILED",
+    "number": "SV0463"
+  },
+  {
+    "description": "A read of the ID information for the amplifier has failed at power-on",
+    "message": "READ ID DATA FAILED",
+    "number": "SV0465"
+  },
+  {
+    "description": "The maximum current of an amplifier is different to that of a motor. Probable causes are:",
+    "message": "MOTOR/AMP. COMBINATION",
+    "number": "SV0466"
+  },
+  {
+    "description": "An attempt was made to set up HIGH SPEED HRV control for use when the controlled axis of an amplifier for which HIGH SPEED HRV control could not be used",
+    "message": "HI HRV SETTING ERROR(AMP)",
+    "number": "SV0468"
+  },
+  {
+    "description": "SVM : DC link overcurrent.  SVU : DC link overcurrent",
+    "message": "INV. DC LINK OVER CURRENT",
+    "number": "SV0600"
+  },
+  {
+    "description": "SVM : Radiator cooling fan failure.  SVU : Radiator cooling fan failure",
+    "message": "INV. RADIATOR FAN FAILURE",
+    "number": "SV0601"
+  },
+  {
+    "description": "SVM : The servo motor has overheated",
+    "message": "INV. OVERHEAT",
+    "number": "SV0602"
+  },
+  {
+    "description": "SVM : The IPM (Intelligent Power Module) detected an overheat alarm.  SVU : The IPM (Intelligent Power Module) detected an overheat alarm",
+    "message": "INV. IPM ALARM(OH)",
+    "number": "SV0603"
+  },
+  {
+    "description": "The communication between SVM and PSM is in error",
+    "message": "AMP. COMMUNICATION ERROR",
+    "number": "SV0604"
+  },
+  {
+    "description": "PSMR : The motor regenerative power is too much",
+    "message": "CNV. EX. DISCHARGE POW",
+    "number": "SV0605"
+  },
+  {
+    "description": "PSM : External radiator cooling fan failure. PSMR : External radiator cooling fan failure",
+    "message": "CNV. RADIATOR FAN FAILURE",
+    "number": "SV0606"
+  },
+  {
+    "description": "PSM : The input power supply has a missing phase. PSMR : The input power supply has a missing phase",
+    "message": "CNV. SINGLE PHASE FAILURE",
+    "number": "SV0607"
+  },
+  {
+    "description": "The ready signal (VRDY) of the velocity control which should be OFF is ON while the servo control is ON",
+    "message": "V_READY ON (INITIALIZING )",
+    "number": "SV1025"
+  },
+  {
+    "description": "The parameter for servo axis arrange is not set correctly. A negative value, duplicate value, or greater value than the number of control axes was set to the parameter No. 1023 \"The servo axis number of each axis.\"",
+    "message": "ILLEGAL AXIS ARRANGE",
+    "number": "SV1026"
+  },
+  {
+    "description": "In tandem control, the setting of the parameter No. 1023 is incorrect",
+    "message": "ILLEGAL TANDEM AXIS",
+    "number": "SV1055"
+  },
+  {
+    "description": "In tandem control, the setting of the parameter No. 1020, No. 1025, No. 1026 or TDM (No.1817#6) is incorrect",
+    "message": "ILLEGAL TANDEM PAIR",
+    "number": "SV1056"
+  },
+  {
+    "description": "An FSSB configuration error occurred (detected by software). The connected amplifier type is incompatible with the FSSB setting value",
+    "message": "FSSB:CONFIGURATION ERROR(SOFT)",
+    "number": "SV1067"
+  },
+  {
+    "description": "The amount of compensation for the straightness exceeded a maximum value of 32767",
+    "message": "S-COMP. VALUE OVERFLOW",
+    "number": "SV1100"
+  },
+  {
+    "description": "In the initialization, the FSSB could not be in an open ready sate. The axis card is thought to be defective",
+    "message": "FSSB:OPEN READY TIME OUT",
+    "number": "SV5134"
+  },
+  {
+    "description": "The number of amplifier identified by the FSSB is insufficient than the number of control axes. Or, the setting of the number of axes or the amplifier connection is in error",
+    "message": "FSSB:NUMBER OF AMP. IS INSUFFICIENT",
+    "number": "SV5136"
+  },
+  {
+    "description": "An FSSB configuration error occurred. The connecting amplifier type is incompatible with the FSSB setting value",
+    "message": "FSSB:CONFIGURATION ERROR",
+    "number": "SV5137"
+  },
+  {
+    "description": "Servo initialization has not completed successfully. It is probable that an optical cable failed or a connection between the amplifier and another module failed",
+    "message": "FSSB:ERROR",
+    "number": "SV5139"
+  },
+  {
+    "description": "The initialization of the FSSB was completed, but it could not be opened. Or, the connection between the CNC and the amplifier in is incorrect",
+    "message": "FSSB:OPEN TIME OUT",
+    "number": "SV5197"
+  },
+  {
+    "description": "requirements for performing HIGH SPEED HRV control",
+    "message": "FSSB:ILLEGAL CONNECTION",
+    "number": "SV5311"
+  },
+  {
+    "description": "Exceeded the positive side stored stroke check 1",
+    "message": "+ OVERTRAVEL ( SOFT 1 )",
+    "number": "OT0500"
+  },
+  {
+    "description": "Exceeded the negative side stored stroke check 1",
+    "message": "- OVERTRAVEL ( SOFT 1 )",
+    "number": "OT0501"
+  },
+  {
+    "description": "Exceeded the positive side stored stroke check 2. Or, in the chuck tail stock barrier, an entry to the inhibited area was made during movement in the positive direction",
+    "message": "+ OVERTRAVEL ( SOFT 2 )",
+    "number": "OT0502"
+  },
+  {
+    "description": "Exceeded the negative side stored stroke check 2. Or, in the chuck tail stock barrier, an entry to the inhibited area was made during movement in the negative direction",
+    "message": "- OVERTRAVEL ( SOFT 2 )",
+    "number": "OT0503"
+  },
+  {
+    "description": "Exceeded the positive side stored stroke check 3",
+    "message": "+ OVERTRAVEL ( SOFT 3 )",
+    "number": "OT0504"
+  },
+  {
+    "description": "Exceeded the - side stored stroke check 3",
+    "message": "- OVERTRAVEL ( SOFT 3 )",
+    "number": "OT0505"
+  },
+  {
+    "description": "The stroke limit switch in the positive direction was triggered. This alarm is generated when the machine reaches the stroke end. When this alarm is not generated, feed of all axes is stopped during automatic operation. During manual operation, only the feed of the axis on which the alarm occurred is stopped",
+    "message": "+ OVERTRAVEL ( HARD )",
+    "number": "OT0506"
+  },
+  {
+    "description": "The stroke limit switch in the negative direction was triggered. This alarm is generated when the machine reaches the stroke end. When this alarm is not generated, feed of all axes is stopped during automatic operation. During manual operation, only the feed of the axis on which the alarm occurred is stopped",
+    "message": "- OVERTRAVEL ( HARD )",
+    "number": "OT0507"
+  },
+  {
+    "description": "A tool moving in the positive direction along the n axis has fouled another tool post",
+    "message": "INTERFERENCE:+",
+    "number": "OT0508"
+  },
+  {
+    "description": "A tool moving in the negative direction along the n axis has fouled another tool post",
+    "message": "INTERFERENCE:-",
+    "number": "OT0509"
+  },
+  {
+    "description": "The tool exceeded the limit in the negative direction during the stroke check before movement",
+    "message": "+ OVERTRAVEL ( PRE-CHECK )",
+    "number": "OT0510"
+  },
+  {
+    "description": "The tool exceeded the limit in the positive direction during the stroke check before movement",
+    "message": "- OVERTRAVEL ( PRE-CHECK )",
+    "number": "OT0511"
+  },
+  {
+    "description": "The permissible acceleration parameter for the optimum torque acceleration/deceleration is in error. A possible cause is either of the following: maximum time",
+    "message": "ILLEGAL ACC. PARAMETER (OPTIMUM TORQUE ACC/DEC)",
+    "number": "OT1710"
+  },
+  {
+    "description": "The resident-type file system could not be accessed as an error occurred in the resident-type file system",
+    "message": "FILE ACCESS ERROR",
+    "number": "IO1001"
+  },
+  {
+    "description": "The file could not be accessed as an error occurred in the CNC file system",
+    "message": "FILE SYSTEM ERROR",
+    "number": "IO1002"
+  },
+  {
+    "description": "The checksum of the CNC part program storage memory is incorrect",
+    "message": "CHECK SUM ERROR",
+    "number": "IO1030"
+  },
+  {
+    "description": "Accessing of data occurred outside the CNC part program storage memory range",
+    "message": "MEMORY ACCESS OVER RANGE",
+    "number": "IO1032"
+  },
+  {
+    "description": "A parameter was set for which the power must be turned OFF then ON again",
+    "message": "POWER MUST BE OFF",
+    "number": "PW0000"
+  },
+  {
+    "description": "The X address of the PMC could not be assigned correctly. This alarm may occur in the following case: - During the setting of parameter No. 3013, the X address could not be assigned correctly for the deceleration dog (*DEC) for a return to the reference position",
+    "message": "X-ADDRESS(*DEC) IS NOT ASSIGNED",
+    "number": "PW0001"
+  },
+  {
+    "description": "The address to assign the axis signal is incorrect. This alarm may occur in the following case: - The parameter No.3021 setting is incorrect",
+    "message": "PMC address is not correct(AXIS)",
+    "number": "PW0002"
+  },
+  {
+    "description": "The address to assign the spindle signal is incorrect. This alarm may occur in the following case: - The parameter No.3022 setting is incorrect",
+    "message": "PMC address is not correct(SPINDLE)",
+    "number": "PW0003"
+  },
+  {
+    "description": "The loader system could not be assigned correctly. The parameter No. 984 setting is incorrect. 984#0(LCP) does not match",
+    "message": "SETTING THE LOADER SYSTEM PATH IS NOT CORRECT",
+    "number": "PW0004"
+  },
+  {
+    "description": "The malfunction prevention function detected an alarm to require the power off",
+    "message": "POWER MUST BE OFF (ILL-EXEC-CHK)",
+    "number": "PW0006"
+  },
+  {
+    "description": "The X address of PMC could not be assigned correctly. Possible causes are: correctly",
+    "message": "X-ADDRESS(SKIP) IS NOT ASSIGNED",
+    "number": "PW0007"
+  },
+  {
+    "description": "The parameter for setting slope compensation is incorrect. This alarm occurs in the following cases: small or too great",
+    "message": "ILLEGAL PARAMETER (I-COMP.)",
+    "number": "PW1102"
+  },
+  {
+    "description": "The parameter for setting 128 straightness compensation points or the parameter compensation data is incorrect,",
+    "message": "ILLEGAL PARAMETER (S-COMP.128)",
+    "number": "PW1103"
+  },
+  {
+    "description": "The parameter for setting straightness compensation is incorrect",
+    "message": "ILLEGAL PARAMETER (S-COMP.)",
+    "number": "PW5046"
+  },
+  {
+    "description": "The positional deviation of the stopped spindle has exceeded the set value during rigid tapping",
+    "message": "RIGID TAP ALARM : EXCESS ERROR",
+    "number": "SP0740"
+  },
+  {
+    "description": "The positional deviation of the moving spindle has exceeded the set value during rigid tapping",
+    "message": "RIGID TAP ALARM : EXCESS ERROR",
+    "number": "SP0741"
+  },
+  {
+    "description": "An LSI overflow has occurred for the spindle during rigid tapping",
+    "message": "RIGID TAP ALARM : LSI OVERFLOW",
+    "number": "SP0742"
+  },
+  {
+    "description": "This alarm is generated if the system does not properly terminate a mode change. The modes include the Cs contour control, spindle positioning, rigid tapping, and spindle control modes. The alarm is activated if the spindle control unit does not respond correctly to the mode change command issued by the NC",
+    "message": "SPINDLE MODE CHANGE ERROR",
+    "number": "SP0752"
+  },
+  {
+    "description": "An abnormal load was detected in a spindle motor. The alarm can be canceled by RESET",
+    "message": "ABNORMAL TORQUE",
+    "number": "SP0754"
+  },
+  {
+    "description": "The CNC CPU detected that the safely function of the n-th spindle was not executed",
+    "message": "SAFETY FUNCTION ERROR",
+    "number": "SP0755"
+  },
+  {
+    "description": "The CNC CPU detected that the connection state and the hardware setting of the spindle amplifier were incompatible on the n-th spindle. If an alarm occurs because of the configuration change of the spindle amplifier , set the spindle amplifier correctly",
+    "message": "ILLEGAL AXIS DATA",
+    "number": "SP0756"
+  },
+  {
+    "description": "The CNC CPU detected that during safety monitoring (the safety monitoring start signal SEV or SEP is 0), the spindle motor speed was greater than the safety speed (parameter No. 4372, 4438, 4440, or 4442) on the n-th spindle. Operate within the safety speed",
+    "message": "SAFETY SPEED OVER",
+    "number": "SP0757"
+  },
+  {
+    "description": "In a multi spindle control, the spindle number other than the valid spindle number was selected by a position coder select signal. An attempt was made to select the spindle number of the system having no valid spindle",
+    "message": "SPINDLE SELECT ERROR",
+    "number": "SP1202"
+  },
+  {
+    "description": "The amount of distribution to a spindle is too much. (specific to the FANUC ROBODRILL)",
+    "message": "TOOL CHANGE SP MOTION OVERFLOW",
+    "number": "SP1210"
+  },
+  {
+    "description": "During a tool change, a too much orientation error was detected for the spindle. (specific to the FANUC ROBODRILL)",
+    "message": "TOOL CHANGE SP ORTN EXCESS ERROR",
+    "number": "SP1211"
+  },
+  {
+    "description": "During a tool change, a too much moving error was detected for the spindle. (specific to the FANUC ROBODRILL)",
+    "message": "TOOL CHANGE SP MOVE EXCESS ERROR",
+    "number": "SP1212"
+  },
+  {
+    "description": "During a tool change, a too much stop error was detected for the spindle. (specific to the FANUC ROBODRILL)",
+    "message": "TOOL CHANGE SP STOP EXCESS ERROR",
+    "number": "SP1213"
+  },
+  {
+    "description": "During changing tools, an abnormal spindle sequence was detected. (specific to the FANUC ROBODRILL)",
+    "message": "TOOL CHANGE SP ILLEGAL SEQUENCE",
+    "number": "SP1214"
+  },
+  {
+    "description": "Either the cable connected to a serial spindle amplifier is broken, or the serial spindle amplifier is not connected",
+    "message": "NO SPINDLE AMP",
+    "number": "SP1220"
+  },
+  {
+    "description": "The spindle No. and the motor No. are incorrectly matched",
+    "message": "ILLEGAL MOTOR NUMBER",
+    "number": "SP1221"
+  },
+  {
+    "description": "The spindle-position coder gear ratio was incorrect",
+    "message": "ILLEGAL SPINDLE-POSITION CODER GEAR RATIO",
+    "number": "SP1224"
+  },
+  {
+    "description": "A CRC error (communications error) occurred in communications between the CNC and the serial spindle amplifier",
+    "message": "CRC ERROR (SERIAL SPINDLE)",
+    "number": "SP1225"
+  },
+  {
+    "description": "A framing error occurred in communications between the CNC and the serial spindle amplifier",
+    "message": "FRAMING ERROR (SERIAL SPINDLE)",
+    "number": "SP1226"
+  },
+  {
+    "description": "A receive error occurred in communications between the CNC and the serial spindle amplifier",
+    "message": "RECEIVING ERROR (SERIAL SPINDLE)",
+    "number": "SP1227"
+  },
+  {
+    "description": "A communications error occurred between the CNC and the serial spindle amplifier",
+    "message": "COMMUNICATION ERROR (SERIAL SPINDLE)",
+    "number": "SP1228"
+  },
+  {
+    "description": "A communications error occurred between serial spindle amplifiers (motor Nos. 1 and 2, or motor Nos. 3-4)",
+    "message": "COMMUNICATION ERROR SERIAL SPINDLE AMP",
+    "number": "SP1229"
+  },
+  {
+    "description": "The position deviation during spindle rotation was greater than the value set in parameters",
+    "message": "SPINDLE EXCESS ERROR (MOVING)",
+    "number": "SP1231"
+  },
+  {
+    "description": "The position deviation during spindle stop was greater than the value set in parameters",
+    "message": "SPINDLE EXCESS ERROR (STOP)",
+    "number": "SP1232"
+  },
+  {
+    "description": "The error counter/speed instruction value of the position coder overflowed",
+    "message": "POSITION CODER OVERFLOW",
+    "number": "SP1233"
+  },
+  {
+    "description": "Grid shift overflowed",
+    "message": "GRID SHIFT OVERFLOW",
+    "number": "SP1234"
+  },
+  {
+    "description": "The analog spindle position coder is broken",
+    "message": "DISCONNECT POSITION CODER",
+    "number": "SP1240"
+  },
+  {
+    "description": "The D/A converter for controlling analog spindles is erroneous",
+    "message": "D/A CONVERTER ERROR",
+    "number": "SP1241"
+  },
+  {
+    "description": "The setting for the spindle position gain is incorrect",
+    "message": "ILLEGAL SPINDLE PARAMETER SETTING(GAIN)",
+    "number": "SP1243"
+  },
+  {
+    "description": "The amount of distribution to a spindle is too much",
+    "message": "MOTION VALUE OVERFLOW",
+    "number": "SP1244"
+  },
+  {
+    "description": "A communication data error was detected on the CNC",
+    "message": "COMMUNICATION DATA ERROR",
+    "number": "SP1245"
+  },
+  {
+    "description": "A communication data error was detected on the CNC",
+    "message": "COMMUNICATION DATA ERROR",
+    "number": "SP1246"
+  },
+  {
+    "description": "A communication data error was detected on the CNC",
+    "message": "COMMUNICATION DATA ERROR",
+    "number": "SP1247"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1969"
+  },
+  {
+    "description": "Initialization of spindle control ended in error",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1970"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1971"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1972"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "ANALOG SPINDLE CONTROL ERROR",
+    "number": "SP1974"
+  },
+  {
+    "description": "An position coder error was detected on the analog spindle",
+    "message": "ANALOG SPINDLE CONTROL ERROR",
+    "number": "SP1975"
+  },
+  {
+    "description": "The amplifier No. could not be set to the serial spindle amplifier",
+    "message": "SERIAL SPINDLE COMMUNICATION ERROR",
+    "number": "SP1976"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SERIAL SPINDLE COMMUNICATION ERROR",
+    "number": "SP1977"
+  },
+  {
+    "description": "A time-out was detected during communications with the serial spindle amplifier",
+    "message": "SERIAL SPINDLE COMMUNICATION ERROR",
+    "number": "SP1978"
+  },
+  {
+    "description": "The communications sequence was no longer correct during communications with the serial spindle amplifier",
+    "message": "SERIAL SPINDLE COMMUNICATION ERROR",
+    "number": "SP1979"
+  },
+  {
+    "description": "Defective SIC-LSI on serial spindle amplifier",
+    "message": "SERIAL SPINDLE AMP. ERROR",
+    "number": "SP1980"
+  },
+  {
+    "description": "An error occurred during reading of the data from SIC-LSI on the analog spindle amplifier side",
+    "message": "SERIAL SPINDLE AMP. ERROR",
+    "number": "SP1981"
+  },
+  {
+    "description": "An error occurred during reading of the data from SIC-LSI on the serial spindle amplifier side",
+    "message": "SERIAL SPINDLE AMP. ERROR",
+    "number": "SP1982"
+  },
+  {
+    "description": "Could not clear on the spindle amplifier side",
+    "message": "SERIAL SPINDLE AMP. ERROR",
+    "number": "SP1983"
+  },
+  {
+    "description": "An error occurred during re-initialization of the spindle amplifier",
+    "message": "SERIAL SPINDLE AMP. ERROR",
+    "number": "SP1984"
+  },
+  {
+    "description": "Failed to automatically set parameters",
+    "message": "SERIAL SPINDLE CONTROL ERROR",
+    "number": "SP1985"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SERIAL SPINDLE CONTROL ERROR",
+    "number": "SP1986"
+  },
+  {
+    "description": "Defective SIC-LSI on the CNC",
+    "message": "SERIAL SPINDLE CONTROL ERROR",
+    "number": "SP1987"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1988"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1989"
+  },
+  {
+    "description": "The spindle was assigned incorrectly. Check to see the following parameter. (No.3716 or 3717)",
+    "message": "ILLEGAL SPINDLE PARAMETER SETTING",
+    "number": "SP1996"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1998"
+  },
+  {
+    "description": "An error occurred in the spindle control software",
+    "message": "SPINDLE CONTROL ERROR",
+    "number": "SP1999"
+  },
+  {
+    "description": "41",
+    "message": "SSPA:41 ILLEGAL 1REV SIGN OF POSITION CODER",
+    "number": "SP9041"
+  },
+  {
+    "description": "CNC cabinet overheat",
+    "message": "LOCKER OVERHEAT",
+    "number": "OH0700"
+  },
+  {
+    "description": "PCB cooling fan motor abnormality",
+    "message": "FAN MOTOR STOP",
+    "number": "OH0701"
+  },
+  {
+    "description": "In feed axis synchronization control, the difference in the amount of positional deviation between the master and slave axes exceeded the parameter (No. 8323) setting value. This alarm occurs only for the slave axis",
+    "message": "SYNC EXCESS ERROR (POS DEV)",
+    "number": "DS0001"
+  },
+  {
+    "description": "In feed axis synchronization control, the difference in the amount of synchronization between the master and slave axes exceeded the parameter (No. 8331) setting value. This alarm occurs only for the slave axis",
+    "message": "SYNC EXCESS ERROR ALARM 1",
+    "number": "DS0002"
+  },
+  {
+    "description": "The system is in the synchronize adjust mode",
+    "message": "SYNCHRONIZE ADJUST MODE",
+    "number": "DS0003"
+  },
+  {
+    "description": "The malfunction prevention function detected the command in which a value exceeding the maximum speed was specified",
+    "message": "EXCESS MAXIMUM FEEDRATE",
+    "number": "DS0004"
+  },
+  {
+    "description": "The malfunction prevention function detected the command in which a value exceeding the maximum acceleration was specified",
+    "message": "EXCESS MAXIMUM ACCELERATION",
+    "number": "DS0005"
+  },
+  {
+    "description": "A machine lock is turned on for the Z axis for which the tool is being changed",
+    "message": "TOOL CHANGE DETECT MACHINE LOCK",
+    "number": "DS0014"
+  },
+  {
+    "description": "A mirror image is turned on for the Z axis for which the tool is being changed",
+    "message": "TOOL CHANGE DETECT MIRROR IMAGE",
+    "number": "DS0015"
+  },
+  {
+    "description": "An attempt was made to perform an automatic return to the reference position on the perpendicular axis before the completion of a return to the reference position on the angular axis. However, this attempt failed because a manual return to the reference position during angular axis control or an automatic return to the reference position after power-up was not commanded. First, return to the reference position on the angular axis, then return to the reference position on the perpendicular axis",
+    "message": "REFERENCE RETURN INCOMPLETE",
+    "number": "DS0020"
+  },
+  {
+    "description": "On angular axis control, one of the angular/perpendicular axes is the scale with ref-pos, and the other of them is not the scale with ref-pos. Such system is not admired",
+    "message": "MISMATCH OF ANGULAR AXIS(D.C.S)",
+    "number": "DS0024"
+  },
+  {
+    "description": "On angular axis control, one of the angular/perpendicular axes is the scale with ref-pos, and the other of them is not the scale with ref-pos. Such system is not admired",
+    "message": "MISMATCH OF ANGULAR AXIS(D.C.S)",
+    "number": "DS0026"
+  },
+  {
+    "description": "Master/slave axes of feed axis synchronization control, one of them is the linear scale with distance-coded reference marks, and the other of them is not the linear scale with distance-coded reference marks. Please establish reference position with the input signal SYNCn<G138>, SYNCJn<G140> or pameter setting to 0",
+    "message": "MISMATCH OF SYNCHRONOUS AXIS(D.C.S)",
+    "number": "DS0027"
+  },
+  {
+    "description": "[External data I/O] The No. specified for a program No. or sequence No. search could not be found. There was an I/O request issued for a pot No. or offset (tool data), but either no tool numbers have been input since power ON or there is no data for the entered tool No. [External workpiece No. search] The program corresponding to the specified workpiece No. could not be found",
+    "message": "SPECIFIED NUMBER NOT FOUND",
+    "number": "DS0059"
+  },
+  {
+    "description": "An attempt was made to display an external operator message or external alarm message, but five or more displays were required simultaneously",
+    "message": "TOO MANY MESSAGE",
+    "number": "DS0131"
+  },
+  {
+    "description": "An attempt to cancel an external operator message or external alarm message failed because the specified message number was not found",
+    "message": "MESSAGE NUMBER NOT FOUND",
+    "number": "DS0132"
+  },
+  {
+    "description": "A value other than 0 to 4095 was specified as the external operator message or the external alarm message number",
+    "message": "TOO LARGE NUMBER",
+    "number": "DS0133"
+  },
+  {
+    "description": "A setting to zero position for the absolute position detector (association with reference position and the counter value of the absolute position detector) is required. Perform the return to the reference position. This alarm may occur with other alarms simultaneously. In this case, other alarms must be handled first",
+    "message": "APC ALARM: NEED REF RETURN",
+    "number": "DS0300"
+  },
+  {
+    "description": "The battery voltage of the absolute position detector has dropped to a level at which data can no longer be held. Or, the power was supplied to the Pulsecoder for the first time. The battery or cable is thought to be defective. Replace the battery with the machine turned on",
+    "message": "APC ALARM: BATTERY VOLTAGE 0",
+    "number": "DS0306"
+  },
+  {
+    "description": "The battery voltage of the absolute position detector has dropped to a level at which a replacement is required. Replace the battery with the machine turned on",
+    "message": "APC ALARM: BATTERY LOW 1",
+    "number": "DS0307"
+  },
+  {
+    "description": "The battery voltage of the absolute position detector dropped to a level at which a replacement was required in the past. (including during power off) Replace the battery with the machine turned on",
+    "message": "APC ALARM: BATTERY LOW 2",
+    "number": "DS0308"
+  },
+  {
+    "description": "An attempt was made to set the zero point for the absolute position detector by MDI operation when it was impossible to set the zero point. Rotate the motor manually at least one turn, and set the zero position of the absolute position detector after turning the CNC and servo amplifier off and then on again",
+    "message": "APC ALARM: REF RETURN IMPOSSIBLE",
+    "number": "DS0309"
+  },
+  {
+    "description": "The return position recorded during retraction is not reached during recovery. The position may be displaced during recovery due to a machine lock or mirror image. Perform the operation again after making a reset",
+    "message": "NOT ON RETURN POINT",
+    "number": "DS0310"
+  },
+  {
+    "description": "The axis specified in automatic zero return was not at the correct zero point when positioning was completed. Perform zero return from a point whose distance from the zero return start position to the zero point is 2 or more revolutions of the motor. Other probable causes are:",
+    "message": "ZERO RETURN END NOT ON REF",
+    "number": "DS0405"
+  },
+  {
+    "description": "The upper 4 bits (EIA4 to EIA7) of an external data I/O interface address signal are set to an undefined address (high bits)",
+    "message": "UNASSIGNED ADDRESS (HIGH)",
+    "number": "DS1120"
+  },
+  {
+    "description": "The lower 4 bits (EIA0 to EIA3) of an external data I/O interface address signal are set to an undefined address (low bits)",
+    "message": "UNASSIGNED ADDRESS (LOW)",
+    "number": "DS1121"
+  },
+  {
+    "description": "OUTPUT REQUEST ERROR An output request was issued during external data output, or an output request was issued for an address that has no output data",
+    "message": "OUTPUT REQUEST ERROR",
+    "number": "DS1124"
+  },
+  {
+    "description": "The numerical value input by external data input signals EID32 to EID47 has exceeded the permissible range",
+    "message": "DI.EIDHW OUT OF RANGE",
+    "number": "DS1127"
+  },
+  {
+    "description": "The numerical value input by external data input signals EID0 to EID31 has exceeded the permissible range",
+    "message": "DI.EIDLL OUT OF RANGE",
+    "number": "DS1128"
+  },
+  {
+    "description": "No requests can be accepted for a program No. or a sequence No. search as the system is not in the memory mode or the reset state",
+    "message": "SEARCH REQUEST NOT ACCEPTED",
+    "number": "DS1130"
+  },
+  {
+    "description": "[External Data I/O] An attempt was made to input tool data for tool offset by a tool No. during loading by the G10 code",
+    "message": "EXT-DATA ERROR (OTHER)",
+    "number": "DS1131"
+  },
+  {
+    "description": "A/D converter malfunction",
+    "message": "A/D CONVERT ALARM",
+    "number": "DS1150"
+  },
+  {
+    "description": "An invalid parameter was set for torque control. The torque constant parameter is set to “0”",
+    "message": "PARAMETER ERROR IN TORQUE",
+    "number": "DS1184"
+  },
+  {
+    "description": "The maximum cutting feedrate or rapid traverse feedrate was exceeded in G54.3",
+    "message": "OVER MAXIMUM FEED",
+    "number": "DS1185"
+  },
+  {
+    "description": "The setting value of parameter for reference marks is satisfied the following any conditions. the valid data range",
+    "message": "ILLEGAL PARAMETER (D.C.S.)",
+    "number": "DS1448"
+  },
+  {
+    "description": "In case of distance coded linear scale I/F, the actual interval of reference marks is different from parameter (No.1821,1882) setting value",
+    "message": "REFERENCE MARK ARE DIFFERENT FROM PARAMETER",
+    "number": "DS1449"
+  },
+  {
+    "description": "1st reference position return (CDxX7 to CDxX0: 17h (Hex)) was specified when the manual reference position return was not executed with the reference position return function enabled (parameter ZRN (No. 1005#0) set to “0”)",
+    "message": "ZERO RETURN NOT FINISHED",
+    "number": "DS1450"
+  },
+  {
+    "description": "The PMC axes cannot be controlled in this state",
+    "message": "IMPROPER PMC AXIS COMMAND",
+    "number": "DS1451"
+  },
+  {
+    "description": "The feedrate of the linear axis during polar coordinate interpolation exceeded the maximum cutting feedrate",
+    "message": "EXCESS VELOCITY",
+    "number": "DS1512"
+  },
+  {
+    "description": "In a hypothetical axis direction compensation during the polar coordinate interpolation mode, an attempt is made to travel to the area in which the travel cannot be made",
+    "message": "ILLEGAL MOTION IN G12.1 MODE",
+    "number": "DS1514"
+  },
+  {
+    "description": "The axis rate was attempt to exceed the maximum cutting feedrate and travel by the pivot tool length compensation",
+    "message": "EXCESS VELOCITY IN G43.4/G43.5",
+    "number": "DS1553"
+  },
+  {
+    "description": "There are errors in the parameters of permissible acceleration for Optimum Torque Acceleration/Deceleration. One of the following is the cause",
+    "message": "ILLEGAL ACC. PARAMETER (OPTIMUM TORQUE ACC/DEC)",
+    "number": "DS1710"
+  },
+  {
+    "description": "One of parameters Nos. 19665 to 19667 and Nos.19680 to 19744 used to configure the machine contains an error",
+    "message": "MACHINE PARAMETER INCORRECT",
+    "number": "DS1931"
+  },
+  {
+    "description": "One of the parameters used to configure the machine is rewritten while the tool direction thermal displacement compensation function is enabled",
+    "message": "DI.THML SIGNAL ON",
+    "number": "DS1932"
+  },
+  {
+    "description": "The relation between a machine coordinate of an axis in synchronization, composition, or superposition control, and the absolute, or relative coordinate was displaced. Perform the manual return to the reference position",
+    "message": "NEED REF RETURN(SYNC:MIX:OVL)",
+    "number": "DS1933"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 1 on the positive side was exceeded",
+    "message": "+ OVERTRAVEL ( SOFT 1 )",
+    "number": "IE0001"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 1 on the negative side was exceeded",
+    "message": "- OVERTRAVEL ( SOFT 1 )",
+    "number": "IE0002"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 2 on the positive side was exceeded",
+    "message": "+ OVERTRAVEL ( SOFT 2 )",
+    "number": "IE0003"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 2 on the negative side was exceeded",
+    "message": "- OVERTRAVEL ( SOFT 2 )",
+    "number": "IE0004"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 3 on the positive side was exceeded",
+    "message": "+ OVERTRAVEL ( SOFT 3 )",
+    "number": "IE0005"
+  },
+  {
+    "description": "The malfunction prevention function detected that stored stroke check 3 on the negative side was exceeded",
+    "message": "- OVERTRAVEL ( SOFT 3 )",
+    "number": "IE0006"
+  },
+  {
+    "description": "The malfunction prevention function detected the command in which a value exceeding the maximum speed was specified",
+    "message": "EXCESS MAXIMUM REV. DATA",
+    "number": "IE0007"
+  },
+  {
+    "description": "The malfunction prevention function detected the acceleration/deceleration error",
+    "message": "ILLEGAL ACC/DEC",
+    "number": "IE0008"
+  },
+  {
+    "description": "The malfunction prevention function detected the displacement of a machine coordinate in the check point",
+    "message": "ILLEGAL MCN COODINATE",
+    "number": "IE0009"
+  }
+]
