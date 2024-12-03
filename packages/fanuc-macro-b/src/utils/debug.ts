@@ -13,9 +13,9 @@ export function enableDebugging(ns?: `${typeof DEBUG_NAMESPACE}:${string}`) {
 }
 
 export const Debuggers = {
-  Interpreter: macroDebugger.extend("interpreter"),
   Lexer: macroDebugger.extend("lexer"),
   Memory: macroDebugger.extend("memory"),
   Parser: macroDebugger.extend("parser"),
-  Runtime: macroDebugger.extend("runtime")
+  Runtime: macroDebugger.extend("runtime"),
+  Interpreter: macroDebugger.extend("interpreter")
 };

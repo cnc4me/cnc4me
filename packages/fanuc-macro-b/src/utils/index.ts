@@ -5,3 +5,4 @@ export * from "./debug";
 export * from "./extractOffsets";
 export * from "./flags";
 export * from "./guards";
+export * from "./mermaid";

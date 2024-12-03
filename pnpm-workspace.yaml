@@ -31,4 +31,4 @@ catalog:
   "@typescript-eslint/eslint-plugin": "^8.14.0"
 
   # Types
-  "@types/node": "^22.9.0"
+  "@types/node": "^22.10.1"

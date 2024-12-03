@@ -24,6 +24,8 @@ import type {
 } from "../types";
 import type { CST } from "../types/CST";
 
+export * from "./MacroRuntimeState";
+
 /*
  * MacroRuntime Class to hold multiple programs in memory
  */

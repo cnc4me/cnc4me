@@ -1,0 +1,13 @@
+---
+title: Fanuc Macro B - Runtime State
+---
+stateDiagram-v2
+  [*] --> stopped
+  stopped --> running: start
+  error --> stopped: reset
+  running --> paused: pause
+  paused --> running: resume
+  running --> stopped: stop
+  running --> error: error
+  running --> finished: finish
+  finished --> [*]

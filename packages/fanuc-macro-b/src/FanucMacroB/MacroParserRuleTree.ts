@@ -81,9 +81,8 @@ export class MacroParserRuleTree extends CstParser {
         { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
-        // { ALT: () => this.SUBRULE(this.AtomicExpression) },
+        { ALT: () => this.SUBRULE(this.Expression) },
         { ALT: () => this.CONSUME(Comment) }
-        // { ALT: () => this.SUBRULE(this.addresses) }
       ]);
     });
   });

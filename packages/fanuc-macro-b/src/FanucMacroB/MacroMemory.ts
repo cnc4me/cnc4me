@@ -269,7 +269,7 @@ export class MacroMemory {
   /**
    * Create an array of all the set macro variables
    */
-  toArray(opts?: { includeUnset: boolean }): MacroValueArray {
+  toArray(opts?: CastingOptions): MacroValueArray {
     const values: MacroValueArray = [];
 
     Object.entries(this.#vars).forEach(([register, value]) => {
@@ -286,9 +286,7 @@ export class MacroMemory {
   /**
    * Collect all the set registers into a POJO for further processing
    */
-  toObject(
-    opts?: Parameters<MacroMemory["toArray"]>[0]
-  ): Record<number, number> {
+  toObject(opts?: CastingOptions): Record<number, number> {
     return Object.fromEntries(this.toArray(opts));
   }
 
@@ -362,3 +360,4 @@ export class MacroMemory {
 }
 
 type VariableDictionary = Record<number, number>;
+type CastingOptions = { includeUnset: boolean };

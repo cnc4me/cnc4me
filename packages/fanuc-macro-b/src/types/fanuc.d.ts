@@ -34,6 +34,7 @@ declare type LineCstChildren = {
   AddressedValue?: AddressedValueCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
   ConditionalExpression?: ConditionalExpressionCstNode[];
+  Expression?: ExpressionCstNode[];
   Comment?: IToken[];
 };
 
