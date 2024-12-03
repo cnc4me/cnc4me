@@ -1,30 +1,17 @@
-import { createServer } from "node:http";
-
-import { createSyntaxDiagramsCode } from "chevrotain";
-
 import { MacroParser } from "../src";
+import { createDiagramServer } from "./_helpers";
 
-import type { BaseParser } from "chevrotain";
+const HOST = process.env["HOST"] ?? "localhost";
+const PORT = process.env["PORT"] ?? 3240;
+const parser = new MacroParser();
+const server = createDiagramServer(parser);
 
-serveParserDiagram(new MacroParser(), 3240);
+server.on("listening", () => {
+  console.log(`Diagram Host Listening on ${HOST}:${PORT}`);
+  console.log(`\nView a State Diagram of the Runtime's Execution Flow.`);
+  console.log(`http://${HOST}:${PORT}/fsm`);
+  console.log(`\nView a Railroad Diagram of the Parser's Grammar.`);
+  console.log(`http://${HOST}:${PORT}/lang`);
+});
 
-function serveParserDiagram(parser: BaseParser, port: number) {
-  const server = createServer((req, res) => {
-    if (req.method === "GET" && req.url === "/") {
-      console.info(`[${new Date().toISOString()}] Generating Parser Diagram`);
-      const gast = parser.getSerializedGastProductions();
-      const html = createSyntaxDiagramsCode(gast);
-
-      res.writeHead(200, { "Content-Type": "text/html" });
-      res.end(html);
-    }
-  });
-
-  server.on("error", err => console.error(err));
-
-  server.on("listening", () => {
-    console.log(`Parser Diagram listening at http://127.0.0.1:${port}`);
-  });
-
-  return server.listen(port);
-}
+server.listen({ hostname: HOST, port: PORT });
