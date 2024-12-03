@@ -1,12 +1,12 @@
 import Debug from "debug";
 
-const DEBUG_NAMESPACE = "FanucMacroB";
+const DEBUG_NAMESPACE = "fanuc";
 
 const macroDebugger = Debug(DEBUG_NAMESPACE);
 
-export { Debug };
+// export { Debug };
 
-export const disableDebugging = Debug.disable();
+export const disableDebugging = () => Debug.disable();
 
 export function enableDebugging(ns?: `${typeof DEBUG_NAMESPACE}:${string}`) {
   Debug.enable(ns ?? `${DEBUG_NAMESPACE}:*`);

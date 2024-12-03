@@ -1,39 +1,35 @@
 /* eslint-disable @typescript-eslint/no-misused-promises */
-import { createActor, MacroRuntimeState } from "../src";
+import { MacroRuntimeFSM } from "../src";
 
-const actor = createActor(MacroRuntimeState);
-
-actor.on("running", () => {
-  console.log("Wheeeeee");
-});
-
-actor.on("stopped", () => {
-  console.log("PAUSE!");
-});
-
-actor.on("error", () => {
-  console.log("Oh noes! an errorrrrrrrrrrrr!");
-});
-
-actor.on("finished", () => {
-  console.log("ALL DONE!");
+const fsm = new MacroRuntimeFSM({
+  onError: () => {
+    console.log("Oh noes! an errorrrrrrrrrrrr!");
+  },
+  onStopped: () => {
+    console.log("PAUSE!");
+  },
+  onFinished: () => {
+    console.log("ALL DONE!");
+  },
+  onRunning: () => {
+    console.log("Wheeeeee");
+  }
 });
 
 void (async () => {
-  await actor.trigger("start");
+  await fsm.trigger("start");
 
-  await actor.trigger("stop");
+  await fsm.trigger("stop");
 
   setTimeout(async () => {
-    await actor.trigger("start");
+    await fsm.trigger("start");
 
     setTimeout(async () => {
-      await actor.trigger("error");
-      console.log("fsm.isFinal() => ", MacroRuntimeState.isFinal());
+      await fsm.trigger("error");
     }, 1000);
   }, 2000);
 
   setTimeout(async () => {
-    await actor.trigger("reset");
+    await fsm.trigger("reset");
   }, 5000);
 })();

@@ -22,56 +22,75 @@ export enum Events {
   error = "error"
 }
 
-const debug = Debuggers.Runtime.extend("fsm");
+const $d = Debuggers.Runtime;
+const $f = $d.extend("fsm");
+const $e = $f.extend("event");
+const $c = $f.extend("callback");
+const $s = $f.extend("state");
 
-const noop: Callback = () => undefined;
+export class MacroRuntimeFSM extends StateMachine<States, Events> {
+  static STATES = States;
+  static EVENTS = Events;
 
-const callbacks: Record<keyof typeof States, NonNullable<Callback>> = {
-  stopped: noop,
-  running: noop,
-  paused: noop,
-  finished: noop,
-  error: noop
-};
+  callbacks: Record<StateHandlerName, ActualCallback> = {
+    onStopped: () => {},
+    onRunning: () => {},
+    onPaused: () => {},
+    onError: () => {},
+    onFinished: () => {}
+  };
 
-// t(fromState, event, toState, callback)
-export const transitions = [
-  t(States.stopped, Events.start, States.running, () => callbacks.running()),
-  t(States.error, Events.reset, States.stopped, () => callbacks.stopped()),
-  t(States.running, Events.pause, States.paused, () => callbacks.paused()),
-  t(States.paused, Events.resume, States.running, () => callbacks.running()),
-  t(States.running, Events.stop, States.stopped, () => callbacks.stopped()),
-  t(States.running, Events.error, States.error, () => callbacks.error()),
-  t(States.running, Events.finish, States.finished, () => callbacks.finished())
-];
+  constructor(callbacks?: Partial<StateHandlerMap>) {
+    super(States.stopped);
 
-// initialize the state machine
-export const MacroRuntimeState: StateMachine<States, Events> = new StateMachine<
-  States,
-  Events
->(
-  States.stopped, // initial state
-  transitions // array of transitions
-);
-
-export function createActor(
-  machine: typeof MacroRuntimeState
-): StateMachineActor {
-  return Object.assign(machine, {
-    trigger(event: keyof typeof Events) {
-      debug("dispatching event", event);
-      debug(event);
-      return machine.dispatch(Events[event]);
-    },
-    on(state: keyof typeof States, cb: NonNullable<Callback>) {
-      debug("entered state", state);
-      debug(state);
-      callbacks[state] = cb;
+    if (callbacks) {
+      for (const [onEvent, callback] of Object.entries(callbacks)) {
+        const stateName = onEvent.replace(/^on/, "").toLowerCase() as StateName;
+        $f("registering callback for", stateName);
+        this.on(stateName, callback);
+      }
     }
-  });
+
+    const s = States;
+    const e = Events;
+
+    /* eslint-disable prettier/prettier */
+    const transitions = [
+      // fromState  event     toState      callback
+      t(s.stopped, e.start,  s.running,  () => this.callbacks.onRunning()),
+      t(s.error,   e.reset,  s.stopped,  () => this.callbacks.onStopped()),
+      t(s.running, e.pause,  s.paused,   () => this.callbacks.onPaused()),
+      t(s.paused,  e.resume, s.running,  () => this.callbacks.onRunning()),
+      t(s.running, e.stop,   s.stopped,  () => this.callbacks.onStopped()),
+      t(s.running, e.error,  s.error,    () => this.callbacks.onError()),
+      t(s.running, e.finish, s.finished, () => this.callbacks.onFinished())
+    ];
+    /* eslint-enable prettier/prettier */
+
+    this.addTransitions(transitions);
+  }
+
+  getTransitions() {
+    return this.transitions;
+  }
+
+  trigger(event: keyof typeof Events) {
+    $e(event);
+    return this.dispatch(Events[event]);
+  }
+
+  on(state: StateName, callback: NonNullable<Callback>) {
+    const theState = state.charAt(0).toUpperCase() + state.slice(1);
+    const callbackName = `on${theState}` as StateHandlerName;
+    this.callbacks[callbackName] = async () => {
+      $c(callbackName);
+      await callback();
+      $s(this._current);
+    };
+  }
 }
 
-type StateMachineActor = StateMachine<States, Events> & {
-  trigger(event: keyof typeof Events): Promise<void>;
-  on(state: keyof typeof States, cb: Callback): void;
-};
+type StateName = keyof typeof States;
+type ActualCallback = NonNullable<Callback>;
+type StateHandlerName = `on${Capitalize<StateName>}`;
+type StateHandlerMap = Record<StateHandlerName, NonNullable<Callback>>;

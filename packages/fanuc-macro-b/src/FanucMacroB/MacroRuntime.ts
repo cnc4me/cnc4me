@@ -11,6 +11,7 @@ import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
+import { MacroRuntimeFSM } from "./MacroRuntimeState";
 
 import type {
   ErrorProducer,
@@ -31,6 +32,7 @@ export * from "./MacroRuntimeState";
  */
 export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   #fmb: FanucMacroB;
+  #state: MacroRuntimeFSM;
 
   private _events = new Emittery<RuntimeEvents>();
   private _programs: Record<number, string> = {};
@@ -39,6 +41,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   constructor(opts?: Partial<MacroRuntimeInitOptions>) {
     // debug("initializing");
     this.#fmb = new FanucMacroB();
+    this.#state = new MacroRuntimeFSM();
   }
 
   get Lexer(): MacroLexer {
