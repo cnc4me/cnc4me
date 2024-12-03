@@ -19,7 +19,7 @@ const register2 = fmb.memory.read(2);
 console.log(register1); // => 20
 console.log(register2); // => 9 [ not 7 :) ]
 
-const vars = fmb.getMemory();
+const vars = fmb.memory.toObject();
 
 console.log(vars);
 
