@@ -13,10 +13,13 @@ export class MacroParser
 {
   static getBaseCstVisitor(opts: { useConstructorDefaults: boolean }) {
     $d("creating BaseCstVisitor");
+    const old = Debuggers.disable();
     const parser = new MacroParserRuleTree();
-    return opts.useConstructorDefaults
+    const instance = opts.useConstructorDefaults
       ? parser.getBaseCstVisitorConstructorWithDefaults()
       : parser.getBaseCstVisitorConstructor();
+    Debuggers.enable(old);
+    return instance; // @TODO can this be typed?
   }
 
   get hasErrors() {

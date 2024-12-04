@@ -24,9 +24,13 @@ import {
   Then,
   Var
 } from "../tokens";
+import { Debuggers } from "../utils";
 import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
 
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
+
+const $d = Debuggers.Interpreter;
+const $t = $d.extend("token");
 
 export class MacroParserRuleTree extends CstParser {
   /**
@@ -37,6 +41,7 @@ export class MacroParserRuleTree extends CstParser {
     token: S,
     options?: ConsumeMethodOpts
   ) {
+    $t(token.tokenTypeIdx, token.name);
     return super.CONSUME(token, options) as Omit<IToken, "tokenType"> & {
       tokenType: S;
     };
@@ -44,9 +49,20 @@ export class MacroParserRuleTree extends CstParser {
 
   constructor() {
     super(FANUC_MACRO_B_GRAMMAR);
-    // debug("initializing");
+    $d("initializing");
     this.performSelfAnalysis();
+    $d("ready");
   }
+
+  /**
+   * Multiple NC Programs
+   */
+  public Programs = this.RULE("Programs", () => {
+    this.MANY_SEP({
+      SEP: Newline,
+      DEF: () => this.SUBRULE(this.Program)
+    });
+  });
 
   /**
    * Defining a valid NC Program
@@ -252,6 +268,17 @@ export class MacroParserRuleTree extends CstParser {
   });
 
   /**
+   * A line consisting of a program number and optional comment
+   */
+  ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
+    this.CONSUME(ProgramNumber);
+    this.OPTION(() => {
+      this.CONSUME(Comment);
+    });
+    this.CONSUME(Newline);
+  });
+
+  /**
    * End of a valid NC File
    */
   EndOfFile = this.RULE("EndOfFile", () => {
@@ -259,16 +286,5 @@ export class MacroParserRuleTree extends CstParser {
     this.OPTION(() => {
       this.CONSUME(Newline);
     });
-  });
-
-  /**
-   *
-   */
-  ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
-    this.CONSUME(ProgramNumber);
-    // this.OPTION(() => {
-    this.CONSUME(Comment);
-    // });
-    this.CONSUME(Newline);
   });
 }

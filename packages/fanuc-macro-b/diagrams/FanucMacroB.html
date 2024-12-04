@@ -22,6 +22,31 @@
     window.serializedGrammar = [
   {
     "type": "Rule",
+    "name": "Programs",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "RepetitionWithSeparator",
+        "idx": 0,
+        "separator": {
+          "type": "Terminal",
+          "name": "Newline",
+          "label": "Newline",
+          "idx": 1,
+          "pattern": "\n"
+        },
+        "definition": [
+          {
+            "type": "NonTerminal",
+            "name": "Program",
+            "idx": 0
+          }
+        ]
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "Program",
     "orgText": "",
     "definition": [
@@ -646,6 +671,39 @@
   },
   {
     "type": "Rule",
+    "name": "ProgramNumberLine",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "ProgramNumber",
+        "label": "ProgramNumber",
+        "idx": 0
+      },
+      {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "Comment",
+            "label": "Comment",
+            "idx": 0,
+            "pattern": "\\(\\s*(.+?)\\s*\\)"
+          }
+        ]
+      },
+      {
+        "type": "Terminal",
+        "name": "Newline",
+        "label": "Newline",
+        "idx": 0,
+        "pattern": "\n"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "EndOfFile",
     "orgText": "",
     "definition": [
@@ -668,33 +726,6 @@
             "pattern": "\n"
           }
         ]
-      }
-    ]
-  },
-  {
-    "type": "Rule",
-    "name": "ProgramNumberLine",
-    "orgText": "",
-    "definition": [
-      {
-        "type": "Terminal",
-        "name": "ProgramNumber",
-        "label": "ProgramNumber",
-        "idx": 0
-      },
-      {
-        "type": "Terminal",
-        "name": "Comment",
-        "label": "Comment",
-        "idx": 0,
-        "pattern": "\\(\\s*(.+?)\\s*\\)"
-      },
-      {
-        "type": "Terminal",
-        "name": "Newline",
-        "label": "Newline",
-        "idx": 0,
-        "pattern": "\n"
       }
     ]
   }

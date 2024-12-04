@@ -1,4 +1,4 @@
-// THIS FILE WAS GENERATED @ 2024-12-04T11:32:57.296Z
+// THIS FILE WAS GENERATED @ 2024-12-04T14:40:06.560Z
 
 /**
  * Base error class for {@link MacroRuntime} to throw machine alarms.
@@ -6,11 +6,7 @@
 export class RuntimeAlarm extends Error {
   number: number | string;
   description: string;
-  constructor(alarm: {
-    number: number | string;
-    message: string;
-    description: string;
-  }) {
+  constructor(alarm: { number: number | string; message: string; description: string }) {
     super(alarm.message);
     this.number = alarm.number;
     this.description = alarm.description;
@@ -822,8 +818,7 @@ export class A0067_TheMultipleRepetiveCyclesIsNotInThePartProgramStorage extends
   constructor() {
     super({
       number: "0067",
-      message:
-        "THE MULTIPLE REPETIVE CYCLES IS NOT IN THE PART PROGRAM STORAGE",
+      message: "THE MULTIPLE REPETIVE CYCLES IS NOT IN THE PART PROGRAM STORAGE",
       description: `A multiple repetitive canned cycle (G70, G71, G72, or G73) command is not registered in a tape memory area`
     });
   }
@@ -2698,8 +2693,7 @@ export class A0320_IllegalMovementAmountCuttingAmountIsInTheDrillingCycle extend
   constructor() {
     super({
       number: "0320",
-      message:
-        "ILLEGAL MOVEMENT AMOUNT/CUTTING AMOUNT IS IN THE DRILLING CYCLE",
+      message: "ILLEGAL MOVEMENT AMOUNT/CUTTING AMOUNT IS IN THE DRILLING CYCLE",
       description: `A negative value is specified in a multiple repetitive canned cutting-off cycle (G74 or G75) as ∆i or ∆k (travel distance/the depth of cut)`
     });
   }
@@ -2759,8 +2753,7 @@ export class A0324_TheInterruptionTypeMacroWasDoneInTheMultipleRepetiveCycles ex
   constructor() {
     super({
       number: "0324",
-      message:
-        "THE INTERRUPTION TYPE MACRO WAS DONE IN THE MULTIPLE REPETIVE CYCLES",
+      message: "THE INTERRUPTION TYPE MACRO WAS DONE IN THE MULTIPLE REPETIVE CYCLES",
       description: `An interruption type macro was issued during the multiple repetitive canned cycle (G70, G71, G72, or G73)`
     });
   }
@@ -3135,8 +3128,7 @@ export class A0350_ParameterOfTheIndexOfTheSynchronousControlAxisSetError extend
   constructor() {
     super({
       number: "0350",
-      message:
-        "PARAMETER OF THE INDEX OF THE SYNCHRONOUS CONTROL AXIS SET ERROR",
+      message: "PARAMETER OF THE INDEX OF THE SYNCHRONOUS CONTROL AXIS SET ERROR",
       description: `An illegal synchronization control axis number (parameter No. 8180) is set`
     });
   }
@@ -3181,8 +3173,7 @@ export class A0353_TheInstructionWasDoneForTheAxisWhichWasNotAbleToMove extends 
   constructor() {
     super({
       number: "0353",
-      message:
-        "THE INSTRUCTION WAS DONE FOR THE AXIS WHICH WAS NOT ABLE TO MOVE",
+      message: "THE INSTRUCTION WAS DONE FOR THE AXIS WHICH WAS NOT ABLE TO MOVE",
       description: `This error occurred when: parameter No. 8162#7MUMx is set to 1`
     });
   }
@@ -3197,8 +3188,7 @@ export class A0354_TheG28WasInstructedInWithTheRefPosNotFixedInSyncMode extends 
   constructor() {
     super({
       number: "0354",
-      message:
-        "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN SYNC MODE",
+      message: "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN SYNC MODE",
       description: `This error occurred when G28 was specified to the master axis being parking during synchronization control, but an axis reference position is not set for the slave axis`
     });
   }
@@ -3258,8 +3248,7 @@ export class A0359_TheG28WasInstructedInWithTheRefPosNotFixedInCompMode extends 
   constructor() {
     super({
       number: "0359",
-      message:
-        "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN COMP MODE",
+      message: "THE G28 WAS INSTRUCTED IN WITH THE REF POS NOT FIXED IN COMP MODE",
       description: `This error occurred when G28 was specified to the composite axis during composite control, but a reference position is not set to the other part of the composition`
     });
   }
@@ -3289,8 +3278,7 @@ export class A0361_BecauseTheAxisIsMovingcommaTheSuperposControlIsCannotBeUsed e
   constructor() {
     super({
       number: "0361",
-      message:
-        "BECAUSE THE AXIS IS MOVING, THE SUPERPOS CONTROL IS CAN'T BE USED",
+      message: "BECAUSE THE AXIS IS MOVING, THE SUPERPOS CONTROL IS CAN'T BE USED",
       description: `While the axis being subject to superposition control was moving, an attempt was made to start or cancel the superposition control by a superposition control axis selection signal`
     });
   }
@@ -3380,8 +3368,7 @@ export class A0367_3DConversionWasCommandedInSyncMode extends RuntimeAlarm {
   constructor() {
     super({
       number: "0367",
-      message:
-        "3-D CONV. WAS COMMANDED IN SYNC MODE AS THE PARAMETER PKUx(NO.8162#2) IS 0",
+      message: "3-D CONV. WAS COMMANDED IN SYNC MODE AS THE PARAMETER PKUx(NO.8162#2) IS 0",
       description: `A three-dimensional coordinate conversion was commanded during synchronization control when the parameter PKUx (No.8162#2) was 0`
     });
   }
@@ -7371,8 +7358,7 @@ export class SV0003_SynchronousCompositeSuperiMposedControlModeCannotBeContinued
   constructor() {
     super({
       number: "SV0003",
-      message:
-        "SYNCHRONOUS/COMPOSITE/SUPERI MPOSED CONTROL MODE CAN'T BE CONTINUED",
+      message: "SYNCHRONOUS/COMPOSITE/SUPERI MPOSED CONTROL MODE CAN'T BE CONTINUED",
       description: `Since as axis in synchronization, composition, or superposition mode caused a servo alarm, the mode could not be continued, If one of the axes in a mode causes a servo alarm, all axes relating to the axis enter the servo-off state. This alarm is generated to enable the cause of the servo-off state to be checked`
     });
   }

@@ -1,10 +1,10 @@
 import { tokenMatcher } from "chevrotain";
 import mitt from "mitt";
 
+import { INTERPRETER } from "../config";
 import {
   AddressedValue,
   AddressInsight,
-  CONFIG,
   InsightCollection,
   MacroVariable
 } from "../lib";
@@ -46,7 +46,7 @@ type VisitorReturnType<T extends Exclude<keyof MacroInterpreter, "events">> =
 const $d = Debuggers.Interpreter;
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
-  useConstructorDefaults: CONFIG.INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
+  useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
 });
 
 /**

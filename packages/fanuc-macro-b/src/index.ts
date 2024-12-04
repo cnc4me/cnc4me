@@ -1,3 +1,4 @@
+import { CONFIG } from "./config";
 import * as Errors from "./errors";
 import * as T from "./tokens";
 import * as Utils from "./utils";
@@ -6,4 +7,4 @@ export * from "./FanucMacroB";
 export * from "./lib";
 export * from "./memory";
 export * from "./types";
-export { Errors, T, Utils };
+export { CONFIG, Errors, T, Utils };

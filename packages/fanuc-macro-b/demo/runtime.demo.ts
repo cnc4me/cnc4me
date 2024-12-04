@@ -28,10 +28,10 @@ M30
 
 runtime.loadProgram(demo, { setActive: true });
 
-console.log(runtime.activeProgram);
+// console.log(runtime.activeProgram);
 
 // const program = runtime.getActiveProgram();
 // console.log(program);
 
 const result = runtime.run();
-console.log(result);
+// console.log(result);

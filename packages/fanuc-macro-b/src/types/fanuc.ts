@@ -1,5 +1,15 @@
 import type { CstNode, ICstVisitor, IToken } from "chevrotain";
 
+export interface ProgramsCstNode extends CstNode {
+  name: "Programs";
+  children: ProgramsCstChildren;
+}
+
+export type ProgramsCstChildren = {
+  Program?: ProgramCstNode[];
+  Newline?: IToken[];
+};
+
 export interface ProgramCstNode extends CstNode {
   name: "Program";
   children: ProgramCstChildren;
@@ -199,6 +209,17 @@ export type StartOfFileCstChildren = {
   Newline: IToken[];
 };
 
+export interface ProgramNumberLineCstNode extends CstNode {
+  name: "ProgramNumberLine";
+  children: ProgramNumberLineCstChildren;
+}
+
+export type ProgramNumberLineCstChildren = {
+  ProgramNumber: IToken[];
+  Comment?: IToken[];
+  Newline: IToken[];
+};
+
 export interface EndOfFileCstNode extends CstNode {
   name: "EndOfFile";
   children: EndOfFileCstChildren;
@@ -209,18 +230,8 @@ export type EndOfFileCstChildren = {
   Newline?: IToken[];
 };
 
-export interface ProgramNumberLineCstNode extends CstNode {
-  name: "ProgramNumberLine";
-  children: ProgramNumberLineCstChildren;
-}
-
-export type ProgramNumberLineCstChildren = {
-  ProgramNumber: IToken[];
-  Comment: IToken[];
-  Newline: IToken[];
-};
-
 export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
+  Programs(children: ProgramsCstChildren, param?: IN): OUT;
   Program(children: ProgramCstChildren, param?: IN): OUT;
   Lines(children: LinesCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
@@ -239,6 +250,6 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
   ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
-  EndOfFile(children: EndOfFileCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;
+  EndOfFile(children: EndOfFileCstChildren, param?: IN): OUT;
 }
