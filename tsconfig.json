@@ -1,14 +1,16 @@
 {
   "compilerOptions": {
-    "composite": true,
     "strict": true,
+    "baseUrl": ".",
     "module": "CommonJS",
     "moduleResolution": "node",
     "target": "es2017",
     "lib": [
       "ESNext"
     ],
-    "baseUrl": ".",
+    "types": [
+      "node"
+    ],
     "paths": {
       "@cnc4me/*": [
         "./packages/*"
@@ -29,22 +31,5 @@
     "allowSyntheticDefaultImports": true,
     "forceConsistentCasingInFileNames": true,
     "noPropertyAccessFromIndexSignature": true
-  },
-  "references": [
-    {
-      "path": "./packages/fanuc-macro-b"
-    },
-    {
-      "path": "./packages/monaco-gcode"
-    },
-    {
-      "path": "./packages/chevrotain-types-generator"
-    },
-    {
-      "path": "./packages/chevrotain-live"
-    }
-  ],
-  "include": [
-    "**/.eslintrc.js",
-  ]
+  }
 }

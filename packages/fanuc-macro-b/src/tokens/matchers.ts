@@ -4,7 +4,7 @@
 const programNumberRegex = /[O|:](\d+)/y;
 
 /**
- *
+ * @TODO this might be too much work for the lexer...
  */
 export function matchProgramNumber(text: string, startOffset: number) {
   let execResult: RegExpExecArrayWithPayload | null = null;

@@ -1,8 +1,9 @@
 import { MacroParser } from "../src";
-import { createDiagramServer } from "./_helpers";
+import { createDiagramServer } from "./common";
 
 const HOST = process.env["HOST"] ?? "localhost";
 const PORT = process.env["PORT"] ?? 3240;
+
 const parser = new MacroParser();
 const server = createDiagramServer(parser);
 

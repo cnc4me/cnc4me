@@ -1,10 +1,9 @@
 import { Utils } from "../src";
-import { transitions } from "../src/FanucMacroB/MacroRuntimeState";
-import { joinCwd, writeFile } from "./_helpers";
+import { fsm, joinCwd, writeFile } from "./common";
 
 const outfile = joinCwd("diagrams", "MarcoRuntimeState.mmd");
 const content = Utils.generateMermaidDiagram(
-  transitions,
+  fsm.getTransitions(),
   "Fanuc Macro B - Runtime State"
 );
 

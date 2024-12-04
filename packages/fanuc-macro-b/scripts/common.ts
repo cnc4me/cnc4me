@@ -4,10 +4,11 @@ import { createSyntaxDiagramsCode } from "chevrotain";
 import { writeFileSync } from "fs";
 import path from "path";
 
-import { Utils } from "../src"; // @TODO WHY RED?
-import { transitions } from "../src/FanucMacroB/MacroRuntimeState";
+import { MacroRuntimeFSM, Utils } from "../src";
 
 import type { BaseParser } from "chevrotain";
+
+export const fsm = new MacroRuntimeFSM();
 
 export function joinCwd(...parts: string[]) {
   return path.join(process.cwd(), ...parts);
@@ -36,7 +37,7 @@ export function createDiagramServer(parser: BaseParser) {
         console.info(
           `[${new Date().toISOString()}] Generating Runtime Diagram`
         );
-        const mmdContent = Utils.generateMermaidDiagram(transitions);
+        const mmdContent = Utils.generateMermaidDiagram(fsm.getTransitions());
 
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(`<html>

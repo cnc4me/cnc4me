@@ -17,7 +17,7 @@ describe.each(TEST_CASES)(`can tokenize the string "%s" as a G Code`, input => {
   const tokens = lexer.tokenize(input);
 
   it("has no errors", () => {
-    expect(lexer.getErrors()).toHaveLength(0);
+    expect(lexer.hasErrors).toBeFalsy();
   });
 
   it("has the correct number of tokens", () => {

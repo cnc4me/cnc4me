@@ -51,9 +51,9 @@ describe.each(TEST_GROUPS)(`tokenizing %s tokens`, (_, cases) => {
 
     it(`produces <${tokenType.name}> token`, () => {
       expect(lexer.hasErrors).toBeFalsy();
+      expect(tokens).toHaveLength(1);
       expect(tokens[0]).toMatchToken(tokenType);
       expect(tokens[0].image).toBe(input);
-      expect(tokens).toHaveLength(1);
     });
   });
 });

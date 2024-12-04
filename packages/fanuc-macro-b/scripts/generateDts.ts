@@ -1,5 +1,5 @@
 import { ChevrotainGenerator, MacroParser } from "../src";
-import { joinCwd, writeFile } from "./_helpers";
+import { joinCwd, writeFile } from "./common";
 
 const parser = new MacroParser();
 const generator = new ChevrotainGenerator(parser);

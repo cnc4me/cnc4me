@@ -43,7 +43,7 @@ type InterpreterEvents = {
 type VisitorReturnType<T extends Exclude<keyof MacroInterpreter, "events">> =
   ReturnType<MacroInterpreter[T]>;
 
-const debug = Debuggers.Interpreter;
+const $d = Debuggers.Interpreter;
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: CONFIG.INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS

@@ -1,10 +1,13 @@
 import { Lexer } from "chevrotain";
 
 import { InputUndefined, LexingError } from "../errors/lexer";
+import { Debuggers } from "../utils";
 import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
 
 import type { ErrorProducer } from "../types";
 import type { ILexerDefinitionError, ILexingResult, IToken } from "chevrotain";
+
+const $d = Debuggers.Lexer;
 
 const _lexer = new Lexer(FANUC_MACRO_B_GRAMMAR);
 
@@ -14,6 +17,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
   #input = "";
 
   constructor() {
+    $d("initializing");
     this.#instance = _lexer;
   }
 
@@ -25,10 +29,17 @@ export class MacroLexer implements ErrorProducer<LexingError> {
     return this.#instance.lexerDefinitionErrors.length > 0;
   }
 
+  /**
+   * This internally calls
+   */
   tokenize(text?: string, initialMode?: string): IToken[] {
-    if (text) this.#input = text;
+    if (text) this.setInput(text);
     if (this.#input === "") throw new InputUndefined();
     this.#result = this.#instance.tokenize(this.#input, initialMode);
+    $d("tokenizing complete");
+    $d("errors:", this.#result.errors.length);
+    $d("tokens:", this.#result.tokens.length);
+    $d("groups:", Object.keys(this.#result.groups).length);
     return this.#result.tokens;
   }
 
@@ -36,6 +47,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
    * Load the Lexer with a string of input
    */
   setInput(input: string): void {
+    $d("setting input");
     this.#input = input;
   }
 
@@ -56,6 +68,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
   }
 
   reset(): void {
+    $d("resetting");
     this.#input = "";
     this.#result = { errors: [], groups: {}, tokens: [] };
   }

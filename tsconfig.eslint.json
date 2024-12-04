@@ -2,23 +2,8 @@
   "extends": "./tsconfig.json",
   "compilerOptions": {
     "noEmit": true,
-    "allowJs": true,
     "types": [
-      "node",
-      "vitest/globals"
+      "node"
     ]
-  },
-  "include": [
-    "./*.js",
-    "./*.ts",
-    "./apps/**/*.js",
-    "./apps/**/*.ts",
-    "./apps/**/*.d.ts",
-    "./apps/**/*.tsx",
-    "./tools/**/*.js",
-    "./tools/**/*.ts",
-    "./packages/**/*.js",
-    "./packages/**/*.ts",
-    "./packages/**/*.mjs"
-  ]
+  }
 }

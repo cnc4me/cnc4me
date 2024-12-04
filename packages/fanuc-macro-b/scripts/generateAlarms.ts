@@ -3,7 +3,7 @@ import path from "node:path";
 
 import * as prettier from "prettier";
 
-import { joinCwd, writeFile } from "./_helpers";
+import { joinCwd, writeFile } from "./common";
 
 type RuntimeAlarmRecord = {
   description: string;
@@ -92,7 +92,7 @@ export class RuntimeAlarm extends Error {
     let className = normalize(message);
 
     if (Number(number) === 367) {
-      console.log(className);
+      // console.log(className);
       className = className.split("As")[0];
     }
 
@@ -121,7 +121,8 @@ void (async () => {
   const formatted = await prettier.format(source, {
     parser: "typescript",
     trailingComma: "none",
-    semi: true
+    semi: true,
+    printWidth: 120
   });
 
   writeFile(outputTsFile, formatted);

@@ -1,10 +1,10 @@
 import { Events, States } from "../FanucMacroB/MacroRuntimeState";
 
-import type { ITransition } from "typescript-fsm";
+import type { Callback, ITransition } from "typescript-fsm";
 
 // Function to generate the Mermaid.js diagram code
 export function generateMermaidDiagram(
-  transitions: ITransition<States, Events, () => void>[],
+  transitions: ITransition<States, Events, Callback>[],
   title?: string
 ) {
   const diagram: string[] = [];

@@ -12,7 +12,7 @@ describe("lexing lines with the MarcoLexer", () => {
     const tokens = lexer.tokenize(inputText);
 
     it("has no errors", () => {
-      expect(lexer.getErrors()).toHaveLength(0);
+      expect(lexer.hasErrors).toBeFalsy();
     });
 
     it("has the correct number of tokens", () => {

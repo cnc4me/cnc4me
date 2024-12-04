@@ -3,10 +3,10 @@ import { MacroRuntimeFSM } from "../src";
 
 const fsm = new MacroRuntimeFSM({
   onError: () => {
-    console.log("Oh noes! an errorrrrrrrrrrrr!");
+    console.log("Oh noes! an Errorror!");
   },
   onStopped: () => {
-    console.log("PAUSE!");
+    console.log("We stopped!");
   },
   onFinished: () => {
     console.log("ALL DONE!");
@@ -16,6 +16,7 @@ const fsm = new MacroRuntimeFSM({
   }
 });
 
+// Run It
 void (async () => {
   await fsm.trigger("start");
 

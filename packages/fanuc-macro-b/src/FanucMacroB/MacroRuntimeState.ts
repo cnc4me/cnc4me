@@ -46,7 +46,7 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     if (callbacks) {
       for (const [onEvent, callback] of Object.entries(callbacks)) {
         const stateName = onEvent.replace(/^on/, "").toLowerCase() as StateName;
-        $f("registering callback for", stateName);
+        $f("registering", onEvent, "callback");
         this.on(stateName, callback);
       }
     }

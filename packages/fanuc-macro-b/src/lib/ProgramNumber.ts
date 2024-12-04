@@ -1,19 +1,27 @@
 export class ProgramNumber {
+  constructor(
+    private matchers: {
+      onFail: (message: string) => void;
+      onMatch: (prgNum: number) => void;
+    }
+  ) {
+    // Setup the matcher with handlers
+  }
+
   /**
    * Attempt to match a valid NC program identifier
    */
-  static match(input: string, { MATCH, NOMATCH }: MatcherHandlers) {
-    const result = input.match(/^O([0-9]+)\s+?(?:\(.+?\))?$/m);
+  match(input: string): ReturnType<ProgramNumber["matchers"]["onMatch"]> {
+    const cleanedInput = input.replace(/^%|[\n\r]/, "").trim();
+    const result = cleanedInput.match(/^O([0-9]+)\s+/);
+
+    console.log(cleanedInput, result);
 
     if (result === null) {
-      return NOMATCH("Program Number Not Found");
+      this.matchers.onFail("Program Number Not Found");
+      return;
     } else {
-      return MATCH(result);
+      return this.matchers.onMatch(Number(result[1]));
     }
   }
 }
-
-type MatcherHandlers = {
-  MATCH: (match: RegExpMatchArray) => unknown;
-  NOMATCH: (error: string) => unknown;
-};

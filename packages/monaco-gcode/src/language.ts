@@ -29,6 +29,8 @@ const rules = createLanguageRules([
   // [/\[[a-zA-Z 0-9:]+\]/, "custom-date"]
 ]);
 
+export const MonarchTokens = { brackets, rules };
+
 export const gcodeLanguage = createMonarchLanguage(brackets, rules);
 
 type GcodeBracketRuleTokens = ExtractBracketRuleTokens<typeof brackets>;

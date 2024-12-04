@@ -26,6 +26,9 @@
   "references": [
     {
       "path": "./tsconfig.eslint.json"
-    }
+    },
+    {
+      "path": "../monaco-gcode"
+    },
   ]
 }
