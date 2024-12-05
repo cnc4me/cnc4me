@@ -12,13 +12,13 @@ export class MacroParser
   implements ErrorProducer<ParsingError>
 {
   static getBaseCstVisitor(opts: { useConstructorDefaults: boolean }) {
-    $d("creating BaseCstVisitor");
-    const old = Debuggers.disable();
+    const { resumeDebugging } = Debuggers.pause();
+    // $d("creating BaseCstVisitor");
     const parser = new MacroParserRuleTree();
     const instance = opts.useConstructorDefaults
       ? parser.getBaseCstVisitorConstructorWithDefaults()
       : parser.getBaseCstVisitorConstructor();
-    Debuggers.enable(old);
+    resumeDebugging();
     return instance; // @TODO can this be typed?
   }
 

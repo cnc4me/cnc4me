@@ -8,12 +8,12 @@ import {
   InsightCollection,
   MacroVariable
 } from "../lib";
+import { NcProgram } from "../lib/NcProgram";
 import { Modulus, Plus, Product } from "../tokens";
 import {
-  InterpretedProgram,
+  type IProgramNumberLine,
   MacroBuiltinFunctionNames,
   ParsedLineData,
-  ProgramIdentifier,
   ValidG10OffsetGroups,
   // VariableRegister,
   WatcherValuePayload
@@ -62,6 +62,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     super();
     this.#memory = new MacroMemory();
     this.#insights = new InsightCollection();
+    $d("validating");
     this.validateVisitor();
   }
 
@@ -76,11 +77,27 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Root Node for valid NC Programs
    */
-  Program(ctx: CST.ProgramCstChildren): InterpretedProgram {
-    const prgId = this.ProgramNumberLine(ctx.ProgramNumberLine[0].children);
+  Program(ctx: CST.ProgramCstChildren): NcProgram {
+    const { number, title } = this.ProgramNumberLine(
+      ctx.ProgramNumberLine[0].children
+    );
     const lines = this.Lines(ctx.Lines[0].children);
-    // const g10s = this._memory.
-    return { ...prgId, lines };
+
+    return NcProgram.create({ id: number, title, lines });
+  }
+
+  /**
+   * Get the Program title and number
+   */
+  ProgramNumberLine(ctx: CST.ProgramNumberLineCstChildren): IProgramNumberLine {
+    const token = unbox(ctx.ProgramNumber);
+    const number = parseInt(token.payload as string);
+    const line: IProgramNumberLine = { number, title: undefined };
+    if (ctx?.Comment) {
+      const image = getImage(ctx.Comment);
+      line.title = unwrapComment(image);
+    }
+    return line;
   }
 
   /**
@@ -97,20 +114,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     return _lines;
-  }
-
-  /**
-   * Get the Program title and number
-   */
-  ProgramNumberLine(ctx: CST.ProgramNumberLineCstChildren): ProgramIdentifier {
-    const token = unbox(ctx.ProgramNumber[0]);
-    const comment = ctx?.Comment ? getImage(ctx.Comment) : "";
-
-    return {
-      programTitle: unwrapComment(comment),
-      // eslint-disable-next-line @typescript-eslint/no-unsafe-argument
-      programNumber: parseInt(token.payload) // TODO Fix this type error
-    };
   }
 
   /**

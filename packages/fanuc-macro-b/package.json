@@ -22,6 +22,7 @@
     "diagram:ui": "tsx ./scripts/diagramHost.ts",
     "diagrams": "pnpm diagram:language && pnpm diagram:runtime",
     "repl": "tsx ./demo/repl.demo.ts",
+    "spindle:ui": "npx parcel ./demo/spindle.html",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },
@@ -29,10 +30,11 @@
     "@cnc4me/monaco-gcode": "workspace:*",
     "chevrotain": "catalog:",
     "debug": "catalog:",
+    "emittery": "^1.0.3",
     "mitt": "^3.0.1",
     "radash": "^12.1.0",
     "ts-pattern": "^5.5.0",
-    "typescript-fsm": "^1.4.5"
+    "typescript-fsm": "^1.5.2"
   },
   "devDependencies": {
     "@types/chance": "^1.1.3",

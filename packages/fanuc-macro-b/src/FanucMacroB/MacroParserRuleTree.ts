@@ -29,7 +29,7 @@ import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
 
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
 
-const $d = Debuggers.Interpreter;
+const $d = Debuggers.Parser;
 const $t = $d.extend("token");
 
 export class MacroParserRuleTree extends CstParser {

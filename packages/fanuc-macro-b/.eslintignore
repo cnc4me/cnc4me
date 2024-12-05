@@ -1,2 +1,4 @@
 src/types/fanuc.d.ts
 dist/
+
+node_modules/

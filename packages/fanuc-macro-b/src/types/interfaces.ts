@@ -6,17 +6,13 @@ export interface IBaseInsight {
   value: number;
 }
 
-export interface ProgramIdentifier {
-  programTitle: string;
-  programNumber: number;
-}
+export type IProgramNumberLine = {
+  number: number;
+  title?: string;
+};
 
 export interface InterpretedLines {
   result: ParsedLineData[];
-}
-
-export interface InterpretedProgram extends ProgramIdentifier {
-  lines: ParsedLineData[];
 }
 
 // export interface VariableRegister {

@@ -5,6 +5,8 @@ import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroVariable } from "./MacroVariable";
 import { ProgramNumber } from "./ProgramNumber";
 
+export * from "./MachineTool";
+
 export {
   AddressedValue,
   AddressInsight,

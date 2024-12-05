@@ -1,0 +1,145 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <title>Spindle State Machine Animation</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+      margin-top: 50px;
+    }
+
+    canvas {
+      border: 1px solid #ccc;
+      margin-top: 20px;
+    }
+
+    #controls {
+      margin-top: 20px;
+    }
+
+    #controls input[type="number"] {
+      width: 60px;
+    }
+  </style>
+</head>
+
+<body>
+
+  <h1>Spindle State Machine Animation</h1>
+  <canvas id="spindleCanvas" width="400" height="400"></canvas>
+
+  <div id="controls">
+    <button id="startForwardBtn">Start Forward</button>
+    <button id="startBackwardBtn">Start Backward</button>
+    <button id="stopBtn">Stop</button>
+    <br><br>
+    Target RPM: <input type="number" id="targetRPMInput" value="1000" min="100" max="5000" step="100">
+  </div>
+
+  <script type="module">
+    import { SpindleFSM } from "../src";
+
+    const spindle = new SpindleFSM();
+
+    (function () {
+      /** @type HTMLCanvasElement */
+      const canvas = document.getElementById('spindleCanvas');
+      /** @type CanvasRenderingContext2D */
+      const ctx = canvas.getContext('2d');
+
+      // Control elements
+      const startForwardBtn = document.getElementById('startForwardBtn');
+      const startBackwardBtn = document.getElementById('startBackwardBtn');
+      const stopBtn = document.getElementById('stopBtn');
+      const targetRPMInput = document.getElementById('targetRPMInput');
+
+      // Settings
+      const radius=50;
+
+      let angle = 0;
+      let lastTimestamp = 0;
+
+      startForwardBtn.addEventListener('click', () => {
+        const targetRPM = parseInt(targetRPMInput.value, 10);
+        spindle.forward(targetRPM);
+      });
+
+      startBackwardBtn.addEventListener('click', () => {
+        const targetRPM = parseInt(targetRPMInput.value, 10);
+        spindle.reverse(targetRPM);
+      });
+
+      stopBtn.addEventListener('click', () => {
+        spindle.stop();
+      });
+
+      // Listen to spindle events
+      spindle.on('rpmChanged', (currentRPM) => {
+        // Update the current RPM (if needed)
+      });
+
+      spindle.on('stateChanged', (state) => {
+        // Handle state changes (if needed)
+      });
+
+      spindle.on('directionChanged', (direction) => {
+        // Handle direction changes (if needed)
+      });
+
+      function drawSpindle() {
+        ctx.clearRect(0, 0, canvas.width, canvas.height);
+
+        // Draw spindle (a simple rectangle for illustration)
+        ctx.save();
+        ctx.translate(canvas.width / 2, canvas.height / 2);
+        ctx.rotate(angle);
+
+        ctx.fillStyle = '#007bff';
+        var colors=['black','white','black','white'];
+        for(var i=0;i<4;i++){
+            var startAngle=i*Math.PI/2;
+            var endAngle=startAngle+Math.PI/2;
+            ctx.beginPath();
+            ctx.moveTo(0,0);
+            ctx.arc(0,0,radius,startAngle,endAngle);
+            ctx.closePath();
+            ctx.fillStyle=colors[i];
+            ctx.fill();
+            ctx.stroke();
+        }
+
+        ctx.restore();
+
+        // Display RPM and state
+        ctx.font = '12px monospace';
+        ctx.fillStyle = '#000';
+        ctx.fillText(`RPM: ${Math.round(spindle.rpms)}`, 10, 20);
+        ctx.fillText(`Direction: ${spindle.rotation || 'stopped'}`, 10, 40);
+        ctx.fillText(`State: ${spindle.getState()}`, 10, 60);
+      }
+
+      function update(timestamp) {
+        if (!lastTimestamp) lastTimestamp = timestamp;
+        const delta = timestamp - lastTimestamp;
+        lastTimestamp = timestamp;
+
+        // Update angle based on spindle speed and direction
+        const rps = spindle.rpms / 60; // Revolutions per second
+        const angularSpeed = rps * 2 * Math.PI; // Radians per second
+
+        angle += (spindle.rotation === 'forward' ? 1 : -1) * angularSpeed * (delta / 1000);
+
+        drawSpindle();
+        requestAnimationFrame(update);
+      }
+
+      requestAnimationFrame(update);
+    })();
+  </script>
+
+</body>
+
+</html>

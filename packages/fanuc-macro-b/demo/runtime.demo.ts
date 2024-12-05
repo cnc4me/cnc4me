@@ -33,5 +33,6 @@ runtime.loadProgram(demo, { setActive: true });
 // const program = runtime.getActiveProgram();
 // console.log(program);
 
-const result = runtime.run();
-// console.log(result);
+runtime.run(line => {
+  console.log(line);
+});

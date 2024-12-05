@@ -13,9 +13,12 @@ let currentNamespaces = "";
 
 const FanucDebugger = Debug(DEBUG_NAMESPACE);
 
-export const disableDebugging = () => {
+export const pauseDebugging = () => {
   currentNamespaces = Debug.disable();
-  return currentNamespaces;
+  return {
+    disabled: currentNamespaces,
+    resumeDebugging: () => Debug.enable(currentNamespaces)
+  };
 };
 
 export function enableDebugging(namespace?: `${(typeof NAMESPACES)[number]}`) {
@@ -33,6 +36,7 @@ export function enableDebugging(namespace?: `${(typeof NAMESPACES)[number]}`) {
 export const Debuggers = {
   enable: Debug.enable,
   disable: Debug.disable,
+  pause: pauseDebugging,
   Main: FanucDebugger,
   Lexer: FanucDebugger.extend("lexer"),
   Memory: FanucDebugger.extend("memory"),

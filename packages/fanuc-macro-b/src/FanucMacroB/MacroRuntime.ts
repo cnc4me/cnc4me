@@ -10,6 +10,7 @@ import {
 } from "../errors/runtime";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
+import { Debuggers } from "../utils";
 import { FanucMacroB } from "./FanucMacroB";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
@@ -17,9 +18,9 @@ import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { MacroRuntimeFSM } from "./MacroRuntimeState";
 
+import type { NcProgram } from "../lib/NcProgram";
 import type {
   ErrorProducer,
-  InterpretedProgram,
   MacroCombinedError,
   MacroRuntimeInitOptions,
   ParsedLineData,
@@ -29,6 +30,8 @@ import type {
 import type { CST } from "../types/CST";
 
 export * from "./MacroRuntimeState";
+
+const $d = Debuggers.Runtime;
 
 /*
  * MacroRuntime Class to hold multiple programs in memory
@@ -121,17 +124,24 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   /**
    * Main entry point to the runtime.
    */
-  run(opts?: Partial<{ dryrun: boolean }>): InterpretedProgram {
+  run(lineHandler?: (line: ParsedLineData) => void): NcProgram {
+    $d("starting run");
     this.#tokenizeActiveProgram();
-
+    $d("lexing complete");
     const programCst = this.Parser.Program() as unknown as CST.ProgramCstNode;
-
+    $d("parsing complete");
     if (this.Parser.errors.length > 0) {
       this.#error(this.Parser.errors[0]);
     }
-
     const result = this.Interpreter.Program(programCst.children);
-
+    $d("interpreting complete");
+    if (typeof lineHandler === "function" && result.lineCount > 0) {
+      const lines = result.getLines();
+      $d("running handler over", lines.length, "lines");
+      for (const line of result.getLines()) {
+        lineHandler(line);
+      }
+    }
     return result;
   }
 
