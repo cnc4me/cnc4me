@@ -34,7 +34,8 @@
     "mitt": "^3.0.1",
     "radash": "^12.1.0",
     "ts-pattern": "^5.5.0",
-    "typescript-fsm": "^1.5.2"
+    "typescript-fsm": "^1.5.2",
+    "xstate": "^5.19.0"
   },
   "devDependencies": {
     "@types/chance": "^1.1.3",

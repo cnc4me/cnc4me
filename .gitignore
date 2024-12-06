@@ -18,6 +18,7 @@ yarn-error.log*
 # Directories
 #
 coverage/
+.parcel-cache/
 .nyc_output/
 .npm/
 .next/
