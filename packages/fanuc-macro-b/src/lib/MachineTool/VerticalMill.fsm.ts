@@ -15,7 +15,7 @@ export const VerticalMill = setup({
       | { type: "home" }
       | { type: "reset" }
       | { type: "reach_position" }
-      | { type: "move_to_position" }
+      | { type: "position_to"; vector: AxisVector }
       | { type: "overtravel_detected" };
   },
   actors: { X: AxisFSM, Y: AxisFSM, Z: AxisFSM },
@@ -24,10 +24,6 @@ export const VerticalMill = setup({
       sendTo("X", { type: "reset" });
       sendTo("Y", { type: "reset" });
       sendTo("Z", { type: "reset" });
-    },
-    moveX: ({ event }) => {
-      console.log(event);
-      sendTo("X", { type: "move_to_position", ax });
     }
   }
 }).createMachine({
@@ -50,10 +46,12 @@ export const VerticalMill = setup({
         reset: {
           reenter: true
         },
-        move_to_position: {
+        position_to: {
           target: "traveling",
-          description: "The axis was commanded a new position."
-          // actions: assign({})
+          description: "The axis was commanded a new position.",
+          actions: ({ event }) => {
+            console.log(event);
+          }
         }
       },
       description: "The axis is not moving and is ready to receive commands."
@@ -77,8 +75,9 @@ export const VerticalMill = setup({
     in_position: {
       type: "final",
       on: {
-        move_to_position: {
-          target: "traveling"
+        position_to: {
+          target: "traveling",
+          description: "Move to a new position."
         }
       },
       description: "The axis has reached the target position."
@@ -94,3 +93,9 @@ export const VerticalMill = setup({
     }
   }
 });
+
+type AxisVector =
+  | [X: number]
+  | [X: number, Y: number]
+  | [X: number, Y: number, Z: number]
+  | Partial<{ X: number; Y: number; Z: number }>;

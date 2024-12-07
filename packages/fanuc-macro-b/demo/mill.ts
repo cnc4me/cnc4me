@@ -12,6 +12,6 @@ const machine = createActor(VerticalMill);
 
 machine.start();
 
-machine.send({ type: "move_to_position" });
+machine.send({ type: "position_to", vector: [1, 1, 1] });
 
 // machine.send({ type: "reset" });

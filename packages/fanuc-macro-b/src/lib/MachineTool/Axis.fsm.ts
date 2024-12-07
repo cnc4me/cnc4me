@@ -1,28 +1,33 @@
-import { assign, setup } from "xstate";
+import { assign, emit, log, not, raise, setup } from "xstate";
 
 export const AxisFSM = setup({
   types: {} as {
     input: {
-      axis: MachineAxis;
+      label: MachineAxis;
       limits: AxisLimitInput;
     };
     context: {
-      axis: MachineAxis;
-      position: {
-        current: number;
-        target: number;
-      };
+      label: MachineAxis;
+      pCurrent: number;
+      pTarget: number;
       limits: {
         min: number;
         max: number;
       };
     };
     events:
-      | { type: "home" }
       | { type: "reset" }
-      | { type: "start_travel" }
-      | { type: "reach_position" }
+      | { type: "move_to_position"; location: number }
+      | { type: "target_position_reached" }
       | { type: "overtravel_detected" };
+  },
+  delays: {
+    TINY_DELAY: 100,
+    QUARTER_SECOND: 250,
+    HALF_SECOND: 500,
+    ONE_SECOND: 1000,
+    FIVE_SECONDS: 5000,
+    EVENTUALLY: 10_000
   },
   actions: {
     track: (_, params: { response: string }) => {
@@ -30,37 +35,55 @@ export const AxisFSM = setup({
       // Tracks { response: 'good' }
     },
     reset: assign({
-      position: () => ({ current: 0, target: 0 })
-    })
+      pTarget: () => 0,
+      pCurrent: () => 0
+    }),
+    emitEvent: emit({ type: "notification" }),
+    targetPositionReached: raise(
+      { type: "target_position_reached" },
+      { delay: 200 }
+    ),
+    move: assign({
+      pTarget: ({ context, event }) => {
+        if (event.type === "move_to_position") {
+          // console.log("EVENT", event);
+          return event.location;
+        }
+        return context.pTarget;
+      }
+    }),
+    // assignTargetPosition: assign({
+    //   pTarget: (_, params: { position: number }) => params.position
+    // }),
+    setTargetPosition: assign({
+      pTarget: (_, params: { position: number }) => params.position
+    }),
+    setCurrentPositionFromTarget: assign(({ context }) => ({
+      pCurrent: context.pTarget,
+      pTarget: NaN
+    }))
   },
   guards: {
-    willOverTravel: ({ context }) => {
-      const { target } = context.position;
-      const { min, max } = context.limits;
-
-      return target < min || target > max;
+    willOverTravel: ({ context: { limits, pTarget } }) => {
+      const test = pTarget < limits.min || pTarget > limits.max;
+      console.log("will overtravel", pTarget, test);
+      return test;
     },
-    /**
-     * Check if a target position is within the defined limits
-     */
-    isValidPosition: ({ context }) => {
-      const { target } = context.position;
-      const { min, max } = context.limits;
-
-      return target > min && target < max;
+    isValidPosition: ({ context }, params: { position: number }) => {
+      const { limits } = context;
+      const target = params.position;
+      return target > limits.min && target < limits.max;
     }
   }
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEEAeBLWA6dEA2YAxAE5xgAuA2gAwC6ioADgPazrnrMB2DIqiAJmoCArFgDsARgDMIgGySBc6gA4V48QBoQAT0SKBWSeJHUALNWkBOcWatnpZgL5PtaTDnxFY5AIbFyAH1yYl8ANzA8GnokEBY2Dm5efgRJEVksaQEBexVJOXlFM209BBVqLBUBPLk5CxlJKskXNwxsEPDI9C4oEjBfAGMAC0D49k4uaN4xxJ5YlLMBaUrqcRyzEUWVeWLdfWoKkXE8+WVRB0UWkHd20Ii8bt7SWAop2JmJ5P1pPKMpK2oVhkp3kJUE0kkWCEKmkcmk5kWZjsVxuWA690ehGYEQCd0igQgFDAA3IkDeTFY4yS80QVm2mR+RxE5SWWUkYIQ0hMWCOeUclkkNhk0hRbRwXFGlNmhB8-iC6Mi5LiUs+NIQi2W5TW9k21R2HLSkNWJxUcNU4mol1c1zF2LAuM6eD6LyodGmKupoBSaQyWXWNUKAl2pS5Yl5MgsEKF0hFVy4zEJ8FiN3dCVVXsQAFoxHVmTH8-nLBzM3IsHJ-gcY4DjFYRKKPLgCKmqXMM6l1FYy4K8lqzOJ7BzsstFCdFpJzGpnNbUQqHj1m7MvggRFZllZcuPx3JynCOfZMtVjJILEpauJY60GxKPp7lWnbwtDLIzPlam-ajY95CqnkX-C6rIPz1tgdoOvcC7pnw+iCmYKznvkUYqBsIgcoBlSHiIRyiKsdYuE4QA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEEAeBLWA6dEA2YAxAE5xgAuA2gAwC6ioADgPazrnrMB2DIqiAFgCsARiwAOAJxCh4gOxTJcgMzihygDQgAnogC0yyViFyhA5bIHVxANkkjqQgL5OtaTDnxEAtswBuYAD65MyBLGwc3DT0SCDh7Jw8sfwIAjbGNpnUaTZmQpK2WroIIhZYuapmAgBMAsLV1c6uIO7Y5MQAhgF46FxQhOQdxDDkYawJ3IGkHQDGABaQ0bzxkUmgKcLUWErKjrni4tTSmjqIIjLlNso2IgpycjbU1HIubhhtnd29-aSwFEuxFaJXgpPSNITlEQ1MziNLVGwNORFRANIwCOSSYRXaio4SvFrvLDtLpgHp9Qj+MDEYndQIQChgGbkRZ0ZbjVYgwS3coWKxyETVQzmATIhDqcRYdHVSTwuTCKTKF7NVpEz6k76EXwBYKhIFRVmA9nA5KIITpbI2A5QkRqI7SISi4RGBHS9RyWoCSTKfEq3pjCKJTWUnX+iZcAFMI3cTkIQ7VSXKeHiZQiBG2Uyi0RYCylOqPAWmESSH2EgBmHQArnhyCQyFQDZGA9GTQgwWbs40i1JqDcjkjTqlzuVzOJatUi2lpC5mlxmPT4LFWmym2s+PpdgIO6ICpIew4lKK9AWsM8zCm0onMbISx5cARl2GY2V7soBKnhbD7hmB22JO7ducab8paAg3h8JJklAD4ci26Ink81DvrYNSpoUA7ShKNhwvkiGHLY3rKoSfp6quJExvcRg4lhUiiMoKY2qKsongc9j5NU-JyNYBFvB45ZVuQ0HGusgjxuINqOF6khYVh2Siu6zqWHYr5ic84jTk4QA */
   id: "Axis",
   initial: "idle",
   context: ({ input }) => ({
-    axis: input.axis,
+    label: input.label,
     limits: parseLimits(input.limits),
-    position: {
-      current: NaN,
-      target: NaN
-    }
+    pCurrent: NaN,
+    pTarget: NaN
   }),
   states: {
     idle: {
@@ -70,10 +93,16 @@ export const AxisFSM = setup({
           actions: [
             { type: "track", params: { response: "good" } }, //
             { type: "reset" }
-          ]
+          ],
+          description: "Reset to clear any error messages."
         },
-        start_travel: {
+        move_to_position: {
           target: "traveling",
+          actions: [
+            {
+              type: "move"
+            }
+          ],
           description: "The axis is moving to its commanded location."
         }
       },
@@ -81,38 +110,70 @@ export const AxisFSM = setup({
     },
 
     traveling: {
-      on: {
-        reach_position: {
+      after: {
+        HALF_SECOND: {
           target: "in_position"
+        }
+      },
+      on: {
+        target_position_reached: {
+          target: "in_position",
+          description: "The Axis is stable at the commanded position."
         },
 
         reset: {
           target: "idle",
-          actions: "reset"
+          actions: {
+            type: "reset"
+          },
+          description: "Abort the current axis movement."
         },
 
-        overtravel_detected: "overtravel"
+        overtravel_detected: {
+          target: "fault",
+          description:
+            "An overtravel has occured and placed the Axis in a fault state."
+        },
+
+        move_to_position: {
+          target: "traveling",
+          actions: [
+            {
+              type: "move"
+            }
+          ],
+          description: "While in motion, a new position was commanded."
+        }
       },
       description: "The axis is currently moving towards a target position."
     },
 
     in_position: {
+      entry: {
+        type: "setCurrentPositionFromTarget"
+      },
       on: {
-        start_travel: {
-          target: "traveling"
+        move_to_position: {
+          target: "traveling",
+          actions: {
+            type: "move",
+            params: ({ event }) => event.location
+          },
+          description: "The Axis was commanded to a new position."
         }
       },
       description: "The axis has reached the target position and is stable."
     },
 
-    overtravel: {
+    fault: {
       on: {
         reset: {
           target: "idle",
-          actions: "reset"
+          actions: "reset",
+          description: "Reset the Axis from its fault state."
         }
       },
-      description: "The axis has moved beyond its safe travel limits."
+      description: "The Axis encountered an error."
     }
   }
 });
