@@ -28,13 +28,13 @@ axis.start();
 
 void slowly(
   [
-    async () => axis.send({ type: "move_to_position", location: 1 }),
-    async () => axis.send({ type: "move_to_position", location: 14.25 }),
-    async () => axis.send({ type: "move_to_position", location: -2 }),
-    async () => axis.send({ type: "move_to_position", location: 7.55543 }),
-    async () => axis.send({ type: "move_to_position", location: 0 })
+    async () => axis.send({ type: "travel", to: 1 }),
+    async () => axis.send({ type: "travel", to: 14.25 }),
+    async () => axis.send({ type: "travel", to: -2 }),
+    async () => axis.send({ type: "travel", to: 7.55543 }),
+    async () => axis.send({ type: "travel", to: 1.2 })
   ],
-  2000
+  2
 );
 
 // machine.send({ type: "reset" });

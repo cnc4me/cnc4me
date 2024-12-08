@@ -17,9 +17,13 @@ export const AxisFSM = setup({
     };
     events:
       | { type: "reset" }
-      | { type: "move_to_position"; location: number }
+      | { type: "travel"; to: number }
       | { type: "target_position_reached" }
       | { type: "overtravel_detected" };
+    emitted:
+      | { type: "in_position"; position: number }
+      | { type: "other1" }
+      | { type: "other2" };
   },
   delays: {
     TINY_DELAY: 100,
@@ -38,18 +42,17 @@ export const AxisFSM = setup({
       pTarget: () => 0,
       pCurrent: () => 0
     }),
-    emitEvent: emit({ type: "notification" }),
+    emitInPosition: emit(({ context }) => ({
+      type: "in_position" as const,
+      position: context.pCurrent
+    })),
     targetPositionReached: raise(
       { type: "target_position_reached" },
       { delay: 200 }
     ),
     move: assign({
       pTarget: ({ context, event }) => {
-        if (event.type === "move_to_position") {
-          // console.log("EVENT", event);
-          return event.location;
-        }
-        return context.pTarget;
+        return event.type === "travel" ? event.to : context.pTarget;
       }
     }),
     // assignTargetPosition: assign({
@@ -76,7 +79,7 @@ export const AxisFSM = setup({
     }
   }
 }).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEEAeBLWA6dEA2YAxAE5xgAuA2gAwC6ioADgPazrnrMB2DIqiAFgCsARiwAOAJxCh4gOxTJcgMzihygDQgAnogC0yyViFyhA5bIHVxANkkjqQgL5OtaTDnxEAtswBuYAD65MyBLGwc3DT0SCDh7Jw8sfwIAjbGNpnUaTZmQpK2WroIIhZYuapmAgBMAsLV1c6uIO7Y5MQAhgF46FxQhOQdxDDkYawJ3IGkHQDGABaQ0bzxkUmgKcLUWErKjrni4tTSmjqIIjLlNso2IgpycjbU1HIubhhtnd29-aSwFEuxFaJXgpPSNITlEQ1MziNLVGwNORFRANIwCOSSYRXaio4SvFrvLDtLpgHp9Qj+MDEYndQIQChgGbkRZ0ZbjVYgwS3coWKxyETVQzmATIhDqcRYdHVSTwuTCKTKF7NVpEz6k76EXwBYKhIFRVmA9nA5KIITpbI2A5QkRqI7SISi4RGBHS9RyWoCSTKfEq3pjCKJTWUnX+iZcAFMI3cTkIQ7VSXKeHiZQiBG2Uyi0RYCylOqPAWmESSH2EgBmHQArnhyCQyFQDZGA9GTQgwWbs40i1JqDcjkjTqlzuVzOJatUi2lpC5mlxmPT4LFWmym2s+PpdgIO6ICpIew4lKK9AWsM8zCm0onMbISx5cARl2GY2V7soBKnhbD7hmB22JO7ducab8paAg3h8JJklAD4ci26Ink81DvrYNSpoUA7ShKNhwvkiGHLY3rKoSfp6quJExvcRg4lhUiiMoKY2qKsongc9j5NU-JyNYBFvB45ZVuQ0HGusgjxuINqOF6khYVh2Siu6zqWHYr5ic84jTk4QA */
+  /** @xstate-layout N4IgpgJg5mDOIC5QEEAeBLWA6dEA2YAxAE5xgAuA2gAwC6ioADgPazrnrMB2DIqiAWgBM1LAHYAnAFYxQgMwAWIWLnUAjADYhCgDQgAnoLlrRGuQA45Ek2olyZCgL6O9aTDnxFyxAIYA3MDwaeiQQFjYObl5+BCEJBSwlbQlrNUkNBSk9QwQBTSw1BTEHamtzeKFzKWdXDGxvf0D0LihCch9iGHIAfXD2Ti5u0h8AYwALSGDePsieUJiJcwTpaUqJISEpEzFswWUEjSqhDWoT83NTsScXEDd63wC8ZtbSWAop0JmB6ME0rGNrNo1HE1FI5Bo7LsECYNFh5BspOUNGCrhIxDVbnUsA1Hs9CMwAsQcYFuhAKGARuRJnRpqx+lF5ogNGIxFhqNQNuZiuZlFchFDjuZElJqAo5GIMmlBRoMXdsQ8mi02gqgjTPnTZj8EAolIk0eY1AaFNRzlIdVDhGjEmpDeKeXJKqdZVjiU8lahYO0qVgfAAzKnEAAUABUAJIAOQAmt0ACIAUQAMshIwBKQhy13PD5MDXfRnQ6jgxLGOLUMS2DlxAVyLA88rxTTScuLao3OXNXq57jKxqqkI5iJ50ALKRCLASLRmsrHUrmKEwuEO7RCEzlWQKCTO9y+nwAVzw5BIZCoaoH9Lmw9+QsL7MOhvt0jUAqkUkSKi5ciXUgkoucNy4zBkvAoR3LSg4MpeuRqJ+4hSBoyLFOspy6AYRiLAUFhWGk5ZpJoW7YLgBBgeeWoCFUsHwTI34iGYKQWoUsLsqORQWMoILmPh8q9s8xGavmzKwpYhZVCkhY2PRCiMdQo4WNImTKNInEdl8EFhF2F58IgNpWiu5jIoodhFPyqFQWYbLSUCwKZJIiycTu+7kLxQ6aQgiismChqLGiLKflkJnKGo4jspkxgsiyYoyn+QA */
   id: "Axis",
   initial: "idle",
   context: ({ input }) => ({
@@ -96,7 +99,7 @@ export const AxisFSM = setup({
           ],
           description: "Reset to clear any error messages."
         },
-        move_to_position: {
+        travel: {
           target: "traveling",
           actions: [
             {
@@ -111,7 +114,7 @@ export const AxisFSM = setup({
 
     traveling: {
       after: {
-        HALF_SECOND: {
+        TINY_DELAY: {
           target: "in_position"
         }
       },
@@ -135,7 +138,7 @@ export const AxisFSM = setup({
             "An overtravel has occured and placed the Axis in a fault state."
         },
 
-        move_to_position: {
+        travel: {
           target: "traveling",
           actions: [
             {
@@ -153,11 +156,11 @@ export const AxisFSM = setup({
         type: "setCurrentPositionFromTarget"
       },
       on: {
-        move_to_position: {
+        travel: {
           target: "traveling",
           actions: {
             type: "move",
-            params: ({ event }) => event.location
+            params: ({ event }) => event.to
           },
           description: "The Axis was commanded to a new position."
         }
