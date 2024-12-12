@@ -3,20 +3,8 @@ import { Callback, StateMachine, t } from "typescript-fsm";
 
 import { Debuggers } from "../../utils";
 
-/**
- * Configuration for the SpindleFSM (Finite State Machine)
- *
- * @interface SpindleFsmConfig
- * @property {boolean} throwOnFault - Set to true to have faults be thrown as errors.
- * @property {boolean} simulation - Set to true to enable simulation mode where spindle acceleration takes "time".
- * @property {object} rpm - Configuration related to the revolutions per minute (RPM) of the spindle.
- * @property {number} rpm.max - The maximum RPM value allowed.
- * @property {"fault" | "clamp"} rpm.onExceedMaxRPM - Defines the behavior when the spindle exceeds the maximum RPM:
- *    - "fault" throws an error when exceeded.
- *    - "clamp" limits the RPM to the maximum value.
- * @property {number} acceleration.default - The default acceleration value.
- * @property {number} acceleration.kFactor - A factor used to adjust the acceleration.
- */
+import type { DeepPartial } from "../../types/generics";
+
 interface SpindleFsmConfig {
   throwOnFault: boolean;
   rpm: {
@@ -56,8 +44,6 @@ enum Rotation {
 }
 
 const $d = Debuggers.Main.extend("machine:spindle");
-const $s = $d.extend("state");
-const $r = $d.extend("rpm");
 
 // @ts-expect-error ICallbacks doesn't type correctly, but it still works
 export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
@@ -73,8 +59,9 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   readonly #events = new Emittery<SpindleEventEmitter>();
 
   // Constructor
-  constructor(config?: Partial<SpindleFsmConfig>) {
+  constructor(config?: DeepPartial<SpindleFsmConfig>) {
     super(States.Idle, [], {
+      // This overrides console.error
       error: (msg: string) => void this.#events.emit("FAULT", msg)
     });
 
@@ -117,7 +104,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
       t(s.Decelerating, e.FaultOccurred,    s.Fault,        this.#onFault),
       t(s.Idle,         e.FaultOccurred,    s.Fault,        this.#onFault),
     ]);
-    $s(this.getState());
+    $d("State", this.getState());
     // end-constructor
   }
 
@@ -135,6 +122,18 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
 
   get rpms(): number {
     return this.#rpm.current;
+
+  }
+
+  get stats() {
+    return {
+      currentRPM: this.#rpm.current,
+      directon: this.direction,
+    }
+  }
+
+  get simulation() {
+    return this.#config.acceleration.simulate ;
   }
 
   set simulation(state: boolean) {
@@ -152,7 +151,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
    * Spindle Forward (CW)
    */
   async M3(targetRPM: number) {
-    $d("M3 command received");
+    $d("Command:", "M3");
     await this.#setTargetRPM(targetRPM);
     await this.dispatch(Events.Forward).catch(err => {
       if (this.#config.throwOnFault) throw err;
@@ -163,7 +162,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
    * Spindle Reverse (CCW)
    */
   async M4(targetRPM: number) {
-    $d("M4 command received");
+    $d("Command:", "M4");
     await this.#setTargetRPM(targetRPM);
     await this.dispatch(Events.Reverse).catch(err => {
       if (this.#config.throwOnFault) throw err;
@@ -174,7 +173,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
    * Spindle Stop
    */
   async M5() {
-    $d("M5 command received");
+    $d("Command:", "M5");
     return this.dispatch(Events.Stop);
   }
 
@@ -184,6 +183,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   reverse = this.M4.bind(this);
 
   async #onForward() {
+    this.#logState();
     this.#direction = Rotation.Forward;
     $d(`forward to`, this.#rpm.target);
     await this.#simulateAcceleration();
@@ -191,6 +191,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   }
 
   async #onReverse() {
+    this.#logState();
     this.#direction = Rotation.Reverse;
     $d(`reverse to`, this.#rpm.target);
     await this.#simulateAcceleration();
@@ -201,8 +202,8 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     this.#rpm.current = this.#rpm.target;
     $d(`target reached: ${this.rpms} RPMs`);
     $d(`direction:`, this.direction);
-    $s(this.getState());
-    void this.#events.emit("REACHED_TARGET_RPM", this.rpms);
+    this.#logState();
+    void this.#events.emit("AT_TARGET_RPM", this.rpms);
     // State transitions to Running
   }
 
@@ -227,10 +228,10 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
 
 
   async #setTargetRPM(targetRPM: number) {
-    $r(targetRPM, "RPM commanded");
+    $d(targetRPM, "RPM commanded");
     if (targetRPM < this.#config.rpm.max) {
       this.#rpm.target = targetRPM;
-      $r(this.#rpm.target, "target set")
+      $d(this.#rpm.target, "target set")
       return;
     }
     if (this.#config.rpm.onExceedMaxRPM === "fault") {
@@ -240,7 +241,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
       );
     } else {
       this.#rpm.target = this.#config.rpm.max;
-      $r(this.#config.rpm.max, "target clamped");
+      $d(this.#config.rpm.max, "target clamped");
     }
     void this.#events.emit("RPM_CHANGED", {
       current: this.rpms,
@@ -250,9 +251,9 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
 
   async #simulateAcceleration() {
     if (this.#config.acceleration.simulate) {
-      $r(`simulating acceleration`);
+      $d(`simulating acceleration`);
       await this.#dwell();
-      $r("target reached")
+      $d("target RPM reached")
     }
   }
 
@@ -260,7 +261,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     if (this.#config.acceleration.simulate) {
       $d(`simulating deceleration`);
       await this.#dwell();
-      $r("target reached")
+      $d("target RPM reached")
     }
   }
 
@@ -268,6 +269,10 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     return await new Promise(resolve => {
       setTimeout(resolve, this.#config.acceleration.timeout);
     });
+  }
+
+  #logState() {
+    $d(`state:`, this.getState());
   }
 }
 
@@ -283,7 +288,7 @@ type SpindleEventEmitter = {
   M4: undefined;
   M5: undefined;
   FAULT: string;
-  REACHED_TARGET_RPM: number;
+  AT_TARGET_RPM: number;
   RPM_CHANGED: {
     target: number;
     current: number;
@@ -294,7 +299,3 @@ interface ICallbacks
   extends Record<Events, Callback | NumberCallback | StringCallback> {
   [Events.FaultOccurred]: (fault: string) => void;
 }
-
-type StateHandlers = `on${keyof typeof States}`;
-
-type Dispatchers = Record<`on${keyof typeof Events}`, null>;

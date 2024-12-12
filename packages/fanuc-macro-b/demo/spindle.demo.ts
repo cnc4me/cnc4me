@@ -3,12 +3,12 @@ import { SpindleFSM } from "../src";
 const spindle = new SpindleFSM({
   rpm: {
     max: 5000,
-    onExceedMaxRPM: "clamp" // or "clamp"
+    onExceedMaxRPM: "clamp"
   }
 });
 
-spindle.on("REACHED_TARGET_RPM", () => {
-  console.log("[REACHED_TARGET_RPM] At Speed!");
+spindle.on("AT_TARGET_RPM", rpm => {
+  console.log("At Speed!", rpm);
 });
 
 spindle.on("RPM_CHANGED", ({ current, target }) => {
@@ -18,16 +18,15 @@ spindle.on("RPM_CHANGED", ({ current, target }) => {
 });
 
 spindle.on("FAULT", fault => {
-  console.log(`[FAULT] ${fault}`);
+  console.error(`[FAULT] ${fault}`);
 });
 
 void (async () => {
   spindle.simulation = false;
+
   await spindle.M3(6000);
-  console.log(spindle.rpms);
+
   setTimeout(() => {
-    void spindle.M5().then(() => {
-      console.log(spindle.rpms);
-    });
+    void spindle.M5();
   }, 2000);
 })();

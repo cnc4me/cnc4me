@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { createActor } from "xstate";
 
-import { AxisFSM } from "../src/lib/MachineTool";
+import { AxisFSM } from "../src/lib/MachineTool/Axis.xstate";
 
 async function slowly(functions: (() => Promise<void>)[], delay: number) {
   for (const func of functions) {
@@ -12,10 +12,20 @@ async function slowly(functions: (() => Promise<void>)[], delay: number) {
 }
 
 const axis = createActor(AxisFSM, {
-  input: { label: "X", limits: 100 }
+  input: { label: "X", limits: 1200 }
 });
 
-// console.dir(machine, { depth: 1 });
+axis.on("overtravel", ({ message }) => {
+  console.error(message);
+});
+
+axis.on("in_position", ({ position }) => {
+  console.log("\tin_position at", position);
+});
+
+axis.on("in_motion", ({ from, to }) => {
+  console.log("\tin_motion from", from, "to", to);
+});
 
 axis.subscribe(snapshot => {
   // console.dir(snapshot.context, { depth: 1 });
@@ -26,15 +36,10 @@ axis.subscribe(snapshot => {
 
 axis.start();
 
-void slowly(
-  [
-    async () => axis.send({ type: "travel", to: 1 }),
-    async () => axis.send({ type: "travel", to: 14.25 }),
-    async () => axis.send({ type: "travel", to: -2 }),
-    async () => axis.send({ type: "travel", to: 7.55543 }),
-    async () => axis.send({ type: "travel", to: 1.2 })
-  ],
-  2
-);
+void (async () => {
+  const moves = [1, 2, 3, 4, 5];
 
-// machine.send({ type: "reset" });
+  for (const position of moves) {
+    axis.send({ type: "travel", to: position });
+  }
+})();

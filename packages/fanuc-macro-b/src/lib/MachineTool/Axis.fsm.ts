@@ -1,210 +1,227 @@
-import { assign, emit, log, not, raise, setup } from "xstate";
+import Emittery from "emittery";
+import { Callback, StateMachine, t } from "typescript-fsm";
 
-export const AxisFSM = setup({
-  types: {} as {
-    input: {
-      label: MachineAxis;
-      limits: AxisLimitInput;
+import { Debuggers } from "../../utils";
+import { parseLimits } from "./parseLimits";
+
+import type { Debugger } from "debug";
+
+enum States {
+  Idle = "Idle",
+  Fault = "Fault",
+  Traveling = "Traveling"
+}
+
+enum Events {
+  Move = "Move",
+  Reset = "Reset",
+  MoveComplete = "MoveComplete",
+  FaultOccurred = "FaultOccurred"
+}
+
+type EmittedEvents = {
+  FAULT: string;
+  RESET: undefined;
+  MOTION_COMPLETE: number;
+  TRAVELING: Record<"to" | "from", number> & {
+    type: MotionType;
+  };
+};
+
+type StringCallback = (msg: string) => void;
+type TravelingEvent = (args: MotionType) => Promise<void>;
+type Callbacks = Callback | StringCallback | TravelingEvent;
+interface ICallbacks extends Record<Events, Callbacks> {
+  [Events.Move]: TravelingEvent;
+  [Events.FaultOccurred]: StringCallback;
+}
+
+const $d = Debuggers.Main.extend("machine:axis");
+
+export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
+  #debug: Debugger;
+  #targetPosition: number;
+  #currentPosition: number;
+  #config: {
+    label: AxisLabel;
+    limits: AxisLimits;
+    travelTimeout: number;
+    throwOnFault: boolean;
+  };
+
+  readonly #events = new Emittery<EmittedEvents>();
+
+  // Constructor
+  constructor(config: {
+    label: AxisLabel;
+    limits: AxisLimitsInput;
+    travelTimeout?: number;
+    throwOnFault?: boolean;
+  }) {
+    super(States.Idle, [], {
+      // This overrides console.error
+      error: (msg: string) => void this.#events.emit("FAULT", msg)
+    });
+    this.#targetPosition = NaN;
+    this.#currentPosition = NaN;
+    this.#config = {
+      label: config.label,
+      limits: parseLimits(config.limits),
+      travelTimeout: config?.travelTimeout ?? 250,
+      throwOnFault: config?.throwOnFault ?? false
     };
-    context: {
-      label: MachineAxis;
-      pCurrent: number;
-      pTarget: number;
-      limits: {
-        min: number;
-        max: number;
-      };
-    };
-    events:
-      | { type: "reset" }
-      | { type: "travel"; to: number }
-      | { type: "target_position_reached" }
-      | { type: "overtravel_detected" };
-    emitted:
-      | { type: "in_position"; position: number }
-      | { type: "other1" }
-      | { type: "other2" };
-  },
-  delays: {
-    TINY_DELAY: 100,
-    QUARTER_SECOND: 250,
-    HALF_SECOND: 500,
-    ONE_SECOND: 1000,
-    FIVE_SECONDS: 5000,
-    EVENTUALLY: 10_000
-  },
-  actions: {
-    track: (_, params: { response: string }) => {
-      console.log(params.response);
-      // Tracks { response: 'good' }
-    },
-    reset: assign({
-      pTarget: () => 0,
-      pCurrent: () => 0
-    }),
-    emitInPosition: emit(({ context }) => ({
-      type: "in_position" as const,
-      position: context.pCurrent
-    })),
-    targetPositionReached: raise(
-      { type: "target_position_reached" },
-      { delay: 200 }
-    ),
-    move: assign({
-      pTarget: ({ context, event }) => {
-        return event.type === "travel" ? event.to : context.pTarget;
+    this.#debug = $d.extend(this.#config.label);
+    this.#debug(`initializing`);
+    this.#debug(this.#config);
+
+    const s = States;
+    const e = Events;
+
+    /* eslint-disable prettier/prettier */
+    this.addTransitions([
+      // fromState     event         toState       callback
+      t(s.Idle,       e.Move,          s.Traveling, this.#onMove),
+      t(s.Traveling,  e.Move,          s.Traveling, this.#onMove),
+      t(s.Traveling,  e.MoveComplete,  s.Idle,      this.#onMoveComplete),
+      t(s.Idle,       e.FaultOccurred, s.Fault,     this.#onFault),
+      t(s.Traveling,  e.FaultOccurred, s.Fault,     this.#onFault),
+      t(s.Traveling,  e.Reset,         s.Idle,      this.#onReset),
+      t(s.Fault,      e.Reset,         s.Idle,      this.#onReset),
+    ]);
+    /* eslint-enable prettier/prettier */
+    this.#logState();
+    // end-constructor
+  }
+
+  get limits() {
+    return this.#config.limits;
+  }
+
+  get position() {
+    return this.#currentPosition;
+  }
+
+  on<T extends keyof EmittedEvents>(
+    event: T,
+    cb: (eventData: EmittedEvents[T]) => void
+  ) {
+    return this.#events.on(event, cb);
+  }
+
+  /**
+   * Generic state testing method
+   */
+  is(state: keyof typeof States): boolean {
+    return this.getState() === States[state];
+  }
+
+  isValidPosition(position: number) {
+    return (
+      position > this.#config.limits.min && position < this.#config.limits.max
+    );
+  }
+
+  async reset() {
+    if (this.is("Idle")) {
+      return this.#onReset();
+    } else {
+      return await this.dispatch(Events.Reset);
+    }
+  }
+
+  async moveTo(position: number, command: MotionType = "G0") {
+    return await this[command](position);
+  }
+
+  /**
+   * Rapid Move
+   */
+  async G0(position: number) {
+    this.#targetPosition = position;
+    this.#debug({ command: "G0", position });
+    return await this.dispatch(Events.Move, "G0");
+  }
+
+  /**
+   * Feed Move
+   */
+  async G1(position: number) {
+    this.#targetPosition = position;
+    this.#debug({ command: "G1", position });
+    return await this.dispatch(Events.Move, "G1");
+  }
+
+  #onReset() {
+    this.#debug(`resetting`);
+    this.#targetPosition = NaN;
+    this.#currentPosition = NaN;
+    this.#debug(`positions cleared`);
+  }
+
+  async #onMove(motionType: MotionType) {
+    this.#logState();
+    // this.#debug("Target", this.#targetPosition);
+    try {
+      void this.#events.emit("TRAVELING", {
+        type: motionType,
+        to: this.#targetPosition,
+        from: this.#currentPosition
+      });
+      await dwell(this.#config.travelTimeout);
+      await this.dispatch(Events.MoveComplete);
+    } catch (err) {
+      if (this.#config.throwOnFault) {
+        throw err;
       }
-    }),
-    // assignTargetPosition: assign({
-    //   pTarget: (_, params: { position: number }) => params.position
-    // }),
-    setTargetPosition: assign({
-      pTarget: (_, params: { position: number }) => params.position
-    }),
-    setCurrentPositionFromTarget: assign(({ context }) => ({
-      pCurrent: context.pTarget,
-      pTarget: NaN
-    }))
-  },
-  guards: {
-    willOverTravel: ({ context: { limits, pTarget } }) => {
-      const test = pTarget < limits.min || pTarget > limits.max;
-      console.log("will overtravel", pTarget, test);
-      return test;
-    },
-    isValidPosition: ({ context }, params: { position: number }) => {
-      const { limits } = context;
-      const target = params.position;
-      return target > limits.min && target < limits.max;
     }
   }
-}).createMachine({
-  /** @xstate-layout N4IgpgJg5mDOIC5QEEAeBLWA6dEA2YAxAE5xgAuA2gAwC6ioADgPazrnrMB2DIqiAWgBM1LAHYAnAFYxQgMwAWIWLnUAjADYhCgDQgAnoLlrRGuQA45Ek2olyZCgL6O9aTDnxFyxAIYA3MDwaeiQQFjYObl5+BCEJBSwlbQlrNUkNBSk9QwQBTSw1BTEHamtzeKFzKWdXDGxvf0D0LihCch9iGHIAfXD2Ti5u0h8AYwALSGDePsieUJiJcwTpaUqJISEpEzFswWUEjSqhDWoT83NTsScXEDd63wC8ZtbSWAop0JmB6ME0rGNrNo1HE1FI5Bo7LsECYNFh5BspOUNGCrhIxDVbnUsA1Hs9CMwAsQcYFuhAKGARuRJnRpqx+lF5ogNGIxFhqNQNuZiuZlFchFDjuZElJqAo5GIMmlBRoMXdsQ8mi02gqgjTPnTZj8EAolIk0eY1AaFNRzlIdVDhGjEmpDeKeXJKqdZVjiU8lahYO0qVgfAAzKnEAAUABUAJIAOQAmt0ACIAUQAMshIwBKQhy13PD5MDXfRnQ6jgxLGOLUMS2DlxAVyLA88rxTTScuLao3OXNXq57jKxqqkI5iJ50ALKRCLASLRmsrHUrmKEwuEO7RCEzlWQKCTO9y+nwAVzw5BIZCoaoH9Lmw9+QsL7MOhvt0jUAqkUkSKi5ciXUgkoucNy4zBkvAoR3LSg4MpeuRqJ+4hSBoyLFOspy6AYRiLAUFhWGk5ZpJoW7YLgBBgeeWoCFUsHwTI34iGYKQWoUsLsqORQWMoILmPh8q9s8xGavmzKwpYhZVCkhY2PRCiMdQo4WNImTKNInEdl8EFhF2F58IgNpWiu5jIoodhFPyqFQWYbLSUCwKZJIiycTu+7kLxQ6aQgiismChqLGiLKflkJnKGo4jspkxgsiyYoyn+QA */
-  id: "Axis",
-  initial: "idle",
-  context: ({ input }) => ({
-    label: input.label,
-    limits: parseLimits(input.limits),
-    pCurrent: NaN,
-    pTarget: NaN
-  }),
-  states: {
-    idle: {
-      on: {
-        reset: {
-          reenter: true,
-          actions: [
-            { type: "track", params: { response: "good" } }, //
-            { type: "reset" }
-          ],
-          description: "Reset to clear any error messages."
-        },
-        travel: {
-          target: "traveling",
-          actions: [
-            {
-              type: "move"
-            }
-          ],
-          description: "The axis is moving to its commanded location."
-        }
-      },
-      description: "The axis is not moving and is ready to receive commands."
-    },
 
-    traveling: {
-      after: {
-        TINY_DELAY: {
-          target: "in_position"
-        }
-      },
-      on: {
-        target_position_reached: {
-          target: "in_position",
-          description: "The Axis is stable at the commanded position."
-        },
+  #onMoveComplete() {
+    this.#currentPosition = this.#targetPosition;
+    this.#targetPosition = NaN;
+    this.#debug("motion complete");
+    this.#debug({ currentPosition: this.#currentPosition });
+    this.#logState();
+    void this.#events.emit("MOTION_COMPLETE", this.#currentPosition);
+  }
 
-        reset: {
-          target: "idle",
-          actions: {
-            type: "reset"
-          },
-          description: "Abort the current axis movement."
-        },
+  #onFault(message: string) {
+    this.#logState();
+    this.#debug("fault occured", message);
+    void this.#events.emit("FAULT", message);
+  }
 
-        overtravel_detected: {
-          target: "fault",
-          description:
-            "An overtravel has occured and placed the Axis in a fault state."
-        },
+  async #validateTargetPosition(position: number) {
+    if (position > this.#config.limits.max) {
+      return await this.#handleError("Target position exceeds axis limit (+)");
+    }
+    if (position < this.#config.limits.max) {
+      return await this.#handleError("Target position exceeds axis limit (-)");
+    }
+    return position;
+  }
 
-        travel: {
-          target: "traveling",
-          actions: [
-            {
-              type: "move"
-            }
-          ],
-          description: "While in motion, a new position was commanded."
-        }
-      },
-      description: "The axis is currently moving towards a target position."
-    },
-
-    in_position: {
-      entry: {
-        type: "setCurrentPositionFromTarget"
-      },
-      on: {
-        travel: {
-          target: "traveling",
-          actions: {
-            type: "move",
-            params: ({ event }) => event.to
-          },
-          description: "The Axis was commanded to a new position."
-        }
-      },
-      description: "The axis has reached the target position and is stable."
-    },
-
-    fault: {
-      on: {
-        reset: {
-          target: "idle",
-          actions: "reset",
-          description: "Reset the Axis from its fault state."
-        }
-      },
-      description: "The Axis encountered an error."
+  async #handleError(error: string) {
+    if (this.#config.throwOnFault) {
+      throw new Error(error);
+    } else {
+      await this.dispatch(Events.FaultOccurred, error);
     }
   }
-});
 
-export type MachineAxis = "X" | "Y" | "Z";
-export type AxisLimits = Record<"min" | "max", number>;
-export type AxisLimitInput = number | [negative: number, positive: number];
-export type AxisStateMachine = typeof AxisFSM;
-
-function parseLimits(limits: AxisLimitInput): AxisLimits {
-  if (Array.isArray(limits)) {
-    if (limits[1] === limits[0]) {
-      throw new Error(`(+) & (-) limits cannot be equal`);
-    }
-    if (limits[0] > limits[1]) {
-      throw new Error(`(-) limit cannot be greater than the (+) limit`);
-    }
-    if (limits[1] < limits[0]) {
-      throw new Error(`(+) limit cannot be smaller than the (-) limit`);
-    }
-    return {
-      min: limits[0],
-      max: limits[1]
-    };
-  } else {
-    return {
-      min: -1 * Math.abs(limits),
-      max: Math.abs(limits)
-    };
+  #logState() {
+    this.#debug(`State:`, this.getState());
   }
 }
+
+async function dwell(timeout: number) {
+  return await new Promise(resolve => setTimeout(resolve, timeout));
+}
+
+type AxisLabel = "X" | "Y" | "Z";
+export type MotionType = "G0" | "G1";
+export type AxisLimits = Record<"min" | "max", number>;
+export type AxisLimitsInput =
+  | number
+  | [negative: number, positive: number]
+  | AxisLimits;

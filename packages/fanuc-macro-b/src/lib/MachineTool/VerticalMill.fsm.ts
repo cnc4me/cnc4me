@@ -1,6 +1,6 @@
 import { assign, createActor, sendTo, setup } from "xstate";
 
-import { AxisFSM } from "./Axis.fsm";
+import { AxisFSM } from "./Axis.xstate";
 
 import type { ActorRefLike } from "xstate";
 

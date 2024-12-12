@@ -1,17 +1,28 @@
-import { createActor } from "xstate";
+import { CncMachine } from "../src/lib/MachineTool/CncMachine";
 
-import { VerticalMill } from "../src/lib/MachineTool";
+const machine = new CncMachine({
+  limits: { X: 1200, Y: 3000, Z: [-1200, 200] }
+});
 
-const machine = createActor(VerticalMill);
+machine.on("MOTION_COMPLETE", position => {
+  console.log(position);
+});
 
-// console.dir(machine, { depth: 1 });
+// machine.setHome("X", 20);
+// machine.setHome("X", ({ min, max }) => max - 20);
 
-// machine.subscribe(({ context }) => {
-//   console.dir(context, { depth: 1 });
-// });
+void (async () => {
+  const positions = [
+    [1, 2, 3],
+    [5, -12, 0.555],
+    [-21.21, 4.12, 2]
+  ];
 
-machine.start();
+  for (const p of positions) {
+    await machine.moveTo(p);
+  }
 
-machine.send({ type: "position_to", vector: [1, 1, 1] });
+  const state = machine.getStats();
 
-// machine.send({ type: "reset" });
+  console.log(state);
+})();
