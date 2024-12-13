@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { AxisFSM } from "../src/lib/MachineTool/Axis.fsm";
+import { AxisFSM } from "../src/lib/MachineTool/AxisFSM";
 
 const axis = new AxisFSM({
   label: "X",

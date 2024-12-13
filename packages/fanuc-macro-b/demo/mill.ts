@@ -1,4 +1,4 @@
-import { CncMachine } from "../src/lib/MachineTool/CncMachine";
+import { CncMachine } from "../src/lib/MachineTool";
 
 const machine = new CncMachine({
   limits: { X: 1200, Y: 3000, Z: [-1200, 200] }
@@ -13,13 +13,14 @@ machine.on("MOTION_COMPLETE", position => {
 
 void (async () => {
   const positions = [
-    [1, 2, 3],
-    [5, -12, 0.555],
-    [-21.21, 4.12, 2]
+    { X: 41.23 }, //
+    { Y: 1 },
+    { Y: -1 },
+    { Y: 1 }
   ];
 
   for (const p of positions) {
-    await machine.moveTo(p);
+    await machine.G0(p);
   }
 
   const state = machine.getStats();

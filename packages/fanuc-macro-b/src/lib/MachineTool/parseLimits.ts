@@ -1,4 +1,4 @@
-import type { AxisLimits, AxisLimitsInput } from "./Axis.fsm";
+import type { AxisLimits, AxisLimitsInput } from "./AxisFSM";
 
 export function parseLimits(limits: AxisLimitsInput): AxisLimits {
   if (typeof limits === "number") {

@@ -29,7 +29,7 @@
 <body>
 
   <h1>Spindle State Machine Animation</h1>
-  <canvas id="spindleCanvas" width="400" height="400"></canvas>
+  <canvas id="spindle" width="400" height="400"></canvas>
 
   <div id="controls">
     <button id="startForwardBtn">Start Forward</button>
@@ -46,7 +46,7 @@
 
     (function () {
       /** @type HTMLCanvasElement */
-      const canvas = document.getElementById('spindleCanvas');
+      const canvas = document.getElementById('spindle');
       /** @type CanvasRenderingContext2D */
       const ctx = canvas.getContext('2d');
 

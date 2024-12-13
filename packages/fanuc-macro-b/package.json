@@ -29,6 +29,7 @@
   "dependencies": {
     "@cnc4me/monaco-gcode": "workspace:*",
     "@statelyai/inspect": "^0.4.0",
+    "canvas": "^2.11.2",
     "chevrotain": "catalog:",
     "debug": "catalog:",
     "emittery": "^1.0.3",

@@ -1,3 +1,3 @@
-export { AxisFSM } from "./Axis.xstate";
-export { SpindleFSM } from "./Spindle.fsm";
-export { VerticalMill } from "./VerticalMill.fsm";
+export { AxisFSM } from "./AxisFSM";
+export { CncMachine } from "./CncMachine";
+export { SpindleFSM } from "./SpindleFSM";

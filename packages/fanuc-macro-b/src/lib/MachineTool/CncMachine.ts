@@ -6,10 +6,9 @@ import {
   type AxisLimits,
   type AxisLimitsInput,
   type MotionType
-} from "./Axis.fsm";
+} from "./AxisFSM";
 import { parseLimits } from "./parseLimits";
-import { Position } from "./Position";
-import { SpindleFSM } from "./Spindle.fsm";
+import { SpindleFSM } from "./SpindleFSM";
 
 type EmittedEvents = {
   FAULT: string;
@@ -83,7 +82,22 @@ export class CncMachine {
     this.#debug(this.#config);
   }
 
-  get position() {
+  /** Spindle Forward */
+  M3 = (rpm: number) => this.spindle.M3(rpm);
+
+  /** Spindle Reverse  */
+  M4 = (rpm: number) => this.spindle.M4(rpm);
+
+  /** Spindle Stop */
+  M5 = () => this.spindle.M5();
+
+  /** Rapid Move */
+  G0 = (vector: Vector) => this.#moveTo(vector, "G0");
+
+  /** Feed Move */
+  G1 = (vector: Vector) => this.#moveTo(vector, "G1");
+
+  getPosition() {
     return {
       X: this.axes.X.position,
       Y: this.axes.Y.position,
@@ -93,7 +107,7 @@ export class CncMachine {
 
   getStats() {
     return {
-      positions: this.position,
+      positions: this.getPosition(),
       spindle: this.spindle.stats
     };
   }
@@ -130,24 +144,19 @@ export class CncMachine {
     ]);
   }
 
-  async moveTo(
-    vector: number[] | [X?: number, Y?: number, Z?: number] | Position,
-    command: MotionType = "G0"
-  ) {
-    this.#debug({ command, vector });
+  async #moveTo(position: Position, command: MotionType) {
+    this.#debug({ command, position });
     const moves = [];
-    if (Array.isArray(vector)) {
-      const [X, Y, Z] = vector;
-      if (X) moves.push(this.axes.X.moveTo(X, command));
-      if (Y) moves.push(this.axes.Y.moveTo(Y, command));
-      if (Z) moves.push(this.axes.Z.moveTo(Z, command));
-    } else {
-      const { X, Y, Z } = vector;
-      if (X) moves.push(this.axes.X.moveTo(X, command));
-      if (Y) moves.push(this.axes.Y.moveTo(Y, command));
-      if (Z) moves.push(this.axes.Z.moveTo(Z, command));
-    }
+
+    const { X, Y, Z } = position;
+    if (X) moves.push(this.axes.X.moveTo(X, command));
+    if (Y) moves.push(this.axes.Y.moveTo(Y, command));
+    if (Z) moves.push(this.axes.Z.moveTo(Z, command));
+
     await Promise.all(moves);
-    return this.#events.emit("MOTION_COMPLETE", this.position);
+
+    return this.#events.emit("MOTION_COMPLETE", this.getPosition());
   }
 }
+
+type Position = Partial<Record<"X" | "Y" | "Z", number>>;
