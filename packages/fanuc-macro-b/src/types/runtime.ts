@@ -1,11 +1,5 @@
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";
-import type { InterpretedProgram } from "./interfaces";
-
-export interface MacroRuntimeInitOptions {
-  // autoExec: boolean;
-  preloadInput: string;
-}
 
 export interface ProgramLoadOptions {
   setActive: boolean;
@@ -13,12 +7,8 @@ export interface ProgramLoadOptions {
 
 export type MacroCombinedError = MacroLexerError | MacroParserError;
 
-export interface RuntimeOutput {
+export interface RuntimeOutput<T> {
   // errors: RuntimeErrors[];
-  result: InterpretedProgram;
+  result: T;
   timing: number;
 }
-
-export type RuntimeEvents = {
-  error: Error;
-};

@@ -1,6 +1,7 @@
+import { Subject } from "rxjs";
 import { match, Pattern } from "ts-pattern";
 
-import { MemoryConstants, RegisterMap } from "../memory";
+import { MemoryConstants, RegisterMap, type SystemVariable } from "../memory";
 import { range } from "../utils";
 
 import type {
@@ -9,12 +10,16 @@ import type {
   MacroValueArray,
   ToolOffsetArray,
   ToolOffsetDict,
-  UpdatedValue,
   WorkCoordinateArray,
   WorkCoordinateRecord
 } from "../types";
 
 const { WORK, TOOL } = MemoryConstants.OFFSET_GROUPS;
+
+export type RegisterValueChange = Record<
+  "previous" | "current" | "register",
+  number
+>;
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -30,12 +35,7 @@ export class MacroMemory {
   ];
 
   #vars: VariableDictionary = {};
-
-  /**
-   * @TODO this will be fun! implement a stack for sub-programs and loops
-   * @TODO we will also need a level counter? or can that be derived...
-   */
-  #stack: VariableDictionary[] = [];
+  #updates = new Subject<RegisterValueChange>();
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
@@ -47,10 +47,12 @@ export class MacroMemory {
     this.clearAll();
   }
 
+  subscribe = this.#updates.subscribe.bind(this.#updates);
+
   /**
    * Read a value from a register
    */
-  read(register: number): number {
+  read(register: number | SystemVariable): number {
     const value = this.#read(register);
     // debug(`[READ ] #${register}= ${value}`);
     return value;
@@ -59,23 +61,25 @@ export class MacroMemory {
   /**
    * Write  a value to a register
    */
-  write(register: number, value: number): UpdatedValue {
-    const prev = this.#read(register);
+  write(
+    register: number | SystemVariable,
+    value: number
+  ): Omit<RegisterValueChange, "register"> {
+    const previous = this.#read(register);
 
     this.#write(register, value);
 
-    // debug(`[WRITE] #${register}= ${value}`);
+    const current = this.#vars[register];
 
-    return {
-      prev,
-      curr: this.#vars[register]
-    };
+    this.#updates.next({ previous, current, register });
+
+    return { previous, current };
   }
 
   /**
-   * Clear a register value by writing `NaN`
+   * Clear a register value by writing {@link MacroMemory.ZERO}
    */
-  clear(register: number): void {
+  clear(register: number | SystemVariable): void {
     this.#write(register, MacroMemory.ZERO);
   }
 
@@ -89,7 +93,7 @@ export class MacroMemory {
   }
 
   /**
-   * Evaluate a G10 line to extract values
+   * Evaluate a G10 line to apply values
    */
   g10(g10: G10ToolOffsets | G10WorkOffsets) {
     // debug("[ G10 ]", g10);

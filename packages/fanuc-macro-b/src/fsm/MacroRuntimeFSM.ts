@@ -1,3 +1,4 @@
+import Emittery from "emittery";
 import { StateMachine, t } from "typescript-fsm";
 
 import { Debuggers } from "../utils";
@@ -11,6 +12,7 @@ export enum States {
   paused = "paused",
   running = "running"
 }
+type StateName = keyof typeof States;
 
 export enum Events {
   start = "start",
@@ -32,7 +34,7 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
   static STATES = States;
   static EVENTS = Events;
 
-  callbacks: Record<StateHandlerName, ActualCallback> = {
+  callbacks: StateHandlerMap<StateName> = {
     onStopped: () => {},
     onRunning: () => {},
     onPaused: () => {},
@@ -40,16 +42,10 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     onFinished: () => {}
   };
 
-  constructor(callbacks?: Partial<StateHandlerMap>) {
-    super(States.stopped);
+  #events = new Emittery();
 
-    if (callbacks) {
-      for (const [onEvent, callback] of Object.entries(callbacks)) {
-        const stateName = onEvent.replace(/^on/, "").toLowerCase() as StateName;
-        $f("registering", onEvent, "callback");
-        this.on(stateName, callback);
-      }
-    }
+  constructor(callbacks?: Partial<StateHandlerMap<StateName>>) {
+    super(States.stopped);
 
     const s = States;
     const e = Events;
@@ -68,20 +64,30 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     /* eslint-enable prettier/prettier */
 
     this.addTransitions(transitions);
+
+    if (callbacks) {
+      for (const onState of Object.keys(callbacks)) {
+        const event = onState as CallbackName<StateName>;
+        const callback = callbacks[event] as ActualCallback;
+        const stateName = onState.replace(/^on/, "").toLowerCase() as StateName;
+        $f("registering", onState, "callback");
+        this.on(stateName, callback);
+      }
+    }
   }
 
   getTransitions() {
     return this.transitions;
   }
 
-  trigger(event: keyof typeof Events) {
+  async trigger(event: keyof typeof Events) {
     $e(event);
-    return this.dispatch(Events[event]);
+    return await this.dispatch(Events[event]);
   }
 
-  on(state: StateName, callback: NonNullable<Callback>) {
-    const theState = state.charAt(0).toUpperCase() + state.slice(1);
-    const callbackName = `on${theState}` as StateHandlerName;
+  on<T extends StateName>(stateName: T, callback: NonNullable<Callback>) {
+    const state = stateName.charAt(0).toUpperCase() + stateName.slice(1);
+    const callbackName = `on${state}` as CallbackName<T>;
     this.callbacks[callbackName] = async () => {
       $c(callbackName);
       await callback();
@@ -90,7 +96,11 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
   }
 }
 
-type StateName = keyof typeof States;
 type ActualCallback = NonNullable<Callback>;
-type StateHandlerName = `on${Capitalize<StateName>}`;
-type StateHandlerMap = Record<StateHandlerName, NonNullable<Callback>>;
+
+type CallbackName<T extends string> = `on${Capitalize<T>}`;
+
+type StateHandlerMap<T extends string> = Record<
+  CallbackName<T>,
+  ActualCallback
+>;

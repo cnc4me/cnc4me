@@ -1,9 +1,16 @@
 import Emittery from "emittery";
 import { Callback, StateMachine, t } from "typescript-fsm";
 
-import { Debuggers } from "../../utils";
-import { parseLimits } from "./parseLimits";
+import { Debuggers } from "../utils";
 
+import type {
+  AxisFsmEvents,
+  AxisLabel,
+  AxisLimits,
+  AxisLimitsInput,
+  FsmCallback,
+  MotionType
+} from "./fsm.types";
 import type { Debugger } from "debug";
 
 enum States {
@@ -19,27 +26,23 @@ enum Events {
   FaultOccurred = "FaultOccurred"
 }
 
-type EmittedEvents = {
-  FAULT: string;
-  RESET: undefined;
-  MOTION_COMPLETE: number;
-  TRAVELING: Record<"to" | "from", number> & {
-    type: MotionType;
-  };
-};
+interface AxisFsmConfig {
+  limits: AxisLimitsInput;
+  travelTimeout?: number;
+  throwOnFault?: boolean;
+}
 
-type StringCallback = (msg: string) => void;
-type TravelingEvent = (args: MotionType) => Promise<void>;
-type Callbacks = Callback | StringCallback | TravelingEvent;
-interface ICallbacks extends Record<Events, Callbacks> {
-  [Events.Move]: TravelingEvent;
-  [Events.FaultOccurred]: StringCallback;
+interface ICallbacks extends Record<Events, FsmCallback<MotionType>> {
+  [Events.Reset]: Callback;
+  [Events.MoveComplete]: Callback;
+  [Events.FaultOccurred]: (message: string) => void;
+  [Events.Move]: (command: MotionType) => Promise<void>;
 }
 
 const $d = Debuggers.Main.extend("machine:axis");
 
+// @ts-expect-error The callbacks work but TS has some issue...
 export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
-  #debug: Debugger;
   #targetPosition: number;
   #currentPosition: number;
   #config: {
@@ -49,15 +52,11 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     throwOnFault: boolean;
   };
 
-  readonly #events = new Emittery<EmittedEvents>();
+  readonly #debug: Debugger;
+  readonly #events = new Emittery<AxisFsmEvents>();
 
   // Constructor
-  constructor(config: {
-    label: AxisLabel;
-    limits: AxisLimitsInput;
-    travelTimeout?: number;
-    throwOnFault?: boolean;
-  }) {
+  constructor(label: AxisLabel, config: AxisFsmConfig) {
     super(States.Idle, [], {
       // This overrides console.error
       error: (msg: string) => void this.#events.emit("FAULT", msg)
@@ -65,7 +64,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     this.#targetPosition = NaN;
     this.#currentPosition = NaN;
     this.#config = {
-      label: config.label,
+      label,
       limits: parseLimits(config.limits),
       travelTimeout: config?.travelTimeout ?? 250,
       throwOnFault: config?.throwOnFault ?? false
@@ -80,8 +79,8 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     /* eslint-disable prettier/prettier */
     this.addTransitions([
       // fromState     event         toState       callback
-      t(s.Idle,       e.Move,          s.Traveling, this.#onMove),
-      t(s.Traveling,  e.Move,          s.Traveling, this.#onMove),
+      t(s.Idle,       e.Move,          s.Traveling, this.#onTraveling),
+      t(s.Traveling,  e.Move,          s.Traveling, this.#onTraveling),
       t(s.Traveling,  e.MoveComplete,  s.Idle,      this.#onMoveComplete),
       t(s.Idle,       e.FaultOccurred, s.Fault,     this.#onFault),
       t(s.Traveling,  e.FaultOccurred, s.Fault,     this.#onFault),
@@ -101,9 +100,9 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     return this.#currentPosition;
   }
 
-  on<T extends keyof EmittedEvents>(
+  on<T extends keyof AxisFsmEvents>(
     event: T,
-    cb: (eventData: EmittedEvents[T]) => void
+    cb: (eventData: AxisFsmEvents[T]) => void
   ) {
     return this.#events.on(event, cb);
   }
@@ -158,7 +157,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     this.#debug(`positions cleared`);
   }
 
-  async #onMove(motionType: MotionType) {
+  async #onTraveling(motionType: MotionType) {
     this.#logState();
     // this.#debug("Target", this.#targetPosition);
     try {
@@ -214,14 +213,35 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
   }
 }
 
+//
+// Helper Functions
+//
 async function dwell(timeout: number) {
   return await new Promise(resolve => setTimeout(resolve, timeout));
 }
 
-type AxisLabel = "X" | "Y" | "Z";
-export type MotionType = "G0" | "G1";
-export type AxisLimits = Record<"min" | "max", number>;
-export type AxisLimitsInput =
-  | number
-  | [negative: number, positive: number]
-  | AxisLimits;
+function parseLimits(limits: AxisLimitsInput): AxisLimits {
+  if (typeof limits === "number") {
+    return { min: -Math.abs(limits), max: Math.abs(limits) };
+  }
+
+  if (Array.isArray(limits)) {
+    const [min, max] = limits;
+    if (min === max) {
+      throw new Error(`(+) & (-) limits cannot be equal`);
+    }
+    if (min > max) {
+      throw new Error(`(-) limit cannot be greater than the (+) limit`);
+    }
+    return { min, max };
+  }
+
+  const { min, max } = limits;
+  if (min === max) {
+    throw new Error(`(+) & (-) limits cannot be equal`);
+  }
+  if (min > max) {
+    throw new Error(`(-) limit cannot be greater than the (+) limit`);
+  }
+  return limits;
+}

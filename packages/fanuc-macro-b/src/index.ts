@@ -6,5 +6,6 @@ import * as Utils from "./utils";
 export * from "./FanucMacroB";
 export * from "./lib";
 export * from "./memory";
+export * from "./fsm";
 export * from "./types";
 export { CONFIG, Errors, T, Utils };

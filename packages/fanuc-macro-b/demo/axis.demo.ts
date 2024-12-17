@@ -1,8 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
-import { AxisFSM } from "../src/lib/MachineTool/AxisFSM";
+import { AxisFSM } from "../src";
 
-const axis = new AxisFSM({
-  label: "X",
+const axis = new AxisFSM("X", {
   limits: 1200,
   travelTimeout: 0
 });

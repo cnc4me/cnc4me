@@ -1,3 +1,4 @@
+import type { AxisLabel, MotionType } from "../fsm/fsm.types";
 import type { AddressedValue } from "../lib";
 import type { IToken } from "chevrotain";
 
@@ -11,16 +12,12 @@ export type IProgramNumberLine = {
   title?: string;
 };
 
-export interface InterpretedLines {
-  result: ParsedLineData[];
+export interface MachineCommand {
+  motion?: MotionType;
+  position?: Partial<Record<AxisLabel, number>>;
 }
 
-// export interface VariableRegister {
-//   register: number;
-//   value: number;
-// }
-
-export interface ParsedLineData {
+export interface IParsedLineData {
   /**
    * Parsed `N` line number (this is not the literal line, but explicit Nnnnn )
    */

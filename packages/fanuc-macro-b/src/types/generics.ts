@@ -11,6 +11,10 @@ export interface ErrorProducer<E> {
   getErrors(): E[];
 }
 
+export type PrefixObjectKeys<Prefix extends string, T> = {
+  [K in keyof T as `${Prefix}:${string & K}`]: T[K];
+};
+
 export type DeepPartial<T> = T extends object
   ? {
       [P in keyof T]?: DeepPartial<T[P]>;

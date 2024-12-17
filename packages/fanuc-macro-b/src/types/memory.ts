@@ -9,15 +9,6 @@ export interface WorkCoordinateRecord {
 
 export type WorkCoordinateArray = [X: number, Y: number, Z: number, B: number];
 
-export interface UpdatedValue {
-  prev: number;
-  curr: number;
-}
-
-export interface WatcherValuePayload extends UpdatedValue {
-  register: number;
-}
-
 export type ToolOffsetArray = [
   toolNumber: number,
   lengthGeom: number,

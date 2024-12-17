@@ -1,4 +1,4 @@
-import { Events, States } from "../FanucMacroB/MacroRuntimeState";
+import { Events, States } from "../FanucMacroB/Runtime/MacroRuntimeFSM";
 
 import type { Callback, ITransition } from "typescript-fsm";
 

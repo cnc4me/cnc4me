@@ -1,21 +1,9 @@
 import Emittery from "emittery";
 import { Callback, StateMachine, t } from "typescript-fsm";
 
-import { Debuggers } from "../../utils";
+import { Debuggers } from "../utils";
 
-import type { DeepPartial } from "../../types/generics";
-
-interface SpindleFsmConfig {
-  throwOnFault: boolean;
-  rpm: {
-    max: number;
-    onExceedMaxRPM: "fault" | "clamp";
-  };
-  acceleration: {
-    simulate: boolean;
-    timeout: number;
-  };
-}
+import type { DeepPartial } from "../types/generics";
 
 enum States {
   Idle = "Idle",
@@ -41,6 +29,23 @@ enum Rotation {
   Forward = 1,
   Stopped = 0,
   Reverse = -1
+}
+
+export interface SpindleFsmConfig {
+  throwOnFault: boolean;
+  rpm: {
+    max: number;
+    onExceedMaxRPM: "fault" | "clamp";
+  };
+  acceleration: {
+    simulate: boolean;
+    timeout: number;
+  };
+}
+
+interface ICallbacks
+  extends Record<Events, Callback | NumberCallback | StringCallback> {
+  [Events.FaultOccurred]: (fault: string) => void;
 }
 
 const $d = Debuggers.Main.extend("machine:spindle");
@@ -294,8 +299,3 @@ type SpindleEventEmitter = {
     current: number;
   };
 };
-
-interface ICallbacks
-  extends Record<Events, Callback | NumberCallback | StringCallback> {
-  [Events.FaultOccurred]: (fault: string) => void;
-}

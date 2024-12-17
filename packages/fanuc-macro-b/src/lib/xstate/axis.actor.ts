@@ -1,7 +1,7 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { createActor } from "xstate";
 
-import { AxisFSM } from "../src/lib/MachineTool/xstate/Axis.xstate";
+import { AxisFSM } from "./Axis.xstate";
 
 async function slowly(functions: (() => Promise<void>)[], delay: number) {
   for (const func of functions) {

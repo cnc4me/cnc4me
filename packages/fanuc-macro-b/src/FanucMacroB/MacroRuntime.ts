@@ -1,5 +1,5 @@
 import { IToken } from "chevrotain";
-import mitt, { type Emitter } from "mitt";
+import Emittery from "emittery";
 
 import { LexingError } from "../errors/lexer";
 import { ParsingError } from "../errors/parser";
@@ -8,47 +8,76 @@ import {
   NoActiveProgram,
   ProgramNumberNotFound
 } from "../errors/runtime";
+import { type CncMachine, MacroRuntimeFSM } from "../fsm";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
+import { SystemVariable } from "../memory";
 import { Debuggers } from "../utils";
 import { FanucMacroB } from "./FanucMacroB";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
-import { MacroRuntimeFSM } from "./MacroRuntimeState";
 
 import type { NcProgram } from "../lib/NcProgram";
 import type {
+  CST,
   ErrorProducer,
+  IParsedLineData,
   MacroCombinedError,
-  MacroRuntimeInitOptions,
-  ParsedLineData,
-  ProgramLoadOptions,
-  RuntimeEvents
+  PrefixObjectKeys,
+  ProgramLoadOptions
 } from "../types";
-import type { CST } from "../types/CST";
 
-export * from "./MacroRuntimeState";
+export interface MacroRuntimeConfig {
+  machine?: CncMachine;
+}
 
-const $d = Debuggers.Runtime;
+type _CncMachineEvents = PrefixObjectKeys<"MACHINE", typeof CncMachine.EVENTS>;
+type _InterpreterEvents = PrefixObjectKeys<
+  "INTERPRETER",
+  typeof MacroInterpreter.EVENTS
+>;
+type RuntimeEvents = {
+  ERROR: Error;
+};
 
 /*
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
+  static EVENTS: RuntimeEvents & _CncMachineEvents & _InterpreterEvents;
+
   #fmb: FanucMacroB;
-  #state: MacroRuntimeFSM;
-  #events: Emitter<RuntimeEvents>;
+  #state = new MacroRuntimeFSM();
+  #events = new Emittery<typeof MacroRuntime.EVENTS>();
 
   #programs: Record<number, string> = {};
-  #activeProgram: number | null = null;
 
-  constructor(opts?: Partial<MacroRuntimeInitOptions>) {
-    // debug("initializing");
+  #machine!: CncMachine;
+  #debug = Debuggers.Runtime;
+
+  constructor(config?: Partial<MacroRuntimeConfig>) {
+    this.#debug("initializing");
     this.#fmb = new FanucMacroB();
-    this.#state = new MacroRuntimeFSM();
-    this.#events = mitt<RuntimeEvents>();
+
+    if (config?.machine) {
+      this.#debug("simulating with machine");
+      this.#machine = config.machine;
+      this.Interpreter.on("LINE", line => {
+        this.#machine.processLineData(line);
+      });
+      this.#machine.onAny((event, data) => {
+        void this.#events.emit(`MACHINE:${event}`, data);
+      });
+
+      // this.Interpreter.on("LINE", line => {
+      //   void this.#machine.pushLine(line);
+      // });
+    }
+    this.Interpreter.onAny((event, data) => {
+      void this.#events.emit(`INTERPRETER:${event}`, data);
+    });
   }
 
   get Lexer(): MacroLexer {
@@ -67,13 +96,15 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     return this.#fmb.memory;
   }
 
-  get activeProgram() {
-    return this.#activeProgram;
+  get mainProgram() {
+    return this.Memory.read(SystemVariable._MAINO);
   }
 
   get hasErrors() {
     return this.Lexer.hasErrors || this.Parser.hasErrors;
   }
+
+  on = this.#events.on.bind(this.#events);
 
   getErrors() {
     return [
@@ -101,47 +132,24 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   }
 
   /**
-   * Return the currently active program.
-   */
-  getActiveProgram(): string {
-    const prgNum = this.getActiveProgramNumber();
-    this.#throwIfProgramNotLoaded(prgNum);
-    return this.getProgram(this.#activeProgram as number);
-  }
-
-  /**
-   * Get the currently active program number from the runtime.
-   *
-   * Returns the program number if exists, otherwise NaN to indicate error
-   */
-  getActiveProgramNumber(): number {
-    if (typeof this.#activeProgram !== "number") {
-      throw new NoActiveProgram();
-    }
-    return this.#activeProgram;
-  }
-
-  /**
    * Main entry point to the runtime.
    */
-  run(lineHandler?: (line: ParsedLineData) => void): NcProgram {
-    $d("starting run");
+  run(lineCallback?: (line: IParsedLineData) => void): NcProgram {
+    // if (typeof lineCallback === "function") {
+    //   this.#debug("lineCallback registered");
+    //   this.Interpreter.on("LINE", line => {
+    //     lineCallback(line);
+    //   });
+    // }
+    this.#debug("starting run");
     this.#tokenizeActiveProgram();
-    $d("lexing complete");
+    this.#debug("lexing complete");
     const programCst = this.Parser.Program() as unknown as CST.ProgramCstNode;
-    $d("parsing complete");
+    this.#debug("parsing complete");
     if (this.Parser.errors.length > 0) {
       this.#error(this.Parser.errors[0]);
     }
     const result = this.Interpreter.Program(programCst.children);
-    $d("interpreting complete");
-    if (typeof lineHandler === "function" && result.lineCount > 0) {
-      const lines = result.getLines();
-      $d("running handler over", lines.length, "lines");
-      for (const line of result.getLines()) {
-        lineHandler(line);
-      }
-    }
     return result;
   }
 
@@ -151,7 +159,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * This method can create a program if given a string
    */
   loadProgram(input: string, options?: ProgramLoadOptions): void {
-    const prgNum = new ProgramNumber({
+    ProgramNumber.create({
       onFail: err => this.#error(err),
       onMatch: programNumber => {
         this.#programs[programNumber] = input;
@@ -161,8 +169,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
           // this.#tokenizeActiveProgram();
         }
       }
-    });
-    prgNum.match(input);
+    }).match(input);
   }
 
   /**
@@ -188,15 +195,35 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   setActiveProgram(programNumber: number): boolean {
     // debug(`Setting program #${programNumber} active`);
     this.#throwIfProgramNotLoaded(programNumber);
-    this.#activeProgram = programNumber;
+    this.Memory.write(SystemVariable._MAINO, programNumber);
     return true;
   }
+
+  /**
+   * Return the currently active program.
+   */
+  getActiveProgram(): string {
+    this.#throwIfProgramNotLoaded(this.mainProgram);
+    return this.getProgram(this.mainProgram);
+  }
+
+  /**
+   * Get the currently active program number from the runtime.
+   *
+   * Returns the program number if exists, otherwise NaN to indicate error
+   */
+  // getActiveProgramNumber(): number {
+  //   if (typeof this.mainProgram !== "number") {
+  //     throw new NoActiveProgram();
+  //   }
+  //   return this.#activeProgram;
+  // }
 
   /**
    * Register a function to handle errors that occur in the runtime.
    */
   onError(handler: (eventData: MacroCombinedError) => void) {
-    return this.#events.on("error", handler);
+    return this.#events.on("ERROR", handler);
   }
 
   /**
@@ -215,6 +242,13 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Return a program by number if loaded in memory.
    */
   getProgram(programNumber: number | string): string {
+    if (
+      typeof programNumber !== "string" &&
+      typeof programNumber !== "number"
+    ) {
+      throw new InvalidProgramNumber(programNumber);
+    }
+
     if (typeof programNumber === "number") {
       this.#throwIfProgramNotLoaded(programNumber);
       return this.#programs[programNumber];
@@ -234,8 +268,8 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    */
   reset(): void {
     this.#programs = {};
-    this.#activeProgram = NaN;
     this.Parser.reset();
+    this.Memory.clear(SystemVariable._MAINO);
     this.Interpreter.getMemory().clearAll();
   }
 
@@ -244,7 +278,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    */
   #error<T extends Error>(err: T | string) {
     const error = typeof err === "string" ? new Error(err) : err;
-    this.#events.emit("error", error);
+    void this.#events.emit("ERROR", error);
   }
 
   /**

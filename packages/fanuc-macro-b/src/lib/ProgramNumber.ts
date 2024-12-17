@@ -1,10 +1,9 @@
 export class ProgramNumber {
-  constructor(
-    private matchers: {
-      onFail: (message: string) => void;
-      onMatch: (prgNum: number) => void;
-    }
-  ) {
+  static create(matchers: Matchers) {
+    return new ProgramNumber(matchers);
+  }
+
+  constructor(private matchers: Matchers) {
     // Setup the matcher with handlers
   }
 
@@ -22,3 +21,8 @@ export class ProgramNumber {
     }
   }
 }
+
+type Matchers = {
+  onFail: (message: string) => void;
+  onMatch: (prgNum: number) => void;
+};

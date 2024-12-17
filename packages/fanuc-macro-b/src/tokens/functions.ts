@@ -1,5 +1,5 @@
-import { createToken } from "./token.utils";
 import { Keyword } from "./token.categories";
+import { createToken } from "./token.utils";
 
 export const FANUC_MACRO_B_FNS = [
   "ABS",

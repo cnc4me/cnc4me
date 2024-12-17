@@ -6,7 +6,7 @@ export * from "./bitwise";
 export * from "./boolean";
 export * from "./brackets";
 export * from "./control-flow";
-export { BuiltinFunction } from "./functions";
+export * from "./functions";
 export * from "./numbers";
 export * from "./operators";
 export * from "./skipped";

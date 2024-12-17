@@ -11,7 +11,7 @@ export class AddressedValue {
     return new AddressedValue(ctx);
   }
 
-  static parseForValue(input: string): number {
+  static valueOf(input: string): number {
     return parseNumber(stripFirstChar(input));
   }
 

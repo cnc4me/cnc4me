@@ -1,5 +1,5 @@
 import { tokenMatcher } from "chevrotain";
-import mitt from "mitt";
+import Emittery from "emittery";
 
 import { INTERPRETER } from "../config";
 import {
@@ -11,12 +11,11 @@ import {
 import { NcProgram } from "../lib/NcProgram";
 import { Modulus, Plus, Product } from "../tokens";
 import {
+  CST,
+  type IParsedLineData,
   type IProgramNumberLine,
   MacroBuiltinFunctionNames,
-  ParsedLineData,
-  ValidG10OffsetGroups,
-  // VariableRegister,
-  WatcherValuePayload
+  ValidG10OffsetGroups
 } from "../types";
 import {
   getImage,
@@ -31,20 +30,6 @@ import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { STDLIB } from "./StandardLibrary";
 
-import type { CST } from "../types/CST";
-import type { Emitter } from "mitt";
-
-type InterpreterEvents = {
-  M0: undefined;
-  M1: undefined;
-  REGISTER_VALUE_CHANGE: WatcherValuePayload;
-};
-
-type VisitorReturnType<T extends Exclude<keyof MacroInterpreter, "events">> =
-  ReturnType<MacroInterpreter[T]>;
-
-const $d = Debuggers.Interpreter;
-
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
 });
@@ -53,18 +38,28 @@ const BaseCstVisitor = MacroParser.getBaseCstVisitor({
  * Macro Interpreter
  */
 export class MacroInterpreter extends BaseCstVisitor {
-  public events: Emitter<InterpreterEvents> = mitt<InterpreterEvents>();
+  static EVENTS: {
+    LINE: IParsedLineData;
+  };
+
+  #lines: IParsedLineData[] = [];
 
   #memory: MacroMemory;
   #insights: InsightCollection;
+  #debug = Debuggers.Interpreter;
+  #events = new Emittery<typeof MacroInterpreter.EVENTS>();
 
   constructor() {
     super();
+    this.#debug("initializing");
     this.#memory = new MacroMemory();
     this.#insights = new InsightCollection();
-    $d("validating");
+    this.#debug("validating");
     this.validateVisitor();
   }
+
+  on = this.#events.on.bind(this.#events);
+  onAny = this.#events.onAny.bind(this.#events);
 
   getMemory() {
     return this.#memory;
@@ -103,24 +98,22 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Iterate over the {@link LineCstChildren} to extract the contents
    */
-  Lines(ctx: CST.LinesCstChildren): ParsedLineData[] {
-    const _lines = [];
-
+  Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
     if (ctx?.Line) {
       for (const line of ctx.Line) {
         const visited = this.Line(line.children);
-        _lines.push(visited);
+        this.#lines.push(visited);
+        void this.#events.emit("LINE", visited);
       }
     }
-
-    return _lines;
+    return this.#lines;
   }
 
   /**
    * Get the complete contents of a line of G code
    */
-  Line(ctx: CST.LineCstChildren): ParsedLineData {
-    const parsed: ParsedLineData = {
+  Line(ctx: CST.LineCstChildren): IParsedLineData {
+    const parsed: IParsedLineData = {
       N: NaN,
       gCodes: [],
       mCodes: [],
@@ -133,8 +126,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
-      // debug(rawLineNumber);
-      parsed.N = AddressedValue.parseForValue(rawLineNumber);
+      parsed.N = AddressedValue.valueOf(rawLineNumber);
     }
 
     if (ctx?.G_Code) {
@@ -178,8 +170,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     if ("G10" in parsed.gCodeMap) {
       const { addressMap } = parsed;
 
-      // this.Insights["G10"].collect(ctx.);
-      // const g10 = new G10Line(values);
       this.#memory.g10({
         L: addressMap["L"] as ValidG10OffsetGroups,
         P: addressMap["P"],
@@ -190,7 +180,7 @@ export class MacroInterpreter extends BaseCstVisitor {
         B: addressMap["B"]
       });
     }
-
+    void this.#events.emit("LINE", parsed);
     return parsed;
   }
 
@@ -257,7 +247,6 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Update a macro variable regsiter with a value
    */
   VariableAssignment(ctx: CST.VariableAssignmentCstChildren) {
-    // log.debug("Assigning Variable");
     let valueToAssign: number = NaN;
     const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
 
@@ -265,15 +254,9 @@ export class MacroInterpreter extends BaseCstVisitor {
       valueToAssign = this.Expression(ctx.Expression[0].children);
     }
 
-    const currentValue = this.#memory.read(macroVar.register);
+    // const currentValue = this.#memory.read(macroVar.register);
 
     this.#memory.write(macroVar.register, valueToAssign);
-
-    this.events.emit("REGISTER_VALUE_CHANGE", {
-      register: macroVar.register,
-      prev: currentValue,
-      curr: valueToAssign
-    });
   }
 
   /**
@@ -399,3 +382,14 @@ export class MacroInterpreter extends BaseCstVisitor {
     return result;
   }
 }
+
+type InterpreterPropsToIgnore = "events" | "lines";
+
+type InterpreterMethodsToMap = Exclude<
+  keyof MacroInterpreter,
+  InterpreterPropsToIgnore
+>;
+
+type VisitorReturnType<T extends InterpreterMethodsToMap> = ReturnType<
+  MacroInterpreter[T]
+>;
