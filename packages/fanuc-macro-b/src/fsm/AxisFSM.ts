@@ -100,6 +100,10 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     return this.#currentPosition;
   }
 
+  setLimits(limits: AxisLimitsInput) {
+    this.#config.limits = parseLimits(limits);
+  }
+
   on<T extends keyof AxisFsmEvents>(
     event: T,
     cb: (eventData: AxisFsmEvents[T]) => void
@@ -148,6 +152,15 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     this.#targetPosition = position;
     this.#debug({ command: "G1", position });
     return await this.dispatch(Events.Move, "G1");
+  }
+
+  setConfig(opts: Partial<AxisFsmConfig>) {
+    const _config = this.#config;
+    if (opts?.limits) {
+      _config.limits = parseLimits(opts.limits);
+    }
+    this.#debug("config updated %O", _config);
+    this.#config = _config;
   }
 
   #onReset() {

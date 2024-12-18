@@ -1,7 +1,13 @@
-import type { ParsedLineData } from "../types";
+import type { IParsedLineData } from "../types";
+
+export type NcProgramCreateConfig = {
+  id: number;
+  title?: string;
+  lines: IParsedLineData[];
+};
 
 export class NcProgram {
-  #lines: ParsedLineData[];
+  #lines: IParsedLineData[];
 
   static create(init: NcProgramCreateConfig): NcProgram {
     const { id, title, lines } = init;
@@ -21,17 +27,11 @@ export class NcProgram {
     return this.#lines.length;
   }
 
-  getLines(): ParsedLineData[] {
+  getLines(): IParsedLineData[] {
     return this.#lines;
   }
 
-  setLines(lines: ParsedLineData[]) {
+  setLines(lines: IParsedLineData[]) {
     this.#lines.push(...lines);
   }
 }
-
-export type NcProgramCreateConfig = {
-  id: number;
-  title?: string;
-  lines: ParsedLineData[];
-};

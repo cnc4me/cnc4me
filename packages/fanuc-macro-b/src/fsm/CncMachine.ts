@@ -92,8 +92,8 @@ export class CncMachine {
   /**
    * Handle lines from the interpreter to simulate the machine
    */
-  processLineData(line: IParsedLineData) {
-    // this.#debug("got a line", line);
+  queueLine(line: IParsedLineData) {
+    this.#debug("queueing line");
     if (line.gCodeMap["G0"]) {
       this.activeMotionType = "G0";
     }
@@ -186,13 +186,18 @@ export class CncMachine {
   }
 
   async #moveTo(position: Position, command: MotionType) {
-    this.#debug(command);
-    const moves = [];
+    this.#debug(
+      command,
+      Object.entries(position)
+        .map(([a, p]) => `${a}${p}`)
+        .join(" ")
+    );
+    const moves: Promise<void>[] = [];
 
     const { X, Y, Z } = position;
-    if (X) moves.push(await this.axes.X.moveTo(X, command));
-    if (Y) moves.push(await this.axes.Y.moveTo(Y, command));
-    if (Z) moves.push(await this.axes.Z.moveTo(Z, command));
+    if (X) moves.push(this.axes.X.moveTo(X, command));
+    if (Y) moves.push(this.axes.Y.moveTo(Y, command));
+    if (Z) moves.push(this.axes.Z.moveTo(Z, command));
 
     await Promise.all(moves);
 

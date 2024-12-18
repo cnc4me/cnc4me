@@ -42,7 +42,7 @@ type RuntimeEvents = {
   ERROR: Error;
 };
 
-/*
+/**
  * MacroRuntime Class to hold multiple programs in memory
  */
 export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
@@ -64,16 +64,12 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     if (config?.machine) {
       this.#debug("simulating with machine");
       this.#machine = config.machine;
-      this.Interpreter.on("LINE", line => {
-        this.#machine.processLineData(line);
-      });
+      // this.Interpreter.on("LINE", line => {
+      //   this.#machine.queueLine(line);
+      // });
       this.#machine.onAny((event, data) => {
         void this.#events.emit(`MACHINE:${event}`, data);
       });
-
-      // this.Interpreter.on("LINE", line => {
-      //   void this.#machine.pushLine(line);
-      // });
     }
     this.Interpreter.onAny((event, data) => {
       void this.#events.emit(`INTERPRETER:${event}`, data);
@@ -94,6 +90,10 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   get Memory(): MacroMemory {
     return this.#fmb.memory;
+  }
+
+  get Machine(): CncMachine {
+    return this.#machine;
   }
 
   get mainProgram() {
@@ -135,12 +135,6 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Main entry point to the runtime.
    */
   run(lineCallback?: (line: IParsedLineData) => void): NcProgram {
-    // if (typeof lineCallback === "function") {
-    //   this.#debug("lineCallback registered");
-    //   this.Interpreter.on("LINE", line => {
-    //     lineCallback(line);
-    //   });
-    // }
     this.#debug("starting run");
     this.#tokenizeActiveProgram();
     this.#debug("lexing complete");
@@ -150,6 +144,12 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       this.#error(this.Parser.errors[0]);
     }
     const result = this.Interpreter.Program(programCst.children);
+    for (const line of result.getLines()) {
+      this.#machine.queueLine(line);
+      if (typeof lineCallback === "function") {
+        lineCallback(line);
+      }
+    }
     return result;
   }
 
