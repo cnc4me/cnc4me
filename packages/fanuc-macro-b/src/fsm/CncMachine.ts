@@ -89,42 +89,6 @@ export class CncMachine {
   on = this.#events.on.bind(this.#events);
   onAny = this.#events.onAny.bind(this.#events);
 
-  /**
-   * Handle lines from the interpreter to simulate the machine
-   */
-  queueLine(line: IParsedLineData) {
-    this.#debug("queueing line");
-    if (line.gCodeMap["G0"]) {
-      this.activeMotionType = "G0";
-    }
-    if (line.gCodeMap["G1"]) {
-      this.activeMotionType = "G1";
-    }
-
-    let hasPosition = false;
-    const position: Position = {};
-    for (const addr of line.addresses) {
-      if (addr.prefix === "X") {
-        hasPosition = true;
-        position.X = addr.value;
-      }
-      if (addr.prefix === "Y") {
-        hasPosition = true;
-        position.Y = addr.value;
-      }
-      if (addr.prefix === "Z") {
-        hasPosition = true;
-        position.Z = addr.value;
-      }
-    }
-
-    if (hasPosition) {
-      void this.#commands.add(() =>
-        this.#moveTo(position, this.activeMotionType)
-      );
-    }
-  }
-
   /** Spindle Forward */
   M3 = (rpm: number) => this.spindle.M3(rpm);
 
@@ -185,22 +149,61 @@ export class CncMachine {
     ]);
   }
 
-  async #moveTo(position: Position, command: MotionType) {
-    this.#debug(
-      command,
-      Object.entries(position)
-        .map(([a, p]) => `${a}${p}`)
-        .join(" ")
-    );
+  /**
+   * Handle lines from the interpreter to simulate the machine
+   *
+   * @TODO: I don't think this is the right way to have the G0/G1 be "modal" but it works?
+   */
+  queueLine(line: IParsedLineData) {
+    let motionType = this.activeMotionType;
+
+    if (line.gCodeMap["G0"]) {
+      this.activeMotionType = motionType = "G0";
+    }
+    if (line.gCodeMap["G1"]) {
+      this.activeMotionType = motionType = "G1";
+    }
+
+    let hasPosition = false;
+    const position: Position = {};
+    for (const addr of line.addresses) {
+      if (addr.prefix === "X") {
+        hasPosition = true;
+        position.X = addr.value;
+      }
+      if (addr.prefix === "Y") {
+        hasPosition = true;
+        position.Y = addr.value;
+      }
+      if (addr.prefix === "Z") {
+        hasPosition = true;
+        position.Z = addr.value;
+      }
+    }
+
+    if (hasPosition) {
+      this.#debug("queueing:", motionType, _format(position));
+      void this.#commands.add(() => this.#moveTo(position, motionType));
+    }
+  }
+
+  async #moveTo(position: Position, motionType: MotionType) {
+    this.#debug("simulating:", motionType, _format(position));
     const moves: Promise<void>[] = [];
 
     const { X, Y, Z } = position;
-    if (X) moves.push(this.axes.X.moveTo(X, command));
-    if (Y) moves.push(this.axes.Y.moveTo(Y, command));
-    if (Z) moves.push(this.axes.Z.moveTo(Z, command));
+    if (X) moves.push(this.axes.X.moveTo(X, motionType));
+    if (Y) moves.push(this.axes.Y.moveTo(Y, motionType));
+    if (Z) moves.push(this.axes.Z.moveTo(Z, motionType));
 
     await Promise.all(moves);
 
     void this.#events.emit("MOTION_COMPLETE", this.getPosition());
   }
+}
+
+function _format(position: Position) {
+  return Object.entries(position)
+    .map(([a, p]) => `${a}${p}`)
+    .join(" ");
 }
