@@ -1,18 +1,18 @@
-import { extractOffsets, range } from "../utils";
+import { range } from "../utils/common";
+import { Debuggers } from "../utils/debug";
+import { extractOffsets } from "../utils/extractOffsets";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./MacroParser";
 
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";
-import type { ErrorProducer, MacroValueArray, ParsedLineData } from "../types";
+import type { ErrorProducer, IParsedLineData, MacroValueArray } from "../types";
 import type { IToken } from "chevrotain";
 
 export class FanucMacroB
   implements ErrorProducer<MacroLexerError | MacroParserError>
 {
-  #tokens: IToken[];
-
   lexer: MacroLexer;
   parser: MacroParser;
   interpreter: MacroInterpreter;
@@ -21,11 +21,12 @@ export class FanucMacroB
     debug: false
   };
 
+  #debug = Debuggers.Main;
+
   /**
    * @TODO fix this flag here, move it global?
    */
   constructor(options?: Partial<{ debug: boolean }>) {
-    this.#tokens = [];
     this.lexer = new MacroLexer();
     this.parser = new MacroParser();
     this.interpreter = new MacroInterpreter();
@@ -35,7 +36,7 @@ export class FanucMacroB
   }
 
   get memory() {
-    return this.interpreter.getMemory();
+    return this.interpreter.memory;
   }
 
   /**
@@ -46,8 +47,21 @@ export class FanucMacroB
     return this.lexer.hasErrors || this.parser.hasErrors;
   }
 
+  /**
+   * Clear internal token list, reset the Lexer and Parser, and clear the Interpreter memory
+   */
+  reset() {
+    this.#debug("resetting");
+    this.lexer.reset();
+    this.parser.reset();
+    this.interpreter.reset();
+  }
+
+  /**
+   * Retrieve the internal token list
+   */
   getTokens() {
-    return this.#tokens;
+    return this.parser.input;
   }
 
   getErrors() {
@@ -75,22 +89,16 @@ export class FanucMacroB
   }
 
   /**
-   * Tokenize a string of gcode
-   */
-  tokenize(input: string): IToken[] {
-    return this.lexer.tokenize(input);
-  }
-
-  /**
    * Invoke the {@link MacroInterpreter} starting from `lines()`
    */
   eval(input: string): EvalResult {
-    this._tokenizeAndLoadParser(input);
+    this.tokenizeAndLoadParser(input);
+    console.log("EVAL INPUT", input);
     const cst = this.parser.Lines();
-    return {
-      error: null,
-      result: this.interpreter.Lines(cst?.children)
-    };
+    const result = this.interpreter.Lines(cst?.children);
+    console.log(result);
+    console.log("RESULT!");
+    return { error: null, result };
   }
 
   /**
@@ -98,6 +106,7 @@ export class FanucMacroB
    */
   evalG10(input: string) {
     const { error, result } = this.eval(input);
+    // this.#debug(result);
     return {
       error,
       result: extractOffsets(result[0])
@@ -108,7 +117,7 @@ export class FanucMacroB
    * Invoke the {@link MacroInterpreter} starting from `expression()`
    */
   evalExpr(input: string) {
-    this._tokenizeAndLoadParser(input);
+    this.tokenizeAndLoadParser(input);
     const cst = this.parser.Expression();
     return {
       error: null,
@@ -122,7 +131,7 @@ export class FanucMacroB
    * Invoke the {@link MacroInterpreter} starting from `expression()`
    */
   evalFunctionExpr(input: string) {
-    this._tokenizeAndLoadParser(input);
+    this.tokenizeAndLoadParser(input);
     const cst = this.parser.FunctionExpression();
     return {
       error: null,
@@ -136,7 +145,7 @@ export class FanucMacroB
    * Invoke the {@link MacroInterpreter} starting from `program()`
    */
   evalProgram(input: string) {
-    this._tokenizeAndLoadParser(input);
+    this.tokenizeAndLoadParser(input);
     const cst = this.parser.Program();
     return {
       error: null,
@@ -145,22 +154,20 @@ export class FanucMacroB
     };
   }
 
-  private _tokenizeAndLoadParser(input: string) {
-    this.#tokens = this.tokenize(input);
+  tokenizeAndLoadParser(input: string) {
+    const tokens = this.lexer.tokenize(input);
+    this.parser.setInput(tokens);
     if (this.options.debug) {
       //@TODO this is hacky to find a bug, log better
       console.log("=============== MacroInterpreter.#tokens ===============");
-      console.log(
-        this.#tokens.map(t => `<${t.tokenType.name} image="${t.image}">`)
-      );
+      console.log(tokens.map(t => `<${t.tokenType.name} image="${t.image}">`));
     }
-    this.parser.setInput(this.#tokens);
   }
 }
 
 type EvalResult = {
   error: Error[] | null;
-  result: ParsedLineData[];
+  result: IParsedLineData[];
 };
 
 type GetMemoryOptions = {

@@ -1,7 +1,7 @@
 import Emittery from "emittery";
 import { Callback, StateMachine, t } from "typescript-fsm";
 
-import { Debuggers } from "../utils";
+import { Debuggers } from "../utils/debug";
 
 import type { DeepPartial } from "../types/generics";
 

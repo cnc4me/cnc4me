@@ -1,12 +1,14 @@
-import { ParsedLineData, PossibleG10LineValues } from "../types";
 import { hasG10 } from "./flags";
+
+import type { IParsedLineData, PossibleG10LineValues } from "../types";
 
 /**
  * Check for `G10` and extract axis values from {@link ParsedLineData}
  */
-export function extractOffsets(line: ParsedLineData): PossibleG10LineValues {
+export function extractOffsets(line: IParsedLineData): PossibleG10LineValues {
   const { addresses, gCodeMap } = line;
 
+  // @TODO: is this working?
   if (!hasG10(gCodeMap)) {
     throw Error(`G10 not found.`);
   }

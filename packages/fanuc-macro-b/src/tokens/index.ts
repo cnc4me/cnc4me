@@ -1,5 +1,5 @@
 /**
- * All tokens are exported in the lib folder's index as `T`
+ * All tokens are exported in the main index as `T`
  */
 export * from "./addresses";
 export * from "./bitwise";

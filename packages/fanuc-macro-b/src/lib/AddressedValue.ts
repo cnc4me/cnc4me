@@ -1,5 +1,5 @@
 import { AddressedValueCstChildren } from "../types/fanuc";
-import { getImage, parseNumber, stripFirstChar } from "../utils";
+import { getImage, parseNumber, stripFirstChar } from "../utils/common";
 
 export class AddressedValue {
   value: number;

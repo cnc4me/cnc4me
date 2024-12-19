@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { MacroLexer, T } from "../../src";
+import { MacroLexer } from "../../src";
+import { ProgramNumber } from "../../src/tokens";
 
 const lexer = new MacroLexer();
 
@@ -13,10 +14,8 @@ describe(`tokenizing program numbers`, () => {
 
   it(`produces the correct tokens`, () => {
     // expect(tokens).toHaveLength(2);
-    expect(tokens[0]).toMatchToken(T.Address);
-    expect(tokens[0].image).toBe("O");
-
-    expect(tokens[1]).toMatchToken(T.Integer);
-    expect(tokens[1].image).toBe("1234");
+    expect(tokens[0]).toMatchToken(ProgramNumber);
+    expect(tokens[0].image).toBe("O1234");
+    expect(tokens[0].payload).toBe(1234);
   });
 });

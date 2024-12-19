@@ -12,7 +12,7 @@ import { type CncMachine, MacroRuntimeFSM } from "../fsm";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
 import { SystemVariable } from "../memory";
-import { Debuggers } from "../utils";
+import { Debuggers } from "../utils/debug";
 import { FanucMacroB } from "./FanucMacroB";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
@@ -33,20 +33,14 @@ export interface MacroRuntimeConfig {
   machine?: CncMachine;
 }
 
-type _CncMachineEvents = PrefixObjectKeys<"MACHINE", typeof CncMachine.EVENTS>;
-type _InterpreterEvents = PrefixObjectKeys<
-  "INTERPRETER",
-  typeof MacroInterpreter.EVENTS
->;
-type RuntimeEvents = {
-  ERROR: Error;
-};
-
 /**
  * MacroRuntime Class to hold multiple programs in memory
  */
-export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
-  static EVENTS: RuntimeEvents & _CncMachineEvents & _InterpreterEvents;
+export class MacroRuntime
+  extends FanucMacroB
+  implements ErrorProducer<MacroCombinedError>
+{
+  static EVENTS: _CncMachineEvents & _InterpreterEvents & { ERROR: Error };
 
   #fmb: FanucMacroB;
   #state = new MacroRuntimeFSM();
@@ -58,6 +52,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   #debug = Debuggers.Runtime;
 
   constructor(config?: Partial<MacroRuntimeConfig>) {
+    super();
     this.#debug("initializing");
     this.#fmb = new FanucMacroB();
 
@@ -96,21 +91,23 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     return this.#machine;
   }
 
-  get mainProgram() {
-    return this.Memory.read(SystemVariable._MAINO);
-  }
-
   get hasErrors() {
-    return this.Lexer.hasErrors || this.Parser.hasErrors;
+    return this.#fmb.hasErrors;
   }
 
   on = this.#events.on.bind(this.#events);
 
+  /**
+   * Reset the runtime
+   */
+  reset(): void {
+    this.#debug("resetting");
+    this.#programs = {};
+    this.#fmb.reset();
+  }
+
   getErrors() {
-    return [
-      ...this.Parser.getErrors(), //
-      ...this.Lexer.getErrors()
-    ];
+    return this.#fmb.getErrors();
   }
 
   getInsights(): InsightCollection {
@@ -200,24 +197,20 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   }
 
   /**
-   * Return the currently active program.
+   * Return the active program content.
    */
   getActiveProgram(): string {
-    this.#throwIfProgramNotLoaded(this.mainProgram);
-    return this.getProgram(this.mainProgram);
+    const num = this.getActiveProgramNumber();
+    this.#throwIfProgramNotLoaded(num);
+    return this.getProgram(this.getActiveProgramNumber());
   }
 
   /**
-   * Get the currently active program number from the runtime.
-   *
-   * Returns the program number if exists, otherwise NaN to indicate error
+   * Return the active program nmber.
    */
-  // getActiveProgramNumber(): number {
-  //   if (typeof this.mainProgram !== "number") {
-  //     throw new NoActiveProgram();
-  //   }
-  //   return this.#activeProgram;
-  // }
+  getActiveProgramNumber() {
+    return this.Memory.read(SystemVariable._MAINO);
+  }
 
   /**
    * Register a function to handle errors that occur in the runtime.
@@ -264,16 +257,6 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   }
 
   /**
-   * Reset the runtime.
-   */
-  reset(): void {
-    this.#programs = {};
-    this.Parser.reset();
-    this.Memory.clear(SystemVariable._MAINO);
-    this.Interpreter.getMemory().clearAll();
-  }
-
-  /**
    * Load the {@link MacroParser} with tokens from the active program
    */
   #error<T extends Error>(err: T | string) {
@@ -284,24 +267,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   /**
    * Load the {@link MacroParser} with tokens from the active program
    */
-  #tokenizeActiveProgram(): boolean {
+  #tokenizeActiveProgram() {
     const input = this.getActiveProgram();
-    return this.#lexAndLoadParser(input);
-  }
-
-  /**
-   * Generate an array of {@link IToken} from an input string
-   *
-   * @TODO use the below...v
-   *
-   * @deprecated this same method is on FanucMacroB right?
-   */
-  #lexAndLoadParser(input: string): boolean {
-    this.Lexer.tokenize(input);
-    if (this.Lexer.hasErrors) return false;
-    const tokens = this.Lexer.getTokens();
-    this.Parser.setInput(tokens);
-    return true;
+    return this.#fmb.tokenizeAndLoadParser(input);
   }
 
   /**
@@ -313,3 +281,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     }
   }
 }
+
+type _CncMachineEvents = PrefixObjectKeys<"MACHINE", typeof CncMachine.EVENTS>;
+type _InterpreterEvents = PrefixObjectKeys<
+  "INTERPRETER",
+  typeof MacroInterpreter.EVENTS
+>;

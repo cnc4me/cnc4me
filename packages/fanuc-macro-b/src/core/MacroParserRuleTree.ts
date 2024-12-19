@@ -24,7 +24,7 @@ import {
   Then,
   Var
 } from "../tokens";
-import { Debuggers } from "../utils";
+import { Debuggers } from "../utils/debug";
 import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
 
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";

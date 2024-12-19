@@ -11,12 +11,11 @@ export type ValidG10OffsetGroups =
 interface G10LineBase {
   L: number;
   P: number;
-  MODE?: number; // @TODO what is this for?
+  // MODE?: number; // @TODO what is this for?
 }
 
 export interface G10WorkOffsets extends G10LineBase {
   L: ValidG10WorkOffsetGroup;
-  //  L: number;
   X?: number;
   Y?: number;
   Z?: number;
@@ -25,7 +24,6 @@ export interface G10WorkOffsets extends G10LineBase {
 
 export interface G10ToolOffsets extends G10LineBase {
   L: ValidG10ToolOffsetGroup;
-  // readonly L: number;
   R?: number;
 }
 

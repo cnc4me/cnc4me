@@ -1,12 +1,14 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { MacroLexer, T, Utils } from "../../src";
+import { MacroLexer } from "../../src";
+import { Gcode } from "../../src/tokens";
+import { range } from "../../src/utils/common";
 
 const lexer = new MacroLexer();
 
 const TEST_CASES = [
-  ...Utils.range(1, 9).map(n => [`G${n}`]), // Single Digit
-  ...Utils.range(54, 59).map(n => [`G${n}`]), // Work Offsets
+  ...range(1, 9).map(n => [`G${n}`]), // Single Digit
+  ...range(54, 59).map(n => [`G${n}`]), // Work Offsets
   ["G200"], // Three Digit
   ["G54.1"] // With Decimal
 ];
@@ -29,6 +31,6 @@ describe.each(TEST_CASES)(`can tokenize the string "%s" as a G Code`, input => {
   });
 
   it("matches the correct token type", () => {
-    expect(tokens[0]).toMatchToken(T.Gcode);
+    expect(tokens[0]).toMatchToken(Gcode);
   });
 });

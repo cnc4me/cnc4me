@@ -1,7 +1,7 @@
 import Emittery from "emittery";
 import PQueue from "p-queue";
 
-import { Debuggers } from "../utils";
+import { Debuggers } from "../utils/debug";
 import { AxisFSM } from "./AxisFSM";
 import { SpindleFSM } from "./SpindleFSM";
 

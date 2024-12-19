@@ -1,4 +1,4 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
 import { FanucMacroB } from "../../src";
 
@@ -10,17 +10,17 @@ import { FanucMacroB } from "../../src";
  * L20 = Aux Work Offsets
  * ```
  */
-const G10_LINES = {
-  G54: "G10 L2 P1 X7.5 Y21.5189 Z3.0025 B270.",
-  G55: "G10 L2 P2 X-1.2365 Y2.3584 Z9.3201 B63.5",
-  G54_1_P7: "G10 L20 P7 X5.0023 Y12.3225 Z5.5201 B90."
-};
-
-const fmb = new FanucMacroB();
+const G54_LINE = "G10 L2 P1 X7.5 Y21.5189 Z3.0025 B270.";
+const G55_LINE = "G10 L2 P2 X-1.2365 Y2.3584 Z9.3201 B63.5";
+const G54_1_P7 = "G10 L20 P7 X5.0023 Y12.3225 Z5.5201 B90.";
 
 describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
-  it(`can get values for G54 via ${G10_LINES.G54}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.G54);
+  const fmb = new FanucMacroB();
+
+  beforeEach(() => fmb.reset());
+
+  it(`parses values for G54 via ${G54_LINE}`, () => {
+    const { error, result } = fmb.evalG10(G54_LINE);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({
@@ -33,8 +33,8 @@ describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
     });
   });
 
-  it(`can get values for G55 via ${G10_LINES.G55}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.G55);
+  it(`parses values for G55 via ${G55_LINE}`, () => {
+    const { error, result } = fmb.evalG10(G55_LINE);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({
@@ -47,8 +47,8 @@ describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
     });
   });
 
-  it(`can get values for G54.1 P7 via ${G10_LINES.G54_1_P7}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.G54_1_P7);
+  it(`parses values for G54.1 P7 via ${G54_1_P7}`, () => {
+    const { error, result } = fmb.evalG10(G54_1_P7);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({

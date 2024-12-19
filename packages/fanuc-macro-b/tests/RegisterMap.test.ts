@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { RegisterMap } from "../src";
+import { RegisterMap } from "../src/memory/helpers";
 
 type TestCaseValues = Record<
   "register" | "group" | "toolNum" | "axis",

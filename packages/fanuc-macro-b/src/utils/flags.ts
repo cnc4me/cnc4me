@@ -5,3 +5,7 @@ export function hasDwell(gCodeFlags: Record<string, boolean>): boolean {
 export function hasG10(gCodeFlags: Record<string, boolean>): boolean {
   return "G10" in gCodeFlags;
 }
+
+// export function assertHasG10<T extends { G10: true }>(gCodeFlags: T): boolean {
+//   return "G10" in gCodeFlags;
+// }

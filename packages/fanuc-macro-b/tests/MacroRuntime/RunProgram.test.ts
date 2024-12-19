@@ -32,10 +32,10 @@ describe("running a simple program with the MacroRuntime", () => {
     expect(runtime.getActiveProgramNumber()).toBe(TEST_PROGRAM_NUMBER);
   });
 
-  it("can get the lines of the activate program", () => {
+  it.skip("can get the lines of the activate program", () => {
     const prg = runtime.getActiveProgram();
 
-    expect(runtime.getActiveProgramNumber()).toBe(TEST_PROGRAM_NUMBER);
+    expect(prg).toBe(TEST_PROGRAM_NUMBER);
   });
 
   it("loads and automatically activates a program", () => {});

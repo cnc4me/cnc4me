@@ -1,4 +1,4 @@
-import { IToken } from "chevrotain";
+import type { IToken } from "chevrotain";
 
 /**
  * Generate an array of integers, including start and finish.

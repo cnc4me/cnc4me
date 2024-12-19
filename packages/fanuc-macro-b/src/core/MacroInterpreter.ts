@@ -11,21 +11,15 @@ import {
 import { NcProgram } from "../lib/NcProgram";
 import { Modulus, Plus, Product } from "../tokens";
 import {
-  CST,
+  type CST,
   type IParsedLineData,
   type IProgramNumberLine,
-  MacroBuiltinFunctionNames,
-  ValidG10OffsetGroups
+  type MacroBuiltinFunctionNames,
+  type ValidG10OffsetGroups
 } from "../types";
-import {
-  getImage,
-  hasDwell,
-  hasG10,
-  parseNumber,
-  unbox,
-  unwrapComment
-} from "../utils";
+import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
 import { Debuggers } from "../utils/debug";
+import { hasDwell, hasG10 } from "../utils/flags";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { STDLIB } from "./StandardLibrary";
@@ -58,11 +52,22 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.validateVisitor();
   }
 
+  /**
+   * Get the interpreter's {@link MacroMemory}
+   */
+  get memory() {
+    return this.#memory;
+  }
+
   on = this.#events.on.bind(this.#events);
   onAny = this.#events.onAny.bind(this.#events);
 
-  getMemory() {
-    return this.#memory;
+  /**
+   * Reset the {@link MarcoInterpreter} by clearing any lines and the {@link MacroMemory}
+   */
+  reset() {
+    this.#lines = [];
+    this.#memory.reset();
   }
 
   getInsights(): InsightCollection {
@@ -383,7 +388,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 }
 
-type InterpreterPropsToIgnore = "events" | "lines";
+type InterpreterPropsToIgnore = "events" | "lines" | "memory";
 
 type InterpreterMethodsToMap = Exclude<
   keyof MacroInterpreter,

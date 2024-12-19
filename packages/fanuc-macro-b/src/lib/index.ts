@@ -5,6 +5,7 @@ import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroVariable } from "./MacroVariable";
 import { ProgramNumber } from "./ProgramNumber";
 
+export { BinaryRegister } from "./BinaryRegister";
 export {
   AddressedValue,
   AddressInsight,

@@ -1,11 +1,16 @@
-import { CONFIG } from "./config";
-import * as Errors from "./errors";
 import * as T from "./tokens";
-import * as Utils from "./utils";
 
-export * from "./FanucMacroB";
-export * from "./lib";
-export * from "./memory";
-export * from "./fsm";
-export * from "./types";
-export { CONFIG, Errors, T, Utils };
+export { CONFIG } from "./config";
+export {
+  FanucMacroB,
+  MacroInterpreter,
+  MacroLexer,
+  MacroMemory,
+  MacroParser,
+  MacroRuntime
+} from "./core";
+export { Errors } from "./errors";
+export { MemoryConstants, RegisterMap, SystemVariable } from "./memory";
+export { T };
+
+export type * from "./types";

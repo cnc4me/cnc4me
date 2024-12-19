@@ -1,6 +1,7 @@
-import { describe, expect, it } from "vitest";
+import { beforeEach, describe, expect, it } from "vitest";
 
-import { FanucMacroB, MemoryConstants } from "../../src";
+import { FanucMacroB } from "../../src";
+import { MemoryConstants } from "../../src/memory";
 
 /**
  * G10 Line Reference
@@ -12,18 +13,18 @@ import { FanucMacroB, MemoryConstants } from "../../src";
  * L13 = Tool Diameter Geometry
  * ```
  */
-const G10_LINES = {
-  T5_LENGTH: "G10 L11 P5 R6.5132",
-  T156_LENGTH_COMP: "G10 L10 P156 R.002",
-  T33_DIAMETER: "G10 L13 P33 R.375",
-  T298_DIAMETER_COMP: "G10 L12 P298 R-.0012"
-};
-
-const fmb = new FanucMacroB();
+const T5_LENGTH = "G10 L11 P5 R6.5132";
+const T156_LENGTH_COMP = "G10 L10 P156 R.002";
+const T33_DIAMETER = "G10 L13 P33 R.375";
+const T298_DIAMETER_COMP = "G10 L12 P298 R-.0012";
 
 describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets", () => {
-  it(`can get values for T5 (height) via ${G10_LINES.T5_LENGTH}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.T5_LENGTH);
+  const fmb = new FanucMacroB();
+
+  beforeEach(() => fmb.reset());
+
+  it(`can get values for T5 (height) via ${T5_LENGTH}`, () => {
+    const { error, result } = fmb.evalG10(T5_LENGTH);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({
@@ -33,8 +34,8 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     });
   });
 
-  it(`can get values for T156 (height comp.) via ${G10_LINES.T156_LENGTH_COMP}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.T156_LENGTH_COMP);
+  it(`can get values for T156 (height comp.) via ${T156_LENGTH_COMP}`, () => {
+    const { error, result } = fmb.evalG10(T156_LENGTH_COMP);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({
@@ -44,8 +45,8 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     });
   });
 
-  it(`can get values for T33 (diameter) via ${G10_LINES.T33_DIAMETER}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.T33_DIAMETER);
+  it(`can get values for T33 (diameter) via ${T33_DIAMETER}`, () => {
+    const { error, result } = fmb.evalG10(T33_DIAMETER);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({
@@ -55,8 +56,8 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     });
   });
 
-  it(`can get values for T298 (diameter comp.) via ${G10_LINES.T298_DIAMETER_COMP}`, () => {
-    const { error, result } = fmb.evalG10(G10_LINES.T298_DIAMETER_COMP);
+  it(`can get values for T298 (diameter comp.) via ${T298_DIAMETER_COMP}`, () => {
+    const { error, result } = fmb.evalG10(T298_DIAMETER_COMP);
 
     expect(error).toBeFalsy();
     expect(result).toMatchObject({

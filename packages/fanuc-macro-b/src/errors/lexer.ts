@@ -6,7 +6,8 @@ export class MacroLexerError extends Error {
 
 export class LexingError extends MacroLexerError {
   constructor(err: ILexingError) {
-    super(`There was an error running the lexer.`, { cause: err });
+    const cause = Object.assign(err, { name: "ILexingError" }) as Error;
+    super(`There was an error running the lexer.`, { cause });
   }
 }
 

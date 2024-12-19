@@ -1,8 +1,9 @@
-import { Subject } from "rxjs";
+import Emittery from "emittery";
 import { match, Pattern } from "ts-pattern";
 
 import { MemoryConstants, RegisterMap, type SystemVariable } from "../memory";
-import { range } from "../utils";
+import { range } from "../utils/common";
+import { Debuggers } from "../utils/debug";
 
 import type {
   G10ToolOffsets,
@@ -16,10 +17,9 @@ import type {
 
 const { WORK, TOOL } = MemoryConstants.OFFSET_GROUPS;
 
-export type RegisterValueChange = Record<
-  "previous" | "current" | "register",
-  number
->;
+export type MacroMemoryEvents = {
+  REGISTER_UPDATE: Record<"previous" | "current" | "register", number>;
+};
 
 /**
  * A Representaion of a CNC machines' macro memory.
@@ -35,19 +35,28 @@ export class MacroMemory {
   ];
 
   #vars: VariableDictionary = {};
-  #updates = new Subject<RegisterValueChange>();
+  #events = new Emittery<MacroMemoryEvents>();
+  #debug = Debuggers.Memory;
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
    * @TODO have a way to initialize code groups
    */
   constructor() {
+    this.#debug("initializing");
     // this.write(M.GROUP_3, 90);
-    //
-    this.clearAll();
   }
 
-  subscribe = this.#updates.subscribe.bind(this.#updates);
+  on = this.#events.on.bind(this.#events);
+
+  /**
+   * Clear all registers to reset the memory
+   */
+  reset(): void {
+    for (const register of MacroMemory.REGISTERS) {
+      this.clear(register);
+    }
+  }
 
   /**
    * Read a value from a register
@@ -64,14 +73,14 @@ export class MacroMemory {
   write(
     register: number | SystemVariable,
     value: number
-  ): Omit<RegisterValueChange, "register"> {
+  ): Omit<MacroMemoryEvents["REGISTER_UPDATE"], "register"> {
     const previous = this.#read(register);
 
     this.#write(register, value);
 
     const current = this.#vars[register];
 
-    this.#updates.next({ previous, current, register });
+    void this.#events.emit("REGISTER_UPDATE", { previous, current, register });
 
     return { previous, current };
   }
@@ -81,15 +90,6 @@ export class MacroMemory {
    */
   clear(register: number | SystemVariable): void {
     this.#write(register, MacroMemory.ZERO);
-  }
-
-  /**
-   * Clear all registers to reset the memory
-   */
-  clearAll(): void {
-    for (const register of MacroMemory.REGISTERS) {
-      this.clear(register);
-    }
   }
 
   /**
@@ -301,6 +301,9 @@ export class MacroMemory {
     return JSON.stringify(this.#vars);
   }
 
+  /**
+   * Write a new value to a register
+   */
   #write(register: number, value: number) {
     this.#vars[register] = value;
   }

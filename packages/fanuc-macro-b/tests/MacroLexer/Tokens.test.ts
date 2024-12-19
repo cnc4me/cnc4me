@@ -1,37 +1,56 @@
 import { describe, expect, it } from "vitest";
 
-import { FANUC_MACRO_B_FNS, MacroLexer, T } from "../../src";
+import { MacroLexer } from "../../src";
+import { FANUC_MACRO_B_FNS } from "../../src/lib";
+import {
+  Address,
+  BuiltinFunction,
+  Decimal,
+  Divide,
+  Do,
+  Equals,
+  GotoLine,
+  If,
+  Integer,
+  Minus,
+  Newline,
+  Plus,
+  Product,
+  Then,
+  Var,
+  While
+} from "../../src/tokens";
 
 import type { TokenType } from "chevrotain";
 
 const BASIC_CASES: TestCaseData[] = [
-  ["\n", T.Newline],
-  ["7", T.Integer],
-  ["1.2", T.Decimal],
-  ["+", T.Plus],
-  ["-", T.Minus],
-  ["/", T.Divide],
-  ["*", T.Product],
-  ["#", T.Var],
-  ["=", T.Equals]
+  ["\n", Newline],
+  ["7", Integer],
+  ["1.2", Decimal],
+  ["+", Plus],
+  ["-", Minus],
+  ["/", Divide],
+  ["*", Product],
+  ["#", Var],
+  ["=", Equals]
 ];
 
 const CONTROL_FLOW_CASES: TestCaseData[] = [
-  ["IF", T.If],
-  ["THEN", T.Then],
-  ["DO", T.Do],
-  ["WHILE", T.While],
-  ["GOTO1", T.GotoLine],
-  ["GOTO162", T.GotoLine],
-  ["GOTO60102", T.GotoLine]
+  ["IF", If],
+  ["THEN", Then],
+  ["DO", Do],
+  ["WHILE", While],
+  ["GOTO1", GotoLine],
+  ["GOTO162", GotoLine],
+  ["GOTO60102", GotoLine]
 ];
 
 const ADDRESS_CASES = "ABCDEFHIJKLPQRSTUVWXYZ" // Missing G,M,N,O on purpose, they are reserved
   .split("")
-  .map(ltr => [ltr, T.Address]) as TestCaseData[];
+  .map(ltr => [ltr, Address]) as TestCaseData[];
 
 const FUNCTION_CASES = FANUC_MACRO_B_FNS.map(
-  fn => [fn, T.BuiltinFunction] as TestCaseData
+  fn => [fn, BuiltinFunction] as TestCaseData
 );
 
 const TEST_GROUPS: [label: string, cases: TestCaseData[]][] = [

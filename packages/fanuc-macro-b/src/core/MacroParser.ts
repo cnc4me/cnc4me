@@ -1,11 +1,9 @@
 import { ParsingError } from "../errors/parser";
-import { Debuggers } from "../utils";
+import { Debuggers } from "../utils/debug";
 import { MacroParserRuleTree } from "./MacroParserRuleTree";
 
 import type { ErrorProducer } from "../types";
 import type { IToken } from "chevrotain";
-
-const $d = Debuggers.Parser;
 
 export class MacroParser
   extends MacroParserRuleTree
@@ -22,12 +20,19 @@ export class MacroParser
     return instance; // @TODO can this be typed?
   }
 
+  #debug = Debuggers.Parser;
+
   get hasErrors() {
     return this.errors.length > 0;
   }
 
+  public override reset(): void {
+    this.#debug("resetting");
+    super.reset();
+  }
+
   setInput(tokens: IToken[]) {
-    $d("setting input with", tokens.length, "tokens");
+    this.#debug("setting input with", tokens.length, "tokens");
     this.input = tokens;
   }
 
