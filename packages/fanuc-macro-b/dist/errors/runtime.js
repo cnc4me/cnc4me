@@ -1,0 +1,2 @@
+class o extends Error{}class e extends o{constructor(){super("There is no active program.")}}class t extends o{constructor(s){super(`Program number "${s}" not found.`)}}class n extends o{constructor(s){super([`"${s}" is not a valid program number.`,'Program numbers as strings must start with "O"'].join(`
+`))}}export{n as InvalidProgramNumber,o as MacroRuntimeError,e as NoActiveProgram,t as ProgramNumberNotFound};

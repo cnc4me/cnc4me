@@ -1,0 +1,1 @@
+import r from"debug";const t="fanuc";let n="";const e=r(t),a=()=>(n=r.disable(),{disabled:n,resumeDebugging:()=>r.enable(n)}),u={enable:r.enable,disable:r.disable,pause:a,Main:e,Lexer:e.extend("lexer"),Memory:e.extend("memory"),Parser:e.extend("parser"),Runtime:e.extend("runtime"),Interpreter:e.extend("interpreter")};export{u as Debuggers,a as pauseDebugging};

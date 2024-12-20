@@ -5,12 +5,15 @@
   "description": "Virtual implementation of a Fanuc gcode interpreter and execution environment",
   "license": "MIT",
   "author": "Kevin Hill",
+  "main": "./dist/index.js",
   "exports": {
-    ".": "./src/index.ts",
-    "./*": "./src/index.ts"
+    ".": {
+      "import": "./dist/index.js",
+      "types": "./dist/index.d.ts"
+    }
   },
   "scripts": {
-    "assets": "pnpm assets:types && pnpm assets:dts && pnpm assets:alarms && pnpm diagrams",
+    "assets": "pnpm concurrently -c auto --pad-prefix \"pnpm:assets:*\"",
     "assets:alarms": "tsx ./scripts/generateAlarms.ts",
     "assets:dts": "tsx ./scripts/generateDts.ts",
     "assets:types": "tsx ./scripts/generateTypes.ts",
@@ -51,6 +54,7 @@
     "@vitest/expect": "catalog:",
     "@vitest/ui": "2.1.5",
     "chance": "^1.1.8",
+    "concurrently": "^9.1.0",
     "cross-env": "^7.0.3",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
@@ -61,9 +65,11 @@
     "rollup": "^4",
     "rollup-plugin-define": "^1.0.1",
     "rollup-plugin-dts": "^6.1.1",
+    "rollup-plugin-node-externals": "^8.0.0",
     "tsx": "catalog:",
     "typescript": "catalog:",
     "vite": "catalog:",
+    "vite-plugin-dts": "^4.4.0",
     "vitest": "catalog:"
   }
 }

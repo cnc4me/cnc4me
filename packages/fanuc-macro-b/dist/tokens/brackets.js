@@ -1,0 +1,1 @@
+import{Fences as t}from"./token.categories.js";import{createToken as e}from"./token.utils.js";const n=t,o=e({name:"OpenParen",pattern:"(",categories:n}),c=e({name:"CloseParen",pattern:")",categories:n}),p=e({name:"OpenBracket",pattern:"[",categories:n}),s=e({name:"CloseBracket",pattern:"]",categories:n});export{s as CloseBracket,c as CloseParen,p as OpenBracket,o as OpenParen};

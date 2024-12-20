@@ -8,7 +8,6 @@ import { MacroParser } from "./MacroParser";
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";
 import type { ErrorProducer, IParsedLineData, MacroValueArray } from "../types";
-import type { IToken } from "chevrotain";
 
 export class FanucMacroB
   implements ErrorProducer<MacroLexerError | MacroParserError>

@@ -4,7 +4,8 @@ import { createSyntaxDiagramsCode } from "chevrotain";
 import { writeFileSync } from "fs";
 import path from "path";
 
-import { MacroRuntimeFSM, Utils } from "../src";
+import { MacroRuntimeFSM } from "../src/fsm/MacroRuntimeFSM";
+import { generateMermaidDiagram } from "../src/utils/mermaid";
 
 import type { BaseParser } from "chevrotain";
 
@@ -37,7 +38,7 @@ export function createDiagramServer(parser: BaseParser) {
         console.info(
           `[${new Date().toISOString()}] Generating Runtime Diagram`
         );
-        const mmdContent = Utils.generateMermaidDiagram(fsm.getTransitions());
+        const mmdContent = generateMermaidDiagram(fsm.getTransitions());
 
         res.writeHead(200, { "Content-Type": "text/html" });
         res.end(`<html>

@@ -2,34 +2,31 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "strict": true,
-    "rootDir": ".",
-    "outDir": "dist",
-    "target": "ESNext",
-    "module": "ESNext",
-    "moduleResolution": "bundler",
-    // "noEmit": true,
-    "esModuleInterop": true,
+    "outDir": "./dist",
     "resolveJsonModule": true,
-    "skipLibCheck": true,
     "experimentalDecorators": true,
     "lib": [
       "DOM",
       "ESNext"
-    ]
+    ],
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    }
   },
   "files": [
-    "vite.config.ts",
     "./tests/_vitest/vitest.expect.d.ts"
   ],
   "include": [
+    "vite.config.*",
     "./src/**/*.ts",
     "./src/lib/*.json",
-    "./tests/**/*.ts"
+    "./tests/**/*.ts",
+    "./scripts/*.ts",
   ],
-  "references": [
-    {
-      "path": "../monaco-gcode"
-    },
+  "exclude": [
+    "dist",
+    "node_modules"
   ]
 }

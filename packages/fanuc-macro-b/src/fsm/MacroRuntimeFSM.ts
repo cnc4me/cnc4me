@@ -1,4 +1,3 @@
-import Emittery from "emittery";
 import { StateMachine, t } from "typescript-fsm";
 
 import { Debuggers } from "../utils/debug";
@@ -41,8 +40,6 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     onError: () => {},
     onFinished: () => {}
   };
-
-  #events = new Emittery();
 
   constructor(callbacks?: Partial<StateHandlerMap<StateName>>) {
     super(States.stopped);

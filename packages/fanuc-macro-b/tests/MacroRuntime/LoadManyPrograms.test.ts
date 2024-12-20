@@ -1,6 +1,7 @@
 import { describe, expect, it } from "vitest";
 
-import { Errors, MacroRuntime } from "../../src";
+import { MacroRuntime } from "../../src/core/MacroRuntime";
+import { Errors } from "../../src/errors";
 
 const program1 = `%
 O0001 ( Program 1 )

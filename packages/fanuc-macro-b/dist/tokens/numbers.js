@@ -1,0 +1,1 @@
+import{NumericValue as r}from"./token.categories.js";import{createToken as e}from"./token.utils.js";const t=r,n=e({name:"Integer",pattern:/\d+/,categories:t}),m=e({name:"Decimal",pattern:/(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,longer_alt:n,categories:t});export{m as Decimal,n as Integer};

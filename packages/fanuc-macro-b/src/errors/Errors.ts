@@ -3,7 +3,7 @@ import * as ParserErrors from "./parser";
 import * as RuntimeErrors from "./runtime";
 
 export const Errors = {
-  Lexer: LexerErrors,
-  Parser: ParserErrors,
-  Runtime: RuntimeErrors
+  ...LexerErrors,
+  ...ParserErrors,
+  ...RuntimeErrors
 };

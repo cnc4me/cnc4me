@@ -104,12 +104,14 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     this.#config.limits = parseLimits(limits);
   }
 
-  on<T extends keyof AxisFsmEvents>(
-    event: T,
-    cb: (eventData: AxisFsmEvents[T]) => void
-  ) {
-    return this.#events.on(event, cb);
-  }
+  on = this.#events.on.bind(this.#events);
+  onAny = this.#events.onAny.bind(this.#events);
+  // on<T extends keyof AxisFsmEvents>(
+  //   event: T,
+  //   cb: (eventData: AxisFsmEvents[T]) => void
+  // ) {
+  //   return this.#events.on(event, cb);
+  // }
 
   /**
    * Generic state testing method
@@ -203,6 +205,8 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     void this.#events.emit("FAULT", message);
   }
 
+  // @TODO: USE THIS
+  // @ts-expect-error I know I'm not using this yet
   async #validateTargetPosition(position: number) {
     if (position > this.#config.limits.max) {
       return await this.#handleError("Target position exceeds axis limit (+)");

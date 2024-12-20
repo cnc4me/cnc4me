@@ -1,0 +1,1 @@
+import{Lexer as e}from"chevrotain";import{createToken as t}from"./token.utils.js";const m=t({name:"WhiteSpace",pattern:/[\s\t\r]+/,group:e.SKIPPED}),n=t({name:"Comment",pattern:/\(\s*(.+?)\s*\)/,start_chars_hint:["("]});export{n as Comment,m as WhiteSpace};

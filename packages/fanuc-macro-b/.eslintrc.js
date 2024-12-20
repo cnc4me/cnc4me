@@ -1,4 +1,6 @@
 /* eslint-env node */
+// const path = require("node:path");
+
 /** @type {import('eslint').Linter.Config} */
 module.exports = {
   root: true,

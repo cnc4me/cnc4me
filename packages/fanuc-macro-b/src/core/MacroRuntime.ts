@@ -1,13 +1,8 @@
-import { IToken } from "chevrotain";
 import Emittery from "emittery";
 
 import { LexingError } from "../errors/lexer";
 import { ParsingError } from "../errors/parser";
-import {
-  InvalidProgramNumber,
-  NoActiveProgram,
-  ProgramNumberNotFound
-} from "../errors/runtime";
+import { InvalidProgramNumber, ProgramNumberNotFound } from "../errors/runtime";
 import { type CncMachine, MacroRuntimeFSM } from "../fsm";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
@@ -36,13 +31,12 @@ export interface MacroRuntimeConfig {
 /**
  * MacroRuntime Class to hold multiple programs in memory
  */
-export class MacroRuntime
-  extends FanucMacroB
-  implements ErrorProducer<MacroCombinedError>
-{
+export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   static EVENTS: _CncMachineEvents & _InterpreterEvents & { ERROR: Error };
 
   #fmb: FanucMacroB;
+  // @TODO: manage the runtime state
+  // @ts-expect-error WORKING ON IT
   #state = new MacroRuntimeFSM();
   #events = new Emittery<typeof MacroRuntime.EVENTS>();
 
@@ -52,7 +46,6 @@ export class MacroRuntime
   #debug = Debuggers.Runtime;
 
   constructor(config?: Partial<MacroRuntimeConfig>) {
-    super();
     this.#debug("initializing");
     this.#fmb = new FanucMacroB();
 

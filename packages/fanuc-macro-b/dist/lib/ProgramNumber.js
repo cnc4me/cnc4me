@@ -1,0 +1,1 @@
+class r{constructor(t){this.matchers=t}static create(t){return new r(t)}match(t){const e=t.replace(/^%|[\n\r]/,"").trim().match(/^O([0-9]+)\s+/);e===null?this.matchers.onFail("Program Number Not Found"):this.matchers.onMatch(Number(e[1]))}}export{r as ProgramNumber};
