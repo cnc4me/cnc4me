@@ -1,0 +1,22 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "lib": [
+      "ESNext"
+    ],
+  },
+  "files": [
+    "index.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/fanuc-macro-b"
+    },
+    {
+      "path": "../../packages/monaco-gcode"
+    },
+    {
+      "path": "../../packages/chevrotain-live"
+    }
+  ]
+}
