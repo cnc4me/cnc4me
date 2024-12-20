@@ -9,8 +9,10 @@
   },
   "license": "MIT",
   "author": "Kevin Hill",
-  "exports": "./src/index.ts",
   "main": "./src/index.ts",
+  "exports": {
+    ".": "./src/index.ts"
+  },
   "scripts": {
     "test": "vitest"
   },

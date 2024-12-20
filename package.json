@@ -30,10 +30,15 @@
     "tsup": "^8.3.5",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:"
+    "vitest": "catalog:",
+    "nx": "20.2.2"
   },
   "engines": {
     "pnpm": "*"
   },
-  "packageManager": "pnpm@9.14.2"
+  "packageManager": "pnpm@9.14.2",
+  "workspaces": [
+    "packages",
+    "apps"
+  ]
 }

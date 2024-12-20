@@ -41,3 +41,8 @@ common/autoinstallers/*/.npmrc
 
 # Local Netlify folder
 .netlify
+
+
+
+.nx/cache
+.nx/workspace-data

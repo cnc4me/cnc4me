@@ -1,10 +1,16 @@
 {
   "extends": "../../tsconfig.json",
   "compilerOptions": {
-    "composite": true
+    "composite": true,
+    "lib": [
+      "ESNext"
+    ],
   },
   "include": [
-    "src",
-    "tests"
+    "src"
+  ],
+  "exclude": [
+    "dist",
+    "node_modules"
   ]
 }

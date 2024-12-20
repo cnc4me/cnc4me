@@ -5,8 +5,7 @@ module.exports = {
   parserOptions: {
     emcaVersion: "2022",
     sourceType: "module",
-    tsconfigRootDir: __dirname,
-    project: ["./tsconfig.eslint.json", "./packages/*/tsconfig.eslint.json"],
+    project: "tsconfig.json",
   },
   env: {
     es6: true,
@@ -14,15 +13,15 @@ module.exports = {
   },
   settings: {
     "import/parsers": {
-      "@typescript-eslint/parser": [".mjs", ".ts", ".tsx"],
+      "@typescript-eslint/parser": [".ts"],
     },
     "import/resolver": {
       node: {
-        extensions: [".js", ".mjs", ".jsx", ".ts", ".tsx"],
+        extensions: [".ts"],
       },
       typescript: {
         alwaysTryTypes: true,
-        project: ["./packages/*/tsconfig.json"],
+        project: "tsconfig.json",
       },
     },
   },
@@ -97,53 +96,5 @@ module.exports = {
     "import/no-self-import": "error",
     "import/no-absolute-path": "error",
     "import/newline-after-import": "error",
-    "import/no-unresolved": ["error", { caseSensitive: false }],
-    "import/no-extraneous-dependencies": [
-      "error",
-      {
-        devDependencies: true,
-        peerDependencies: true,
-        optionalDependencies: false,
-      },
-    ],
   },
-  overrides: [
-    // // all test files
-    // {
-    //   plugins: ["jest"],
-    //   extends: ["plugin:jest/all"],
-    //   files: [
-    //     "packages/*/jest.config.js",
-    //     "packages/*/tests/**/*.spec.ts",
-    //     "packages/*/tests/**/*.test.ts",
-    //   ],
-    //   rules: {
-    //     "@typescript-eslint/no-unsafe-call": "off",
-    //     "@typescript-eslint/no-unsafe-return": "off",
-    //     "@typescript-eslint/no-unsafe-assignment": "off",
-    //     "@typescript-eslint/no-unsafe-member-access": "off",
-    //   },
-    // },
-    // tools and tests
-    {
-      files: ["**/tools/**/*.ts", "**/tests/**/*.ts"],
-      rules: {
-        // allow console logs in tools and tests
-        "no-console": "off",
-      },
-    },
-    {
-      files: ["vite.config.ts", "rollup.config.ts"],
-      rules: {
-        "import/no-default-export": "off",
-      },
-    },
-    {
-      files: ["packages/website/src/**/*.{ts,tsx}"],
-      rules: {
-        "import/no-default-export": "off",
-        "no-console": "off",
-      },
-    },
-  ],
 };

@@ -1,25 +1,18 @@
 {
   "compilerOptions": {
     "strict": true,
-    "baseUrl": ".",
-    "module": "CommonJS",
+    "strictNullChecks": true,
+    "target": "ESNext",
+    "module": "ESNext",
     "moduleResolution": "node",
-    "target": "es2017",
-    "lib": [
-      "ESNext"
-    ],
-    "types": [
-      "node"
-    ],
+    "baseUrl": ".",
     "paths": {
       "@cnc4me/*": [
         "./packages/*"
       ]
     },
-    "sourceMap": true,
-    "skipLibCheck": true,
     "declaration": true,
-    "declarationMap": true,
+    "skipLibCheck": true,
     "noUnusedLocals": true,
     "esModuleInterop": true,
     "noImplicitReturns": true,
@@ -29,7 +22,6 @@
     "allowUnreachableCode": false,
     "noFallthroughCasesInSwitch": true,
     "allowSyntheticDefaultImports": true,
-    "forceConsistentCasingInFileNames": true,
-    "noPropertyAccessFromIndexSignature": true
+    "forceConsistentCasingInFileNames": true
   }
 }

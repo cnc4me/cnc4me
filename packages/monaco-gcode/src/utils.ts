@@ -82,7 +82,7 @@ export function generateMonarchLanguageFromChevrotainTokens(
     };
   });
 
-  return mapped;
+  // return mapped;
   return {
     brackets,
     tokenizer: {

@@ -1,6 +1,6 @@
 export { MonarchTokens } from "./language";
 export { MonacoGcode } from "./MonacoGcode";
-export * from "./types";
+export type * from "./types";
 export {
   generateMonarchLanguageFromChevrotainParser,
   generateMonarchLanguageFromChevrotainTokens
