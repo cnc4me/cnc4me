@@ -13,18 +13,29 @@
   "type": "module",
   "scripts": {
     "start": "vite dev",
-    "build": "vite build"
+    "build": "vite build",
+    "lint": "eslint ./src/*"
   },
   "dependencies": {
-    "@cnc4me/fanuc-macro-b": "workspace:*"
+    "@cnc4me/fanuc-macro-b": "workspace:*",
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/material": "^6.2.1",
+    "react": "^18.3.1",
+    "react-dom": "^18.3.1"
   },
   "devDependencies": {
     "@types/node": "catalog:",
+    "@types/react": "^18.3.12",
+    "@types/react-dom": "^18.3.1",
+    "@vitejs/plugin-react": "^4.3.4",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-typescript": "catalog:",
     "eslint-plugin-import": "catalog:",
     "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-react-refresh": "^0.4.16",
     "eslint-plugin-simple-import-sort": "catalog:",
     "tsx": "catalog:",
     "typescript": "catalog:",

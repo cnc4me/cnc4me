@@ -2,6 +2,7 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
+    "jsx": "react-jsx",
     "module": "ESNext",
     "lib": [
       "DOM",
@@ -9,15 +10,14 @@
     ],
   },
   "files": [
-    "./index.html",
     "./vite.config.ts"
+  ],
+  "include": [
+    "src/*"
   ],
   "references": [
     {
       "path": "../../packages/fanuc-macro-b"
-    },
-    {
-      "path": "./tsconfig.eslint.json"
-    },
+    }
   ]
 }
