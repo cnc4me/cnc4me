@@ -1,1 +1,0 @@
-class n extends Error{}class o extends n{constructor(e){const s=Object.assign(e,{name:"IRecognitionException"});super("There was an error running the MacroParser.",{cause:s})}}export{n as MacroParserError,o as ParsingError};

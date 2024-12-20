@@ -1,1 +1,0 @@
-var T=(_=>(_[_._DATE=3011]="_DATE",_[_._TIME=3012]="_TIME",_[_._PRTSA=3901]="_PRTSA",_[_._PRTSN=3902]="_PRTSN",_[_._OFSMEM=3980]="_OFSMEM",_[_._MAINO=4e3]="_MAINO",_[_._TOFSWX=5081]="_TOFSWX",_[_._TOFSWZ=5082]="_TOFSWZ",_[_._TOFSWY=5083]="_TOFSWY",_[_._TOFSGX=5121]="_TOFSGX",_[_._TOFSGZ=5122]="_TOFSGZ",_[_._TOFSGY=5123]="_TOFSGY",_))(T||{});export{T as SystemVariable};

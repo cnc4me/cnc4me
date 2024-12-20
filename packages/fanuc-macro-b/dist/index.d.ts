@@ -8,11 +8,14 @@ import { ILexingError } from 'chevrotain';
 import { ILexingResult } from 'chevrotain';
 import { IRecognitionException } from 'chevrotain';
 import { IToken } from 'chevrotain';
+import { ITransition } from 'typescript-fsm';
 import { OmnipresentEventData } from 'emittery';
 import { ParserMethod } from 'chevrotain';
 import { StateMachine } from 'typescript-fsm';
 import { TokenType } from 'chevrotain';
 import { UnsubscribeFunction } from 'emittery';
+
+declare type ActualCallback = NonNullable<Callback>;
 
 declare type AdditionExpressionCstChildren = {
     lhs: MultiplicationExpressionCstNode[];
@@ -93,13 +96,13 @@ declare interface AtomicExpressionCstNode extends CstNode {
     children: AtomicExpressionCstChildren;
 }
 
-declare class AxisFSM extends StateMachine<States, Events, ICallbacks> {
+export declare class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     #private;
     constructor(label: AxisLabel, config: AxisFsmConfig);
     get limits(): AxisLimits;
     get position(): number;
     setLimits(limits: AxisLimitsInput): void;
-    on: <Name extends keyof AxisFsmEvents | keyof OmnipresentEventData>(eventName: Name | readonly Name[], listener: (eventData: (AxisFsmEvents & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
+    on: <Name extends keyof OmnipresentEventData | keyof AxisFsmEvents>(eventName: Name | readonly Name[], listener: (eventData: (AxisFsmEvents & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
     onAny: (listener: (eventName: keyof AxisFsmEvents, eventData: string | number | (Record<"to" | "from", number> & {
         type: MotionType;
     }) | undefined) => void | Promise<void>) => UnsubscribeFunction;
@@ -173,6 +176,8 @@ declare const BuiltinFunction: Omit<TokenType, "name"> & {
     name: "BuiltinFunction";
 };
 
+declare type CallbackName<T extends string> = `on${Capitalize<T>}`;
+
 declare type CastingOptions = {
     includeUnset: boolean;
 };
@@ -185,7 +190,7 @@ declare const CloseParen: Omit<TokenType, "name"> & {
     name: "CloseParen";
 };
 
-declare class CncMachine {
+export declare class CncMachine {
     #private;
     static EVENTS: Omit<AxisFsmEvents, "MOTION_COMPLETE"> & {
         MOTION_COMPLETE: Position;
@@ -204,7 +209,7 @@ declare class CncMachine {
         axisTravelTimeout: number;
         spindle: ConstructorParameters<typeof SpindleFSM>[0];
     }>);
-    on: <Name extends "FAULT" | "RESET" | "MOTION_COMPLETE" | "TRAVELING" | keyof OmnipresentEventData>(eventName: Name | readonly Name[], listener: (eventData: (Omit<AxisFsmEvents, "MOTION_COMPLETE"> & {
+    on: <Name extends keyof OmnipresentEventData | "FAULT" | "RESET" | "MOTION_COMPLETE" | "TRAVELING">(eventName: Name | readonly Name[], listener: (eventData: (Omit<AxisFsmEvents, "MOTION_COMPLETE"> & {
         MOTION_COMPLETE: Position;
     } & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
     onAny: (listener: (eventName: "FAULT" | "RESET" | "MOTION_COMPLETE" | "TRAVELING", eventData: string | Partial<Record<"X" | "Y" | "Z", number>> | (Record<"to" | "from", number> & {
@@ -406,6 +411,16 @@ declare enum Events_2 {
     Reverse = "Reverse",
     FaultOccurred = "FaultOccurred",
     ReachedTargetRPM = "ReachedTargetRPM"
+}
+
+declare enum Events_3 {
+    start = "start",
+    stop = "stop",
+    pause = "pause",
+    resume = "resume",
+    reset = "reset",
+    finish = "finish",
+    error = "error"
 }
 
 declare type ExpressionCstChildren = {
@@ -887,7 +902,7 @@ export declare class MacroMemory {
      * @TODO have a way to initialize code groups
      */
     constructor();
-    on: <Name extends keyof OmnipresentEventData | "REGISTER_UPDATE">(eventName: Name | readonly Name[], listener: (eventData: (MacroMemoryEvents & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
+    on: <Name extends "REGISTER_UPDATE" | keyof OmnipresentEventData>(eventName: Name | readonly Name[], listener: (eventData: (MacroMemoryEvents & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
     /**
      * Clear all registers to reset the memory
      */
@@ -1210,6 +1225,16 @@ export declare interface MacroRuntimeConfig {
 declare class MacroRuntimeError extends Error {
 }
 
+export declare class MacroRuntimeFSM extends StateMachine<States_3, Events_3> {
+    static STATES: typeof States_3;
+    static EVENTS: typeof Events_3;
+    callbacks: StateHandlerMap<StateName>;
+    constructor(callbacks?: Partial<StateHandlerMap<StateName>>);
+    getTransitions(): ITransition<States_3, Events_3, Callback>[];
+    trigger(event: keyof typeof Events_3): Promise<void>;
+    on<T extends StateName>(stateName: T, callback: NonNullable<Callback>): void;
+}
+
 export declare type MacroValueArray = [register: number, value: number][];
 
 declare class MacroVariable {
@@ -1480,7 +1505,7 @@ declare type SpindleEventEmitter = {
     };
 };
 
-declare class SpindleFSM extends StateMachine<States_2, Events_2, ICallbacks_2> {
+export declare class SpindleFSM extends StateMachine<States_2, Events_2, ICallbacks_2> {
     #private;
     handlers: Partial<EventHandlers>;
     constructor(config?: DeepPartial<SpindleFsmConfig>);
@@ -1537,6 +1562,10 @@ declare interface StartOfFileCstNode extends CstNode {
     children: StartOfFileCstChildren;
 }
 
+declare type StateHandlerMap<T extends string> = Record<CallbackName<T>, ActualCallback>;
+
+declare type StateName = keyof typeof States_3;
+
 declare enum States {
     Idle = "Idle",
     Fault = "Fault",
@@ -1549,6 +1578,14 @@ declare enum States_2 {
     Running = "Running",
     Accelerating = "Accelerating",
     Decelerating = "Decelerating"
+}
+
+declare enum States_3 {
+    finished = "finished",
+    error = "error",
+    stopped = "stopped",
+    paused = "paused",
+    running = "running"
 }
 
 /**

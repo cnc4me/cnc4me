@@ -1,1 +1,0 @@
-import{hasG10 as n}from"./flags.js";function a(r){const{addresses:t,gCodeMap:o}=r;if(!n(o))throw Error("G10 not found.");return t.reduce((f,e)=>({...f,[e.prefix]:e.value}),{})}export{a as extractOffsets};

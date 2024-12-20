@@ -1,1 +1,0 @@
-import{Keyword as n}from"./token.categories.js";import{createToken as o}from"./token.utils.js";const t=["ABS","ACOS","ASIN","ATAN","BCD","BIN","COS","EXP","FIX","FUP","LN","ROUND","SIN","SQRT","TAN"],r=o({name:"BuiltinFunction",pattern:new RegExp(t.join("|")),categories:n});export{r as BuiltinFunction,t as FANUC_MACRO_B_FNS};

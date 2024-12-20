@@ -12,6 +12,7 @@ export { MacroParser } from "./core/MacroParser";
 export { MacroRuntime } from "./core/MacroRuntime";
 export { STDLIB } from "./core/StandardLibrary";
 export { Errors } from "./errors";
+export { AxisFSM, CncMachine, MacroRuntimeFSM, SpindleFSM } from "./fsm";
 export { MemoryConstants, RegisterMap, SystemVariable } from "./memory";
 export { T };
 

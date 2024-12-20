@@ -19,6 +19,10 @@ const EXCLUDE = {
 
 export default defineConfig({
   root: ".",
+  esbuild: {
+    minifyIdentifiers: false,
+    keepNames: true
+  },
   build: {
     outDir: "./dist",
     rollupOptions: {
@@ -26,7 +30,6 @@ export default defineConfig({
       input: "./src/index.ts",
       output: {
         format: "es",
-        preserveModules: true,
         entryFileNames: `[name].js`,
         chunkFileNames: `[name].js`,
         assetFileNames: `[name].[ext]`
@@ -46,7 +49,7 @@ export default defineConfig({
     }
   },
   plugins: [
-    nodeExternals(),
+    // nodeExternals(),
     define({
       replacements: {
         "process.env.NODE_ENV": `"production"`

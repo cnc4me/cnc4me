@@ -3,7 +3,7 @@ import Emittery from "emittery";
 import { LexingError } from "../errors/lexer";
 import { ParsingError } from "../errors/parser";
 import { InvalidProgramNumber, ProgramNumberNotFound } from "../errors/runtime";
-import { type CncMachine, MacroRuntimeFSM } from "../fsm";
+import { MacroRuntimeFSM } from "../fsm/MacroRuntimeFSM";
 import { InsightCollection } from "../lib/Insights";
 import { ProgramNumber } from "../lib/ProgramNumber";
 import { SystemVariable } from "../memory";
@@ -14,6 +14,7 @@ import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 
+import type { CncMachine } from "../fsm/CncMachine";
 import type { NcProgram } from "../lib/NcProgram";
 import type {
   CST,

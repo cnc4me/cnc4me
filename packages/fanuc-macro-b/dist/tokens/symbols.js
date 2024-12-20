@@ -1,2 +1,0 @@
-import{ControlFlowKeyword as n}from"./token.categories.js";import{createToken as e}from"./token.utils.js";const t=n,a=e({name:"Var",pattern:"#",categories:t}),m=e({name:"Dot",pattern:".",categories:t}),c=e({name:"Equals",pattern:"=",categories:t}),s=e({name:"Percent",pattern:"%",categories:t}),p=e({name:"Newline",pattern:`
-`,categories:t}),l=e({name:"SemiColon",pattern:";",categories:t});export{m as Dot,c as Equals,p as Newline,s as Percent,l as SemiColon,a as Var};

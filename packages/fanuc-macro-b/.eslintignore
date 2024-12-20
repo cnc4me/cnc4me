@@ -1,4 +1,4 @@
-src/types/fanuc.d.ts
-dist/
+node_modules
+dist
 
-node_modules/
+src/types/fanuc.d.ts

@@ -1,1 +1,0 @@
-import{createCategory as o}from"./token.utils.js";const t=o("Fences"),e=o("Keyword"),n=o("NumericValue"),a=o("BooleanOperator"),c=o("AdditionOperator"),i=o("ControlFlowKeyword"),l=o("MultiplicationOperator");export{c as AdditionOperator,a as BooleanOperator,i as ControlFlowKeyword,t as Fences,e as Keyword,l as MultiplicationOperator,n as NumericValue};

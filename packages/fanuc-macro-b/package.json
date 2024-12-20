@@ -6,6 +6,10 @@
   "license": "MIT",
   "author": "Kevin Hill",
   "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
@@ -27,7 +31,6 @@
     "diagram:ui": "tsx ./scripts/diagramHost.ts",
     "diagrams": "pnpm diagram:language && pnpm diagram:runtime",
     "repl": "tsx ./demo/repl.demo.ts",
-    "spindle:ui": "npx parcel ./demo/spindle.html",
     "test": "vitest",
     "test:ui": "vitest --ui"
   },

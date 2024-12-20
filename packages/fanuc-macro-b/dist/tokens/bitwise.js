@@ -1,1 +1,0 @@
-import{BooleanOperator as e,Keyword as o}from"./token.categories.js";import{createToken as r}from"./token.utils.js";const t=[e,o],m=r({name:"Or",pattern:/OR/,categories:t}),p=r({name:"And",pattern:/AND/,categories:t}),O=r({name:"XOr",pattern:/XOR/,categories:t});export{p as And,m as Or,O as XOr};
