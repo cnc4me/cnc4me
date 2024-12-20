@@ -1,0 +1,23 @@
+{
+  "extends": "../../tsconfig.json",
+  "compilerOptions": {
+    "composite": true,
+    "module": "ESNext",
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+  },
+  "files": [
+    "./index.html",
+    "./vite.config.ts"
+  ],
+  "references": [
+    {
+      "path": "../../packages/fanuc-macro-b"
+    },
+    {
+      "path": "./tsconfig.eslint.json"
+    },
+  ]
+}

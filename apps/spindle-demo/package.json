@@ -1,0 +1,33 @@
+{
+  "name": "@cnc4me/spindle-demo",
+  "version": "1.0.0",
+  "private": true,
+  "description": "View the grammar of the MacroParser",
+  "keywords": [
+    "chevrotain",
+    "parser",
+    "html"
+  ],
+  "license": "MIT",
+  "author": "Kevin Hill",
+  "type": "module",
+  "scripts": {
+    "start": "vite dev",
+    "build": "vite build"
+  },
+  "dependencies": {
+    "@cnc4me/fanuc-macro-b": "workspace:*"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-import-resolver-typescript": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
