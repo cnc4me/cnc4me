@@ -10,7 +10,8 @@
     "subtree:monaco-lang": "git subtree push --prefix packages/monaco-language-gcode monaco-language-gcode main",
     "subtree:monaco-theme": "git subtree push --prefix packages/monaco-theme-gcode monaco-theme-gcode main",
     "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
-    "test": "pnpm -F macro-playground test"
+    "test": "pnpm -F macro-playground test",
+    "spindle-demo": "pnpm run --filter \"@cnc4me/spindle-demo\" start"
   },
   "devDependencies": {
     "@types/node": "catalog:",

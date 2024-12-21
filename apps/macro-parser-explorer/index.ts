@@ -1,5 +1,5 @@
 import { createServer } from "@cnc4me/chevrotain-live";
-import { MacroParser } from "@cnc4me/fanuc-macro-b/dist"; // @TODO WHY NEED DIST?
+import { MacroParser } from "@cnc4me/fanuc-macro-b";
 
 const parser = new MacroParser();
 const server = createServer(parser);
