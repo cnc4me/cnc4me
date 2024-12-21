@@ -1,11 +1,8 @@
 import React from "react";
 
-import type { CanvasProps, DrawProp } from "./types";
-
 function Canvas(props: CanvasProps & DrawProp) {
-  const { draw, ...rest } = props;
-
   const canvasRef = React.useRef<HTMLCanvasElement>(null);
+  const { draw, ...rest } = props;
 
   React.useEffect(() => {
     const canvas = canvasRef.current!;
@@ -14,7 +11,6 @@ function Canvas(props: CanvasProps & DrawProp) {
     let frameCount = 0;
     let animationFrameId = NaN;
 
-    //Our draw came here
     const render = () => {
       frameCount++;
       draw(context, frameCount);
@@ -31,3 +27,12 @@ function Canvas(props: CanvasProps & DrawProp) {
 }
 
 export default Canvas;
+
+export type CanvasProps = React.DetailedHTMLProps<
+  React.CanvasHTMLAttributes<HTMLCanvasElement>,
+  HTMLCanvasElement
+>;
+
+export type DrawProp = {
+  draw: (ctx: CanvasRenderingContext2D, frameCount: number) => void;
+};

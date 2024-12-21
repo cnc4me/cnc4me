@@ -2,7 +2,7 @@ import type { Themes } from "./themes";
 import type { createBracketRules, createLanguageRules } from "./utils";
 import type * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 
-export { Monaco };
+export type { Monaco };
 
 export type GcodeThemeName = keyof typeof Themes;
 export type MonacoTokenizerRule = [match: RegExp, token: string];

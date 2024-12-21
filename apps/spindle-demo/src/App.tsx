@@ -4,6 +4,7 @@ import "@fontsource/roboto/500.css";
 import "@fontsource/roboto/700.css";
 import "./App.css";
 
+import { SpindleFSM } from "@cnc4me/fanuc-macro-b";
 import Box from "@mui/material/Box";
 import Button from "@mui/material/Button";
 import Container from "@mui/material/Container";
@@ -15,17 +16,20 @@ import { useMemo, useState } from "react";
 
 import Canvas from "./Canvas";
 
-import type { SpindleFSM } from "@cnc4me/fanuc-macro-b";
+const a2rad = (a: number) => a * (Math.PI / 180);
 
-export function App({ spindle }: { spindle: SpindleFSM }) {
+const spindle = new SpindleFSM({
+  rpm: { max: 8000 }
+});
+
+export function App() {
+  const [fps, setFps] = useState(30);
+  const [radius, setRadius] = useState(100);
   const [targetRPM, setTargetRpm] = useState(200);
-  const overlayText = useMemo<string[]>(
-    () => [
-      `RPM: ${Math.round(spindle.rpms)} / ${spindle.config.rpm.max}`,
-      `State: ${spindle.getState()}`,
-      `Direction: ${spindle.direction}`
-    ],
-    [spindle]
+
+  const rotationsPerFrame = useMemo(
+    () => targetRPM / (60 * fps),
+    [fps, targetRPM]
   );
 
   // Listen to spindle events
@@ -34,56 +38,80 @@ export function App({ spindle }: { spindle: SpindleFSM }) {
     console.log("TARGET:", target);
   });
 
-  // // Settings
-  const radius = 50;
-
-  let angle = 0;
-  // let lastTimestamp = 0;
-
   const draw = (ctx: CanvasRenderingContext2D, frameCount: number) => {
     const { height, width } = ctx.canvas;
     const centerX = width / 2;
     const centerY = height / 2;
+    const spindleCenter = centerY + 25;
 
+    const colors = ["black", "white"];
     const textX = 10;
     const textStartY = 20;
-    const textGap = 20;
-    const scaler = Math.sin(frameCount * 0.02) ** 2;
+    const textGap = 15;
+    const arrowGap = 15;
 
-    // console.log(scaler);
+    const overlayText = [
+      `RPM: ${Math.round(spindle.rpms)} / ${spindle.config.rpm.max}`,
+      `State: ${spindle.getState()}`,
+      `Direction: ${spindle.direction}`
+    ];
+
+    const angle = spindle.is("Running")
+      ? 2 * Math.PI * (frameCount * rotationsPerFrame)
+      : 0;
 
     ctx.clearRect(0, 0, width, height);
-    // ctx.fillStyle = `rgba(100, 20, 230, ${scaler})`;
-    // ctx.beginPath();
-    // ctx.arc(centerX, centerY, 300 * scaler, 0, 2 * Math.PI);
-    // ctx.fill();
+
+    if (1) {
+      // Draw red line with arrowhead
+      ctx.beginPath();
+      ctx.arc(centerX, spindleCenter, radius + arrowGap, -a2rad(25), 0);
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+
+      // Add arrowhead
+      const arrowLength = 20;
+      const arrowX = centerX + (radius + arrowGap);
+
+      ctx.beginPath();
+      ctx.moveTo(arrowX, spindleCenter);
+      ctx.lineTo(
+        arrowX + arrowLength * Math.cos(Math.PI / 2.7),
+        spindleCenter - arrowLength * Math.sin(Math.PI / 2.7)
+      );
+      ctx.moveTo(arrowX, spindleCenter);
+      ctx.lineTo(
+        arrowX - arrowLength * Math.cos(Math.PI / 3),
+        spindleCenter - arrowLength * Math.sin(Math.PI / 3)
+      );
+      ctx.strokeStyle = "red";
+      ctx.stroke();
+    }
 
     ctx.save();
-    ctx.translate(centerX, centerY);
+    ctx.translate(centerX, spindleCenter);
     ctx.rotate(angle);
 
-    ctx.fillStyle = "#007bff";
-    var colors = ["black", "white", "black", "white"];
+    // ctx.fillStyle = "#ff11ff";
+    ctx.strokeStyle = "black";
     for (var i = 0; i < 4; i++) {
-      var startAngle = (i * Math.PI) / 2;
-      var endAngle = startAngle + Math.PI / 2;
+      var startAngle = i * a2rad(90);
+      var endAngle = startAngle + a2rad(90);
       ctx.beginPath();
       ctx.moveTo(0, 0);
       ctx.arc(0, 0, radius, startAngle, endAngle);
       ctx.closePath();
-      ctx.fillStyle = colors[i];
+      ctx.fillStyle = colors[i % 2];
       ctx.fill();
       ctx.stroke();
     }
 
     ctx.restore();
     ctx.font = "12px monospace";
-    ctx.fillStyle = "#000";
+    ctx.fillStyle = "#777";
     overlayText.forEach((line, idx) => {
       ctx.fillText(line, textX, textStartY + idx * textGap);
     });
-
-    angle = (frameCount > 360 ? frameCount % 360 : frameCount) / scaler / 2;
   };
 
   return (
@@ -91,18 +119,19 @@ export function App({ spindle }: { spindle: SpindleFSM }) {
       <Paper sx={{ maxWidth: "400px", margin: "0 auto" }}>
         <Stack gap={1}>
           <Box>
-            <Typography variant="h3" sx={{ marginTop: "20px" }}>
+            <Typography variant="h3" sx={{ margin: "20px 0 10px 0" }}>
               Spindle FSM
             </Typography>
           </Box>
-          <Canvas draw={draw} width={400} height={250}></Canvas>
+          <Canvas draw={draw} width={400} height={300}></Canvas>
           {/* <ButtonGroup variant="text"> */}
           <Stack direction="row">
             <Button onClick={() => spindle.M4(targetRPM)}>Reverse</Button>
             <Button
               onClick={() => {
-                setTargetRpm(0);
-                spindle.M5();
+                if (!spindle.is("Idle")) {
+                  spindle.M5();
+                }
               }}
             >
               Stop

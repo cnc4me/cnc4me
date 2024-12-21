@@ -35,6 +35,7 @@ export default [
       ...ts.configs["recommended"].rules,
       "prettier/prettier": "error",
       "react-refresh/only-export-components": "error",
+      "@typescript-eslint/no-unused-vars": "warn",
       "simple-import-sort/exports": "error",
       "simple-import-sort/imports": [
         "error",

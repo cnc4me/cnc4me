@@ -1,0 +1,47 @@
+name: Build Macro Playground
+
+on:
+  push:
+    branches:
+      - main
+      - devel
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout Source
+      - uses: pnpm/action-setup@v4
+        name: Install PNPM
+      - uses: actions/setup-node@v4
+        name: Setup Node for PNPM
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm -F @cnc4me/fanuc-macro-b install
+        name: Install Library Deps
+      - run: pnpm -F @cnc4me/fanuc-macro-b test
+        name: Run Vitest
+      - run: pnpm -F @cnc4me/fanuc-macro-b build
+        name: Compile TypeScript Sources
+
+  playground-app:
+    needs: build
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+        name: Checkout Source
+      - uses: pnpm/action-setup@v4
+        name: Install PNPM
+      - uses: actions/setup-node@v4
+        name: Setup Node for PNPM
+        with:
+          node-version: '22'
+          cache: 'pnpm'
+          cache-dependency-path: '**/pnpm-lock.yaml'
+      - run: pnpm -F @cnc4me/macro-playground install
+        name: Install NextJS
+      - run: pnpm -F @cnc4me/macro-playground build
+        name: Build Website

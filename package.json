@@ -3,21 +3,25 @@
   "version": "1.0.0",
   "private": true,
   "license": "MIT",
+  "workspaces": [
+    "packages",
+    "apps"
+  ],
   "scripts": {
     "build:playground": "pnpm -F macro-playground build",
-    "dev": "pnpm -F macro-playground dev",
-    "subtree:chrysalis": "git subtree push --prefix packages/chrysalis chrysalis main",
-    "subtree:monaco-lang": "git subtree push --prefix packages/monaco-language-gcode monaco-language-gcode main",
-    "subtree:monaco-theme": "git subtree push --prefix packages/monaco-theme-gcode monaco-theme-gcode main",
-    "subtree:playground": "git subtree push --prefix apps/website macro-playground main",
-    "test": "pnpm -F macro-playground test",
-    "spindle-demo": "pnpm run --filter \"@cnc4me/spindle-demo\" start"
+    "playground": "pnpm -F macro-playground dev",
+    "spindle-demo": "pnpm run -F spindle-demo start",
+    "subtree:monaco-gcode": "git subtree push --prefix packages/monaco-gcode monaco-gcode main",
+    "subtree:playground": "git subtree push --prefix apps/macro-playground macro-playground main",
+    "test": "pnpm -F \"@cnc4me/*\" test",
+    "github-workflow-test": "act -P ubuntu-latest=-self-hosted"
   },
   "devDependencies": {
     "@types/node": "catalog:",
     "@typescript-eslint/eslint-plugin": "catalog:",
     "@typescript-eslint/parser": "catalog:",
     "@vitest/eslint-plugin": "^1.1.10",
+    "concurrently": "^9.1.0",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
     "eslint-import-resolver-typescript": "catalog:",
@@ -27,19 +31,12 @@
     "prettier": "catalog:",
     "process": "^0.11.10",
     "rimraf": "^3.0.2",
-    "ts-node-dev": "^1.1.8",
-    "tsup": "^8.3.5",
     "typescript": "catalog:",
     "vite": "catalog:",
-    "vitest": "catalog:",
-    "nx": "20.2.2"
-  },
-  "engines": {
-    "pnpm": "*"
+    "vitest": "catalog:"
   },
   "packageManager": "pnpm@9.14.2",
-  "workspaces": [
-    "packages",
-    "apps"
-  ]
+  "engines": {
+    "pnpm": "*"
+  }
 }

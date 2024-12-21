@@ -1,4 +1,0 @@
-.next/
-.vercel/
-node_modules/
-vitest/dist/*
