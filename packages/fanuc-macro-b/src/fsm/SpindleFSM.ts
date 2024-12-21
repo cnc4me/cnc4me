@@ -113,9 +113,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     // end-constructor
   }
 
-  get on() {
-    return this.#events.on.bind(this.#events);
-  }
+  on = this.#events.on.bind(this.#events);
 
   get hasFault() {
     return this.getState() === States.Fault;
@@ -127,7 +125,10 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
 
   get rpms(): number {
     return this.#rpm.current;
+  }
 
+  get config() {
+    return this.#config;
   }
 
   get stats() {
@@ -144,6 +145,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   set simulation(state: boolean) {
     this.#config.acceleration.simulate = state;
   }
+
 
   /**
    * Generic state testing method

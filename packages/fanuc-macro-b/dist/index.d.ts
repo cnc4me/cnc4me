@@ -1509,10 +1509,11 @@ export declare class SpindleFSM extends StateMachine<States_2, Events_2, ICallba
     #private;
     handlers: Partial<EventHandlers>;
     constructor(config?: DeepPartial<SpindleFsmConfig>);
-    get on(): <Name extends keyof OmnipresentEventData | keyof SpindleEventEmitter>(eventName: Name | readonly Name[], listener: (eventData: (SpindleEventEmitter & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
+    on: <Name extends keyof OmnipresentEventData | keyof SpindleEventEmitter>(eventName: Name | readonly Name[], listener: (eventData: (SpindleEventEmitter & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
     get hasFault(): boolean;
     get direction(): string;
     get rpms(): number;
+    get config(): SpindleFsmConfig;
     get stats(): {
         currentRPM: number;
         directon: string;
