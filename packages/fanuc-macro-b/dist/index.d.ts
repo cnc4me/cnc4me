@@ -1180,6 +1180,8 @@ export declare class MacroRuntime implements ErrorProducer<MacroCombinedError> {
      * Load a Program into memory
      *
      * This method can create a program if given a string
+     *
+     * @TODO wrap "programs" if they don't have a program number
      */
     loadProgram(input: string, options?: ProgramLoadOptions): void;
     /**
@@ -1434,6 +1436,7 @@ declare interface ProgramCstNode extends CstNode {
 
 export declare interface ProgramLoadOptions {
     setActive: boolean;
+    programNumber?: number;
 }
 
 /**

@@ -1,5 +1,8 @@
-/* eslint-disable @typescript-eslint/no-misused-promises */
 import { MacroRuntimeFSM } from "../src";
+
+async function dwell(timeout = 1000) {
+  return new Promise<void>(resolve => setTimeout(() => resolve(), timeout));
+}
 
 const fsm = new MacroRuntimeFSM({
   onError: () => {
@@ -17,20 +20,13 @@ const fsm = new MacroRuntimeFSM({
 });
 
 // Run It
-void (async () => {
-  await fsm.trigger("start");
+setTimeout(() => void fsm.trigger("reset"), 5000);
 
-  await fsm.trigger("stop");
-
-  setTimeout(async () => {
-    await fsm.trigger("start");
-
-    setTimeout(async () => {
-      await fsm.trigger("error");
-    }, 1000);
-  }, 2000);
-
-  setTimeout(async () => {
-    await fsm.trigger("reset");
-  }, 5000);
-})();
+void Promise.resolve()
+  .then(() => fsm.trigger("start"))
+  .then(() => dwell())
+  .then(() => fsm.trigger("stop"))
+  .then(() => dwell())
+  .then(() => fsm.trigger("start"))
+  .then(() => dwell())
+  .then(() => fsm.trigger("error"));

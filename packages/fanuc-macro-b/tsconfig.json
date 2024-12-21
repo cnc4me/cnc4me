@@ -23,7 +23,8 @@
     "./src/**/*.ts",
     "./src/lib/*.json",
     "./tests/**/*.ts",
-    "./scripts/*.ts",
+    "./demo/*.ts",
+    "./scripts/*.ts"
   ],
   "exclude": [
     "dist",

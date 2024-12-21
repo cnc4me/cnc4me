@@ -148,9 +148,15 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Load a Program into memory
    *
    * This method can create a program if given a string
+   *
+   * @TODO wrap "programs" if they don't have a program number
    */
   loadProgram(input: string, options?: ProgramLoadOptions): void {
-    ProgramNumber.create({
+    if (options?.programNumber) {
+      this.#programs[options.programNumber] = input;
+    }
+
+    const matcher = ProgramNumber.create({
       onFail: err => this.#error(err),
       onMatch: programNumber => {
         this.#programs[programNumber] = input;
@@ -160,7 +166,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
           // this.#tokenizeActiveProgram();
         }
       }
-    }).match(input);
+    });
+
+    matcher.match(input);
   }
 
   /**

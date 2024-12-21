@@ -1,0 +1,169 @@
+import { assign, createActor, createMachine } from "xstate";
+
+// Define States
+const States = {
+  Idle: "Idle",
+  Fault: "Fault",
+  Running: "Running",
+  Accelerating: "Accelerating",
+  Decelerating: "Decelerating"
+};
+
+// Define Events
+const Events = {
+  Stop: "Stop",
+  Forward: "Forward",
+  Reverse: "Reverse",
+  FaultOccurred: "FaultOccurred",
+  ReachedTargetRPM: "ReachedTargetRPM"
+};
+
+// Rotation States
+const Rotation = {
+  Forward: 1,
+  Stopped: 0,
+  Reverse: -1
+};
+
+// Default Configuration
+const defaultConfig = {
+  throwOnFault: false,
+  rpm: {
+    max: 8000,
+    onExceedMaxRPM: "fault" // 'fault' or 'clamp'
+  },
+  acceleration: {
+    simulate: true,
+    timeout: 250
+  }
+};
+
+const createSpindleFSM = (config = {}) => {
+  const mergedConfig = {
+    ...defaultConfig,
+    ...config,
+    rpm: { ...defaultConfig.rpm, ...config.rpm },
+    acceleration: { ...defaultConfig.acceleration, ...config.acceleration }
+  };
+
+  return createMachine(
+    {
+      /** @xstate-layout N4IgpgJg5mDOIC5SwA4EsB2EA2YB0AkjmAMQBiA9gE4DuAhlRANoAMAuoqChbGgC5oKGTiAAeiAIwAOAJx4ZAVgDMEgEwB2KeokSFUiUoA0IAJ6JlqvCwBs67bKUsWMlhIC+b46kzFCxEgBKYABuYFSwYKwcSCDcvAJCIuII0nKKKhpaOnoGxmYI1qpSeBIALHql1goa2aoeXuhYuH645HQArth8APIAxr3tVFSQUSJx-ILCMcmp8spqmtq6+kamiDK6eKqqSjLqpWoHpSx1niDeTfgAgv1guFR0AhhQgWB0vQAWkAAqDDB8AQACgBZUYxcYJKagGayOYZRbZFZ5RCqUpKPBSJRYpTWAwuMoyJT1c6NXw3Xp3MKPTAvADKfAoKDBXB4E0S03M1nRLEqUi0Si0XJYUmRCA0Cjwyhc1kKLDsihYRLOFzJt3u1OebU6PX6g2GzHYY1ZkKSnO5vP5gscIrWCEq6jw1nSqjKrik5V0xJVzQC7QwGBp5Go9EYzNixsmppSsPSCyyy1ytqxaR0lSU6hxPK9pJ9foDmqCoXCkUN4Ij7Ohkhj80ySxyq3yaIlMlkCg22JsChYCmzPlz-sD9MZYYhkY50bSNYRCYbkiUlici9RziKqh7ypz+F9A81ZA6XT6AyGI1LLPiY8rE7hcbrSNt+kli9c2ycUgsvcueAAImAKeqni8QTvF8EC-FQ-xAqCp7hueFZiGaVgWhmVrCqK6YSI6EjaISUg8lIqiuB+vg-n+VIAVqB66seBrRGebJQvBCAbJYxyFNomhaAoCilKKqiKBiRRqDIBxYc4HhnBgFAQHAIjemARqwQxyQALTWKKqlWIuahCaUqKpkRzRELgCn0VGaIsI6rFrrIaI6KKmilFs3bbOmtgCjoBnXGqZE0iZJrjscxTqFUXJKNxfInBIam2pUGF2FIVTlDiewyJ5eDbvmUB+RejG6aKpTlJhEgtvsGbtmuaUkZSDwAdlcHJMFDpyvoukbOobbdrxMjWHg876HxInqGJG59vge7anVSmSMKDrShouJFFxGj5WFlkWDyOhaOopweEAA */
+      id: "spindle",
+      initial: States.Idle,
+      context: {
+        currentRPM: 0,
+        targetRPM: 0,
+        direction: Rotation.Stopped,
+        config: mergedConfig
+      },
+      states: {
+        [States.Idle]: {
+          on: {
+            [Events.Forward]: {
+              target: States.Accelerating,
+              actions: "onForward"
+            },
+            [Events.Reverse]: {
+              target: States.Accelerating,
+              actions: "onReverse"
+            },
+            [Events.FaultOccurred]: States.Fault
+          }
+        },
+        [States.Accelerating]: {
+          on: {
+            [Events.ReachedTargetRPM]: {
+              target: States.Running,
+              actions: "onReachedTargetRPM"
+            },
+            [Events.Stop]: {
+              target: States.Decelerating,
+              actions: "onStop"
+            },
+            [Events.FaultOccurred]: States.Fault
+          }
+        },
+        [States.Running]: {
+          on: {
+            [Events.Forward]: {
+              target: States.Accelerating,
+              actions: "onForward"
+            },
+            [Events.Reverse]: {
+              target: States.Accelerating,
+              actions: "onReverse"
+            },
+            [Events.Stop]: {
+              target: States.Decelerating,
+              actions: "onStop"
+            },
+            [Events.FaultOccurred]: States.Fault
+          }
+        },
+        [States.Decelerating]: {
+          on: {
+            [Events.ReachedTargetRPM]: {
+              target: States.Idle,
+              actions: "onStopped"
+            },
+            [Events.FaultOccurred]: States.Fault
+          }
+        },
+        [States.Fault]: {
+          entry: "onFault"
+        }
+      }
+    },
+    {
+      actions: {
+        onForward: assign((context, event) => {
+          context.direction = Rotation.Forward;
+          context.targetRPM = event.targetRPM;
+          return context;
+        }),
+        onReverse: assign((context, event) => {
+          context.direction = Rotation.Reverse;
+          context.targetRPM = event.targetRPM;
+          return context;
+        }),
+        onReachedTargetRPM: assign(context => {
+          context.currentRPM = context.targetRPM;
+          return context;
+        }),
+        onStop: assign(context => {
+          context.targetRPM = 0;
+          return context;
+        }),
+        onStopped: assign(context => {
+          context.currentRPM = 0;
+          context.direction = Rotation.Stopped;
+          return context;
+        }),
+        onFault: (context, event) => {
+          console.error(`Fault occurred: ${event.message}`);
+        }
+      }
+    }
+  );
+};
+
+// Instantiate the machine
+const spindleFSM = createSpindleFSM();
+const service = createActor(spindleFSM)
+  .onTransition(state => {
+    if (state.changed) {
+      console.log(`State changed to: ${state.value}`);
+      console.log("Context:", state.context);
+    }
+  })
+  .start();
+
+// Example usage
+service.send({ type: Events.Forward, targetRPM: 5000 });
+setTimeout(() => service.send(Events.ReachedTargetRPM), 1000);
+setTimeout(() => service.send(Events.Stop), 2000);
+setTimeout(
+  () => service.send(Events.FaultOccurred, { message: "Overload" }),
+  3000
+);
