@@ -1,0 +1,30 @@
+{
+  "name": "@cnc4me/machine-trace",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Virtual implementation of a Fanuc gcode interpreter and execution environment",
+  "license": "MIT",
+  "author": "Kevin Hill",
+  "main": "./dist/index.js",
+  "scripts": {
+    "start": "tsx image.ts"
+  },
+  "dependencies": {
+    "canvas": "^2.11.2"
+  },
+  "devDependencies": {
+    "@types/node": "catalog:",
+    "@typescript-eslint/eslint-plugin": "catalog:",
+    "@typescript-eslint/parser": "catalog:",
+    "@typescript-eslint/utils": "catalog:",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "prettier": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}

@@ -117,6 +117,52 @@ importers:
         specifier: 'catalog:'
         version: 2.1.7(@types/node@22.10.1)(@vitest/ui@2.1.5)(lightningcss@1.28.2)
 
+  apps/machine-trace:
+    dependencies:
+      canvas:
+        specifier: ^2.11.2
+        version: 2.11.2
+    devDependencies:
+      '@types/node':
+        specifier: 'catalog:'
+        version: 22.10.1
+      '@typescript-eslint/eslint-plugin':
+        specifier: 'catalog:'
+        version: 8.16.0(@typescript-eslint/parser@8.16.0(eslint@8.57.1)(typescript@5.7.2))(eslint@8.57.1)(typescript@5.7.2)
+      '@typescript-eslint/parser':
+        specifier: 'catalog:'
+        version: 8.16.0(eslint@8.57.1)(typescript@5.7.2)
+      '@typescript-eslint/utils':
+        specifier: 'catalog:'
+        version: 8.16.0(eslint@8.57.1)(typescript@5.7.2)
+      eslint:
+        specifier: 'catalog:'
+        version: 8.57.1
+      eslint-config-prettier:
+        specifier: 'catalog:'
+        version: 9.1.0(eslint@8.57.1)
+      eslint-plugin-import:
+        specifier: 'catalog:'
+        version: 2.31.0(@typescript-eslint/parser@8.16.0(eslint@8.57.1)(typescript@5.7.2))(eslint-import-resolver-typescript@2.7.1)(eslint@8.57.1)
+      eslint-plugin-prettier:
+        specifier: 'catalog:'
+        version: 5.2.1(eslint-config-prettier@9.1.0(eslint@8.57.1))(eslint@8.57.1)(prettier@3.4.1)
+      eslint-plugin-simple-import-sort:
+        specifier: 'catalog:'
+        version: 12.1.1(eslint@8.57.1)
+      prettier:
+        specifier: 'catalog:'
+        version: 3.4.1
+      tsx:
+        specifier: 'catalog:'
+        version: 4.19.2
+      typescript:
+        specifier: 'catalog:'
+        version: 5.7.2
+      vite:
+        specifier: 'catalog:'
+        version: 6.0.5(@types/node@22.10.1)(jiti@1.21.6)(lightningcss@1.28.2)(tsx@4.19.2)(yaml@2.6.1)
+
   apps/macro-parser-explorer:
     dependencies:
       '@cnc4me/chevrotain-live':
@@ -555,9 +601,6 @@ importers:
       '@cnc4me/monaco-gcode':
         specifier: workspace:*
         version: link:../monaco-gcode
-      canvas:
-        specifier: ^2.11.2
-        version: 2.11.2
       chevrotain:
         specifier: 'catalog:'
         version: 10.5.0
@@ -6053,7 +6096,7 @@ snapshots:
       '@typescript-eslint/types': 8.16.0
       '@typescript-eslint/typescript-estree': 8.16.0(typescript@5.7.2)
       '@typescript-eslint/visitor-keys': 8.16.0
-      debug: 4.3.7
+      debug: 4.4.0
       eslint: 8.57.1
     optionalDependencies:
       typescript: 5.7.2
@@ -6074,7 +6117,7 @@ snapshots:
     dependencies:
       '@typescript-eslint/typescript-estree': 8.16.0(typescript@5.7.2)
       '@typescript-eslint/utils': 8.16.0(eslint@8.57.1)(typescript@5.7.2)
-      debug: 4.3.7
+      debug: 4.4.0
       eslint: 8.57.1
       ts-api-utils: 1.4.3(typescript@5.7.2)
     optionalDependencies:
@@ -7205,7 +7248,7 @@ snapshots:
       ajv: 6.12.6
       chalk: 4.1.2
       cross-spawn: 7.0.6
-      debug: 4.3.7
+      debug: 4.4.0
       doctrine: 3.0.0
       escape-string-regexp: 4.0.0
       eslint-scope: 7.2.2

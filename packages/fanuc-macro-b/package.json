@@ -36,7 +36,6 @@
   },
   "dependencies": {
     "@cnc4me/monaco-gcode": "workspace:*",
-    "canvas": "^2.11.2",
     "chevrotain": "catalog:",
     "debug": "catalog:",
     "emittery": "^1.0.3",
