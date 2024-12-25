@@ -68,6 +68,7 @@ export type ConditionalExpressionCstChildren = {
   If: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Then?: IToken[];
+  VariableAssignment?: VariableAssignmentCstNode[];
   GotoLine?: IToken[];
 };
 
@@ -88,8 +89,9 @@ export interface BooleanExpressionCstNode extends CstNode {
 }
 
 export type BooleanExpressionCstChildren = {
-  AtomicExpression: (AtomicExpressionCstNode)[];
+  lhs: AtomicExpressionCstNode[];
   BooleanOperator: IToken[];
+  rhs: AtomicExpressionCstNode[];
 };
 
 export interface AdditionExpressionCstNode extends CstNode {

@@ -155,6 +155,11 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.VariableAssignment(children);
     }
 
+    if (ctx?.ConditionalExpression) {
+      const { children } = unbox(ctx.ConditionalExpression);
+      this.ConditionalExpression(children);
+    }
+
     if (ctx?.AddressedValue) {
       ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
@@ -386,6 +391,40 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     return result;
   }
+
+  ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
+    let boolExpr: boolean | null = null;
+    // if (ctx?.AtomicBooleanExpression) {
+    boolExpr = this.visit(ctx?.AtomicBooleanExpression);
+    // }
+    console.log(ctx, boolExpr);
+    if (boolExpr && ctx?.VariableAssignment) {
+      return this.VariableAssignment(ctx.VariableAssignment[0].children);
+    }
+  }
+
+  /**
+   * Evaluate a BooleanExpression into a boolean value
+   */
+  AtomicBooleanExpression(
+    ctx: CST.AtomicBooleanExpressionCstChildren
+  ): boolean {
+    const { children } = unbox(ctx?.BooleanExpression);
+    const lhs = this.AtomicExpression(children.lhs[0].children);
+    const rhs = this.AtomicExpression(children.rhs[0].children);
+    const operator = getImage(children.BooleanOperator);
+    const test: Record<string, (L: number, R: number) => boolean> = {
+      EQ: (L, R) => L === R,
+      NE: (L, R) => L !== R,
+      LT: (L, R) => L < R,
+      LE: (L, R) => L <= R,
+      GT: (L, R) => L > R,
+      GE: (L, R) => L >= R
+    };
+    return test[operator](lhs, rhs);
+  }
+
+  // Then(ctx: CST) {}
 }
 
 type InterpreterPropsToIgnore = "events" | "lines" | "memory";

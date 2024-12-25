@@ -125,18 +125,21 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   /**
    * Main entry point to the runtime.
    */
-  run(lineCallback?: (line: IParsedLineData) => void): NcProgram {
+  run(lineCallback?: (line: IParsedLineData) => void): NcProgram | undefined {
     this.#debug("starting run");
     this.#tokenizeActiveProgram();
     this.#debug("lexing complete");
     const programCst = this.Parser.Program() as unknown as CST.ProgramCstNode;
     this.#debug("parsing complete");
-    if (this.Parser.errors.length > 0) {
+    if (this.Parser.hasErrors) {
       this.#error(this.Parser.errors[0]);
+      return;
     }
     const result = this.Interpreter.Program(programCst.children);
     for (const line of result.getLines()) {
-      this.#machine.queueLine(line);
+      if (this.#machine) {
+        this.#machine.queueLine(line);
+      }
       if (typeof lineCallback === "function") {
         lineCallback(line);
       }

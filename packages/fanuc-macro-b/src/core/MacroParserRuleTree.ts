@@ -123,10 +123,16 @@ export class MacroParserRuleTree extends CstParser {
   ConditionalExpression = this.RULE("ConditionalExpression", () => {
     this.CONSUME(If);
     this.SUBRULE(this.AtomicBooleanExpression);
-    // eslint-disable-next-line prettier/prettier
     this.OR([
-      { ALT: () => this.CONSUME(Then) },
-      { ALT: () => this.CONSUME(GotoLine) }
+      {
+        ALT: () => {
+          this.CONSUME(Then);
+          this.SUBRULE(this.VariableAssignment);
+        }
+      },
+      {
+        ALT: () => this.CONSUME(GotoLine)
+      }
     ]);
   });
 
@@ -140,9 +146,9 @@ export class MacroParserRuleTree extends CstParser {
    * Making a comparison between two values
    */
   BooleanExpression = this.RULE("BooleanExpression", () => {
-    this.SUBRULE(this.AtomicExpression);
+    this.SUBRULE(this.AtomicExpression, { LABEL: "lhs" });
     this.CONSUME(BooleanOperator);
-    this.SUBRULE2(this.AtomicExpression);
+    this.SUBRULE2(this.AtomicExpression, { LABEL: "rhs" });
   });
 
   /**

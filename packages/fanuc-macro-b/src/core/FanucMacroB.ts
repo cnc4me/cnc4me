@@ -92,11 +92,8 @@ export class FanucMacroB
    */
   eval(input: string): EvalResult {
     this.tokenizeAndLoadParser(input);
-    console.log("EVAL INPUT", input);
     const cst = this.parser.Lines();
     const result = this.interpreter.Lines(cst?.children);
-    console.log(result);
-    console.log("RESULT!");
     return { error: null, result };
   }
 

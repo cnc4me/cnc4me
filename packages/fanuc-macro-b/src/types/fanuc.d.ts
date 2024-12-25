@@ -68,6 +68,7 @@ declare type ConditionalExpressionCstChildren = {
   If: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Then?: IToken[];
+  VariableAssignment?: VariableAssignmentCstNode[];
   GotoLine?: IToken[];
 };
 
@@ -88,8 +89,9 @@ declare interface BooleanExpressionCstNode extends CstNode {
 }
 
 declare type BooleanExpressionCstChildren = {
-  AtomicExpression: (AtomicExpressionCstNode)[];
+  lhs: AtomicExpressionCstNode[];
   BooleanOperator: IToken[];
+  rhs: AtomicExpressionCstNode[];
 };
 
 declare interface AdditionExpressionCstNode extends CstNode {
