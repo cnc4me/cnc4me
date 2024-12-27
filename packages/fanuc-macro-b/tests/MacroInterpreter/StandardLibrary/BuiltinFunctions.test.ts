@@ -1,6 +1,6 @@
 import { describe, expect, it } from "vitest";
 
-import { FanucMacroB } from "../../src";
+import { FanucMacroB } from "../../../src";
 
 const E_TO_THE_POWER = (x: number) => Math.pow(Math.E, x);
 

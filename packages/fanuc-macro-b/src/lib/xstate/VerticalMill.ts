@@ -35,9 +35,9 @@ export const VerticalMill = setup({
   // entry: [],
 
   context: ({ spawn }) => ({
-    X: spawn("X", { input: { axis: "X", limits: 500 } }),
-    Y: spawn("Y", { input: { axis: "Y", limits: 500 } }),
-    Z: spawn("Z", { input: { axis: "Z", limits: 500 } })
+    X: spawn("X", { input: { label: "X", limits: 500 } }),
+    Y: spawn("Y", { input: { label: "Y", limits: 500 } }),
+    Z: spawn("Z", { input: { label: "Z", limits: 500 } })
   }),
 
   states: {

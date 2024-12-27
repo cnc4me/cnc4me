@@ -148,8 +148,9 @@ declare type AxisLimitsInput = number | [negative: number, positive: number] | A
 declare const BaseCstVisitor: new (...args: any[]) => ICstVisitor<any, any>;
 
 declare type BooleanExpressionCstChildren = {
-    AtomicExpression: (AtomicExpressionCstNode)[];
+    lhs: AtomicExpressionCstNode[];
     BooleanOperator: IToken[];
+    rhs: AtomicExpressionCstNode[];
 };
 
 declare interface BooleanExpressionCstNode extends CstNode {
@@ -258,6 +259,7 @@ declare type ConditionalExpressionCstChildren = {
     If: IToken[];
     AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
     Then?: IToken[];
+    VariableAssignment?: VariableAssignmentCstNode[];
     GotoLine?: IToken[];
 };
 
@@ -349,6 +351,10 @@ declare const Do: Omit<TokenType, "name"> & {
 
 declare const Dot: Omit<TokenType, "name"> & {
     name: "Dot";
+};
+
+declare const End: Omit<TokenType, "name"> & {
+    name: "End";
 };
 
 declare type EndOfFileCstChildren = {
@@ -872,6 +878,11 @@ export declare class MacroInterpreter extends BaseCstVisitor {
      * Evaluate one of the built-in functions
      */
     FunctionExpression(ctx: CST.FunctionExpressionCstChildren): number;
+    ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren): void;
+    /**
+     * Evaluate a BooleanExpression into a boolean value
+     */
+    AtomicBooleanExpression(ctx: CST.AtomicBooleanExpressionCstChildren): boolean;
 }
 
 export declare class MacroLexer implements ErrorProducer<LexingError> {
@@ -1175,7 +1186,14 @@ export declare class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     /**
      * Main entry point to the runtime.
      */
-    run(lineCallback?: (line: IParsedLineData) => void): NcProgram;
+    run(lineCallback?: (line: IParsedLineData) => void): NcProgram | undefined;
+    /**
+     * Manual Data Input
+     *
+     * This method can be used to run a "program" by wrapping it
+     * with `%` delimiters and a fake program number.
+     */
+    mdi(input: string): void;
     /**
      * Load a Program into memory
      *
@@ -1639,6 +1657,7 @@ declare namespace T {
         Then,
         Do,
         While,
+        End,
         FANUC_MACRO_B_FNS,
         BuiltinFunction,
         MacroBuiltinFunctionNames,

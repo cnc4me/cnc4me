@@ -7,6 +7,8 @@ import {
   BuiltinFunction,
   CloseBracket,
   Comment,
+  Do,
+  End,
   Equals,
   Gcode,
   GotoLine,
@@ -22,7 +24,9 @@ import {
   Percent,
   ProgramNumber,
   Then,
-  Var
+  Var,
+  While,
+  WhiteSpace
 } from "../tokens";
 import { Debuggers } from "../utils/debug";
 import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
@@ -35,7 +39,8 @@ const $t = $d.extend("token");
 export class MacroParserRuleTree extends CstParser {
   /**
    * Utilize the generic to get the token name
-   * @link https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
+   *
+   * @url https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
    */
   public override CONSUME<S extends TokenType>(
     token: S,
@@ -98,6 +103,7 @@ export class MacroParserRuleTree extends CstParser {
         { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
         { ALT: () => this.SUBRULE(this.Expression) },
+        { ALT: () => this.SUBRULE(this.WhileExpression) },
         { ALT: () => this.CONSUME(Comment) }
       ]);
     });
@@ -118,6 +124,30 @@ export class MacroParserRuleTree extends CstParser {
   });
 
   /**
+   * While loop construct
+   */
+  WhileExpression = this.RULE("WhileExpression", () => {
+    this.CONSUME(While);
+    this.SUBRULE(this.AtomicBooleanExpression);
+    this.CONSUME(Do);
+    this.CONSUME(NumericValue, { LABEL: "do" });
+    this.SUBRULE(this.Lines);
+    this.CONSUME(End);
+    this.CONSUME2(NumericValue, { LABEL: "end" });
+  });
+
+  /**
+   * Go To Line
+   */
+  GoToExpression = this.RULE("GoToExpression", () => {
+    this.CONSUME(GotoLine);
+    this.OPTION(() => {
+      this.CONSUME(WhiteSpace);
+    });
+    this.CONSUME(NumericValue, { LABEL: "line" });
+  });
+
+  /**
    * If Expression to branch control flow
    */
   ConditionalExpression = this.RULE("ConditionalExpression", () => {
@@ -131,7 +161,7 @@ export class MacroParserRuleTree extends CstParser {
         }
       },
       {
-        ALT: () => this.CONSUME(GotoLine)
+        ALT: () => this.SUBRULE(this.GoToExpression)
       }
     ]);
   });
@@ -247,12 +277,22 @@ export class MacroParserRuleTree extends CstParser {
   /**
    * Pound sign `#` followed by an integer representing a variable register
    *
-   * @TODO variable Expressions!
    * @example "#518" or "#152"
    */
   VariableLiteral = this.RULE("VariableLiteral", () => {
     this.CONSUME(Var);
     this.CONSUME(Integer);
+  });
+
+  /**
+   * Pound sign `#` followed by a bracketed expression to evaluate the register number
+   *
+   * @example "#[1+2]" to use #3
+   * @example "#[#1+#2]=1" would set #3=1 if #1=1 and #2=2
+   */
+  VariableExpression = this.RULE("VariableExpression", () => {
+    this.CONSUME(Var);
+    this.SUBRULE(this.BracketExpression);
   });
 
   /**

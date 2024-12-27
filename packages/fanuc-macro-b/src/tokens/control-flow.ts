@@ -32,3 +32,9 @@ export const While = createToken({
   pattern: /WHILE/,
   categories
 });
+
+export const End = createToken({
+  name: "End",
+  pattern: /END/,
+  categories
+});

@@ -190,6 +190,16 @@
                 "type": "Alternative",
                 "definition": [
                   {
+                    "type": "NonTerminal",
+                    "name": "WhileExpression",
+                    "idx": 0
+                  }
+                ]
+              },
+              {
+                "type": "Alternative",
+                "definition": [
+                  {
                     "type": "Terminal",
                     "name": "Comment",
                     "label": "Comment",
@@ -230,6 +240,95 @@
   },
   {
     "type": "Rule",
+    "name": "WhileExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "While",
+        "label": "While",
+        "idx": 0,
+        "pattern": "WHILE"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "AtomicBooleanExpression",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "Do",
+        "label": "Do",
+        "idx": 0,
+        "pattern": "DO"
+      },
+      {
+        "type": "Terminal",
+        "name": "NumericValue",
+        "label": "NumericValue",
+        "idx": 0,
+        "terminalLabel": "do",
+        "pattern": "NOT_APPLICABLE"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "Lines",
+        "idx": 0
+      },
+      {
+        "type": "Terminal",
+        "name": "End",
+        "label": "End",
+        "idx": 0,
+        "pattern": "END"
+      },
+      {
+        "type": "Terminal",
+        "name": "NumericValue",
+        "label": "NumericValue",
+        "idx": 2,
+        "terminalLabel": "end",
+        "pattern": "NOT_APPLICABLE"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "GoToExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "GotoLine",
+        "label": "GotoLine",
+        "idx": 0,
+        "pattern": "GOTO[1-9][0-9]*"
+      },
+      {
+        "type": "Option",
+        "idx": 0,
+        "definition": [
+          {
+            "type": "Terminal",
+            "name": "WhiteSpace",
+            "label": "WhiteSpace",
+            "idx": 0,
+            "pattern": "[\\s\\t\\r]+"
+          }
+        ]
+      },
+      {
+        "type": "Terminal",
+        "name": "NumericValue",
+        "label": "NumericValue",
+        "idx": 0,
+        "terminalLabel": "line",
+        "pattern": "NOT_APPLICABLE"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
     "name": "ConditionalExpression",
     "orgText": "",
     "definition": [
@@ -258,6 +357,11 @@
                 "label": "Then",
                 "idx": 0,
                 "pattern": "THEN"
+              },
+              {
+                "type": "NonTerminal",
+                "name": "VariableAssignment",
+                "idx": 0
               }
             ]
           },
@@ -265,11 +369,9 @@
             "type": "Alternative",
             "definition": [
               {
-                "type": "Terminal",
-                "name": "GotoLine",
-                "label": "GotoLine",
-                "idx": 0,
-                "pattern": "GOTO[1-9][0-9]*"
+                "type": "NonTerminal",
+                "name": "GoToExpression",
+                "idx": 0
               }
             ]
           }
@@ -311,7 +413,8 @@
       {
         "type": "NonTerminal",
         "name": "AtomicExpression",
-        "idx": 0
+        "idx": 0,
+        "label": "lhs"
       },
       {
         "type": "Terminal",
@@ -323,7 +426,8 @@
       {
         "type": "NonTerminal",
         "name": "AtomicExpression",
-        "idx": 2
+        "idx": 2,
+        "label": "rhs"
       }
     ]
   },
@@ -612,6 +716,25 @@
         "label": "Integer",
         "idx": 0,
         "pattern": "\\d+"
+      }
+    ]
+  },
+  {
+    "type": "Rule",
+    "name": "VariableExpression",
+    "orgText": "",
+    "definition": [
+      {
+        "type": "Terminal",
+        "name": "Var",
+        "label": "Var",
+        "idx": 0,
+        "pattern": "#"
+      },
+      {
+        "type": "NonTerminal",
+        "name": "BracketExpression",
+        "idx": 0
       }
     ]
   },

@@ -37,7 +37,6 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   #fmb: FanucMacroB;
   // @TODO: manage the runtime state
-  // @ts-expect-error WORKING ON IT
   #state = new MacroRuntimeFSM();
   #events = new Emittery<typeof MacroRuntime.EVENTS>();
 
@@ -145,6 +144,17 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       }
     }
     return result;
+  }
+
+  /**
+   * Manual Data Input
+   *
+   * This method can be used to run a "program" by wrapping it
+   * with `%` delimiters and a fake program number.
+   */
+  mdi(input: string): void {
+    this.#programs[0] = `%\nO0000\n${input}\n%`;
+    this.setActiveProgram(0);
   }
 
   /**

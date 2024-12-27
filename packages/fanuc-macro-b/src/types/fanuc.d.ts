@@ -45,6 +45,7 @@ declare type LineCstChildren = {
   VariableAssignment?: VariableAssignmentCstNode[];
   ConditionalExpression?: ConditionalExpressionCstNode[];
   Expression?: ExpressionCstNode[];
+  WhileExpression?: WhileExpressionCstNode[];
   Comment?: IToken[];
 };
 
@@ -57,6 +58,32 @@ declare type VariableAssignmentCstChildren = {
   VariableLiteral: VariableLiteralCstNode[];
   Equals: IToken[];
   Expression: ExpressionCstNode[];
+};
+
+declare interface WhileExpressionCstNode extends CstNode {
+  name: "WhileExpression";
+  children: WhileExpressionCstChildren;
+}
+
+declare type WhileExpressionCstChildren = {
+  While: IToken[];
+  AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
+  Do: IToken[];
+  do: IToken[];
+  Lines: LinesCstNode[];
+  End: IToken[];
+  end: IToken[];
+};
+
+declare interface GoToExpressionCstNode extends CstNode {
+  name: "GoToExpression";
+  children: GoToExpressionCstChildren;
+}
+
+declare type GoToExpressionCstChildren = {
+  GotoLine: IToken[];
+  WhiteSpace?: IToken[];
+  line: IToken[];
 };
 
 declare interface ConditionalExpressionCstNode extends CstNode {
@@ -238,6 +265,8 @@ declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   Lines(children: LinesCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
   VariableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
+  WhileExpression(children: WhileExpressionCstChildren, param?: IN): OUT;
+  GoToExpression(children: GoToExpressionCstChildren, param?: IN): OUT;
   ConditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
   AtomicBooleanExpression(children: AtomicBooleanExpressionCstChildren, param?: IN): OUT;
   BooleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;

@@ -206,7 +206,6 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
   }
 
   // @TODO: USE THIS
-  // @ts-expect-error I know I'm not using this yet
   async #validateTargetPosition(position: number) {
     if (position > this.#config.limits.max) {
       return await this.#handleError("Target position exceeds axis limit (+)");

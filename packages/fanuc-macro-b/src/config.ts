@@ -6,9 +6,7 @@ export const MEMORY = {
   UPPER_TOOL_NUMBER_LIMIT: 299
 } as const;
 
-/**
- * @todo use envvars?
- */
+// @todo use envvars?
 export const CONFIG = {
   MEMORY,
   INTERPRETER

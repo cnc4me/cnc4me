@@ -9,7 +9,17 @@ import {
   MacroVariable
 } from "../lib";
 import { NcProgram } from "../lib/NcProgram";
-import { Modulus, Plus, Product } from "../tokens";
+import {
+  EqualTo,
+  GreaterThan,
+  GreaterThanOrEq,
+  LessThan,
+  LessThanOrEq,
+  Modulus,
+  NotEqualTo,
+  Plus,
+  Product
+} from "../tokens";
 import {
   type CST,
   type IParsedLineData,
@@ -190,6 +200,12 @@ export class MacroInterpreter extends BaseCstVisitor {
         B: addressMap["B"]
       });
     }
+
+    if (ctx?.WhileExpression) {
+      const { children } = unbox(ctx.WhileExpression);
+      this.WhileLoop(children);
+    }
+
     void this.#events.emit("LINE", parsed);
     return parsed;
   }
@@ -393,13 +409,15 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
-    let boolExpr: boolean | null = null;
-    // if (ctx?.AtomicBooleanExpression) {
-    boolExpr = this.visit(ctx?.AtomicBooleanExpression);
-    // }
-    console.log(ctx, boolExpr);
-    if (boolExpr && ctx?.VariableAssignment) {
-      return this.VariableAssignment(ctx.VariableAssignment[0].children);
+    const { children } = unbox(ctx?.AtomicBooleanExpression);
+    const boolExpr = this.AtomicBooleanExpression(children);
+    if (boolExpr) {
+      if (ctx?.VariableAssignment) {
+        return this.VariableAssignment(ctx.VariableAssignment[0].children);
+      }
+      // if (ctx?.GotoLine) {
+      //   this.GotoLine();
+      // }
     }
   }
 
@@ -412,19 +430,38 @@ export class MacroInterpreter extends BaseCstVisitor {
     const { children } = unbox(ctx?.BooleanExpression);
     const lhs = this.AtomicExpression(children.lhs[0].children);
     const rhs = this.AtomicExpression(children.rhs[0].children);
-    const operator = getImage(children.BooleanOperator);
-    const test: Record<string, (L: number, R: number) => boolean> = {
-      EQ: (L, R) => L === R,
-      NE: (L, R) => L !== R,
-      LT: (L, R) => L < R,
-      LE: (L, R) => L <= R,
-      GT: (L, R) => L > R,
-      GE: (L, R) => L >= R
-    };
-    return test[operator](lhs, rhs);
+    // const operator = getImage(children.BooleanOperator);
+    const operator = unbox(children.BooleanOperator);
+    if (tokenMatcher(operator, EqualTo)) {
+      return lhs === rhs;
+    } else if (tokenMatcher(operator, NotEqualTo)) {
+      return lhs !== rhs;
+    } else if (tokenMatcher(operator, GreaterThan)) {
+      return lhs > rhs;
+    } else if (tokenMatcher(operator, GreaterThanOrEq)) {
+      return lhs >= rhs;
+    } else if (tokenMatcher(operator, LessThan)) {
+      return lhs < rhs;
+    } else if (tokenMatcher(operator, LessThanOrEq)) {
+      return lhs <= rhs;
+    } else {
+      return false;
+    }
   }
 
-  // Then(ctx: CST) {}
+  /**
+   * Interpret a while loop
+   */
+  WhileLoop(ctx: CST.WhileExpressionCstChildren) {
+    const condition = () => {
+      const { children } = unbox(ctx.AtomicBooleanExpression);
+      return this.AtomicBooleanExpression(children);
+    };
+
+    while (condition()) {
+      this.Lines(ctx.Lines[0].children);
+    }
+  }
 }
 
 type InterpreterPropsToIgnore = "events" | "lines" | "memory";

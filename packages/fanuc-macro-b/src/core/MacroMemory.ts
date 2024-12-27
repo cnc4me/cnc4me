@@ -40,10 +40,10 @@ export class MacroMemory {
 
   /**
    * Construct a new instance of the MacroMemory class and initialize the variables
-   * @TODO have a way to initialize code groups
    */
   constructor() {
     this.#debug("initializing");
+    // @TODO have a way to initialize code groups
     // this.write(M.GROUP_3, 90);
   }
 

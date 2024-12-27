@@ -5,29 +5,30 @@
   "description": "Virtual implementation of a Fanuc gcode interpreter and execution environment",
   "license": "MIT",
   "author": "Kevin Hill",
-  "main": "./dist/index.js",
-  "files": [
-    "dist",
-    "package.json"
-  ],
   "exports": {
     ".": {
       "import": "./dist/index.js",
       "types": "./dist/index.d.ts"
     }
   },
+  "main": "./dist/index.js",
+  "files": [
+    "dist",
+    "package.json"
+  ],
   "scripts": {
     "assets": "pnpm concurrently -c auto --pad-prefix \"pnpm:assets:*\"",
     "assets:alarms": "tsx ./scripts/generateAlarms.ts",
+    "assets:docs": "typedoc --options ./typedoc.json",
     "assets:dts": "tsx ./scripts/generateDts.ts",
     "assets:types": "tsx ./scripts/generateTypes.ts",
-    "assets:docs": "typedoc --options ./typedoc.json",
     "build": "pnpm assets && vite build",
     "coverage": "vitest run --coverage",
     "debug:runtime": "cross-env DEBUG=fanuc:machine*,fanuc:runtime* pnpm tsx watch ./demo/runtime.demo.ts",
     "demo:events": "tsx --watch ./demo/events.demo.ts",
     "demo:runtime": "tsx --watch ./demo/runtime.demo.ts",
-    "diagram:language": "tsx ./scripts/generateLanguageDiagram.ts",
+    "dev-parser": "tsx watch --include \"./src/core/*\" ./scripts/generateLanguageDiagram.ts",
+    "diagram:language": "tsx watch --include \"./src/core/*\" ./scripts/generateLanguageDiagram.ts",
     "diagram:runtime": "tsx ./scripts/generateRuntimeDiagram.ts",
     "diagram:ui": "tsx ./scripts/diagramHost.ts",
     "diagrams": "pnpm diagram:language && pnpm diagram:runtime",
