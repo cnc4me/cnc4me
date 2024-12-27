@@ -1,6 +1,7 @@
 #
 # Files
 #
+*.tsbuildinfo
 
 # Logs
 *.log

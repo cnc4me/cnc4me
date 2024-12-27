@@ -1,12 +1,16 @@
 {
   "folders": [
     {
-      "name": "✨ @cnc4me/cnc4me",
-      "path": "."
-    },
-    {
       "name": "🚀 @cnc4me/macro-playground",
       "path": "apps/website"
+    },
+    {
+      "name": "🚀 @cnc4me/macro-parser-explorer",
+      "path": "apps/macro-parser-explorer"
+    },
+    {
+      "name": "🚀 @cnc4me/spindle-demo",
+      "path": "apps/spindle-demo"
     },
     {
       "name": "📦 @cnc4me/chevrotain-live",
@@ -23,6 +27,10 @@
     {
       "name": "📦 @cnc4me/monaco-gcode",
       "path": "packages/monaco-gcode"
+    },
+    {
+      "name": "✨ @cnc4me/cnc4me",
+      "path": "."
     }
   ],
   "settings": {

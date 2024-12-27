@@ -2,12 +2,21 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
+    "baseUrl": ".",
+    "noEmit": true,
+    "noUnusedLocals": false,
+    "noUnusedParameters": false,
     "lib": [
       "ESNext"
     ],
+    "types": [
+      "monaco-editor"
+    ]
   },
   "include": [
-    "src"
+    "src",
+    "index.ts",
+    "vite.config.ts"
   ],
   "exclude": [
     "dist",

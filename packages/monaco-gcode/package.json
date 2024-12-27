@@ -3,21 +3,32 @@
   "version": "1.0.0",
   "description": "",
   "keywords": [],
+  "type": "module",
   "repository": {
     "type": "git",
     "url": "https://github.com/cnc4me/monaco-gcode"
   },
   "license": "MIT",
   "author": "Kevin Hill",
-  "main": "./src/index.ts",
   "exports": {
-    ".": "./src/index.ts"
+    ".": {
+      "types": "./dist/index.d.ts",
+      "import": "./dist/index.mjs",
+      "require": "./dist/index.js"
+    }
   },
+  "main": "./dist/index.js",
   "scripts": {
+    "start": "vite",
+    "build": "tsc -b tsconfig.build.json",
     "test": "vitest"
   },
   "dependencies": {
     "chevrotain": "catalog:",
-    "monaco-editor": "^0.52.0"
+    "monaco-editor": "^0.52.2"
+  },
+  "devDependencies": {
+    "vite-plugin-define": "^1.0.6",
+    "vite-plugin-dts": "^4.4.0"
   }
 }

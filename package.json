@@ -14,7 +14,7 @@
     "subtree:monaco-gcode": "git subtree push --prefix packages/monaco-gcode monaco-gcode main",
     "subtree:playground": "git subtree push --prefix apps/macro-playground macro-playground main",
     "test": "pnpm -F \"@cnc4me/*\" test",
-    "github-workflow-test": "act -P ubuntu-latest=-self-hosted"
+    "github-workflow-test": "act -P ubuntu-latest=-self-hosted --container-architecture linux/amd64"
   },
   "devDependencies": {
     "@types/node": "catalog:",

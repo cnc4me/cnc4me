@@ -1,5 +1,4 @@
 import type {
-  Monaco,
   MonacoLanguageBracket,
   MonacoTokenizerRule,
   MonarchLanguage,
@@ -71,9 +70,9 @@ export function createBracketRules<T extends string>(
  */
 export function generateMonarchLanguageFromChevrotainTokens(
   tokens: TokenType[],
-  brackets: Monaco.languages.IMonarchLanguageBracket[],
+  brackets: MonarchLanguageBracket[],
   rules: MonacoTokenizerRule[]
-): Monaco.languages.IMonarchLanguage {
+): MonarchLanguage {
   const mapped = tokens.map(tok => {
     return {
       token: tok.name,
@@ -100,9 +99,9 @@ export function generateMonarchLanguageFromChevrotainParser<
   T extends BaseParser
 >(
   parser: T,
-  brackets: Monaco.languages.IMonarchLanguageBracket[],
+  brackets: MonarchLanguageBracket[],
   rules: MonacoTokenizerRule[]
-): Monaco.languages.IMonarchLanguage {
+): MonarchLanguage {
   // console.log(parser);
 
   return {

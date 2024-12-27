@@ -1,7 +1,8 @@
 import { gcodeLanguage } from "./language";
 import { Themes } from "./themes";
 
-import type { Monaco, MonarchLanguage, ThemeData } from "./types";
+import type { MonarchLanguage, ThemeData } from "./types";
+import type * as Monaco from "monaco-editor/esm/vs/editor/editor.api";
 
 export class MonacoGcode {
   constructor(public monaco: typeof Monaco) {}
