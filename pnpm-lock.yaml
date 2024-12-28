@@ -616,6 +616,9 @@ importers:
       radash:
         specifier: ^12.1.0
         version: 12.1.0
+      radashi:
+        specifier: ^12.3.0
+        version: 12.3.0
       ts-pattern:
         specifier: ^5.5.0
         version: 5.5.0
@@ -698,6 +701,9 @@ importers:
       typedoc:
         specifier: ^0.27.6
         version: 0.27.6(typescript@5.7.2)
+      typedoc-plugin-missing-exports:
+        specifier: ^3.1.0
+        version: 3.1.0(typedoc@0.27.6(typescript@5.7.2))
       typescript:
         specifier: 'catalog:'
         version: 5.7.2
@@ -4150,6 +4156,10 @@ packages:
     resolution: {integrity: sha512-b0Zcf09AhqKS83btmUeYBS8tFK7XL2e3RvLmZcm0sTdF1/UUlHSsjXdCcWNxe7yfmAlPve5ym0DmKGtTzP6kVQ==}
     engines: {node: '>=14.18.0'}
 
+  radashi@12.3.0:
+    resolution: {integrity: sha512-ViMnMTF4g+wqL1pp4sMJOEXFydvB+6EsJJOv9/PBVO1lrKbeYNay2ePd6SGrbaBKf1MH+ZpGFx0EwGTElVCWHw==}
+    engines: {node: '>=16.0.0'}
+
   react-dom@18.3.1:
     resolution: {integrity: sha512-5m4nQKp+rZRb09LNH59GM4BxTh9251/ylbKIbpe7TpGxfJ+9kv6BLkLBXIjjspbgbnIBNqlI23tRnTWT0snUIw==}
     peerDependencies:
@@ -4650,6 +4660,11 @@ packages:
   typed-array-length@1.0.7:
     resolution: {integrity: sha512-3KS2b+kL7fsuk/eJZ7EQdnEmQoaho/r6KUef7hxvltNA5DR8NAUM+8wJMbJyZ4G9/7i3v5zPBIMN5aybAh2/Jg==}
     engines: {node: '>= 0.4'}
+
+  typedoc-plugin-missing-exports@3.1.0:
+    resolution: {integrity: sha512-Sogbaj+qDa21NjB3SlIw4JXSwmcl/WOjwiPNaVEcPhpNG/MiRTtpwV81cT7h1cbu9StpONFPbddYWR0KV/fTWA==}
+    peerDependencies:
+      typedoc: 0.26.x || 0.27.x
 
   typedoc@0.27.6:
     resolution: {integrity: sha512-oBFRoh2Px6jFx366db0lLlihcalq/JzyCVp7Vaq1yphL/tbgx2e+bkpkCgJPunaPvPwoTOXSwasfklWHm7GfAw==}
@@ -8551,6 +8566,8 @@ snapshots:
 
   radash@12.1.0: {}
 
+  radashi@12.3.0: {}
+
   react-dom@18.3.1(react@18.3.1):
     dependencies:
       loose-envify: 1.4.0
@@ -9118,6 +9135,10 @@ snapshots:
       is-typed-array: 1.1.13
       possible-typed-array-names: 1.0.0
       reflect.getprototypeof: 1.0.7
+
+  typedoc-plugin-missing-exports@3.1.0(typedoc@0.27.6(typescript@5.7.2)):
+    dependencies:
+      typedoc: 0.27.6(typescript@5.7.2)
 
   typedoc@0.27.6(typescript@5.7.2):
     dependencies:

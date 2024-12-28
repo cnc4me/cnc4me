@@ -5,7 +5,7 @@ import { ParsingError } from "../errors/parser";
 import { InvalidProgramNumber, ProgramNumberNotFound } from "../errors/runtime";
 import { MacroRuntimeFSM } from "../fsm/MacroRuntimeFSM";
 import { InsightCollection } from "../lib/Insights";
-import { ProgramNumber } from "../lib/ProgramNumber";
+import ProgramNumber from "../lib/ProgramNumber";
 import { SystemVariable } from "../memory";
 import { Debuggers } from "../utils/debug";
 import { FanucMacroB } from "./FanucMacroB";
@@ -132,7 +132,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     this.#debug("parsing complete");
     if (this.Parser.hasErrors) {
       this.#error(this.Parser.errors[0]);
-      return;
+      throw new ParsingError(this.Parser.errors[0]);
     }
     const result = this.Interpreter.Program(programCst.children);
     for (const line of result.getLines()) {
@@ -150,10 +150,15 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Manual Data Input
    *
    * This method can be used to run a "program" by wrapping it
-   * with `%` delimiters and a fake program number.
+   * with `%` delimiters and a special program number.
    */
-  mdi(input: string): void {
-    this.#programs[0] = `%\nO0000\n${input}\n%`;
+  mdi(...input: string[]): void {
+    this.#programs[0] = [
+      "%",
+      "O0000", // MDI Program Number
+      ...input, // input lines
+      "%"
+    ].join("\n");
     this.setActiveProgram(0);
   }
 
@@ -161,34 +166,24 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Load a Program into memory
    *
    * This method can create a program if given a string
-   *
-   * @TODO wrap "programs" if they don't have a program number
    */
   loadProgram(input: string, options?: ProgramLoadOptions): void {
     if (options?.programNumber) {
       this.#programs[options.programNumber] = input;
     }
 
-    const matcher = ProgramNumber.create({
-      onFail: err => this.#error(err),
-      onMatch: programNumber => {
-        this.#programs[programNumber] = input;
+    const programNumber = ProgramNumber.match(input);
 
-        if (options?.setActive) {
-          this.setActiveProgram(programNumber);
-          // this.#tokenizeActiveProgram();
-        }
-      }
-    });
+    if (!programNumber) {
+      throw new InvalidProgramNumber(input);
+    }
 
-    matcher.match(input);
-  }
+    this.#programs[programNumber] = input;
 
-  /**
-   * Batch load programs into memory
-   */
-  loadPrograms(programs: string[]): void {
-    programs.forEach(program => this.loadProgram(program));
+    if (options?.setActive) {
+      this.setActiveProgram(programNumber);
+      // this.#tokenizeActiveProgram();
+    }
   }
 
   /**
@@ -201,10 +196,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   /**
    * Set a program number as `active` in the runtime.
-   *
-   * @TODO add error handling to check if program is loaded
    */
   setActiveProgram(programNumber: number): boolean {
+    // @TODO add error handling to check if program is loaded
     // debug(`Setting program #${programNumber} active`);
     this.#throwIfProgramNotLoaded(programNumber);
     this.Memory.write(SystemVariable._MAINO, programNumber);
@@ -271,9 +265,6 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     return this.#programs[parsedProgramNumber];
   }
 
-  /**
-   * Load the {@link MacroParser} with tokens from the active program
-   */
   #error<T extends Error>(err: T | string) {
     const error = typeof err === "string" ? new Error(err) : err;
     void this.#events.emit("ERROR", error);

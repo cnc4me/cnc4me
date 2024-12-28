@@ -3,7 +3,7 @@ import { AddressedValue } from "./AddressedValue";
 import { ChevrotainGenerator } from "./ChevrotainGenerator";
 import { AddressInsight, InsightCollection } from "./Insights";
 import { MacroVariable } from "./MacroVariable";
-import { ProgramNumber } from "./ProgramNumber";
+import ProgramNumber from "./ProgramNumber";
 
 export { BinaryRegister } from "./BinaryRegister";
 export {

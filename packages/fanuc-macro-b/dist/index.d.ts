@@ -260,7 +260,7 @@ declare type ConditionalExpressionCstChildren = {
     AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
     Then?: IToken[];
     VariableAssignment?: VariableAssignmentCstNode[];
-    GotoLine?: IToken[];
+    GoToExpression?: GoToExpressionCstNode[];
 };
 
 declare interface ConditionalExpressionCstNode extends CstNode {
@@ -268,9 +268,6 @@ declare interface ConditionalExpressionCstNode extends CstNode {
     children: ConditionalExpressionCstChildren;
 }
 
-/**
- * @todo use envvars?
- */
 export declare const CONFIG: {
     MEMORY: {
         readonly UPPER_TOOL_NUMBER_LIMIT: 299;
@@ -296,6 +293,10 @@ declare namespace CST {
         LineCstChildren,
         VariableAssignmentCstNode,
         VariableAssignmentCstChildren,
+        WhileExpressionCstNode,
+        WhileExpressionCstChildren,
+        GoToExpressionCstNode,
+        GoToExpressionCstChildren,
         ConditionalExpressionCstNode,
         ConditionalExpressionCstChildren,
         AtomicBooleanExpressionCstNode,
@@ -320,6 +321,8 @@ declare namespace CST {
         NumericLiteralCstChildren,
         VariableLiteralCstNode,
         VariableLiteralCstChildren,
+        VariableExpressionCstNode,
+        VariableExpressionCstChildren,
         ValueLiteralCstNode,
         ValueLiteralCstChildren,
         StartOfFileCstNode,
@@ -456,9 +459,6 @@ export declare class FanucMacroB implements ErrorProducer<MacroLexerError | Macr
     options: {
         debug: boolean;
     };
-    /**
-     * @TODO fix this flag here, move it global?
-     */
     constructor(options?: Partial<{
         debug: boolean;
     }>);
@@ -487,14 +487,14 @@ export declare class FanucMacroB implements ErrorProducer<MacroLexerError | Macr
      */
     eval(input: string): EvalResult;
     /**
-     * Run {@link extractOffsets} on the results from #eval()
+     * Run extract the G10 offsets from the results from {@link FanucMacroB.eval}
      */
     evalG10(input: string): {
         error: Error[] | null;
         result: PossibleG10LineValues;
     };
     /**
-     * Invoke the {@link MacroInterpreter} starting from `expression()`
+     * Invoke the {@link MacroInterpreter.Expression} starting from `expression()`
      */
     evalExpr(input: string): {
         error: null;
@@ -590,6 +590,17 @@ declare function getToolOffsetRegister(group: number, toolNum: number): number;
  */
 declare function getWorkOffsetAxisRegister(group: number, axis: string): number;
 
+declare type GoToExpressionCstChildren = {
+    GotoLine: IToken[];
+    WhiteSpace?: IToken[];
+    line: IToken[];
+};
+
+declare interface GoToExpressionCstNode extends CstNode {
+    name: "GoToExpression";
+    children: GoToExpressionCstChildren;
+}
+
 declare const GotoLine: Omit<TokenType, "name"> & {
     name: "GotoLine";
 };
@@ -624,6 +635,8 @@ declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
     Lines(children: LinesCstChildren, param?: IN): OUT;
     Line(children: LineCstChildren, param?: IN): OUT;
     VariableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
+    WhileExpression(children: WhileExpressionCstChildren, param?: IN): OUT;
+    GoToExpression(children: GoToExpressionCstChildren, param?: IN): OUT;
     ConditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
     AtomicBooleanExpression(children: AtomicBooleanExpressionCstChildren, param?: IN): OUT;
     BooleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
@@ -636,6 +649,7 @@ declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
     AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
     NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
     VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
+    VariableExpression(children: VariableExpressionCstChildren, param?: IN): OUT;
     ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
     StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
     ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;
@@ -764,6 +778,7 @@ declare type LineCstChildren = {
     VariableAssignment?: VariableAssignmentCstNode[];
     ConditionalExpression?: ConditionalExpressionCstNode[];
     Expression?: ExpressionCstNode[];
+    WhileExpression?: WhileExpressionCstNode[];
     Comment?: IToken[];
 };
 
@@ -826,7 +841,7 @@ export declare class MacroInterpreter extends BaseCstVisitor {
      */
     ProgramNumberLine(ctx: CST.ProgramNumberLineCstChildren): IProgramNumberLine;
     /**
-     * Iterate over the {@link LineCstChildren} to extract the contents
+     * Iterate over the lines to extract the contents
      */
     Lines(ctx: CST.LinesCstChildren): IParsedLineData[];
     /**
@@ -883,6 +898,10 @@ export declare class MacroInterpreter extends BaseCstVisitor {
      * Evaluate a BooleanExpression into a boolean value
      */
     AtomicBooleanExpression(ctx: CST.AtomicBooleanExpressionCstChildren): boolean;
+    /**
+     * Interpret a while loop
+     */
+    WhileLoop(ctx: CST.WhileExpressionCstChildren): void;
 }
 
 export declare class MacroLexer implements ErrorProducer<LexingError> {
@@ -910,7 +929,6 @@ export declare class MacroMemory {
     static REGISTERS: number[];
     /**
      * Construct a new instance of the MacroMemory class and initialize the variables
-     * @TODO have a way to initialize code groups
      */
     constructor();
     on: <Name extends "REGISTER_UPDATE" | keyof OmnipresentEventData>(eventName: Name | readonly Name[], listener: (eventData: (MacroMemoryEvents & OmnipresentEventData)[Name]) => void | Promise<void>) => UnsubscribeFunction;
@@ -1040,7 +1058,8 @@ declare class MacroParserError extends Error {
 declare class MacroParserRuleTree extends CstParser {
     /**
      * Utilize the generic to get the token name
-     * @link https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
+     *
+     * @see https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
      */
     CONSUME<S extends TokenType>(token: S, options?: ConsumeMethodOpts): Omit<IToken, "tokenType"> & {
         tokenType: S;
@@ -1071,6 +1090,14 @@ declare class MacroParserRuleTree extends CstParser {
      *   #502 = [#501 / 2]
      */
     VariableAssignment: ParserMethod<[], CstNode>;
+    /**
+     * While loop construct
+     */
+    WhileExpression: ParserMethod<[], CstNode>;
+    /**
+     * Go To Line
+     */
+    GoToExpression: ParserMethod<[], CstNode>;
     /**
      * If Expression to branch control flow
      */
@@ -1125,10 +1152,16 @@ declare class MacroParserRuleTree extends CstParser {
     /**
      * Pound sign `#` followed by an integer representing a variable register
      *
-     * @TODO variable Expressions!
      * @example "#518" or "#152"
      */
     VariableLiteral: ParserMethod<[], CstNode>;
+    /**
+     * Pound sign `#` followed by a bracketed expression to evaluate the register number
+     *
+     * @example "#[1+2]" to use #3
+     * @example "#[#1+#2]=1" would set #3=1 if #1=1 and #2=2
+     */
+    VariableExpression: ParserMethod<[], CstNode>;
     /**
      * Number or Macro variable
      */
@@ -1191,15 +1224,13 @@ export declare class MacroRuntime implements ErrorProducer<MacroCombinedError> {
      * Manual Data Input
      *
      * This method can be used to run a "program" by wrapping it
-     * with `%` delimiters and a fake program number.
+     * with `%` delimiters and a special program number.
      */
-    mdi(input: string): void;
+    mdi(...input: string[]): void;
     /**
      * Load a Program into memory
      *
      * This method can create a program if given a string
-     *
-     * @TODO wrap "programs" if they don't have a program number
      */
     loadProgram(input: string, options?: ProgramLoadOptions): void;
     /**
@@ -1212,8 +1243,6 @@ export declare class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     programIsLoaded(programNumber: number | null): boolean;
     /**
      * Set a program number as `active` in the runtime.
-     *
-     * @TODO add error handling to check if program is loaded
      */
     setActiveProgram(programNumber: number): boolean;
     /**
@@ -1457,10 +1486,6 @@ export declare interface ProgramLoadOptions {
     programNumber?: number;
 }
 
-/**
- * @TODO investigate if the custom matcher is needed. Can the parser turn an address token
- * with image "O" and a number into a "program number"?
- */
 declare const ProgramNumber: Omit<TokenType, "name"> & {
     name: "ProgramNumber";
 };
@@ -1722,10 +1747,6 @@ declare interface ValueLiteralCstNode extends CstNode {
     children: ValueLiteralCstChildren;
 }
 
-/**
- * @TODO this should be more complex and handle the variable number capture?
- * @TODO have it evaluate expressions into var numbers?
- */
 declare const Var: Omit<TokenType, "name"> & {
     name: "Var";
 };
@@ -1741,6 +1762,16 @@ declare interface VariableAssignmentCstNode extends CstNode {
     children: VariableAssignmentCstChildren;
 }
 
+declare type VariableExpressionCstChildren = {
+    Var: IToken[];
+    BracketExpression: BracketExpressionCstNode[];
+};
+
+declare interface VariableExpressionCstNode extends CstNode {
+    name: "VariableExpression";
+    children: VariableExpressionCstChildren;
+}
+
 declare type VariableLiteralCstChildren = {
     Var: IToken[];
     Integer: IToken[];
@@ -1754,6 +1785,21 @@ declare interface VariableLiteralCstNode extends CstNode {
 declare const While: Omit<TokenType, "name"> & {
     name: "While";
 };
+
+declare type WhileExpressionCstChildren = {
+    While: IToken[];
+    AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
+    Do: IToken[];
+    do: IToken[];
+    Lines: LinesCstNode[];
+    End: IToken[];
+    end: IToken[];
+};
+
+declare interface WhileExpressionCstNode extends CstNode {
+    name: "WhileExpression";
+    children: WhileExpressionCstChildren;
+}
 
 declare const WhiteSpace: Omit<TokenType, "name"> & {
     name: "WhiteSpace";

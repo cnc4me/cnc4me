@@ -1,4 +1,4 @@
-import { tokenMatcher } from "chevrotain";
+import { ICstVisitor, tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
 
 import { INTERPRETER } from "../config";
@@ -80,6 +80,10 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.#memory.reset();
   }
 
+  getRawLines() {
+    return this.#lines;
+  }
+
   getInsights(): InsightCollection {
     return this.#insights;
   }
@@ -92,7 +96,6 @@ export class MacroInterpreter extends BaseCstVisitor {
       ctx.ProgramNumberLine[0].children
     );
     const lines = this.Lines(ctx.Lines[0].children);
-
     return NcProgram.create({ id: number, title, lines });
   }
 
@@ -111,7 +114,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Iterate over the {@link LineCstChildren} to extract the contents
+   * Iterate over the lines to extract the contents
    */
   Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
     if (ctx?.Line) {

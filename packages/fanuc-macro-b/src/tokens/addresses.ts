@@ -18,10 +18,8 @@ export const LineNumber = createToken({
   pattern: /N\d+/
 });
 
-/**
- * @TODO investigate if the custom matcher is needed. Can the parser turn an address token
- * with image "O" and a number into a "program number"?
- */
+// @TODO investigate if the custom matcher is needed.
+// Can the parser turn an address token with image "O" and a number into a "program number"?
 export const ProgramNumber = createToken({
   name: "ProgramNumber",
   pattern: matchProgramNumber,
@@ -29,6 +27,11 @@ export const ProgramNumber = createToken({
   // pattern: /[O|:](\d+)/,
   // longer_alt: Address
 });
+
+// export const ProgramNumber = createToken({
+//   name: "ProgramNumber",
+//   pattern: /[O|:]\d+/
+// });
 
 export const Address = createToken({
   name: "Address",

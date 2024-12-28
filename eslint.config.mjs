@@ -54,7 +54,12 @@ const rules = {
 /** @type { import("eslint").Linter.Config[] } */
 export default [
   {
-    files: ["**/*.ts", "./apps/**/*.tsx", "**/vite.config.ts"],
+    files: [
+      "**/*.ts", //
+      "**/*.d.ts", //
+      "./apps/**/*.tsx",
+      "**/vite.config.ts",
+    ],
     languageOptions,
     plugins,
     rules,

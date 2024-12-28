@@ -22,10 +22,8 @@ export class FanucMacroB
 
   #debug = Debuggers.Main;
 
-  /**
-   * @TODO fix this flag here, move it global?
-   */
   constructor(options?: Partial<{ debug: boolean }>) {
+    // @TODO fix this debug flag here, move it global?
     this.lexer = new MacroLexer();
     this.parser = new MacroParser();
     this.interpreter = new MacroInterpreter();
@@ -98,7 +96,7 @@ export class FanucMacroB
   }
 
   /**
-   * Run {@link extractOffsets} on the results from #eval()
+   * Run extract the G10 offsets from the results from {@link FanucMacroB.eval}
    */
   evalG10(input: string) {
     const { error, result } = this.eval(input);
@@ -110,7 +108,7 @@ export class FanucMacroB
   }
 
   /**
-   * Invoke the {@link MacroInterpreter} starting from `expression()`
+   * Invoke the {@link MacroInterpreter.Expression} starting from `expression()`
    */
   evalExpr(input: string) {
     this.tokenizeAndLoadParser(input);

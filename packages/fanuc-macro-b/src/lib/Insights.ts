@@ -1,4 +1,4 @@
-import { max, min, unique } from "radash";
+import { max, min, unique } from "radashi";
 
 import type { IBaseInsight } from "../types";
 import type { AddressedValue } from "./AddressedValue";

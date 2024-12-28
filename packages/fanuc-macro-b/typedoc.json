@@ -11,5 +11,8 @@
   "compilerOptions": {
     "skipLibCheck": true,
     "noUnusedLocals": false,
-  }
+  },
+  "plugin": [
+    "typedoc-plugin-missing-exports"
+  ]
 }

@@ -3,7 +3,6 @@ import { readdirSync } from "node:fs";
 import path from "node:path";
 
 import define from "rollup-plugin-define";
-import nodeExternals from "rollup-plugin-node-externals";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
 

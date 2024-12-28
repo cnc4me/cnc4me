@@ -96,7 +96,7 @@ export type ConditionalExpressionCstChildren = {
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Then?: IToken[];
   VariableAssignment?: VariableAssignmentCstNode[];
-  GotoLine?: IToken[];
+  GoToExpression?: GoToExpressionCstNode[];
 };
 
 export interface AtomicBooleanExpressionCstNode extends CstNode {
@@ -218,6 +218,16 @@ export type VariableLiteralCstChildren = {
   Integer: IToken[];
 };
 
+export interface VariableExpressionCstNode extends CstNode {
+  name: "VariableExpression";
+  children: VariableExpressionCstChildren;
+}
+
+export type VariableExpressionCstChildren = {
+  Var: IToken[];
+  BracketExpression: BracketExpressionCstNode[];
+};
+
 export interface ValueLiteralCstNode extends CstNode {
   name: "ValueLiteral";
   children: ValueLiteralCstChildren;
@@ -279,6 +289,7 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;
   VariableLiteral(children: VariableLiteralCstChildren, param?: IN): OUT;
+  VariableExpression(children: VariableExpressionCstChildren, param?: IN): OUT;
   ValueLiteral(children: ValueLiteralCstChildren, param?: IN): OUT;
   StartOfFile(children: StartOfFileCstChildren, param?: IN): OUT;
   ProgramNumberLine(children: ProgramNumberLineCstChildren, param?: IN): OUT;

@@ -40,7 +40,7 @@ export class MacroParserRuleTree extends CstParser {
   /**
    * Utilize the generic to get the token name
    *
-   * @url https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
+   * @see https://github.com/Chevrotain/chevrotain/issues/1987#issuecomment-1709854026
    */
   public override CONSUME<S extends TokenType>(
     token: S,
@@ -78,6 +78,20 @@ export class MacroParserRuleTree extends CstParser {
     this.SUBRULE(this.Lines);
     this.SUBRULE(this.EndOfFile);
   });
+
+  /**
+   * Defining a valid NC Program
+   */
+  // public __NEW_Program = this.RULE("Program", () => {
+  //   this.CONSUME(Percent);
+  //   this.OPTION(() => {
+  //     this.CONSUME(Newline);
+  //   });
+  //   this.SUBRULE(this.ProgramNumberLine);
+  //   this.SUBRULE(this.Lines);
+  //   this.CONSUME2(Newline);
+  //   this.CONSUME2(Percent);
+  // });
 
   /**
    *

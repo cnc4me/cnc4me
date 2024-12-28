@@ -3,10 +3,8 @@ import { createToken } from "./token.utils";
 
 const categories = ControlFlowKeyword;
 
-/**
- * @TODO this should be more complex and handle the variable number capture?
- * @TODO have it evaluate expressions into var numbers?
- */
+// @TODO this should be more complex and handle the variable number capture?
+// @TODO have it evaluate expressions into var numbers?
 export const Var = createToken({
   name: "Var",
   pattern: "#",
