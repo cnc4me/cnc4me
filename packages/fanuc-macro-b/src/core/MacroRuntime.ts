@@ -98,9 +98,17 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     this.#programs = {};
     this.#fmb.reset();
   }
-
   getErrors() {
     return this.#fmb.getErrors();
+  }
+
+  /**
+   * Read a variable from memory
+   *
+   * @example getMacroVariable(1) to read the value of "#1"
+   */
+  getMacroVariable(register: number) {
+    return this.Memory.read(register);
   }
 
   getInsights(): InsightCollection {

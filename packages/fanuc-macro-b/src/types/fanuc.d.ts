@@ -1,97 +1,98 @@
 import type { CstNode, ICstVisitor, IToken } from "chevrotain";
 
-export interface ProgramsCstNode extends CstNode {
+declare interface ProgramsCstNode extends CstNode {
   name: "Programs";
   children: ProgramsCstChildren;
 }
 
-export type ProgramsCstChildren = {
+declare type ProgramsCstChildren = {
   Program?: ProgramCstNode[];
   Newline?: IToken[];
 };
 
-export interface ProgramCstNode extends CstNode {
+declare interface ProgramCstNode extends CstNode {
   name: "Program";
   children: ProgramCstChildren;
 }
 
-export type ProgramCstChildren = {
-  StartOfFile: StartOfFileCstNode[];
+declare type ProgramCstChildren = {
+  Percent: (IToken)[];
+  Newline?: (IToken)[];
   ProgramNumberLine: ProgramNumberLineCstNode[];
   Lines: LinesCstNode[];
-  EndOfFile: EndOfFileCstNode[];
 };
 
-export interface LinesCstNode extends CstNode {
+declare interface LinesCstNode extends CstNode {
   name: "Lines";
   children: LinesCstChildren;
 }
 
-export type LinesCstChildren = {
+declare type LinesCstChildren = {
   Line?: LineCstNode[];
   Newline?: IToken[];
 };
 
-export interface LineCstNode extends CstNode {
+declare interface LineCstNode extends CstNode {
   name: "Line";
   children: LineCstChildren;
 }
 
-export type LineCstChildren = {
-  LineNumber?: IToken[];
-  G_Code?: IToken[];
-  M_Code?: IToken[];
+declare type LineCstChildren = {
   AddressedValue?: AddressedValueCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
   ConditionalExpression?: ConditionalExpressionCstNode[];
   Expression?: ExpressionCstNode[];
+  GoToExpression?: GoToExpressionCstNode[];
   WhileExpression?: WhileExpressionCstNode[];
+  LineNumber?: IToken[];
+  G_Code?: IToken[];
+  M_Code?: IToken[];
   Comment?: IToken[];
 };
 
-export interface VariableAssignmentCstNode extends CstNode {
+declare interface VariableAssignmentCstNode extends CstNode {
   name: "VariableAssignment";
   children: VariableAssignmentCstChildren;
 }
 
-export type VariableAssignmentCstChildren = {
+declare type VariableAssignmentCstChildren = {
   VariableLiteral: VariableLiteralCstNode[];
   Equals: IToken[];
   Expression: ExpressionCstNode[];
 };
 
-export interface WhileExpressionCstNode extends CstNode {
+declare interface WhileExpressionCstNode extends CstNode {
   name: "WhileExpression";
   children: WhileExpressionCstChildren;
 }
 
-export type WhileExpressionCstChildren = {
+declare type WhileExpressionCstChildren = {
   While: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Do: IToken[];
-  do: IToken[];
+  DoStart: IToken[];
   Lines: LinesCstNode[];
   End: IToken[];
-  end: IToken[];
+  DoEnd: IToken[];
 };
 
-export interface GoToExpressionCstNode extends CstNode {
+declare interface GoToExpressionCstNode extends CstNode {
   name: "GoToExpression";
   children: GoToExpressionCstChildren;
 }
 
-export type GoToExpressionCstChildren = {
+declare type GoToExpressionCstChildren = {
   GotoLine: IToken[];
   WhiteSpace?: IToken[];
-  line: IToken[];
+  LineNumber: IToken[];
 };
 
-export interface ConditionalExpressionCstNode extends CstNode {
+declare interface ConditionalExpressionCstNode extends CstNode {
   name: "ConditionalExpression";
   children: ConditionalExpressionCstChildren;
 }
 
-export type ConditionalExpressionCstChildren = {
+declare type ConditionalExpressionCstChildren = {
   If: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Then?: IToken[];
@@ -99,98 +100,98 @@ export type ConditionalExpressionCstChildren = {
   GoToExpression?: GoToExpressionCstNode[];
 };
 
-export interface AtomicBooleanExpressionCstNode extends CstNode {
+declare interface AtomicBooleanExpressionCstNode extends CstNode {
   name: "AtomicBooleanExpression";
   children: AtomicBooleanExpressionCstChildren;
 }
 
-export type AtomicBooleanExpressionCstChildren = {
+declare type AtomicBooleanExpressionCstChildren = {
   OpenBracket: IToken[];
   BooleanExpression: BooleanExpressionCstNode[];
   CloseBracket: IToken[];
 };
 
-export interface BooleanExpressionCstNode extends CstNode {
+declare interface BooleanExpressionCstNode extends CstNode {
   name: "BooleanExpression";
   children: BooleanExpressionCstChildren;
 }
 
-export type BooleanExpressionCstChildren = {
+declare type BooleanExpressionCstChildren = {
   lhs: AtomicExpressionCstNode[];
   BooleanOperator: IToken[];
   rhs: AtomicExpressionCstNode[];
 };
 
-export interface AdditionExpressionCstNode extends CstNode {
+declare interface AdditionExpressionCstNode extends CstNode {
   name: "AdditionExpression";
   children: AdditionExpressionCstChildren;
 }
 
-export type AdditionExpressionCstChildren = {
+declare type AdditionExpressionCstChildren = {
   lhs: MultiplicationExpressionCstNode[];
   AdditionOperator?: IToken[];
   rhs?: MultiplicationExpressionCstNode[];
 };
 
-export interface MultiplicationExpressionCstNode extends CstNode {
+declare interface MultiplicationExpressionCstNode extends CstNode {
   name: "MultiplicationExpression";
   children: MultiplicationExpressionCstChildren;
 }
 
-export type MultiplicationExpressionCstChildren = {
+declare type MultiplicationExpressionCstChildren = {
   lhs: AtomicExpressionCstNode[];
   MultiplicationOperator?: IToken[];
   rhs?: AtomicExpressionCstNode[];
 };
 
-export interface FunctionExpressionCstNode extends CstNode {
+declare interface FunctionExpressionCstNode extends CstNode {
   name: "FunctionExpression";
   children: FunctionExpressionCstChildren;
 }
 
-export type FunctionExpressionCstChildren = {
+declare type FunctionExpressionCstChildren = {
   FunctionName: IToken[];
   BracketExpression: BracketExpressionCstNode[];
 };
 
-export interface BracketExpressionCstNode extends CstNode {
+declare interface BracketExpressionCstNode extends CstNode {
   name: "BracketExpression";
   children: BracketExpressionCstChildren;
 }
 
-export type BracketExpressionCstChildren = {
+declare type BracketExpressionCstChildren = {
   OpenBracket: IToken[];
   Expression: ExpressionCstNode[];
   CloseBracket: IToken[];
 };
 
-export interface AtomicExpressionCstNode extends CstNode {
+declare interface AtomicExpressionCstNode extends CstNode {
   name: "AtomicExpression";
   children: AtomicExpressionCstChildren;
 }
 
-export type AtomicExpressionCstChildren = {
+declare type AtomicExpressionCstChildren = {
   FunctionExpression?: FunctionExpressionCstNode[];
   BracketExpression?: BracketExpressionCstNode[];
   NumericLiteral?: NumericLiteralCstNode[];
   VariableLiteral?: VariableLiteralCstNode[];
 };
 
-export interface ExpressionCstNode extends CstNode {
+declare interface ExpressionCstNode extends CstNode {
   name: "Expression";
   children: ExpressionCstChildren;
 }
 
-export type ExpressionCstChildren = {
+declare type ExpressionCstChildren = {
   AdditionExpression: AdditionExpressionCstNode[];
 };
 
-export interface AddressedValueCstNode extends CstNode {
+declare interface AddressedValueCstNode extends CstNode {
   name: "AddressedValue";
   children: AddressedValueCstChildren;
 }
 
-export type AddressedValueCstChildren = {
+declare type AddressedValueCstChildren = {
   Address: IToken[];
   Minus?: IToken[];
   NumericValue?: IToken[];
@@ -198,78 +199,78 @@ export type AddressedValueCstChildren = {
   VariableLiteral?: VariableLiteralCstNode[];
 };
 
-export interface NumericLiteralCstNode extends CstNode {
+declare interface NumericLiteralCstNode extends CstNode {
   name: "NumericLiteral";
   children: NumericLiteralCstChildren;
 }
 
-export type NumericLiteralCstChildren = {
+declare type NumericLiteralCstChildren = {
   Minus?: IToken[];
   NumericValue: IToken[];
 };
 
-export interface VariableLiteralCstNode extends CstNode {
+declare interface VariableLiteralCstNode extends CstNode {
   name: "VariableLiteral";
   children: VariableLiteralCstChildren;
 }
 
-export type VariableLiteralCstChildren = {
+declare type VariableLiteralCstChildren = {
   Var: IToken[];
   Integer: IToken[];
 };
 
-export interface VariableExpressionCstNode extends CstNode {
+declare interface VariableExpressionCstNode extends CstNode {
   name: "VariableExpression";
   children: VariableExpressionCstChildren;
 }
 
-export type VariableExpressionCstChildren = {
+declare type VariableExpressionCstChildren = {
   Var: IToken[];
   BracketExpression: BracketExpressionCstNode[];
 };
 
-export interface ValueLiteralCstNode extends CstNode {
+declare interface ValueLiteralCstNode extends CstNode {
   name: "ValueLiteral";
   children: ValueLiteralCstChildren;
 }
 
-export type ValueLiteralCstChildren = {
+declare type ValueLiteralCstChildren = {
   VariableLiteral?: VariableLiteralCstNode[];
   NumericLiteral?: NumericLiteralCstNode[];
 };
 
-export interface StartOfFileCstNode extends CstNode {
+declare interface StartOfFileCstNode extends CstNode {
   name: "StartOfFile";
   children: StartOfFileCstChildren;
 }
 
-export type StartOfFileCstChildren = {
+declare type StartOfFileCstChildren = {
   Percent: IToken[];
   Newline: IToken[];
 };
 
-export interface ProgramNumberLineCstNode extends CstNode {
+declare interface ProgramNumberLineCstNode extends CstNode {
   name: "ProgramNumberLine";
   children: ProgramNumberLineCstChildren;
 }
 
-export type ProgramNumberLineCstChildren = {
+declare type ProgramNumberLineCstChildren = {
   ProgramNumber: IToken[];
   Comment?: IToken[];
   Newline: IToken[];
 };
 
-export interface EndOfFileCstNode extends CstNode {
+declare interface EndOfFileCstNode extends CstNode {
   name: "EndOfFile";
   children: EndOfFileCstChildren;
 }
 
-export type EndOfFileCstChildren = {
+declare type EndOfFileCstChildren = {
   Percent: IToken[];
   Newline?: IToken[];
 };
 
-export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
+declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   Programs(children: ProgramsCstChildren, param?: IN): OUT;
   Program(children: ProgramCstChildren, param?: IN): OUT;
   Lines(children: LinesCstChildren, param?: IN): OUT;

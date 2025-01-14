@@ -13,6 +13,6 @@ export const Integer = createToken({
 export const Decimal = createToken({
   name: "Decimal",
   pattern: /(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,
-  longer_alt: Integer,
-  categories
+  categories,
+  longer_alt: Integer
 });

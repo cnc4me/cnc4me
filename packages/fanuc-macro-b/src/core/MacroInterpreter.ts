@@ -1,4 +1,4 @@
-import { ICstVisitor, tokenMatcher } from "chevrotain";
+import { tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
 
 import { INTERPRETER } from "../config";
@@ -20,19 +20,21 @@ import {
   Plus,
   Product
 } from "../tokens";
-import {
-  type CST,
-  type IParsedLineData,
-  type IProgramNumberLine,
-  type MacroBuiltinFunctionNames,
-  type ValidG10OffsetGroups
-} from "../types";
 import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
 import { Debuggers } from "../utils/debug";
 import { hasDwell, hasG10 } from "../utils/flags";
+import { BlockArray, type IBlock } from "./BlockArray";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { STDLIB } from "./StandardLibrary";
+
+import type {
+  CST,
+  IParsedLineData,
+  IProgramNumberLine,
+  MacroBuiltinFunctionNames,
+  ValidG10OffsetGroups
+} from "../types";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
@@ -47,6 +49,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   };
 
   #lines: IParsedLineData[] = [];
+  #blocks = new BlockArray();
 
   #memory: MacroMemory;
   #insights: InsightCollection;
@@ -73,7 +76,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   onAny = this.#events.onAny.bind(this.#events);
 
   /**
-   * Reset the {@link MarcoInterpreter} by clearing any lines and the {@link MacroMemory}
+   * Reset the interpreter by clearing all lines and the {@link MacroMemory}
    */
   reset() {
     this.#lines = [];
@@ -83,6 +86,21 @@ export class MacroInterpreter extends BaseCstVisitor {
   getRawLines() {
     return this.#lines;
   }
+
+  getBlocks() {
+    return this.#blocks;
+  }
+
+  // /**
+  //  * @todo why is this not returning the block numbers?
+  //  */
+  // getBlockMap() {
+  //   return this.#blocks
+  //     .map(([N, lineCtx]) => {
+  //       return ["N" + `${N}`.padStart(8, "0")].join(" ");
+  //     })
+  //     .join("\n");
+  // }
 
   getInsights(): InsightCollection {
     return this.#insights;
@@ -117,12 +135,54 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Iterate over the lines to extract the contents
    */
   Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
+    this.#debug("Lines");
     if (ctx?.Line) {
-      for (const line of ctx.Line) {
-        const visited = this.Line(line.children);
-        this.#lines.push(visited);
-        void this.#events.emit("LINE", visited);
+      const lines = ctx.Line;
+      const lookahead = 3;
+
+      this.#debug("First Scan, extracting block numbers");
+      for (const line of lines) {
+        const block: IBlock = { N: NaN, line: {} };
+        if (line.children?.LineNumber) {
+          const token = getImage(line.children.LineNumber);
+          block.N = Number(token.slice(1));
+        }
+        block.line = line.children;
+        this.#blocks.append(block);
       }
+
+      this.#debug("Interpreting Blocks");
+      this.#debug(this.#blocks, this.#blocks.length);
+
+      const maxIterations = 100;
+      let iterations = 0;
+      do {
+        if (iterations > maxIterations) {
+          throw new Error(
+            `Max iterations (${maxIterations}) reached. Possible infinte loop.`
+          );
+        }
+        const currentPointer = this.#blocks.getPointer();
+        const block = this.#blocks.read() as IBlock;
+
+        if (block?.line) {
+          this.#debug("visiting", block.line);
+
+          // THIS MIGHT UPDATE this.#blocks.pointer
+          const visited = this.Line(block.line);
+          // THIS MIGHT HAVE UPDATED this.#blocks.pointer
+
+          this.#debug("visited", visited);
+          this.#lines.push(visited);
+          void this.#events.emit("LINE", visited);
+        }
+
+        // Check if the pointer was externally modified
+        if (this.#blocks.getPointer() === currentPointer) {
+          this.#blocks.advancePointer();
+        }
+        iterations++;
+      } while (!this.#blocks.pointerAtEnd);
     }
     return this.#lines;
   }
@@ -139,12 +199,13 @@ export class MacroInterpreter extends BaseCstVisitor {
       addresses: [],
       gCodeMap: {},
       mCodeMap: {},
-      addressMap: {}
+      addressMap: {},
+      hasVariable: false
     };
 
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
-      parsed.N = AddressedValue.valueOf(rawLineNumber);
+      parsed.N = Number(rawLineNumber.slice(1));
     }
 
     if (ctx?.G_Code) {
@@ -163,7 +224,13 @@ export class MacroInterpreter extends BaseCstVisitor {
       });
     }
 
+    if (ctx?.GoToExpression) {
+      const { children } = unbox(ctx.GoToExpression);
+      this.GoToExpression(children);
+    }
+
     if (ctx?.VariableAssignment) {
+      parsed.hasVariable = true;
       const { children } = unbox(ctx.VariableAssignment);
       this.VariableAssignment(children);
     }
@@ -297,8 +364,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   /**
    * This handles subtraction as well since both the
-   * {@link Plus} and {@link Minus} tokens have
-   * the category {@link AdditionOperator}
+   * `Plus` and `Minus` tokens have the category `AdditionOperator`
    */
   AdditionExpression(ctx: CST.AdditionExpressionCstChildren): number {
     let lhsValue: number = this.MultiplicationExpression(ctx.lhs[0].children);
@@ -329,8 +395,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   /**
    * This handles division as well since both the
-   * {@link Product} and {@link Divide} tokens have
-   * the category {@link MultiplicationOperator}
+   * `Product` and `Divide` tokens have the category `MultiplicationOperator`
    */
   MultiplicationExpression(
     ctx: CST.MultiplicationExpressionCstChildren
@@ -450,6 +515,16 @@ export class MacroInterpreter extends BaseCstVisitor {
     } else {
       return false;
     }
+  }
+
+  /**
+   * Move the pointer to the goto line
+   */
+  GoToExpression(ctx: CST.GoToExpressionCstChildren) {
+    const N = parseInt(getImage(ctx.LineNumber));
+    this.#debug("GoToExpression", { N });
+    this.#blocks.setPointerToBlock(N);
+    return;
   }
 
   /**

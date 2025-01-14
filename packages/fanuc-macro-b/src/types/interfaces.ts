@@ -18,6 +18,7 @@ export interface MachineCommand {
 }
 
 export interface IParsedLineData {
+  hasVariable: boolean;
   /**
    * Parsed `N` line number (this is not the literal line, but explicit Nnnnn )
    */

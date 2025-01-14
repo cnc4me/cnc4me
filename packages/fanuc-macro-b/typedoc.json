@@ -5,12 +5,20 @@
     "./src/index.ts"
   ],
   "excludeExternals": true,
+  // "useTsLinkResolution": false,
   "externalPattern": [
     "**/xstate/**/*.ts"
   ],
   "compilerOptions": {
     "skipLibCheck": true,
     "noUnusedLocals": false,
+    "lib": [
+      "DOM",
+      "ESNext"
+    ],
+    "types": [
+      "node"
+    ]
   },
   "plugin": [
     "typedoc-plugin-missing-exports"

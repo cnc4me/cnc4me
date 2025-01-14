@@ -1,40 +1,43 @@
+import { Address, Gcode } from "./addresses";
 import { ControlFlowKeyword, Keyword } from "./token.categories";
 import { createToken } from "./token.utils";
 
 const categories = [ControlFlowKeyword, Keyword];
+const sharedConfig = { categories, longer_alt: [Address] };
 
 export const GotoLine = createToken({
   name: "GotoLine",
-  pattern: /GOTO[1-9][0-9]*/,
-  categories
+  pattern: /GOTO/,
+  categories,
+  longer_alt: [Gcode]
 });
 
 export const If = createToken({
   name: "If",
   pattern: /IF/,
-  categories
+  ...sharedConfig
 });
 
 export const Then = createToken({
   name: "Then",
   pattern: /THEN/,
-  categories
+  ...sharedConfig
 });
 
 export const Do = createToken({
   name: "Do",
   pattern: /DO/,
-  categories
+  ...sharedConfig
 });
 
 export const While = createToken({
   name: "While",
   pattern: /WHILE/,
-  categories
+  ...sharedConfig
 });
 
 export const End = createToken({
   name: "End",
   pattern: /END/,
-  categories
+  ...sharedConfig
 });

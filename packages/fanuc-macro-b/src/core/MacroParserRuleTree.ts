@@ -73,25 +73,17 @@ export class MacroParserRuleTree extends CstParser {
    * Defining a valid NC Program
    */
   public Program = this.RULE("Program", () => {
-    this.SUBRULE(this.StartOfFile);
+    this.CONSUME(Percent);
+    this.OPTION(() => {
+      this.CONSUME(Newline);
+    });
     this.SUBRULE(this.ProgramNumberLine);
     this.SUBRULE(this.Lines);
-    this.SUBRULE(this.EndOfFile);
+    this.OPTION2(() => {
+      this.CONSUME2(Newline);
+    });
+    this.CONSUME2(Percent);
   });
-
-  /**
-   * Defining a valid NC Program
-   */
-  // public __NEW_Program = this.RULE("Program", () => {
-  //   this.CONSUME(Percent);
-  //   this.OPTION(() => {
-  //     this.CONSUME(Newline);
-  //   });
-  //   this.SUBRULE(this.ProgramNumberLine);
-  //   this.SUBRULE(this.Lines);
-  //   this.CONSUME2(Newline);
-  //   this.CONSUME2(Percent);
-  // });
 
   /**
    *
@@ -110,14 +102,15 @@ export class MacroParserRuleTree extends CstParser {
     this.MANY(() => {
       this.OR([
         // { ALT: () => this.CONSUME(Newline) },
-        { ALT: () => this.CONSUME(LineNumber) },
-        { ALT: () => this.CONSUME(Gcode) },
-        { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
         { ALT: () => this.SUBRULE(this.Expression) },
+        { ALT: () => this.SUBRULE(this.GoToExpression) },
         { ALT: () => this.SUBRULE(this.WhileExpression) },
+        { ALT: () => this.CONSUME(LineNumber) },
+        { ALT: () => this.CONSUME(Gcode) },
+        { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.CONSUME(Comment) }
       ]);
     });
@@ -144,10 +137,10 @@ export class MacroParserRuleTree extends CstParser {
     this.CONSUME(While);
     this.SUBRULE(this.AtomicBooleanExpression);
     this.CONSUME(Do);
-    this.CONSUME(NumericValue, { LABEL: "do" });
+    this.CONSUME(NumericValue, { LABEL: "DoStart" });
     this.SUBRULE(this.Lines);
     this.CONSUME(End);
-    this.CONSUME2(NumericValue, { LABEL: "end" });
+    this.CONSUME2(NumericValue, { LABEL: "DoEnd" });
   });
 
   /**
@@ -158,7 +151,7 @@ export class MacroParserRuleTree extends CstParser {
     this.OPTION(() => {
       this.CONSUME(WhiteSpace);
     });
-    this.CONSUME(NumericValue, { LABEL: "line" });
+    this.CONSUME(NumericValue, { LABEL: "LineNumber" });
   });
 
   /**

@@ -5,17 +5,18 @@ import { ProgramNumber } from "../../src/tokens";
 
 const lexer = new MacroLexer();
 
-describe(`tokenizing program numbers`, () => {
-  const tokens = lexer.tokenize("O1234");
+describe.each([
+  ["O1"],
+  ["O01"],
+  ["O001"],
+  ["O0001"],
+  ["O9999"] //
+] as const)(`tokenizing program numbers`, prgNum => {
+  it(`correctly identifies "${prgNum}"`, () => {
+    const tokens = lexer.tokenize(prgNum);
 
-  it(`has no errors`, () => {
     expect(lexer.hasErrors).toBeFalsy();
-  });
-
-  it(`produces the correct tokens`, () => {
-    // expect(tokens).toHaveLength(2);
     expect(tokens[0]).toMatchToken(ProgramNumber);
-    expect(tokens[0].image).toBe("O1234");
-    expect(tokens[0].payload).toBe(1234);
+    expect(tokens[0].image).toBe(prgNum);
   });
 });

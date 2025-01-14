@@ -9,6 +9,6 @@ export class ParsingError extends MacroParserError {
     const cause = Object.assign(err, {
       name: "IRecognitionException"
     }) as Error;
-    super(`There was an error running the MacroParser.`, { cause });
+    super(cause.message, { cause });
   }
 }

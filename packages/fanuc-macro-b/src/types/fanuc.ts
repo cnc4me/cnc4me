@@ -16,10 +16,10 @@ export interface ProgramCstNode extends CstNode {
 }
 
 export type ProgramCstChildren = {
-  StartOfFile: StartOfFileCstNode[];
+  Percent: (IToken)[];
+  Newline?: (IToken)[];
   ProgramNumberLine: ProgramNumberLineCstNode[];
   Lines: LinesCstNode[];
-  EndOfFile: EndOfFileCstNode[];
 };
 
 export interface LinesCstNode extends CstNode {
@@ -38,14 +38,15 @@ export interface LineCstNode extends CstNode {
 }
 
 export type LineCstChildren = {
-  LineNumber?: IToken[];
-  G_Code?: IToken[];
-  M_Code?: IToken[];
   AddressedValue?: AddressedValueCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
   ConditionalExpression?: ConditionalExpressionCstNode[];
   Expression?: ExpressionCstNode[];
+  GoToExpression?: GoToExpressionCstNode[];
   WhileExpression?: WhileExpressionCstNode[];
+  LineNumber?: IToken[];
+  G_Code?: IToken[];
+  M_Code?: IToken[];
   Comment?: IToken[];
 };
 
@@ -69,10 +70,10 @@ export type WhileExpressionCstChildren = {
   While: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Do: IToken[];
-  do: IToken[];
+  DoStart: IToken[];
   Lines: LinesCstNode[];
   End: IToken[];
-  end: IToken[];
+  DoEnd: IToken[];
 };
 
 export interface GoToExpressionCstNode extends CstNode {
@@ -83,7 +84,7 @@ export interface GoToExpressionCstNode extends CstNode {
 export type GoToExpressionCstChildren = {
   GotoLine: IToken[];
   WhiteSpace?: IToken[];
-  line: IToken[];
+  LineNumber: IToken[];
 };
 
 export interface ConditionalExpressionCstNode extends CstNode {

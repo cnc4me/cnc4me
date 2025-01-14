@@ -13,15 +13,15 @@
       "@/*": [
         "./src/*"
       ]
-    }
+    },
+    "types": [
+      "./src/types/fanuc.d.ts",
+      "./tests/_vitest/vitest.d.ts"
+    ]
   },
-  "files": [
-    "./src/types/fanuc.d.ts",
-    "./tests/_vitest/vitest.expect.d.ts"
-  ],
   "include": [
     "vite.config.*",
-    "src",
+    "src/**/*.ts",
     "src/lib/*.json",
     "demo",
     "tests",

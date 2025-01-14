@@ -28,7 +28,13 @@ module.exports = {
       },
     },
   },
-  plugins: ["import", "prettier", "@typescript-eslint", "simple-import-sort"],
+  plugins: [
+    "import",
+    "prettier",
+    "@typescript-eslint",
+    "simple-import-sort",
+    "eslint-plugin-tsdoc",
+  ],
   extends: [
     "eslint:recommended",
     "plugin:@typescript-eslint/recommended",
@@ -39,6 +45,8 @@ module.exports = {
   ],
   rules: {
     "prettier/prettier": "error",
+    "tsdoc/syntax": "warn",
+
     //
     // typescript
     //
