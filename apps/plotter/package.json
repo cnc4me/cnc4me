@@ -1,0 +1,49 @@
+{
+  "name": "@cnc4me/plotter",
+  "version": "1.0.0",
+  "private": true,
+  "description": "Plotter demo",
+  "keywords": [
+    "chevrotain",
+    "parser",
+    "html"
+  ],
+  "license": "MIT",
+  "author": "Kevin Hill",
+  "type": "module",
+  "scripts": {
+    "build": "vite build",
+    "lint": "eslint ./src",
+    "start": "vite dev"
+  },
+  "dependencies": {
+    "@emotion/react": "^11.14.0",
+    "@emotion/styled": "^11.14.0",
+    "@fontsource/roboto": "^5.1.0",
+    "@mui/material": "catalog:",
+    "@react-three/drei": "^9.121.1",
+    "@react-three/fiber": "^8.17.12",
+    "d3": "^7.9.0",
+    "lodash.debounce": "^4.0.8",
+    "react": "catalog:",
+    "react-dom": "catalog:"
+  },
+  "devDependencies": {
+    "@types/d3": "^7.4.3",
+    "@types/node": "catalog:",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
+    "@vitejs/plugin-react": "catalog:",
+    "csstype": "^3.1.3",
+    "eslint": "catalog:",
+    "eslint-config-prettier": "catalog:",
+    "eslint-import-resolver-typescript": "catalog:",
+    "eslint-plugin-import": "catalog:",
+    "eslint-plugin-prettier": "catalog:",
+    "eslint-plugin-react-refresh": "^0.4.16",
+    "eslint-plugin-simple-import-sort": "catalog:",
+    "tsx": "catalog:",
+    "typescript": "catalog:",
+    "vite": "catalog:"
+  }
+}
