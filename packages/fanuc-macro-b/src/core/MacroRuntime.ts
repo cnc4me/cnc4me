@@ -160,7 +160,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * This method can be used to run a "program" by wrapping it
    * with `%` delimiters and a special program number.
    */
-  mdi(...input: string[]): void {
+  mdi(...input: string[]): this {
     this.#programs[0] = [
       "%",
       "O0000", // MDI Program Number
@@ -168,6 +168,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       "%"
     ].join("\n");
     this.setActiveProgram(0);
+    return this;
   }
 
   /**
@@ -175,7 +176,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    *
    * This method can create a program if given a string
    */
-  loadProgram(input: string, options?: ProgramLoadOptions): void {
+  loadProgram(input: string, options?: ProgramLoadOptions): this {
     if (options?.programNumber) {
       this.#programs[options.programNumber] = input;
     }
@@ -192,6 +193,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       this.setActiveProgram(programNumber);
       // this.#tokenizeActiveProgram();
     }
+    return this;
   }
 
   /**
@@ -205,12 +207,12 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   /**
    * Set a program number as `active` in the runtime.
    */
-  setActiveProgram(programNumber: number): boolean {
+  setActiveProgram(programNumber: number): this {
     // @TODO add error handling to check if program is loaded
     // debug(`Setting program #${programNumber} active`);
     this.#throwIfProgramNotLoaded(programNumber);
     this.Memory.write(SystemVariable._MAINO, programNumber);
-    return true;
+    return this;
   }
 
   /**

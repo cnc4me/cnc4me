@@ -46,6 +46,7 @@ const BaseCstVisitor = MacroParser.getBaseCstVisitor({
 export class MacroInterpreter extends BaseCstVisitor {
   static EVENTS: {
     LINE: IParsedLineData;
+    END_OF_PROGRAM: undefined;
   };
 
   #lines: IParsedLineData[] = [];
@@ -76,10 +77,13 @@ export class MacroInterpreter extends BaseCstVisitor {
   onAny = this.#events.onAny.bind(this.#events);
 
   /**
-   * Reset the interpreter by clearing all lines and the {@link MacroMemory}
+   * Reset the Interpreter
+   *
+   * Clears lines and blocks, resets the {@link MacroMemory}
    */
   reset() {
     this.#lines = [];
+    this.#blocks.reset();
     this.#memory.reset();
   }
 
@@ -138,9 +142,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     this.#debug("Lines");
     if (ctx?.Line) {
       const lines = ctx.Line;
-      const lookahead = 3;
-
-      this.#debug("First Scan, extracting block numbers");
+      this.#debug("Assembling Blocks");
       for (const line of lines) {
         const block: IBlock = { N: NaN, line: {} };
         if (line.children?.LineNumber) {
@@ -152,37 +154,9 @@ export class MacroInterpreter extends BaseCstVisitor {
       }
 
       this.#debug("Interpreting Blocks");
-      this.#debug(this.#blocks, this.#blocks.length);
-
-      const maxIterations = 100;
-      let iterations = 0;
-      do {
-        if (iterations > maxIterations) {
-          throw new Error(
-            `Max iterations (${maxIterations}) reached. Possible infinte loop.`
-          );
-        }
-        const currentPointer = this.#blocks.getPointer();
-        const block = this.#blocks.read() as IBlock;
-
-        if (block?.line) {
-          this.#debug("visiting", block.line);
-
-          // THIS MIGHT UPDATE this.#blocks.pointer
-          const visited = this.Line(block.line);
-          // THIS MIGHT HAVE UPDATED this.#blocks.pointer
-
-          this.#debug("visited", visited);
-          this.#lines.push(visited);
-          void this.#events.emit("LINE", visited);
-        }
-
-        // Check if the pointer was externally modified
-        if (this.#blocks.getPointer() === currentPointer) {
-          this.#blocks.advancePointer();
-        }
-        iterations++;
-      } while (!this.#blocks.pointerAtEnd);
+      this.#debug("Block Count:", this.#blocks.length);
+      this.#debug(this.#blocks);
+      this.#processBlocks({ maxIterations: 10 });
     }
     return this.#lines;
   }
@@ -222,11 +196,9 @@ export class MacroInterpreter extends BaseCstVisitor {
         parsed.mCodes.push(token);
         parsed.mCodeMap[token.image] = true;
       });
-    }
-
-    if (ctx?.GoToExpression) {
-      const { children } = unbox(ctx.GoToExpression);
-      this.GoToExpression(children);
+      if (parsed.mCodeMap.M30) {
+        this.#events.emit("END_OF_PROGRAM");
+      }
     }
 
     if (ctx?.VariableAssignment) {
@@ -243,10 +215,19 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (ctx?.AddressedValue) {
       ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
-        // debug(parsedAddr);
         parsed.addresses.push(parsedAddr);
         parsed.addressMap[parsedAddr.prefix] = parsedAddr.value;
       });
+    }
+
+    if (ctx?.GoToExpression) {
+      const { children } = unbox(ctx.GoToExpression);
+      this.GoToExpression(children);
+    }
+
+    if (ctx?.WhileExpression) {
+      const { children } = unbox(ctx.WhileExpression);
+      this.WhileLoop(children);
     }
 
     if (ctx?.Comment) {
@@ -269,11 +250,6 @@ export class MacroInterpreter extends BaseCstVisitor {
         Z: addressMap["Z"],
         B: addressMap["B"]
       });
-    }
-
-    if (ctx?.WhileExpression) {
-      const { children } = unbox(ctx.WhileExpression);
-      this.WhileLoop(children);
     }
 
     void this.#events.emit("LINE", parsed);
@@ -518,16 +494,6 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Move the pointer to the goto line
-   */
-  GoToExpression(ctx: CST.GoToExpressionCstChildren) {
-    const N = parseInt(getImage(ctx.LineNumber));
-    this.#debug("GoToExpression", { N });
-    this.#blocks.setPointerToBlock(N);
-    return;
-  }
-
-  /**
    * Interpret a while loop
    */
   WhileLoop(ctx: CST.WhileExpressionCstChildren) {
@@ -539,6 +505,50 @@ export class MacroInterpreter extends BaseCstVisitor {
     while (condition()) {
       this.Lines(ctx.Lines[0].children);
     }
+  }
+  /**
+   * Move the pointer to the goto line
+   */
+  GoToExpression(ctx: CST.GoToExpressionCstChildren) {
+    const _debug = this.#debug.extend(`goto`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("pointer was", this.#blocks.getPointer());
+    this.#blocks.setPointerToBlock(N);
+    return;
+  }
+
+  #processBlocks(opts: { maxIterations: number }) {
+    const _debug = this.#debug.extend("blocks");
+
+    const maxIterations = opts.maxIterations ?? 1_000;
+    let iterations = 0;
+    do {
+      _debug(`[LOOP ${iterations}]`);
+      if (iterations > maxIterations) {
+        throw new Error(
+          `Max iterations (${maxIterations}) reached. Possible infinte loop.`
+        );
+      }
+      const currentPointer = this.#blocks.getPointer();
+      const block = this.#blocks.read() as IBlock;
+
+      if (block?.line) {
+        const visited = this.Line(block.line);
+        _debug(`visited line`);
+        _debug("pointer was", this.#blocks.getPointer());
+        // THIS MIGHT HAVE UPDATED this.#blocks.pointer
+        // _debug("visited", visited);
+        this.#lines.push(visited);
+        void this.#events.emit("LINE", visited);
+      }
+
+      // Check if the pointer was externally modified
+      if (this.#blocks.getPointer() === currentPointer) {
+        this.#blocks.advancePointer();
+        _debug("pointer is", this.#blocks.getPointer());
+      }
+      iterations++;
+    } while (!this.#blocks.pointerAtEnd);
   }
 }
 

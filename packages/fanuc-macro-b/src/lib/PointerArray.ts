@@ -1,6 +1,6 @@
 export class PointerArray<T> {
-  private items: T[] = [];
-  private pointer: number;
+  protected items: T[] = [];
+  protected pointer: number;
 
   constructor() {
     this.pointer = 0;
