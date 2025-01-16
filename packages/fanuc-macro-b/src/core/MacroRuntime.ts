@@ -105,9 +105,9 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   /**
    * Read a variable from memory
    *
-   * @example getMacroVariable(1) to read the value of "#1"
+   * @example readRegister(1) to read the value of "#1"
    */
-  getMacroVariable(register: number) {
+  readRegister(register: number) {
     return this.Memory.read(register);
   }
 

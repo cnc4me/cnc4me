@@ -42,17 +42,16 @@ describe("Evaluating a GOTO", () => {
   it(`jumps execution to the specified block number`, () => {
     runtime.loadProgram(PROGRAM1, { setActive: true }).run();
 
-    const res = runtime.getMacroVariable(1);
-    expect(res).toBe(1);
+    expect(runtime.readRegister(1)).toBe(1);
   });
 
   it(`can interpret multiple GOTO`, () => {
     runtime.loadProgram(PROGRAM2, { setActive: true }).run();
-    expect(runtime.getMacroVariable(2)).toBe(4);
+    expect(runtime.readRegister(2)).toBe(4);
   });
 
   it(`can GOTO inner blocks and back out`, () => {
     runtime.loadProgram(PROGRAM3, { setActive: true }).run();
-    expect(runtime.getMacroVariable(3)).toBe(5);
+    expect(runtime.readRegister(3)).toBe(5);
   });
 });

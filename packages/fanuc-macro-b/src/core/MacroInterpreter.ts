@@ -207,6 +207,11 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.VariableAssignment(children);
     }
 
+    if (ctx?.GoToExpression) {
+      const { children } = unbox(ctx.GoToExpression);
+      this.GoToExpression(children);
+    }
+
     if (ctx?.ConditionalExpression) {
       const { children } = unbox(ctx.ConditionalExpression);
       this.ConditionalExpression(children);
@@ -218,11 +223,6 @@ export class MacroInterpreter extends BaseCstVisitor {
         parsed.addresses.push(parsedAddr);
         parsed.addressMap[parsedAddr.prefix] = parsedAddr.value;
       });
-    }
-
-    if (ctx?.GoToExpression) {
-      const { children } = unbox(ctx.GoToExpression);
-      this.GoToExpression(children);
     }
 
     if (ctx?.WhileExpression) {
@@ -455,13 +455,14 @@ export class MacroInterpreter extends BaseCstVisitor {
   ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
     const { children } = unbox(ctx?.AtomicBooleanExpression);
     const boolExpr = this.AtomicBooleanExpression(children);
-    if (boolExpr) {
+    this.#debug.extend("AtomicBooleanExpression")(boolExpr);
+    if (boolExpr === true) {
       if (ctx?.VariableAssignment) {
         return this.VariableAssignment(ctx.VariableAssignment[0].children);
       }
-      // if (ctx?.GotoLine) {
-      //   this.GotoLine();
-      // }
+      if (ctx?.GoToExpression) {
+        this.GoToExpression(ctx.GoToExpression[0].children);
+      }
     }
   }
 
@@ -474,8 +475,8 @@ export class MacroInterpreter extends BaseCstVisitor {
     const { children } = unbox(ctx?.BooleanExpression);
     const lhs = this.AtomicExpression(children.lhs[0].children);
     const rhs = this.AtomicExpression(children.rhs[0].children);
-    // const operator = getImage(children.BooleanOperator);
     const operator = unbox(children.BooleanOperator);
+    this.#debug.extend("AtomicBooleanExpression")(lhs, operator.image, rhs);
     if (tokenMatcher(operator, EqualTo)) {
       return lhs === rhs;
     } else if (tokenMatcher(operator, NotEqualTo)) {
@@ -523,7 +524,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     const maxIterations = opts.maxIterations ?? 1_000;
     let iterations = 0;
     do {
-      _debug(`[LOOP ${iterations}]`);
+      _debug(`[ITERATION ${iterations}]`);
       if (iterations > maxIterations) {
         throw new Error(
           `Max iterations (${maxIterations}) reached. Possible infinte loop.`
