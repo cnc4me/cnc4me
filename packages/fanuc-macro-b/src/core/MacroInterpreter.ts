@@ -23,7 +23,7 @@ import {
 import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
 import { Debuggers } from "../utils/debug";
 import { hasDwell, hasG10 } from "../utils/flags";
-import { BlockArray, type IBlock } from "./BlockArray";
+import { BlockCollection } from "./BlockCollection";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./MacroParser";
 import { STDLIB } from "./StandardLibrary";
@@ -35,10 +35,13 @@ import type {
   MacroBuiltinFunctionNames,
   ValidG10OffsetGroups
 } from "../types";
+import type { IBlock } from "./BlockCollection";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
 });
+
+type MacroInterpreterEvents = typeof MacroInterpreter.EVENTS;
 
 /**
  * Macro Interpreter
@@ -48,21 +51,17 @@ export class MacroInterpreter extends BaseCstVisitor {
     LINE: IParsedLineData;
     END_OF_PROGRAM: undefined;
   };
-
-  #lines: IParsedLineData[] = [];
-  #blocks = new BlockArray();
-
-  #memory: MacroMemory;
-  #insights: InsightCollection;
   #debug = Debuggers.Interpreter;
+  #lines: IParsedLineData[] = [];
+  #memory = new MacroMemory();
+  #blocks = new BlockCollection();
+  #insights = new InsightCollection();
   #events = new Emittery<typeof MacroInterpreter.EVENTS>();
 
   constructor() {
     super();
-    this.#debug("initializing");
-    this.#memory = new MacroMemory();
-    this.#insights = new InsightCollection();
-    this.#debug("validating");
+    this.#debug("");
+    this.#debug("initializing & validating");
     this.validateVisitor();
   }
 
@@ -521,7 +520,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   #processBlocks(opts: { maxIterations: number }) {
     const _debug = this.#debug.extend("blocks");
 
-    const maxIterations = opts.maxIterations ?? 1_000;
+    const maxIterations = opts.maxIterations ?? 1_000_000;
     let iterations = 0;
     do {
       _debug(`[ITERATION ${iterations}]`);

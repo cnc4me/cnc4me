@@ -36,7 +36,7 @@ M30
 
 const runtime = new MacroRuntime();
 
-describe("Evaluating a GOTO", () => {
+describe("Evaluating GOTO n", () => {
   beforeEach(() => runtime.reset());
 
   it(`jumps execution to the specified block number`, () => {

@@ -98,6 +98,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     this.#programs = {};
     this.#fmb.reset();
   }
+
   getErrors() {
     return this.#fmb.getErrors();
   }

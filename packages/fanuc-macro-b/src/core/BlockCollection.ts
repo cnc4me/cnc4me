@@ -8,7 +8,7 @@ export interface IBlock {
   line: CST.LineCstChildren;
 }
 
-export class BlockArray extends PointerArray<IBlock> {
+export class BlockCollection extends PointerArray<IBlock> {
   #debug: debug.Debugger;
 
   constructor() {

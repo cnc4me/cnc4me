@@ -9,11 +9,17 @@ import {
   Divide,
   Do,
   Equals,
+  EqualTo,
   GotoLine,
+  GreaterThan,
+  GreaterThanOrEq,
   If,
   Integer,
+  LessThan,
+  LessThanOrEq,
   Minus,
   Newline,
+  NotEqualTo,
   Plus,
   Product,
   Then,
@@ -35,14 +41,18 @@ const BASIC_CASES: TestCaseData[] = [
   ["=", Equals]
 ];
 
-const CONTROL_FLOW_CASES: TestCaseData[] = [
+const KEYWORD_CASES: TestCaseData[] = [
   ["IF", If],
   ["THEN", Then],
   ["DO", Do],
   ["WHILE", While],
-  ["GOTO1", GotoLine],
-  ["GOTO162", GotoLine],
-  ["GOTO60102", GotoLine]
+  ["GOTO", GotoLine],
+  ["EQ", EqualTo],
+  ["NE", NotEqualTo],
+  ["LT", LessThan],
+  ["LE", LessThanOrEq],
+  ["GT", GreaterThan],
+  ["GE", GreaterThanOrEq]
 ];
 
 const ADDRESS_CASES = "ABCDEFHIJKLPQRSTUVWXYZ" // Missing G,M,N,O on purpose, they are reserved
@@ -57,7 +67,7 @@ const TEST_GROUPS: [label: string, cases: TestCaseData[]][] = [
   ["basic", BASIC_CASES],
   ["address", ADDRESS_CASES],
   ["function", FUNCTION_CASES],
-  ["control-flow", CONTROL_FLOW_CASES]
+  ["keyword", KEYWORD_CASES]
 ];
 
 const lexer = new MacroLexer();
@@ -68,7 +78,7 @@ describe.each(TEST_GROUPS)(`tokenizing %s tokens`, (_, cases) => {
 
     const tokens = lexer.tokenize(input);
 
-    it(`produces <${tokenType.name}> token`, () => {
+    it(`produces token: ${tokenType.name}`, () => {
       expect(lexer.hasErrors).toBeFalsy();
       expect(tokens).toHaveLength(1);
       expect(tokens[0]).toMatchToken(tokenType);
