@@ -28,7 +28,6 @@ import {
   While,
   WhiteSpace
 } from "../../tokens";
-import { Keyword } from "../../tokens/token.utils";
 import { Debuggers } from "../../utils/debug";
 import { FANUC_MACRO_B_GRAMMAR } from "./MacroGrammar";
 
@@ -106,7 +105,6 @@ export class MacroParserRuleTree extends CstParser {
         { ALT: () => this.SUBRULE(this.Expression) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.CONSUME(LineNumber) },
-        // { ALT: () => this.CONSUME(Keyword) },
         { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.CONSUME(Gcode) },
         { ALT: () => this.CONSUME(Comment) }

@@ -509,7 +509,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Move the pointer to the goto line
+   * Move the pointer to the starting GOTO block number
    */
   EndStatement(ctx: CST.EndStatementCstChildren) {
     const _debug = this.#debug.extend(`end`);
@@ -521,7 +521,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Move the pointer to the goto line
+   * Move the pointer to the GOTO block number
    */
   GoToStatement(ctx: CST.GoToStatementCstChildren) {
     const _debug = this.#debug.extend(`goto`);
