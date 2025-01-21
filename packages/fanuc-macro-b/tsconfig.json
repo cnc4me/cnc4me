@@ -2,12 +2,13 @@
   "extends": "../../tsconfig.json",
   "compilerOptions": {
     "composite": true,
-    "outDir": "./dist",
+    "target": "ES2023",
+    "noEmit": true,
     "resolveJsonModule": true,
     "experimentalDecorators": true,
     "lib": [
       "DOM",
-      "ESNext"
+      "ES2023"
     ],
     "paths": {
       "@/*": [

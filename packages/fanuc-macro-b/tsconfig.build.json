@@ -4,10 +4,6 @@
     "composite": true,
     "rootDir": "./src",
     "outDir": "./dist",
-    "resolveJsonModule": true,
-    "lib": [
-      "ESNext"
-    ],
   },
   "include": [
     "src/**/*.ts",

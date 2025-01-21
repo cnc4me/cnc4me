@@ -1,3 +1,4 @@
 {
-    "livePreview.defaultPreviewPath": "/diagrams/FanucMacroB.html"
+  "livePreview.defaultPreviewPath": "/docs/index.html",
+  "prettier.configPath": "/Users/kevinhill/Projects/cnc4me/.prettierrc.json"
 }

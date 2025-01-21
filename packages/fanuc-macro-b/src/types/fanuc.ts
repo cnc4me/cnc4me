@@ -40,8 +40,7 @@ export interface LineCstNode extends CstNode {
 export type LineCstChildren = {
   ConditionalExpression?: ConditionalExpressionCstNode[];
   GoToStatement?: GoToStatementCstNode[];
-  WhileExpression?: WhileExpressionCstNode[];
-  EndStatement?: EndStatementCstNode[];
+  WhileDoEndExpression?: WhileDoEndExpressionCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
   Expression?: ExpressionCstNode[];
   AddressedValue?: AddressedValueCstNode[];
@@ -60,19 +59,6 @@ export type VariableAssignmentCstChildren = {
   VariableLiteral: VariableLiteralCstNode[];
   Equals: IToken[];
   Expression: ExpressionCstNode[];
-};
-
-export interface WhileExpressionCstNode extends CstNode {
-  name: "WhileExpression";
-  children: WhileExpressionCstChildren;
-}
-
-export type WhileExpressionCstChildren = {
-  While: IToken[];
-  AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
-  DoStatement: DoStatementCstNode[];
-  Lines: LinesCstNode[];
-  EndStatement: EndStatementCstNode[];
 };
 
 export interface DoStatementCstNode extends CstNode {
@@ -106,6 +92,19 @@ export type GoToStatementCstChildren = {
   GotoLine: IToken[];
   WhiteSpace?: IToken[];
   LineNumber: IToken[];
+};
+
+export interface WhileDoEndExpressionCstNode extends CstNode {
+  name: "WhileDoEndExpression";
+  children: WhileDoEndExpressionCstChildren;
+}
+
+export type WhileDoEndExpressionCstChildren = {
+  While: IToken[];
+  AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
+  DoStatement: DoStatementCstNode[];
+  Lines: LinesCstNode[];
+  EndStatement: EndStatementCstNode[];
 };
 
 export interface ConditionalExpressionCstNode extends CstNode {
@@ -297,10 +296,10 @@ export interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   Lines(children: LinesCstChildren, param?: IN): OUT;
   Line(children: LineCstChildren, param?: IN): OUT;
   VariableAssignment(children: VariableAssignmentCstChildren, param?: IN): OUT;
-  WhileExpression(children: WhileExpressionCstChildren, param?: IN): OUT;
   DoStatement(children: DoStatementCstChildren, param?: IN): OUT;
   EndStatement(children: EndStatementCstChildren, param?: IN): OUT;
   GoToStatement(children: GoToStatementCstChildren, param?: IN): OUT;
+  WhileDoEndExpression(children: WhileDoEndExpressionCstChildren, param?: IN): OUT;
   ConditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
   AtomicBooleanExpression(children: AtomicBooleanExpressionCstChildren, param?: IN): OUT;
   BooleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;

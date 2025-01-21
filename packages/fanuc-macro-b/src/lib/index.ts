@@ -1,4 +1,4 @@
-import { FANUC_MACRO_B_FNS } from "../tokens/functions";
+import { FANUC_MACRO_B_FNS } from "../core/tokens/functions";
 import { AddressedValue } from "./AddressedValue";
 import { ChevrotainGenerator } from "./ChevrotainGenerator";
 import { AddressInsight, InsightCollection } from "./Insights";

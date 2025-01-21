@@ -1,0 +1,40 @@
+:root,
+:root[data-theme="light"],
+:root[data-theme="dark"] {
+  --fanuc-yellow: #FFFF00;
+  --fanuc-red: #FF4400;
+  --icon-border-color: var(--fanuc-red);
+
+  --md-sys-color-primary: var(--fanuc-yellow) !important;
+  --color-icon-background: var(--fanuc-yellow) !important;
+
+  --md-sys-color-secondary: var(--fanuc-red) !important;
+  --color-icon-text: var(--fanuc-red) !important;
+
+  /* Icon Borders */
+  --color-document: var(--icon-border-color) !important;
+  --color-ts-enum: var(--icon-border-color) !important;
+  --color-ts-class: var(--icon-border-color) !important;
+  --color-ts-variable: var(--icon-border-color) !important;
+  --color-ts-interface: var(--icon-border-color) !important;
+  --color-ts-namespace: var(--icon-border-color) !important;
+  --color-ts-type-alias: var(--icon-border-color) !important;
+}
+
+header {
+  padding: 0 !important;
+  background-color: var(--fanuc-yellow) !important;
+}
+
+header * {
+  color: var(--fanuc-red) !important;
+}
+
+/* Hide the Theme Switcher... Dark only 😈 */
+.tsd-theme-toggle {
+  display: none !important;
+}
+
+/* #icon-search path {
+  fill: var(--md-sys-color-primary) !important;
+} */

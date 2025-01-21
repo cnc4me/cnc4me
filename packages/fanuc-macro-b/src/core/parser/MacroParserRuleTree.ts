@@ -1,5 +1,6 @@
 import { CstParser } from "chevrotain";
 
+import { Debuggers } from "../../utils/debug";
 import {
   AdditionOperator,
   Address,
@@ -27,8 +28,7 @@ import {
   Var,
   While,
   WhiteSpace
-} from "../../tokens";
-import { Debuggers } from "../../utils/debug";
+} from "../tokens";
 import { FANUC_MACRO_B_GRAMMAR } from "./MacroGrammar";
 
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
@@ -99,8 +99,8 @@ export class MacroParserRuleTree extends CstParser {
       this.OR([
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
         { ALT: () => this.SUBRULE(this.GoToStatement) },
-        { ALT: () => this.SUBRULE(this.WhileExpression) },
-        { ALT: () => this.SUBRULE(this.EndStatement) },
+        { ALT: () => this.SUBRULE(this.WhileDoEndExpression) },
+        // { ALT: () => this.SUBRULE(this.EndStatement) },
         { ALT: () => this.SUBRULE(this.VariableAssignment) }, // Part of Expression?
         { ALT: () => this.SUBRULE(this.Expression) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
@@ -156,7 +156,7 @@ export class MacroParserRuleTree extends CstParser {
   /**
    * While loop construct
    */
-  WhileExpression = this.RULE("WhileExpression", () => {
+  WhileDoEndExpression = this.RULE("WhileDoEndExpression", () => {
     this.CONSUME(While);
     this.SUBRULE(this.AtomicBooleanExpression);
     this.SUBRULE(this.DoStatement);

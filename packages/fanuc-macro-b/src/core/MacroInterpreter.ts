@@ -9,6 +9,13 @@ import {
   MacroVariable
 } from "../lib";
 import { NcProgram } from "../lib/NcProgram";
+import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
+import { Debuggers } from "../utils/debug";
+import { hasDwell, hasG10 } from "../utils/flags";
+import { BlockCollection } from "./BlockCollection";
+import { MacroMemory } from "./MacroMemory";
+import { MacroParser } from "./parser/MacroParser";
+import { STDLIB } from "./StandardLibrary";
 import {
   EqualTo,
   GreaterThan,
@@ -19,14 +26,7 @@ import {
   NotEqualTo,
   Plus,
   Product
-} from "../tokens";
-import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
-import { Debuggers } from "../utils/debug";
-import { hasDwell, hasG10 } from "../utils/flags";
-import { BlockCollection } from "./BlockCollection";
-import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./parser/MacroParser";
-import { STDLIB } from "./StandardLibrary";
+} from "./tokens";
 
 import type {
   CST,
@@ -224,9 +224,9 @@ export class MacroInterpreter extends BaseCstVisitor {
       });
     }
 
-    if (ctx?.WhileExpression) {
-      const { children } = unbox(ctx.WhileExpression);
-      this.WhileLoop(children);
+    if (ctx?.WhileDoEndExpression) {
+      const { children } = unbox(ctx.WhileDoEndExpression);
+      this.WhileDoEndExpression(children);
     }
 
     if (ctx?.Comment) {
@@ -497,7 +497,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    * Interpret a while loop
    */
-  WhileLoop(ctx: CST.WhileExpressionCstChildren) {
+  WhileDoEndExpression(ctx: CST.WhileDoEndExpressionCstChildren) {
     const condition = () => {
       const { children } = unbox(ctx.AtomicBooleanExpression);
       return this.AtomicBooleanExpression(children);
@@ -506,6 +506,18 @@ export class MacroInterpreter extends BaseCstVisitor {
     while (condition()) {
       this.Lines(ctx.Lines[0].children);
     }
+  }
+
+  /**
+   *
+   */
+  DoStatement(ctx: CST.DoStatementCstChildren) {
+    const _debug = this.#debug.extend(`do`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("DO LINE NUM", N);
+    // _debug("pointer was", this.#blocks.getPointer());
+    // this.#blocks.setPointerToBlock(N);
+    return;
   }
 
   /**

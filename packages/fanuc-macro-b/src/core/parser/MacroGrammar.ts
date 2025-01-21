@@ -38,7 +38,7 @@ import {
   Var,
   While,
   WhiteSpace
-} from "../../tokens";
+} from "../tokens";
 
 /**
  * The order of tokens is important because token

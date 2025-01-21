@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { MacroLexer } from "../../src";
-import { Do, End, GotoLine, Integer } from "../../src/tokens";
+import { Do, End, GotoLine, Integer } from "../../src/core/tokens";
 
 // Define test cases in a data-driven manner
 const testCases = [

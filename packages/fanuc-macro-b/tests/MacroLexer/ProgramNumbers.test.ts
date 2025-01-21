@@ -1,7 +1,7 @@
 import { describe, expect, it } from "vitest";
 
 import { MacroLexer } from "../../src";
-import { ProgramNumber } from "../../src/tokens";
+import { ProgramNumber } from "../../src/core/tokens";
 
 const lexer = new MacroLexer();
 

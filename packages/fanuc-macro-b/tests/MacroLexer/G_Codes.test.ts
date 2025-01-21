@@ -1,7 +1,7 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
 import { MacroLexer } from "../../src";
-import { Gcode } from "../../src/tokens";
+import { Gcode } from "../../src/core/tokens";
 import { range } from "../../src/utils/common";
 
 const lexer = new MacroLexer();

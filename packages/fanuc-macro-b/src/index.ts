@@ -1,4 +1,4 @@
-import * as T from "./tokens";
+import * as T from "./core/tokens";
 
 import type { MacroRuntimeConfig } from "./core/MacroRuntime";
 

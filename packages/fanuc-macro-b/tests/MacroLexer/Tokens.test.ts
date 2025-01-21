@@ -26,7 +26,7 @@ import {
   Then,
   Var,
   While
-} from "../../src/tokens";
+} from "../../src/core/tokens";
 
 import type { TokenType } from "chevrotain";
 
