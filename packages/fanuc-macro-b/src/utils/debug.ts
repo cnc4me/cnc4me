@@ -1,27 +1,32 @@
 import Debug from "debug";
 
 const DEBUG_NAMESPACE = "fanuc";
-const NAMESPACES = [
-  "lexer",
-  "memory",
-  "parser",
-  "runtime",
-  "interpreter"
-] as const;
 
 let currentNamespaces = "";
 
 const FanucDebugger = Debug(DEBUG_NAMESPACE);
 
-export const pauseDebugging = () => {
-  currentNamespaces = Debug.disable();
-  return {
-    disabled: currentNamespaces,
-    resumeDebugging: () => Debug.enable(currentNamespaces)
-  };
+export const Debuggers = {
+  enable: Debug.enable,
+  disable: Debug.disable,
+  Main: FanucDebugger,
+  Lexer: FanucDebugger.extend("lexer"),
+  Memory: FanucDebugger.extend("memory"),
+  Parser: FanucDebugger.extend("parser"),
+  Runtime: FanucDebugger.extend("runtime"),
+  Interpreter: FanucDebugger.extend("interpreter"),
+  pause() {
+    currentNamespaces = Debug.disable();
+    return {
+      disabled: currentNamespaces,
+      resumeDebugging: () => Debug.enable(currentNamespaces)
+    };
+  }
 };
 
-export function enableDebugging(namespace?: `${(typeof NAMESPACES)[number]}`) {
+export function enableDebugging(
+  namespace?: "lexer" | "memory" | "parser" | "runtime" | "interpreter"
+) {
   if (namespace) {
     Debug.enable(`${DEBUG_NAMESPACE}:${namespace}`);
   } else {
@@ -32,15 +37,3 @@ export function enableDebugging(namespace?: `${(typeof NAMESPACES)[number]}`) {
     }
   }
 }
-
-export const Debuggers = {
-  enable: Debug.enable,
-  disable: Debug.disable,
-  pause: pauseDebugging,
-  Main: FanucDebugger,
-  Lexer: FanucDebugger.extend("lexer"),
-  Memory: FanucDebugger.extend("memory"),
-  Parser: FanucDebugger.extend("parser"),
-  Runtime: FanucDebugger.extend("runtime"),
-  Interpreter: FanucDebugger.extend("interpreter")
-};

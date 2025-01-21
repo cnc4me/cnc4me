@@ -1,6 +1,15 @@
+import { Address } from "./addresses";
 import { Decimal } from "./numbers";
-import { AdditionOperator, MultiplicationOperator } from "./token.categories";
+import { createCategory } from "./token.utils";
 import { createToken } from "./token.utils";
+
+export const AdditionOperator = createCategory("AdditionOperator");
+export const MultiplicationOperator = createCategory("MultiplicationOperator");
+
+export const Equals = createToken({
+  name: "Equals",
+  pattern: "="
+});
 
 export const Plus = createToken({
   name: "Plus",
@@ -12,7 +21,7 @@ export const Minus = createToken({
   name: "Minus",
   pattern: "-",
   longer_alt: [Decimal],
-  // This will make the AdditionExpression handle subtraction too
+  // 👇🏻 This will make the AdditionExpression handle subtraction too
   categories: AdditionOperator
 });
 
@@ -25,13 +34,14 @@ export const Product = createToken({
 export const Divide = createToken({
   name: "Divide",
   pattern: "/",
-  // This will make the MultiplicationExpression handle division too
+  // 👇🏻 This will make the MultiplicationExpression handle division too
   categories: MultiplicationOperator
 });
 
 export const Modulus = createToken({
   name: "Modulus",
   pattern: /MOD/,
-  // This will make the MultiplicationExpression handle modulus too
+  longer_alt: Address,
+  // 👇🏻 This will make the MultiplicationExpression handle modulus too
   categories: MultiplicationOperator
 });

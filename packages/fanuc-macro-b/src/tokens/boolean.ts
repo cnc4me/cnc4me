@@ -1,9 +1,13 @@
 import { Address } from "./addresses";
-import { BooleanOperator, Keyword } from "./token.categories";
+import { createCategory, Keyword } from "./token.utils";
 import { createToken } from "./token.utils";
 
-const categories = [BooleanOperator, Keyword];
-const sharedConfig = { categories, longer_alt: [Address] };
+export const BooleanOperator = createCategory("BooleanOperator");
+
+const sharedConfig = {
+  longer_alt: Address,
+  categories: [BooleanOperator, Keyword]
+};
 
 export const EqualTo = createToken({
   name: "EqualTo",
@@ -38,5 +42,23 @@ export const GreaterThan = createToken({
 export const GreaterThanOrEq = createToken({
   name: "GreaterThanOrEq",
   pattern: /GE/,
+  ...sharedConfig
+});
+
+export const Or = createToken({
+  name: "Or",
+  pattern: /OR/,
+  ...sharedConfig
+});
+
+export const And = createToken({
+  name: "And",
+  pattern: /AND/,
+  ...sharedConfig
+});
+
+export const XOr = createToken({
+  name: "XOr",
+  pattern: /XOR/,
   ...sharedConfig
 });

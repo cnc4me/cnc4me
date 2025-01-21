@@ -3,7 +3,7 @@ import { Debuggers } from "../utils/debug";
 import { extractOffsets } from "../utils/extractOffsets";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
-import { MacroParser } from "./MacroParser";
+import { MacroParser } from "./parser/MacroParser";
 
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";

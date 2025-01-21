@@ -1,28 +1,21 @@
-import { Fences } from "./token.categories";
 import { createToken } from "./token.utils";
-
-const categories = Fences;
 
 export const OpenParen = createToken({
   name: "OpenParen",
-  pattern: "(",
-  categories
+  pattern: "("
 });
 
 export const CloseParen = createToken({
   name: "CloseParen",
-  pattern: ")",
-  categories
+  pattern: ")"
 });
 
 export const OpenBracket = createToken({
   name: "OpenBracket",
-  pattern: "[",
-  categories
+  pattern: "["
 });
 
 export const CloseBracket = createToken({
   name: "CloseBracket",
-  pattern: "]",
-  categories
+  pattern: "]"
 });

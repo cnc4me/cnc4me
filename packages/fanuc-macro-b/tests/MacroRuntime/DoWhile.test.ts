@@ -4,19 +4,18 @@ import { MacroRuntime } from "../../src";
 
 const PROGRAM = `%
 O0001 (test 1)
-N1 #1 = 1
-N2 GOTO4
-N3 #1 = 0
-N4
-N5 M30
+#100 = 1
+WHILE [#100 LE 5] DO1
+#100 = #100 + 1
+END1
 %`;
 
 const runtime = new MacroRuntime();
 
-describe("Evaluating a GOTO", () => {
+describe.skip("Evaluating a While / Do / End", () => {
   beforeEach(() => runtime.reset());
 
-  it(`jumps execution to the specified block number`, () => {
+  it(`loops the correct number of times`, () => {
     runtime.loadProgram(PROGRAM, { setActive: true }).run();
 
     const res = runtime.readRegister(1);

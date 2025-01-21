@@ -2,7 +2,6 @@
  * All tokens are exported in the main index as `T`
  */
 export * from "./addresses";
-export * from "./bitwise";
 export * from "./boolean";
 export * from "./brackets";
 export * from "./control-flow";
@@ -11,7 +10,6 @@ export * from "./numbers";
 export * from "./operators";
 export * from "./skipped";
 export * from "./symbols";
-export * from "./token.categories";
 
 /**
  * @TODO

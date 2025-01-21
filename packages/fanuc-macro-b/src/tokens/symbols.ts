@@ -1,44 +1,30 @@
-import { ControlFlowKeyword } from "./token.categories";
 import { createToken } from "./token.utils";
-
-const categories = ControlFlowKeyword;
 
 // @TODO this should be more complex and handle the variable number capture?
 // @TODO have it evaluate expressions into var numbers?
 export const Var = createToken({
   name: "Var",
-  pattern: "#",
-  categories
+  pattern: "#"
 });
 
 export const Dot = createToken({
   name: "Dot",
-  pattern: ".",
-  categories
-});
-
-export const Equals = createToken({
-  name: "Equals",
-  pattern: "=",
-  categories
+  pattern: "."
 });
 
 export const Percent = createToken({
   name: "Percent",
-  pattern: "%",
-  categories
+  pattern: "%"
 });
 
 export const Newline = createToken({
   name: "Newline",
-  pattern: "\n",
-  categories
+  pattern: "\n"
 });
 
 export const SemiColon = createToken({
   name: "SemiColon",
-  pattern: ";",
-  categories
+  pattern: ";"
 });
 
 // export const Comma = createToken({

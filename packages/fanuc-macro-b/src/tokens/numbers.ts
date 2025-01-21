@@ -1,18 +1,18 @@
-import { NumericValue } from "./token.categories";
+import { createCategory } from "./token.utils";
 import { createToken } from "./token.utils";
 
-const categories = NumericValue;
+export const NumericValue = createCategory("NumericValue");
 
 export const Integer = createToken({
   name: "Integer",
   pattern: /\d+/,
-  categories
+  categories: NumericValue
 });
 
 // Borrowed the regex from https://stackoverflow.com/a/13252134
 export const Decimal = createToken({
   name: "Decimal",
   pattern: /(?=\d*[.])([0-9]+\.?[0-9]*|\.[0-9]+)/,
-  categories,
-  longer_alt: Integer
+  longer_alt: Integer,
+  categories: NumericValue
 });

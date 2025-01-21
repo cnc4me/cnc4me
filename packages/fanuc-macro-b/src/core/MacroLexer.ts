@@ -2,7 +2,7 @@ import { Lexer } from "chevrotain";
 
 import { InputUndefined, LexingError } from "../errors/lexer";
 import { Debuggers } from "../utils/debug";
-import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
+import { FANUC_MACRO_B_GRAMMAR } from "./parser/MacroGrammar";
 
 import type { ErrorProducer } from "../types";
 import type { ILexerDefinitionError, ILexingResult, IToken } from "chevrotain";

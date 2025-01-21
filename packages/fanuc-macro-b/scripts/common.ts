@@ -4,7 +4,7 @@ import { createSyntaxDiagramsCode } from "chevrotain";
 import { writeFileSync } from "fs";
 import path from "path";
 
-import { MacroRuntimeFSM } from "../src/fsm/MacroRuntimeFSM";
+import { MacroRuntimeFSM } from "../src";
 import { generateMermaidDiagram } from "../src/utils/mermaid";
 
 import type { BaseParser } from "chevrotain";

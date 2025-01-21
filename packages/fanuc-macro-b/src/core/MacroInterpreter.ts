@@ -25,7 +25,7 @@ import { Debuggers } from "../utils/debug";
 import { hasDwell, hasG10 } from "../utils/flags";
 import { BlockCollection } from "./BlockCollection";
 import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./MacroParser";
+import { MacroParser } from "./parser/MacroParser";
 import { STDLIB } from "./StandardLibrary";
 
 import type {
@@ -206,9 +206,9 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.VariableAssignment(children);
     }
 
-    if (ctx?.GoToExpression) {
-      const { children } = unbox(ctx.GoToExpression);
-      this.GoToExpression(children);
+    if (ctx?.GoToStatement) {
+      const { children } = unbox(ctx.GoToStatement);
+      this.GoToStatement(children);
     }
 
     if (ctx?.ConditionalExpression) {
@@ -459,8 +459,8 @@ export class MacroInterpreter extends BaseCstVisitor {
       if (ctx?.VariableAssignment) {
         return this.VariableAssignment(ctx.VariableAssignment[0].children);
       }
-      if (ctx?.GoToExpression) {
-        this.GoToExpression(ctx.GoToExpression[0].children);
+      if (ctx?.GoToStatement) {
+        this.GoToStatement(ctx.GoToStatement[0].children);
       }
     }
   }
@@ -476,6 +476,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     const rhs = this.AtomicExpression(children.rhs[0].children);
     const operator = unbox(children.BooleanOperator);
     this.#debug.extend("AtomicBooleanExpression")(lhs, operator.image, rhs);
+
     if (tokenMatcher(operator, EqualTo)) {
       return lhs === rhs;
     } else if (tokenMatcher(operator, NotEqualTo)) {
@@ -506,10 +507,23 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.Lines(ctx.Lines[0].children);
     }
   }
+
   /**
    * Move the pointer to the goto line
    */
-  GoToExpression(ctx: CST.GoToExpressionCstChildren) {
+  EndStatement(ctx: CST.EndStatementCstChildren) {
+    const _debug = this.#debug.extend(`end`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("END LINE NUM", N);
+    // _debug("pointer was", this.#blocks.getPointer());
+    // this.#blocks.setPointerToBlock(N);
+    return;
+  }
+
+  /**
+   * Move the pointer to the goto line
+   */
+  GoToStatement(ctx: CST.GoToStatementCstChildren) {
     const _debug = this.#debug.extend(`goto`);
     const N = parseInt(getImage(ctx.LineNumber));
     _debug("pointer was", this.#blocks.getPointer());

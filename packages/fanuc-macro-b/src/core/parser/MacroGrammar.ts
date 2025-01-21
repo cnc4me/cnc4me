@@ -1,18 +1,16 @@
 import {
   AdditionOperator,
   Address,
-  BooleanOperator,
   BuiltinFunction,
   CloseBracket,
   CloseParen,
   Comment,
-  ControlFlowKeyword,
   Decimal,
   Divide,
   Do,
+  End,
   Equals,
   EqualTo,
-  Fences,
   Gcode,
   GotoLine,
   GreaterThan,
@@ -40,7 +38,7 @@ import {
   Var,
   While,
   WhiteSpace
-} from "../tokens";
+} from "../../tokens";
 
 /**
  * The order of tokens is important because token
@@ -50,10 +48,11 @@ export const FANUC_MACRO_B_GRAMMAR = [
   Newline,
   WhiteSpace,
   Comment,
-  While,
   BuiltinFunction,
+  While,
   GotoLine,
   Then,
+  End,
   Do,
   If,
   EqualTo,
@@ -91,10 +90,7 @@ export const FANUC_MACRO_B_GRAMMAR = [
   /**
    * Categories
    */
-  Fences,
   NumericValue,
-  ControlFlowKeyword,
-  BooleanOperator,
   AdditionOperator,
   MultiplicationOperator
 ];

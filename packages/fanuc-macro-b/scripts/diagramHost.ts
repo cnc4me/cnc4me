@@ -1,4 +1,4 @@
-import { MacroParser } from "../src/core/MacroParser";
+import { MacroParser } from "../src";
 import { createDiagramServer } from "./common";
 
 const HOST = process.env["HOST"] ?? "localhost";

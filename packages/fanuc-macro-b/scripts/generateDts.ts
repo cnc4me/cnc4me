@@ -1,4 +1,4 @@
-import { MacroParser } from "../src/core/MacroParser";
+import { MacroParser } from "../src";
 import { ChevrotainGenerator } from "../src/lib/ChevrotainGenerator";
 import { joinCwd, writeFile } from "./common";
 

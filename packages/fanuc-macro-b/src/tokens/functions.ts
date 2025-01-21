@@ -1,4 +1,4 @@
-import { Keyword } from "./token.categories";
+import { Keyword } from "./token.utils";
 import { createToken } from "./token.utils";
 
 export const FANUC_MACRO_B_FNS = [

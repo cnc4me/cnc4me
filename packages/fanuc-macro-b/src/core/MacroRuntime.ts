@@ -12,7 +12,7 @@ import { FanucMacroB } from "./FanucMacroB";
 import { MacroInterpreter } from "./MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./MacroParser";
+import { MacroParser } from "./parser/MacroParser";
 
 import type { CncMachine } from "../fsm/CncMachine";
 import type { NcProgram } from "../lib/NcProgram";

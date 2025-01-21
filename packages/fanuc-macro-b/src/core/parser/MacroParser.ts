@@ -1,8 +1,8 @@
-import { ParsingError } from "../errors/parser";
-import { Debuggers } from "../utils/debug";
+import { ParsingError } from "../../errors/parser";
+import { Debuggers } from "../../utils/debug";
 import { MacroParserRuleTree } from "./MacroParserRuleTree";
 
-import type { ErrorProducer } from "../types";
+import type { ErrorProducer } from "../../types";
 import type { IToken } from "chevrotain";
 
 export class MacroParser

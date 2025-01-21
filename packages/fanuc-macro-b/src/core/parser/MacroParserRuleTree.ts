@@ -27,9 +27,10 @@ import {
   Var,
   While,
   WhiteSpace
-} from "../tokens";
-import { Debuggers } from "../utils/debug";
-import { FANUC_MACRO_B_GRAMMAR } from "./FanucMacroB.grammar";
+} from "../../tokens";
+import { Keyword } from "../../tokens/token.utils";
+import { Debuggers } from "../../utils/debug";
+import { FANUC_MACRO_B_GRAMMAR } from "./MacroGrammar";
 
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
 
@@ -74,14 +75,10 @@ export class MacroParserRuleTree extends CstParser {
    */
   public Program = this.RULE("Program", () => {
     this.CONSUME(Percent);
-    this.OPTION(() => {
-      this.CONSUME(Newline);
-    });
+    this.OPTION(() => this.CONSUME(Newline));
     this.SUBRULE(this.ProgramNumberLine);
     this.SUBRULE(this.Lines);
-    this.OPTION2(() => {
-      this.CONSUME2(Newline);
-    });
+    this.OPTION2(() => this.CONSUME2(Newline));
     this.CONSUME2(Percent);
   });
 
@@ -101,16 +98,17 @@ export class MacroParserRuleTree extends CstParser {
   public Line = this.RULE("Line", () => {
     this.MANY(() => {
       this.OR([
-        // { ALT: () => this.CONSUME(Newline) },
-        { ALT: () => this.SUBRULE(this.AddressedValue) },
-        { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
-        { ALT: () => this.SUBRULE(this.Expression) },
-        { ALT: () => this.SUBRULE(this.GoToExpression) },
+        { ALT: () => this.SUBRULE(this.GoToStatement) },
         { ALT: () => this.SUBRULE(this.WhileExpression) },
+        { ALT: () => this.SUBRULE(this.EndStatement) },
+        { ALT: () => this.SUBRULE(this.VariableAssignment) }, // Part of Expression?
+        { ALT: () => this.SUBRULE(this.Expression) },
+        { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.CONSUME(LineNumber) },
-        { ALT: () => this.CONSUME(Gcode) },
+        // { ALT: () => this.CONSUME(Keyword) },
         { ALT: () => this.CONSUME(Mcode) },
+        { ALT: () => this.CONSUME(Gcode) },
         { ALT: () => this.CONSUME(Comment) }
       ]);
     });
@@ -131,27 +129,41 @@ export class MacroParserRuleTree extends CstParser {
   });
 
   /**
-   * While loop construct
+   * End of a WHILE loop
    */
-  WhileExpression = this.RULE("WhileExpression", () => {
-    this.CONSUME(While);
-    this.SUBRULE(this.AtomicBooleanExpression);
+  DoStatement = this.RULE("DoStatement", () => {
     this.CONSUME(Do);
-    this.CONSUME(NumericValue, { LABEL: "DoStart" });
-    this.SUBRULE(this.Lines);
+    this.MAYBE_CONSUME_WHITESPACE();
+    this.CONSUME(Integer, { LABEL: "LineNumber" });
+  });
+
+  /**
+   * End of a WHILE loop
+   */
+  EndStatement = this.RULE("EndStatement", () => {
     this.CONSUME(End);
-    this.CONSUME2(NumericValue, { LABEL: "DoEnd" });
+    this.MAYBE_CONSUME_WHITESPACE();
+    this.CONSUME(Integer, { LABEL: "LineNumber" });
   });
 
   /**
    * Go To Line
    */
-  GoToExpression = this.RULE("GoToExpression", () => {
+  GoToStatement = this.RULE("GoToStatement", () => {
     this.CONSUME(GotoLine);
-    this.OPTION(() => {
-      this.CONSUME(WhiteSpace);
-    });
-    this.CONSUME(NumericValue, { LABEL: "LineNumber" });
+    this.MAYBE_CONSUME_WHITESPACE();
+    this.CONSUME(Integer, { LABEL: "LineNumber" });
+  });
+
+  /**
+   * While loop construct
+   */
+  WhileExpression = this.RULE("WhileExpression", () => {
+    this.CONSUME(While);
+    this.SUBRULE(this.AtomicBooleanExpression);
+    this.SUBRULE(this.DoStatement);
+    this.SUBRULE1(this.Lines);
+    this.SUBRULE2(this.EndStatement);
   });
 
   /**
@@ -168,7 +180,7 @@ export class MacroParserRuleTree extends CstParser {
         }
       },
       {
-        ALT: () => this.SUBRULE(this.GoToExpression)
+        ALT: () => this.SUBRULE(this.GoToStatement)
       }
     ]);
   });
@@ -259,9 +271,7 @@ export class MacroParserRuleTree extends CstParser {
    */
   AddressedValue = this.RULE("AddressedValue", () => {
     this.CONSUME(Address);
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
+    this.OPTION(() => this.CONSUME(Minus));
     this.OR([
       { ALT: () => this.CONSUME(NumericValue) },
       { ALT: () => this.SUBRULE(this.BracketExpression) },
@@ -275,9 +285,7 @@ export class MacroParserRuleTree extends CstParser {
    * @example 5, 1.2345, -1., 3000
    */
   NumericLiteral = this.RULE("NumericLiteral", () => {
-    this.OPTION(() => {
-      this.CONSUME(Minus);
-    });
+    this.OPTION(() => this.CONSUME(Minus));
     this.CONSUME(NumericValue);
   });
 
@@ -325,9 +333,7 @@ export class MacroParserRuleTree extends CstParser {
    */
   ProgramNumberLine = this.RULE("ProgramNumberLine", () => {
     this.CONSUME(ProgramNumber);
-    this.OPTION(() => {
-      this.CONSUME(Comment);
-    });
+    this.OPTION(() => this.CONSUME(Comment));
     this.CONSUME(Newline);
   });
 
@@ -336,8 +342,10 @@ export class MacroParserRuleTree extends CstParser {
    */
   EndOfFile = this.RULE("EndOfFile", () => {
     this.CONSUME(Percent);
-    this.OPTION(() => {
-      this.CONSUME(Newline);
-    });
+    this.OPTION(() => this.CONSUME(Newline));
   });
+
+  MAYBE_CONSUME_WHITESPACE = () => {
+    this.OPTION(() => this.CONSUME(WhiteSpace));
+  };
 }
