@@ -2,11 +2,11 @@
 
 ***
 
-[Fanuc Macro B](../../../globals.md) / [CST](../README.md) / WhileDoEndExpressionCstNode
+[Fanuc Macro B](../../../globals.md) / [CST](../README.md) / AtomicWhileExpressionCstNode
 
-# Interface: WhileDoEndExpressionCstNode
+# Interface: AtomicWhileExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:97](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L97)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:122](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L122)
 
 ## Extends
 
@@ -16,9 +16,9 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:97](https://github.com/cn
 
 ### children
 
-> **children**: [`WhileDoEndExpressionCstChildren`](../type-aliases/WhileDoEndExpressionCstChildren.md)
+> **children**: [`AtomicWhileExpressionCstChildren`](../type-aliases/AtomicWhileExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:99](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L99)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:124](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L124)
 
 #### Overrides
 
@@ -45,9 +45,9 @@ For more details.
 
 ### name
 
-> **name**: `"WhileDoEndExpression"`
+> **name**: `"AtomicWhileExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:98](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L98)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:123](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L123)
 
 #### Overrides
 

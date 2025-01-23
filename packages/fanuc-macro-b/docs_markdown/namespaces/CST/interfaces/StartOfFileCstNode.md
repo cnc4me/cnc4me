@@ -6,7 +6,7 @@
 
 # Interface: StartOfFileCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:262](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L262)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:271](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L271)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:262](https://github.com/c
 
 > **children**: [`StartOfFileCstChildren`](../type-aliases/StartOfFileCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:264](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L264)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:273](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L273)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"StartOfFile"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:263](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L263)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:272](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L272)
 
 #### Overrides
 

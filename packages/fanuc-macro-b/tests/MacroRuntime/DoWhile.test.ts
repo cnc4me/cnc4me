@@ -12,7 +12,7 @@ END1
 
 const runtime = new MacroRuntime();
 
-describe("Evaluating a While / Do / End", () => {
+describe("Evaluating a While / Do / End", { timeout: 100 }, () => {
   beforeEach(() => runtime.reset());
 
   it(`loops the correct number of times`, () => {

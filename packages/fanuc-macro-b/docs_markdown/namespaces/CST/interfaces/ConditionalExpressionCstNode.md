@@ -6,7 +6,7 @@
 
 # Interface: ConditionalExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:110](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L110)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:98](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L98)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:110](https://github.com/c
 
 > **children**: [`ConditionalExpressionCstChildren`](../type-aliases/ConditionalExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:112](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L112)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:100](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L100)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"ConditionalExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:111](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L111)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:99](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L99)
 
 #### Overrides
 

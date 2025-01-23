@@ -8,7 +8,7 @@
 
 > `const` **LineNumber**: `Omit`\<`TokenType`, `"name"`\> & `object`
 
-Defined in: packages/fanuc-macro-b/src/core/tokens/addresses.ts:26
+Defined in: [packages/fanuc-macro-b/src/core/tokens/addresses.ts:26](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/tokens/addresses.ts#L26)
 
 ## Type declaration
 

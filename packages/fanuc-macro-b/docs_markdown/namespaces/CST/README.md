@@ -12,6 +12,7 @@
 - [AddressedValueCstNode](interfaces/AddressedValueCstNode.md)
 - [AtomicBooleanExpressionCstNode](interfaces/AtomicBooleanExpressionCstNode.md)
 - [AtomicExpressionCstNode](interfaces/AtomicExpressionCstNode.md)
+- [AtomicWhileExpressionCstNode](interfaces/AtomicWhileExpressionCstNode.md)
 - [BooleanExpressionCstNode](interfaces/BooleanExpressionCstNode.md)
 - [BracketExpressionCstNode](interfaces/BracketExpressionCstNode.md)
 - [ConditionalExpressionCstNode](interfaces/ConditionalExpressionCstNode.md)
@@ -21,9 +22,9 @@
 - [ExpressionCstNode](interfaces/ExpressionCstNode.md)
 - [FunctionExpressionCstNode](interfaces/FunctionExpressionCstNode.md)
 - [GoToStatementCstNode](interfaces/GoToStatementCstNode.md)
-- [ICstNodeVisitor](interfaces/ICstNodeVisitor.md)
 - [LineCstNode](interfaces/LineCstNode.md)
 - [LinesCstNode](interfaces/LinesCstNode.md)
+- [MacroNodeVisitor](interfaces/MacroNodeVisitor.md)
 - [MultiplicationExpressionCstNode](interfaces/MultiplicationExpressionCstNode.md)
 - [NumericLiteralCstNode](interfaces/NumericLiteralCstNode.md)
 - [ProgramCstNode](interfaces/ProgramCstNode.md)
@@ -34,7 +35,7 @@
 - [VariableAssignmentCstNode](interfaces/VariableAssignmentCstNode.md)
 - [VariableExpressionCstNode](interfaces/VariableExpressionCstNode.md)
 - [VariableLiteralCstNode](interfaces/VariableLiteralCstNode.md)
-- [WhileDoEndExpressionCstNode](interfaces/WhileDoEndExpressionCstNode.md)
+- [WhileDoExpressionCstNode](interfaces/WhileDoExpressionCstNode.md)
 
 ## Type Aliases
 
@@ -42,6 +43,7 @@
 - [AddressedValueCstChildren](type-aliases/AddressedValueCstChildren.md)
 - [AtomicBooleanExpressionCstChildren](type-aliases/AtomicBooleanExpressionCstChildren.md)
 - [AtomicExpressionCstChildren](type-aliases/AtomicExpressionCstChildren.md)
+- [AtomicWhileExpressionCstChildren](type-aliases/AtomicWhileExpressionCstChildren.md)
 - [BooleanExpressionCstChildren](type-aliases/BooleanExpressionCstChildren.md)
 - [BracketExpressionCstChildren](type-aliases/BracketExpressionCstChildren.md)
 - [ConditionalExpressionCstChildren](type-aliases/ConditionalExpressionCstChildren.md)
@@ -63,4 +65,4 @@
 - [VariableAssignmentCstChildren](type-aliases/VariableAssignmentCstChildren.md)
 - [VariableExpressionCstChildren](type-aliases/VariableExpressionCstChildren.md)
 - [VariableLiteralCstChildren](type-aliases/VariableLiteralCstChildren.md)
-- [WhileDoEndExpressionCstChildren](type-aliases/WhileDoEndExpressionCstChildren.md)
+- [WhileDoExpressionCstChildren](type-aliases/WhileDoExpressionCstChildren.md)

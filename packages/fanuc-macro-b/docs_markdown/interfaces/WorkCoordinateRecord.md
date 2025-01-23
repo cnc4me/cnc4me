@@ -6,7 +6,7 @@
 
 # Interface: WorkCoordinateRecord
 
-Defined in: [packages/fanuc-macro-b/src/types/memory.ts:3](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/memory.ts#L3)
+Defined in: [packages/fanuc-macro-b/src/types/memory.ts:3](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/memory.ts#L3)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/fanuc-macro-b/src/types/memory.ts:3](https://github.com/cn
 
 > **B**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/memory.ts:7](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/memory.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/types/memory.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/memory.ts#L7)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/fanuc-macro-b/src/types/memory.ts:7](https://github.com/cn
 
 > **X**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/memory.ts:4](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/memory.ts#L4)
+Defined in: [packages/fanuc-macro-b/src/types/memory.ts:4](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/memory.ts#L4)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [packages/fanuc-macro-b/src/types/memory.ts:4](https://github.com/cn
 
 > **Y**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/memory.ts:5](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/memory.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/types/memory.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/memory.ts#L5)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [packages/fanuc-macro-b/src/types/memory.ts:5](https://github.com/cn
 
 > **Z**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/memory.ts:6](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/memory.ts#L6)
+Defined in: [packages/fanuc-macro-b/src/types/memory.ts:6](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/memory.ts#L6)

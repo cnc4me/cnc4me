@@ -6,7 +6,7 @@
 
 # Interface: ParsedAddressData
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:50](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L50)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:50](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L50)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:50](https://github.c
 
 > **address**: `string`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:53](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L53)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:53](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L53)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:53](https://github.c
 
 > **image**: `string`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:51](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L51)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:51](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L51)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:51](https://github.c
 
 > **isNegative**: `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:54](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L54)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:54](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L54)
 
 ***
 
@@ -38,4 +38,4 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:54](https://github.c
 
 > **value**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:52](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L52)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:52](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L52)

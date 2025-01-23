@@ -6,7 +6,7 @@
 
 # Class: SpindleFSM
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:54](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L54)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:54](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L54)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:54](https://github.com
 
 > **new SpindleFSM**(`config`?): [`SpindleFSM`](SpindleFSM.md)
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:67](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L67)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:67](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L67)
 
 #### Parameters
 
@@ -78,7 +78,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **forward**: (`targetRPM`) => `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:189](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L189)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:189](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L189)
 
 Spindle Forward (CW)
 
@@ -98,7 +98,7 @@ Spindle Forward (CW)
 
 > **handlers**: `Partial`\<`EventHandlers`\> = `{}`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:55](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L55)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:55](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L55)
 
 ***
 
@@ -130,7 +130,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:116](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L116)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:116](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L116)
 
 Subscribe to one or more events.
 
@@ -181,7 +181,7 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 > **reverse**: (`targetRPM`) => `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:190](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L190)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:190](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L190)
 
 Spindle Reverse (CCW)
 
@@ -201,7 +201,7 @@ Spindle Reverse (CCW)
 
 > **stop**: () => `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:188](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L188)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:188](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L188)
 
 Spindle Stop
 
@@ -229,7 +229,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **get** **config**(): `SpindleFsmConfig`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:130](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L130)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:130](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L130)
 
 ##### Returns
 
@@ -243,7 +243,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:130](https://github.co
 
 > **get** **direction**(): `string`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:122](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L122)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:122](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L122)
 
 ##### Returns
 
@@ -257,7 +257,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:122](https://github.co
 
 > **get** **hasFault**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:118](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L118)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:118](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L118)
 
 ##### Returns
 
@@ -271,7 +271,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:118](https://github.co
 
 > **get** **rpms**(): `number`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:126](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L126)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:126](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L126)
 
 ##### Returns
 
@@ -285,7 +285,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:126](https://github.co
 
 > **get** **simulation**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:141](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L141)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:141](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L141)
 
 ##### Returns
 
@@ -295,7 +295,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:141](https://github.co
 
 > **set** **simulation**(`state`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:145](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L145)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:145](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L145)
 
 ##### Parameters
 
@@ -315,7 +315,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:145](https://github.co
 
 > **get** **stats**(): `object`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:134](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L134)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:134](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L134)
 
 ##### Returns
 
@@ -447,7 +447,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **is**(`state`): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:153](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L153)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:153](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L153)
 
 Generic state testing method
 
@@ -483,7 +483,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **M3**(`targetRPM`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:160](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L160)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:160](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L160)
 
 Spindle Forward (CW)
 
@@ -503,7 +503,7 @@ Spindle Forward (CW)
 
 > **M4**(`targetRPM`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:171](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L171)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:171](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L171)
 
 Spindle Reverse (CCW)
 
@@ -523,7 +523,7 @@ Spindle Reverse (CCW)
 
 > **M5**(): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:182](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L182)
+Defined in: [packages/fanuc-macro-b/src/fsm/SpindleFSM.ts:182](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/SpindleFSM.ts#L182)
 
 Spindle Stop
 

@@ -6,7 +6,7 @@
 
 # Interface: AtomicExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:188](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L188)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:143](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L143)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:188](https://github.com/c
 
 > **children**: [`AtomicExpressionCstChildren`](../type-aliases/AtomicExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:190](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L190)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:145](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L145)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"AtomicExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:189](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L189)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:144](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L144)
 
 #### Overrides
 

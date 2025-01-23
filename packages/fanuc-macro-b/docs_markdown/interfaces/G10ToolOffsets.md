@@ -6,7 +6,7 @@
 
 # Interface: G10ToolOffsets
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:25](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/g10.ts#L25)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:25](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L25)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:25](https://github.com/cnc4
 
 > **L**: [`ValidG10ToolOffsetGroup`](../type-aliases/ValidG10ToolOffsetGroup.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:26](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/g10.ts#L26)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:26](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L26)
 
 #### Overrides
 
@@ -30,7 +30,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:26](https://github.com/cnc4
 
 > **P**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/g10.ts#L13)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L13)
 
 #### Inherited from
 
@@ -42,4 +42,4 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4
 
 > `optional` **R**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:27](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/g10.ts#L27)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:27](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L27)

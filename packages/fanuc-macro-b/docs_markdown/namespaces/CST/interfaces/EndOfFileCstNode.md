@@ -6,7 +6,7 @@
 
 # Interface: EndOfFileCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:283](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L283)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:292](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L292)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:283](https://github.com/c
 
 > **children**: [`EndOfFileCstChildren`](../type-aliases/EndOfFileCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:285](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L285)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:294](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L294)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"EndOfFile"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:284](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L284)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:293](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L293)
 
 #### Overrides
 

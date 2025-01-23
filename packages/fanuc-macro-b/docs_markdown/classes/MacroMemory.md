@@ -6,7 +6,7 @@
 
 # Class: MacroMemory
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:27](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L27)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:27](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L27)
 
 A Representaion of a CNC machines' macro memory.
 
@@ -16,7 +16,7 @@ A Representaion of a CNC machines' macro memory.
 
 > **new MacroMemory**(): [`MacroMemory`](MacroMemory.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:44](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L44)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:44](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L44)
 
 Construct a new instance of the MacroMemory class and initialize the variables
 
@@ -30,7 +30,7 @@ Construct a new instance of the MacroMemory class and initialize the variables
 
 > **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:50](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L50)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:50](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L50)
 
 Subscribe to one or more events.
 
@@ -81,7 +81,7 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 > `static` **REGISTERS**: `number`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:29](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L29)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:29](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L29)
 
 ***
 
@@ -89,7 +89,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:29](https://github.c
 
 > `static` **ZERO**: `number` = `0`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:28](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L28)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:28](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L28)
 
 ## Methods
 
@@ -97,7 +97,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:28](https://github.c
 
 > **clear**(`register`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:91](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L91)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:91](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L91)
 
 Clear a register value by writing [MacroMemory.ZERO](MacroMemory.md#zero)
 
@@ -117,7 +117,7 @@ Clear a register value by writing [MacroMemory.ZERO](MacroMemory.md#zero)
 
 > **g10**(`g10`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:98](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L98)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:98](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L98)
 
 Evaluate a G10 line to apply values
 
@@ -137,7 +137,7 @@ Evaluate a G10 line to apply values
 
 > **getAuxWorkCoordinateArray**(`pGroup`): [`WorkCoordinateArray`](../type-aliases/WorkCoordinateArray.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:158](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L158)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:158](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L158)
 
 Get auxiliary work coordinates for a G54.1 `P` group
 
@@ -157,7 +157,7 @@ Get auxiliary work coordinates for a G54.1 `P` group
 
 > **getAuxWorkCoordinateRecord**(`pGroup`): [`WorkCoordinateRecord`](../interfaces/WorkCoordinateRecord.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:147](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L147)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:147](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L147)
 
 Get auxiliary work coordinates for a G54.1 `P` group
 
@@ -177,7 +177,7 @@ Get auxiliary work coordinates for a G54.1 `P` group
 
 > **getToolDiameter**(`toolNum`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:223](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L223)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:223](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L223)
 
 Get Tool diameter value by tool number
 
@@ -197,7 +197,7 @@ Get Tool diameter value by tool number
 
 > **getToolDiameterComp**(`toolNum`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:237](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L237)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:237](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L237)
 
 Get Tool Diameter Comp value by tool number
 
@@ -217,7 +217,7 @@ Get Tool Diameter Comp value by tool number
 
 > **getToolLength**(`toolNum`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:195](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L195)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:195](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L195)
 
 Get Tool Length value by tool number
 
@@ -237,7 +237,7 @@ Get Tool Length value by tool number
 
 > **getToolLengthComp**(`toolNum`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:209](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L209)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:209](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L209)
 
 Get Tool Length Comp value by tool number
 
@@ -257,7 +257,7 @@ Get Tool Length Comp value by tool number
 
 > **getToolOffsetArray**(`toolNum`): [`ToolOffsetArray`](../type-aliases/ToolOffsetArray.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:179](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L179)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:179](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L179)
 
 Get all tool offset values as an array of values
 
@@ -277,7 +277,7 @@ Get all tool offset values as an array of values
 
 > **getToolOffsets**(`toolNum`): [`ToolOffsetDict`](../interfaces/ToolOffsetDict.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:167](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L167)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:167](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L167)
 
 Get all tool offset values for a tool number
 
@@ -297,7 +297,7 @@ Get all tool offset values for a tool number
 
 > **getWorkCoordinateArray**(`gOffset`): [`WorkCoordinateArray`](../type-aliases/WorkCoordinateArray.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:138](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L138)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:138](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L138)
 
 Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59)
 
@@ -317,7 +317,7 @@ Get work coordinates for a common work offset (G53, G54, G55, G56, G57, G58, G59
 
 > **getWorkCoordinateRecord**(`gOffset`): [`WorkCoordinateRecord`](../interfaces/WorkCoordinateRecord.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:127](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L127)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:127](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L127)
 
 Get work coordinates as labeled axis locations for a common work offset
 (G53, G54, G55, G56, G57, G58, G59)
@@ -338,7 +338,7 @@ Get work coordinates as labeled axis locations for a common work offset
 
 > **read**(`register`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:64](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L64)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:64](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L64)
 
 Read a value from a register
 
@@ -358,7 +358,7 @@ Read a value from a register
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:55](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L55)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:55](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L55)
 
 Clear all registers to reset the memory
 
@@ -372,7 +372,7 @@ Clear all registers to reset the memory
 
 > **setAuxWorkOffset**(`group`, `locations`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:263](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L263)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:263](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L263)
 
 Set axis values for a Work Offset Group (L2)
 
@@ -399,7 +399,7 @@ Use in program: `G54 X0 Y0`
 
 > **setCommonWorkOffset**(`group`, `locations`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:247](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L247)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:247](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L247)
 
 Set axis values for a Work Offset Group (L2)
 
@@ -426,7 +426,7 @@ Use in program: `G54 X0 Y0`
 
 > **setToolDiameter**(`toolNum`, `value`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:216](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L216)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:216](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L216)
 
 Tool Diameter Offset Group (L13)
 
@@ -450,7 +450,7 @@ Tool Diameter Offset Group (L13)
 
 > **setToolDiameterComp**(`toolNum`, `value`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:230](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L230)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:230](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L230)
 
 Tool Diameter Compensation. Offset Group (L12)
 
@@ -474,7 +474,7 @@ Tool Diameter Compensation. Offset Group (L12)
 
 > **setToolLength**(`toolNum`, `value`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:188](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L188)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:188](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L188)
 
 Tool Length Offset Group (L11)
 
@@ -498,7 +498,7 @@ Tool Length Offset Group (L11)
 
 > **setToolLengthComp**(`toolNum`, `value`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:202](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L202)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:202](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L202)
 
 Tool Length Compensation Offset Group (L10)
 
@@ -522,7 +522,7 @@ Tool Length Compensation Offset Group (L10)
 
 > **toArray**(`opts`?): [`MacroValueArray`](../type-aliases/MacroValueArray.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:276](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L276)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:276](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L276)
 
 Create an array of all the set macro variables
 
@@ -542,7 +542,7 @@ Create an array of all the set macro variables
 
 > **toJSON**(): `string`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:300](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L300)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:300](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L300)
 
 Serialize all the MacroMemory into a JSON string
 
@@ -556,7 +556,7 @@ Serialize all the MacroMemory into a JSON string
 
 > **toObject**(`opts`?): `Record`\<`number`, `number`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:293](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L293)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:293](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L293)
 
 Collect all the set registers into a POJO for further processing
 
@@ -576,7 +576,7 @@ Collect all the set registers into a POJO for further processing
 
 > **write**(`register`, `value`): `Omit`\<`Record`\<`"previous"` \| `"current"` \| `"register"`, `number`\>, `"register"`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:73](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroMemory.ts#L73)
+Defined in: [packages/fanuc-macro-b/src/core/MacroMemory.ts:73](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroMemory.ts#L73)
 
 Write  a value to a register
 

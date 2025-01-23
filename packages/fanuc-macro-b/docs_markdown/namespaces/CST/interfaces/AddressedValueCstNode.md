@@ -6,7 +6,7 @@
 
 # Interface: AddressedValueCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:209](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L209)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:218](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L218)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:209](https://github.com/c
 
 > **children**: [`AddressedValueCstChildren`](../type-aliases/AddressedValueCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:211](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L211)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:220](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L220)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"AddressedValue"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:210](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L210)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:219](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L219)
 
 #### Overrides
 

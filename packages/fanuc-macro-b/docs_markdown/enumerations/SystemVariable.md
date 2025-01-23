@@ -6,7 +6,7 @@
 
 # Enumeration: SystemVariable
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:1](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L1)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:1](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L1)
 
 ## Enumeration Members
 
@@ -14,7 +14,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:1](https://github.com/cn
 
 > **\_DATE**: `3011`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:2](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L2)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:2](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L2)
 
 ***
 
@@ -22,7 +22,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:2](https://github.com/cn
 
 > **\_MAINO**: `4000`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:7](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L7)
 
 ***
 
@@ -30,7 +30,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:7](https://github.com/cn
 
 > **\_OFSMEM**: `3980`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:6](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L6)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:6](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L6)
 
 ***
 
@@ -38,7 +38,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:6](https://github.com/cn
 
 > **\_PRTSA**: `3901`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:4](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L4)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:4](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L4)
 
 ***
 
@@ -46,7 +46,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:4](https://github.com/cn
 
 > **\_PRTSN**: `3902`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:5](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L5)
 
 ***
 
@@ -54,7 +54,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:5](https://github.com/cn
 
 > **\_TIME**: `3012`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:3](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L3)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:3](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L3)
 
 ***
 
@@ -62,7 +62,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:3](https://github.com/cn
 
 > **\_TOFSGX**: `5121`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:11](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L11)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:11](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L11)
 
 ***
 
@@ -70,7 +70,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:11](https://github.com/c
 
 > **\_TOFSGY**: `5123`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:13](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L13)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:13](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L13)
 
 ***
 
@@ -78,7 +78,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:13](https://github.com/c
 
 > **\_TOFSGZ**: `5122`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:12](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L12)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:12](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L12)
 
 ***
 
@@ -86,7 +86,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:12](https://github.com/c
 
 > **\_TOFSWX**: `5081`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:8](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L8)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:8](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L8)
 
 ***
 
@@ -94,7 +94,7 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:8](https://github.com/cn
 
 > **\_TOFSWY**: `5083`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:10](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L10)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:10](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L10)
 
 ***
 
@@ -102,4 +102,4 @@ Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:10](https://github.com/c
 
 > **\_TOFSWZ**: `5082`
 
-Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:9](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/memory/enums.ts#L9)
+Defined in: [packages/fanuc-macro-b/src/memory/enums.ts:9](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/memory/enums.ts#L9)

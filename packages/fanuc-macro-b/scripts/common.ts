@@ -11,6 +11,8 @@ import type { BaseParser } from "chevrotain";
 
 export const fsm = new MacroRuntimeFSM();
 
+export const VISITOR_INTERFACE_NAME = "MacroNodeVisitor";
+
 export function joinCwd(...parts: string[]) {
   return path.join(process.cwd(), ...parts);
 }

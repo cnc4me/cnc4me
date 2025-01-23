@@ -6,7 +6,7 @@
 
 # Interface: IBaseInsight
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:5](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L5)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:5](https://github.co
 
 > **ctx**: `string`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:6](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L6)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:6](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L6)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:6](https://github.co
 
 > **value**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:7](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/interfaces.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/types/interfaces.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/interfaces.ts#L7)

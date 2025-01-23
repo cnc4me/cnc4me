@@ -6,7 +6,7 @@
 
 # Interface: NumericLiteralCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:222](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L222)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:231](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L231)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:222](https://github.com/c
 
 > **children**: [`NumericLiteralCstChildren`](../type-aliases/NumericLiteralCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:224](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L224)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:233](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L233)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"NumericLiteral"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:223](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L223)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:232](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L232)
 
 #### Overrides
 

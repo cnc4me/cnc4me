@@ -6,7 +6,7 @@
 
 # Class: MacroRuntime
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:35](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L35)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:35](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L35)
 
 MacroRuntime Class to hold multiple programs in memory
 
@@ -20,7 +20,7 @@ MacroRuntime Class to hold multiple programs in memory
 
 > **new MacroRuntime**(`config`?): [`MacroRuntime`](MacroRuntime.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:48](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L48)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:48](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L48)
 
 #### Parameters
 
@@ -38,7 +38,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:48](https://github.
 
 > **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:91](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L91)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:91](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L91)
 
 Subscribe to one or more events.
 
@@ -89,7 +89,7 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 > `static` **EVENTS**: [`PrefixObjectKeys`](../type-aliases/PrefixObjectKeys.md)\<`"MACHINE"`, `Omit`\<`AxisFsmEvents`, `"MOTION_COMPLETE"`\> & `object`\> & [`PrefixObjectKeys`](../type-aliases/PrefixObjectKeys.md)\<`"INTERPRETER"`, \{ `END_OF_PROGRAM`: `undefined`; `LINE`: [`IParsedLineData`](../interfaces/IParsedLineData.md); \}\> & `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:36](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L36)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:36](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L36)
 
 #### Type declaration
 
@@ -105,7 +105,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:36](https://github.
 
 > **get** **hasErrors**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:87](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L87)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:87](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L87)
 
 ##### Returns
 
@@ -123,7 +123,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:87](https://github.
 
 > **get** **Interpreter**(): [`MacroInterpreter`](MacroInterpreter.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:75](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L75)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:75](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L75)
 
 ##### Returns
 
@@ -137,7 +137,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:75](https://github.
 
 > **get** **Lexer**(): [`MacroLexer`](MacroLexer.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:67](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L67)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:67](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L67)
 
 ##### Returns
 
@@ -151,7 +151,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:67](https://github.
 
 > **get** **Machine**(): [`CncMachine`](CncMachine.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:83](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L83)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:83](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L83)
 
 ##### Returns
 
@@ -165,7 +165,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:83](https://github.
 
 > **get** **Memory**(): [`MacroMemory`](MacroMemory.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:79](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L79)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:79](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L79)
 
 ##### Returns
 
@@ -179,7 +179,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:79](https://github.
 
 > **get** **Parser**(): [`MacroParser`](MacroParser.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:71](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L71)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:71](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L71)
 
 ##### Returns
 
@@ -191,7 +191,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:71](https://github.
 
 > **getActiveProgram**(): `string`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:222](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L222)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:222](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L222)
 
 Return the active program content.
 
@@ -205,7 +205,7 @@ Return the active program content.
 
 > **getActiveProgramNumber**(): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:231](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L231)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:231](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L231)
 
 Return the active program nmber.
 
@@ -219,7 +219,7 @@ Return the active program nmber.
 
 > **getErrorMessages**(): `string`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:245](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L245)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:245](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L245)
 
 Retrieve a record of errors
 
@@ -233,7 +233,7 @@ Retrieve a record of errors
 
 > **getErrors**(): ([`LexingError`](../variables/Errors.md#lexingerror) \| [`ParsingError`](../variables/Errors.md#parsingerror))[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:102](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L102)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:102](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L102)
 
 #### Returns
 
@@ -249,7 +249,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:102](https://github
 
 > **getInsights**(): `InsightCollection`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:115](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L115)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:115](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L115)
 
 #### Returns
 
@@ -261,7 +261,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:115](https://github
 
 > **getProgram**(`programNumber`): `string`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:257](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L257)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:257](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L257)
 
 Return a program by number if loaded in memory.
 
@@ -281,7 +281,7 @@ Return a program by number if loaded in memory.
 
 > **getProgramCount**(): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:129](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L129)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:129](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L129)
 
 Count of loaded programs.
 
@@ -295,7 +295,7 @@ Count of loaded programs.
 
 > **getPrograms**(): `Record`\<`number`, `string`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:122](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L122)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:122](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L122)
 
 Returns the loaded programs indexed by their program numbers.
 
@@ -309,7 +309,7 @@ Returns the loaded programs indexed by their program numbers.
 
 > **loadProgram**(`input`, `options`?): `this`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:180](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L180)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:180](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L180)
 
 Load a Program into memory
 
@@ -335,7 +335,7 @@ This method can create a program if given a string
 
 > **mdi**(...`input`): `this`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:164](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L164)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:164](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L164)
 
 Manual Data Input
 
@@ -358,7 +358,7 @@ with `%` delimiters and a special program number.
 
 > **onError**(`handler`): `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:238](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L238)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:238](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L238)
 
 Register a function to handle errors that occur in the runtime.
 
@@ -378,7 +378,7 @@ Register a function to handle errors that occur in the runtime.
 
 > **programIsLoaded**(`programNumber`): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:203](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L203)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:203](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L203)
 
 Check if a program has been loaded and exists in the runtime.
 
@@ -398,7 +398,7 @@ Check if a program has been loaded and exists in the runtime.
 
 > **readRegister**(`register`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:111](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L111)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:111](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L111)
 
 Read a variable from memory
 
@@ -424,7 +424,7 @@ readRegister(1) to read the value of "#1"
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:96](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L96)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:96](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L96)
 
 Reset the runtime
 
@@ -438,7 +438,7 @@ Reset the runtime
 
 > **run**(`lineCallback`?): `undefined` \| `NcProgram`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:136](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L136)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:136](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L136)
 
 Main entry point to the runtime.
 
@@ -458,7 +458,7 @@ Main entry point to the runtime.
 
 > **setActiveProgram**(`programNumber`): `this`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:211](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L211)
+Defined in: [packages/fanuc-macro-b/src/core/MacroRuntime.ts:211](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroRuntime.ts#L211)
 
 Set a program number as `active` in the runtime.
 

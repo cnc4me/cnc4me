@@ -6,7 +6,7 @@
 
 # Class: AxisFSM
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:45](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L45)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:45](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L45)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:45](https://github.com/cn
 
 > **new AxisFSM**(`label`, `config`): [`AxisFSM`](AxisFSM.md)
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:59](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L59)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:59](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L59)
 
 #### Parameters
 
@@ -80,7 +80,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:107](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L107)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:107](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L107)
 
 Subscribe to one or more events.
 
@@ -131,7 +131,7 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 > **onAny**: (`listener`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:108](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L108)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:108](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L108)
 
 Subscribe to be notified about any event.
 
@@ -167,7 +167,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **get** **limits**(): `AxisLimits`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:95](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L95)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:95](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L95)
 
 ##### Returns
 
@@ -181,7 +181,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:95](https://github.com/cn
 
 > **get** **position**(): `number`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:99](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L99)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:99](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L99)
 
 ##### Returns
 
@@ -267,7 +267,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **G0**(`position`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:144](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L144)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:144](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L144)
 
 Rapid Move
 
@@ -287,7 +287,7 @@ Rapid Move
 
 > **G1**(`position`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:153](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L153)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:153](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L153)
 
 Feed Move
 
@@ -345,7 +345,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **is**(`state`): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:119](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L119)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:119](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L119)
 
 Generic state testing method
 
@@ -381,7 +381,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **isValidPosition**(`position`): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:123](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L123)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:123](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L123)
 
 #### Parameters
 
@@ -399,7 +399,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:123](https://github.com/c
 
 > **moveTo**(`position`, `command`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:137](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L137)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:137](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L137)
 
 #### Parameters
 
@@ -421,7 +421,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:137](https://github.com/c
 
 > **reset**(): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:129](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L129)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:129](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L129)
 
 #### Returns
 
@@ -433,7 +433,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:129](https://github.com/c
 
 > **setConfig**(`opts`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:159](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L159)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:159](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L159)
 
 #### Parameters
 
@@ -451,7 +451,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:159](https://github.com/c
 
 > **setLimits**(`limits`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:103](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L103)
+Defined in: [packages/fanuc-macro-b/src/fsm/AxisFSM.ts:103](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/AxisFSM.ts#L103)
 
 #### Parameters
 

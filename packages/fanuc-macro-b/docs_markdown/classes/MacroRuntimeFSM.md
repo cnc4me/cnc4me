@@ -6,7 +6,7 @@
 
 # Class: MacroRuntimeFSM
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:32](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L32)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:32](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L32)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:32](https://githu
 
 > **new MacroRuntimeFSM**(`callbacks`?): [`MacroRuntimeFSM`](MacroRuntimeFSM.md)
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:44](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L44)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:44](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L44)
 
 #### Parameters
 
@@ -52,7 +52,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **callbacks**: `StateHandlerMap`\<`"finished"` \| `"error"` \| `"stopped"` \| `"paused"` \| `"running"`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:36](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L36)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:36](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L36)
 
 ***
 
@@ -96,7 +96,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > `static` **EVENTS**: *typeof* `Events` = `Events`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:34](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L34)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:34](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L34)
 
 ***
 
@@ -104,7 +104,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:34](https://githu
 
 > `static` **STATES**: *typeof* `States` = `States`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:33](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L33)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:33](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L33)
 
 ## Methods
 
@@ -224,7 +224,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **getTransitions**(): `ITransition`\<`States`, `Events`, `Callback`\>[]
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:76](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L76)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:76](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L76)
 
 #### Returns
 
@@ -252,7 +252,7 @@ Defined in: node\_modules/.pnpm/typescript-fsm@1.5.2/node\_modules/typescript-fs
 
 > **on**\<`T`\>(`stateName`, `callback`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:85](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L85)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:85](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L85)
 
 #### Type Parameters
 
@@ -302,7 +302,7 @@ Generate a Mermaid StateDiagram of the current machine.
 
 > **trigger**(`event`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:80](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L80)
+Defined in: [packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts:80](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/MacroRuntimeFSM.ts#L80)
 
 #### Parameters
 

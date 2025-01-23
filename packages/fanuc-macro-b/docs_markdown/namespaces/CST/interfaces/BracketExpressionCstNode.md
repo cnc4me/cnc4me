@@ -6,7 +6,7 @@
 
 # Interface: BracketExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:177](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L177)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:198](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L198)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:177](https://github.com/c
 
 > **children**: [`BracketExpressionCstChildren`](../type-aliases/BracketExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:179](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L179)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:200](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L200)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"BracketExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:178](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L178)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:199](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L199)
 
 #### Overrides
 

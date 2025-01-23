@@ -6,7 +6,7 @@
 
 # Class: FanucMacroB
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:12](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L12)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:12](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L12)
 
 ## Implements
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:12](https://github.c
 
 > **new FanucMacroB**(`options`?): [`FanucMacroB`](FanucMacroB.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:25](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L25)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:25](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L25)
 
 #### Parameters
 
@@ -36,7 +36,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:25](https://github.c
 
 > **interpreter**: [`MacroInterpreter`](MacroInterpreter.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:17](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L17)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:17](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L17)
 
 ***
 
@@ -44,7 +44,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:17](https://github.c
 
 > **lexer**: [`MacroLexer`](MacroLexer.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:15](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L15)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:15](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L15)
 
 ***
 
@@ -52,7 +52,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:15](https://github.c
 
 > **options**: `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:19](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L19)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:19](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L19)
 
 #### debug
 
@@ -64,7 +64,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:19](https://github.c
 
 > **parser**: [`MacroParser`](MacroParser.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:16](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L16)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:16](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L16)
 
 ## Accessors
 
@@ -74,7 +74,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:16](https://github.c
 
 > **get** **hasErrors**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:43](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L43)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:43](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L43)
 
 If either the [MacroLexer](MacroLexer.md) or [MacroParser](MacroParser.md) encountered errors
 then this property will be `true`
@@ -95,7 +95,7 @@ then this property will be `true`
 
 > **get** **memory**(): [`MacroMemory`](MacroMemory.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:35](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L35)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:35](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L35)
 
 ##### Returns
 
@@ -107,7 +107,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:35](https://github.c
 
 > **eval**(`input`): `EvalResult`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:91](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L91)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:91](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L91)
 
 Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `lines()`
 
@@ -127,7 +127,7 @@ Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `lines()`
 
 > **evalExpr**(`input`): `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:113](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L113)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:113](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L113)
 
 Invoke the [MacroInterpreter.Expression](MacroInterpreter.md#expression) starting from `expression()`
 
@@ -155,7 +155,7 @@ Invoke the [MacroInterpreter.Expression](MacroInterpreter.md#expression) startin
 
 > **evalFunctionExpr**(`input`): `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:127](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L127)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:127](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L127)
 
 Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `expression()`
 
@@ -183,7 +183,7 @@ Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `expression()`
 
 > **evalG10**(`input`): `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:101](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L101)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:101](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L101)
 
 Run extract the G10 offsets from the results from [FanucMacroB.eval](FanucMacroB.md#eval)
 
@@ -211,7 +211,7 @@ Run extract the G10 offsets from the results from [FanucMacroB.eval](FanucMacroB
 
 > **evalProgram**(`input`): `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:141](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L141)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:141](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L141)
 
 Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `program()`
 
@@ -239,7 +239,7 @@ Invoke the [MacroInterpreter](MacroInterpreter.md) starting from `program()`
 
 > **getErrors**(): ([`LexingError`](../variables/Errors.md#lexingerror) \| [`ParsingError`](../variables/Errors.md#parsingerror))[]
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:64](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L64)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:64](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L64)
 
 #### Returns
 
@@ -255,7 +255,7 @@ Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:64](https://github.c
 
 > **getSetMemoryRegisters**(`opts`?): `Record`\<`number`, `number`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:75](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L75)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:75](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L75)
 
 Returns an object where the keys are variable register numbers
 and the value is it's currently set value.
@@ -276,7 +276,7 @@ and the value is it's currently set value.
 
 > **getTokens**(): `IToken`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:60](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L60)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:60](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L60)
 
 Retrieve the internal token list
 
@@ -290,7 +290,7 @@ Retrieve the internal token list
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:50](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L50)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:50](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L50)
 
 Clear internal token list, reset the Lexer and Parser, and clear the Interpreter memory
 
@@ -304,7 +304,7 @@ Clear internal token list, reset the Lexer and Parser, and clear the Interpreter
 
 > **tokenizeAndLoadParser**(`input`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:151](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L151)
+Defined in: [packages/fanuc-macro-b/src/core/FanucMacroB.ts:151](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/FanucMacroB.ts#L151)
 
 #### Parameters
 

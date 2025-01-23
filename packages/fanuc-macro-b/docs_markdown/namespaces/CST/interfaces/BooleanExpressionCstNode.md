@@ -6,7 +6,7 @@
 
 # Interface: BooleanExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:134](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L134)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:155](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L155)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:134](https://github.com/c
 
 > **children**: [`BooleanExpressionCstChildren`](../type-aliases/BooleanExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:136](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L136)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:157](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L157)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"BooleanExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:135](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L135)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:156](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L156)
 
 #### Overrides
 

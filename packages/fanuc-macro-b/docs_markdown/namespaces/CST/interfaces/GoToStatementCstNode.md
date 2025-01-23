@@ -6,7 +6,7 @@
 
 # Interface: GoToStatementCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:86](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L86)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:87](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L87)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:86](https://github.com/cn
 
 > **children**: [`GoToStatementCstChildren`](../type-aliases/GoToStatementCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:88](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L88)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:89](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L89)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"GoToStatement"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:87](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L87)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:88](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L88)
 
 #### Overrides
 

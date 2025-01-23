@@ -8,13 +8,13 @@
 
 > `const` **Errors**: `object`
 
-Defined in: [packages/fanuc-macro-b/src/errors/Errors.ts:5](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/Errors.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/errors/Errors.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/Errors.ts#L5)
 
 ## Type declaration
 
 ### InputUndefined
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:14](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L14)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:14](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L14)
 
 #### Extends
 
@@ -26,7 +26,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:14](https://github.com/c
 
 > **new InputUndefined**(): [`InputUndefined`](Errors.md#inputundefined)
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:15](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L15)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:15](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L15)
 
 ###### Returns
 
@@ -158,7 +158,7 @@ Create .stack property on a target object
 
 ### InvalidInput
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:20](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L20)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:20](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L20)
 
 #### Extends
 
@@ -170,7 +170,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:20](https://github.com/c
 
 > **new InvalidInput**(`o`): [`InvalidInput`](Errors.md#invalidinput)
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:21](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L21)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:21](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L21)
 
 ###### Parameters
 
@@ -308,7 +308,7 @@ Create .stack property on a target object
 
 ### InvalidProgramNumber
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:17](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L17)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:17](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L17)
 
 #### Extends
 
@@ -320,7 +320,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:17](https://github.com
 
 > **new InvalidProgramNumber**(`programNumber`): [`InvalidProgramNumber`](Errors.md#invalidprogramnumber)
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:18](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L18)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:18](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L18)
 
 ###### Parameters
 
@@ -458,7 +458,7 @@ Create .stack property on a target object
 
 ### LexingError
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:7](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L7)
 
 #### Extends
 
@@ -470,7 +470,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:7](https://github.com/cn
 
 > **new LexingError**(`err`): [`LexingError`](Errors.md#lexingerror)
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:8](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L8)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:8](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L8)
 
 ###### Parameters
 
@@ -608,7 +608,7 @@ Create .stack property on a target object
 
 ### MacroLexerError
 
-Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:3](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/lexer.ts#L3)
+Defined in: [packages/fanuc-macro-b/src/errors/lexer.ts:3](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/lexer.ts#L3)
 
 #### Extends
 
@@ -788,7 +788,7 @@ Create .stack property on a target object
 
 ### MacroParserError
 
-Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:3](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/parser.ts#L3)
+Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:3](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/parser.ts#L3)
 
 #### Extends
 
@@ -966,7 +966,7 @@ Create .stack property on a target object
 
 ### MacroRuntimeError
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:1](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L1)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:1](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L1)
 
 #### Extends
 
@@ -1146,7 +1146,7 @@ Create .stack property on a target object
 
 ### NoActiveProgram
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:5](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L5)
 
 #### Extends
 
@@ -1158,7 +1158,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:5](https://github.com/
 
 > **new NoActiveProgram**(): [`NoActiveProgram`](Errors.md#noactiveprogram)
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:6](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L6)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:6](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L6)
 
 ###### Returns
 
@@ -1290,7 +1290,7 @@ Create .stack property on a target object
 
 ### ParsingError
 
-Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:7](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/parser.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/parser.ts#L7)
 
 #### Extends
 
@@ -1302,7 +1302,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:7](https://github.com/c
 
 > **new ParsingError**(`err`): [`ParsingError`](Errors.md#parsingerror)
 
-Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:8](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/parser.ts#L8)
+Defined in: [packages/fanuc-macro-b/src/errors/parser.ts:8](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/parser.ts#L8)
 
 ###### Parameters
 
@@ -1440,7 +1440,7 @@ Create .stack property on a target object
 
 ### ProgramNumberNotFound
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:11](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L11)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:11](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L11)
 
 #### Extends
 
@@ -1452,7 +1452,7 @@ Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:11](https://github.com
 
 > **new ProgramNumberNotFound**(`programNumber`): [`ProgramNumberNotFound`](Errors.md#programnumbernotfound)
 
-Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:12](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/errors/runtime.ts#L12)
+Defined in: [packages/fanuc-macro-b/src/errors/runtime.ts:12](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/errors/runtime.ts#L12)
 
 ###### Parameters
 

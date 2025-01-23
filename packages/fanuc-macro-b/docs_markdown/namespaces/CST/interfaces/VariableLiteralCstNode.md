@@ -6,7 +6,7 @@
 
 # Interface: VariableLiteralCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:232](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L232)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:241](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L241)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:232](https://github.com/c
 
 > **children**: [`VariableLiteralCstChildren`](../type-aliases/VariableLiteralCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:234](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L234)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:243](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L243)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"VariableLiteral"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:233](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L233)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:242](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L242)
 
 #### Overrides
 

@@ -6,7 +6,7 @@
 
 # Interface: ErrorProducer\<E\>
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:9](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/generics.ts#L9)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:9](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L9)
 
 ## Type Parameters
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/generics.ts:9](https://github.com/
 
 > **hasErrors**: `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:10](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/generics.ts#L10)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:10](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L10)
 
 ## Methods
 
@@ -26,7 +26,7 @@ Defined in: [packages/fanuc-macro-b/src/types/generics.ts:10](https://github.com
 
 > **getErrors**(): [`E`](ErrorProducer.html#e)[]
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:11](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/generics.ts#L11)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:11](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L11)
 
 #### Returns
 

@@ -6,7 +6,7 @@
 
 # Interface: VariableAssignmentCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:53](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L53)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:54](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L54)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:53](https://github.com/cn
 
 > **children**: [`VariableAssignmentCstChildren`](../type-aliases/VariableAssignmentCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:55](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L55)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:56](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L56)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"VariableAssignment"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:54](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L54)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:55](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L55)
 
 #### Overrides
 

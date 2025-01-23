@@ -6,7 +6,7 @@
 
 # Class: MacroParser
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:8](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L8)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:8](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L8)
 
 ## Extends
 
@@ -22,7 +22,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:8](https://gi
 
 > **new MacroParser**(): [`MacroParser`](MacroParser.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:55](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L55)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:55](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L55)
 
 #### Returns
 
@@ -38,7 +38,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:55](h
 
 > **AdditionExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:206](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L206)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:223](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L223)
 
 Lowest precedence thus it is first in the rule chain
 The precedence of binary Expressions is determined by how far down the Parse Tree
@@ -54,7 +54,7 @@ The binary Expression appears.
 
 > **AddressedValue**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:270](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L270)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:274](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L274)
 
 A single, capital letter followed by number or
 macro variable reference
@@ -75,7 +75,7 @@ H#518, X1.2345, Z1., M1, G90
 
 > **AtomicBooleanExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:186](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L186)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:190](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L190)
 
 #### Inherited from
 
@@ -87,7 +87,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:186](
 
 > **AtomicExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:248](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L248)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:200](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L200)
 
 `BracketExpression` has the highest precedence and thus it appears
 in the "lowest" leaf in the Expression ParseTree.
@@ -98,11 +98,23 @@ in the "lowest" leaf in the Expression ParseTree.
 
 ***
 
+### AtomicWhileExpression
+
+> **AtomicWhileExpression**: `ParserMethod`\<\[\], `CstNode`\>
+
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:185](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L185)
+
+#### Inherited from
+
+`MacroParserRuleTree.AtomicWhileExpression`
+
+***
+
 ### BooleanExpression
 
 > **BooleanExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:195](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L195)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:212](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L212)
 
 Making a comparison between two values
 
@@ -116,7 +128,7 @@ Making a comparison between two values
 
 > **BracketExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:238](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L238)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:255](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L255)
 
 Any Expression wrapped in brackets
 
@@ -136,7 +148,7 @@ Any Expression wrapped in brackets
 
 > **ConditionalExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:170](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L170)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:159](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L159)
 
 If Expression to branch control flow
 
@@ -150,7 +162,7 @@ If Expression to branch control flow
 
 > **DoStatement**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:132](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L132)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:132](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L132)
 
 End of a WHILE loop
 
@@ -164,7 +176,7 @@ End of a WHILE loop
 
 > **EndOfFile**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:341](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L341)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:345](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L345)
 
 End of a valid NC File
 
@@ -178,7 +190,7 @@ End of a valid NC File
 
 > **EndStatement**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:141](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L141)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:141](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L141)
 
 End of a WHILE loop
 
@@ -204,7 +216,7 @@ Defined in: node\_modules/.pnpm/@chevrotain+types@10.5.0/node\_modules/@chevrota
 
 > **Expression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:260](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L260)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:264](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L264)
 
 #### Inherited from
 
@@ -216,7 +228,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:260](
 
 > **FunctionExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:228](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L228)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:245](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L245)
 
 Calling a Built-In function
 
@@ -230,7 +242,7 @@ Calling a Built-In function
 
 > **GoToStatement**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:150](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L150)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:150](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L150)
 
 Go To Line
 
@@ -256,7 +268,7 @@ Defined in: node\_modules/.pnpm/@chevrotain+types@10.5.0/node\_modules/@chevrota
 
 > **Line**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:97](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L97)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:97](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L97)
 
 Any number of valid addresses, comments, and/or Expressions
 
@@ -270,7 +282,7 @@ Any number of valid addresses, comments, and/or Expressions
 
 > **Lines**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:87](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L87)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:87](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L87)
 
 #### Inherited from
 
@@ -282,7 +294,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:87](h
 
 > **MultiplicationExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:217](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L217)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:234](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L234)
 
 #### Inherited from
 
@@ -294,7 +306,7 @@ Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:217](
 
 > **NumericLiteral**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:285](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L285)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:289](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L289)
 
 A signed, decimal or integer
 
@@ -314,7 +326,7 @@ A signed, decimal or integer
 
 > **Program**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:75](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L75)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:75](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L75)
 
 Defining a valid NC Program
 
@@ -328,7 +340,7 @@ Defining a valid NC Program
 
 > **ProgramNumberLine**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:332](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L332)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:336](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L336)
 
 A line consisting of a program number and optional comment
 
@@ -342,7 +354,7 @@ A line consisting of a program number and optional comment
 
 > **Programs**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:65](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L65)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:65](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L65)
 
 Multiple NC Programs
 
@@ -375,7 +387,7 @@ to learn more on the recording phase and how Chevrotain works.
 
 > **StartOfFile**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:324](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L324)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:328](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L328)
 
 Start of a valid NC File
 
@@ -389,7 +401,7 @@ Start of a valid NC File
 
 > **ValueLiteral**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:314](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L314)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:318](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L318)
 
 Number or Macro variable
 
@@ -403,7 +415,7 @@ Number or Macro variable
 
 > **VariableAssignment**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:123](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L123)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:123](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L123)
 
 Assigning a variable with a value
 
@@ -425,7 +437,7 @@ Assigning a variable with a value
 
 > **VariableExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:306](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L306)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:310](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L310)
 
 Pound sign `#` followed by a bracketed expression to evaluate the register number
 
@@ -449,7 +461,7 @@ Pound sign `#` followed by a bracketed expression to evaluate the register numbe
 
 > **VariableLiteral**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:295](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L295)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:299](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L299)
 
 Pound sign `#` followed by an integer representing a variable register
 
@@ -465,17 +477,17 @@ Pound sign `#` followed by an integer representing a variable register
 
 ***
 
-### WhileDoEndExpression
+### WhileDoExpression
 
-> **WhileDoEndExpression**: `ParserMethod`\<\[\], `CstNode`\>
+> **WhileDoExpression**: `ParserMethod`\<\[\], `CstNode`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:159](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L159)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:178](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L178)
 
 While loop construct
 
 #### Inherited from
 
-`MacroParserRuleTree.WhileDoEndExpression`
+`MacroParserRuleTree.WhileDoExpression`
 
 ## Accessors
 
@@ -485,7 +497,7 @@ While loop construct
 
 > **get** **hasErrors**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:25](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L25)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:25](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L25)
 
 ##### Returns
 
@@ -799,7 +811,7 @@ CONSUME
 
 > **CONSUME**\<`S`\>(`token`, `options`?): `Omit`\<`IToken`, `"tokenType"`\> & `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:45](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L45)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:45](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L45)
 
 Utilize the generic to get the token name
 
@@ -899,7 +911,7 @@ Defined in: node\_modules/.pnpm/@chevrotain+types@10.5.0/node\_modules/@chevrota
 
 > **getErrors**(): [`ParsingError`](../variables/Errors.md#parsingerror)[]
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:39](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L39)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:39](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L39)
 
 #### Returns
 
@@ -1172,7 +1184,7 @@ An object defining the grammar of each iteration and the separator between itera
 
 > **MAYBE\_CONSUME\_WHITESPACE**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:346](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L346)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts:350](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParserRuleTree.ts#L350)
 
 #### Returns
 
@@ -1584,7 +1596,7 @@ See: http://chevrotain.io/docs/tutorial/step2_parsing.html#under-the-hood
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:29](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L29)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:29](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L29)
 
 Resets the parser state, should be overridden for custom parsers which "carry" additional state.
 When overriding, remember to also invoke the super implementation!
@@ -1642,7 +1654,7 @@ be called without parameters during the grammar recording phase.
 
 > **setInput**(`tokens`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:34](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L34)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:34](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L34)
 
 #### Parameters
 
@@ -1768,7 +1780,7 @@ of the sub rule invocation in its rule.
 
 > `static` **getBaseCstVisitor**(`opts`): (...`args`) => `ICstVisitor`\<`any`, `any`\>
 
-Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:12](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L12)
+Defined in: [packages/fanuc-macro-b/src/core/parser/MacroParser.ts:12](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/parser/MacroParser.ts#L12)
 
 #### Parameters
 

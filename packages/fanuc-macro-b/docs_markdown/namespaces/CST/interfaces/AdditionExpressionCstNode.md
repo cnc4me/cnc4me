@@ -6,7 +6,7 @@
 
 # Interface: AdditionExpressionCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:145](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L145)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:166](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L166)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:145](https://github.com/c
 
 > **children**: [`AdditionExpressionCstChildren`](../type-aliases/AdditionExpressionCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:147](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L147)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:168](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L168)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"AdditionExpression"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:146](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L146)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:167](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L167)
 
 #### Overrides
 

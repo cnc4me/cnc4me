@@ -6,7 +6,7 @@
 
 # Interface: ProgramNumberLineCstNode
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:272](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L272)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:281](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L281)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:272](https://github.com/c
 
 > **children**: [`ProgramNumberLineCstChildren`](../type-aliases/ProgramNumberLineCstChildren.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:274](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L274)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:283](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L283)
 
 #### Overrides
 
@@ -47,7 +47,7 @@ For more details.
 
 > **name**: `"ProgramNumberLine"`
 
-Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:273](https://github.com/cnc4me/cnc4me/blob/19757263e25864f8b5a1607c4e54310f81efbb72/packages/fanuc-macro-b/src/types/fanuc.ts#L273)
+Defined in: [packages/fanuc-macro-b/src/types/fanuc.ts:282](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/fanuc.ts#L282)
 
 #### Overrides
 
