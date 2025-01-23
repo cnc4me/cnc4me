@@ -13,10 +13,20 @@ export function range(start: number, end: number) {
  * Get a single value from a possible array with one element
  *
  * If passed an array, then return arr[0].
- * If passed a single value, then it is passed through.
+ * If passed a single value, then return it.
  */
 export function unbox<T>(arr: T | T[]): T {
   return Array.isArray(arr) ? arr[0] : arr;
+}
+
+/**
+ * Ensure that a given value or values are part of an array.
+ *
+ * If passed an array, then return it.
+ * If passed a single value, then wrap it and return it.
+ */
+export function box<T>(arr: T | T[]) {
+  return Array.isArray(arr) ? arr : [arr];
 }
 
 /**

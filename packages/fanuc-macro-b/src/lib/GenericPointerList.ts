@@ -1,4 +1,4 @@
-export class PointerArray<T> {
+export class GenericPointerList<T> {
   protected items: T[] = [];
   protected pointer: number;
 

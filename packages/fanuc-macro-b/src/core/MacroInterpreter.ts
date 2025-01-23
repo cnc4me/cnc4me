@@ -9,10 +9,11 @@ import {
   MacroVariable
 } from "../lib";
 import { NcProgram } from "../lib/NcProgram";
+import { getChild, getChildren } from "../utils/chevrotain";
 import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
 import { Debuggers } from "../utils/debug";
 import { hasDwell, hasG10 } from "../utils/flags";
-import { BlockCollection } from "./BlockCollection";
+import { BlockList } from "./BlockList";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./parser/MacroParser";
 import { STDLIB } from "./StandardLibrary";
@@ -35,13 +36,11 @@ import type {
   MacroBuiltinFunctionNames,
   ValidG10OffsetGroups
 } from "../types";
-import type { IBlock } from "./BlockCollection";
+import type { IBlock } from "./BlockList";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
 });
-
-type MacroInterpreterEvents = typeof MacroInterpreter.EVENTS;
 
 /**
  * Macro Interpreter
@@ -51,16 +50,26 @@ export class MacroInterpreter extends BaseCstVisitor {
     LINE: IParsedLineData;
     END_OF_PROGRAM: undefined;
   };
-  #debug = Debuggers.Interpreter;
+
+  /**
+   * If true, then the interpreter does not evaluate, only records:
+   *
+   * - GOTO and N block numbers
+   * - DOn and ENDn fences
+   */
+  //#scanning = true;
+  #linesCalls = 0;
+
   #lines: IParsedLineData[] = [];
+  #blocks = new BlockList();
+
+  #debug = Debuggers.Interpreter;
   #memory = new MacroMemory();
-  #blocks = new BlockCollection();
   #insights = new InsightCollection();
   #events = new Emittery<typeof MacroInterpreter.EVENTS>();
 
   constructor() {
     super();
-    this.#debug("");
     this.#debug("initializing & validating");
     this.validateVisitor();
   }
@@ -82,6 +91,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   reset() {
     this.#lines = [];
+    this.#linesCalls = 0;
     this.#blocks.reset();
     this.#memory.reset();
   }
@@ -116,6 +126,10 @@ export class MacroInterpreter extends BaseCstVisitor {
     const { number, title } = this.ProgramNumberLine(
       ctx.ProgramNumberLine[0].children
     );
+
+    const flat = this.#flattenLines(ctx.Lines[0].children);
+    this.#debug(flat);
+
     const lines = this.Lines(ctx.Lines[0].children);
     return NcProgram.create({ id: number, title, lines });
   }
@@ -138,24 +152,38 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Iterate over the lines to extract the contents
    */
   Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
-    this.#debug("Lines");
+    const _debug = this.#debug.extend("Lines");
+    this.#linesCalls++;
+    _debug("assembling Blocks");
+    _debug(`[CALL ${this.#linesCalls}]`);
+
     if (ctx?.Line) {
       const lines = ctx.Line;
-      this.#debug("Assembling Blocks");
       for (const line of lines) {
         const block: IBlock = { N: NaN, line: {} };
         if (line.children?.LineNumber) {
+          // const node = getChild(line, "LineNumber");
           const token = getImage(line.children.LineNumber);
           block.N = Number(token.slice(1));
+        }
+        if (line.children?.EndStatement) {
+          const children = getChildren(line.children.EndStatement);
+          block.END = Number(getImage(children.LineNumber));
+          _debug("found END");
         }
         block.line = line.children;
         this.#blocks.append(block);
       }
-
-      this.#debug("Interpreting Blocks");
-      this.#debug("Block Count:", this.#blocks.length);
-      this.#debug(this.#blocks);
-      this.#processBlocks({ maxIterations: 10 });
+      _debug("assembled", this.#blocks.length, "blocks");
+      if (this.#blocks.length > lines.length * 2) {
+        throw new Error(
+          `There are too many blocks something is wrong [${this.#blocks.length}B:${lines.length}L]`
+        );
+      }
+      this.#blocks.forEach(item => {
+        // this.#debug(item.line);
+      });
+      this.#processBlocks({ maxIterations: 20 });
     }
     return this.#lines;
   }
@@ -166,6 +194,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   Line(ctx: CST.LineCstChildren): IParsedLineData {
     const parsed: IParsedLineData = {
       N: NaN,
+      END: NaN,
       gCodes: [],
       mCodes: [],
       comments: [],
@@ -179,6 +208,12 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (ctx?.LineNumber) {
       const rawLineNumber = getImage(ctx.LineNumber);
       parsed.N = Number(rawLineNumber.slice(1));
+    }
+
+    if (ctx?.EndStatement) {
+      const { children } = unbox(ctx.EndStatement);
+      const endId = getImage(children.LineNumber);
+      parsed.END = Number(endId.slice(1));
     }
 
     if (ctx?.G_Code) {
@@ -206,16 +241,6 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.VariableAssignment(children);
     }
 
-    if (ctx?.GoToStatement) {
-      const { children } = unbox(ctx.GoToStatement);
-      this.GoToStatement(children);
-    }
-
-    if (ctx?.ConditionalExpression) {
-      const { children } = unbox(ctx.ConditionalExpression);
-      this.ConditionalExpression(children);
-    }
-
     if (ctx?.AddressedValue) {
       ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
@@ -224,9 +249,21 @@ export class MacroInterpreter extends BaseCstVisitor {
       });
     }
 
-    if (ctx?.WhileDoEndExpression) {
-      const { children } = unbox(ctx.WhileDoEndExpression);
-      this.WhileDoEndExpression(children);
+    if (ctx?.WhileDoExpression) {
+      const { children } = unbox(ctx.WhileDoExpression);
+      this.WhileDoExpression(children);
+    }
+
+    if (ctx?.GoToStatement) {
+      const { children } = unbox(ctx.GoToStatement);
+      // @TODO can this simple visitors use visit() ?
+      this.GoToStatement(children);
+    }
+
+    if (ctx?.ConditionalExpression) {
+      const { children } = unbox(ctx.ConditionalExpression);
+      // @TODO can this simple visitors use visit() ?
+      this.ConditionalExpression(children);
     }
 
     if (ctx?.Comment) {
@@ -256,62 +293,38 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
-   * Parse all possible info out of this address
+   *
    */
-  AddressedValue(
-    ctx: CST.AddressedValueCstChildren,
-    gCodeFlags: Record<string, boolean> = {}
-  ) {
-    const address = new AddressedValue(ctx);
-    const insight = new AddressInsight(address);
-
-    if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
-      this.#insights.collect(insight);
-    }
-
-    return address;
+  DoStatement(ctx: CST.DoStatementCstChildren) {
+    const _debug = this.#debug.extend(`do`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("DO LINE NUM", N);
+    // _debug("pointer was", this.#blocks.getPointer());
+    // this.#blocks.setPointerToBlock(N);
+    return;
   }
 
   /**
-   * A plain number, signed
+   * Move the pointer to the starting GOTO block number
    */
-  NumericLiteral(ctx: CST.NumericLiteralCstChildren): number {
-    const value = getImage(ctx.NumericValue);
-    const minus = ctx.Minus ? "-" : "";
-
-    return parseNumber(`${minus}${value}`);
+  EndStatement(ctx: CST.EndStatementCstChildren) {
+    const _debug = this.#debug.extend(`end`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("END LINE NUM", N);
+    // _debug("pointer was", this.#blocks.getPointer());
+    // this.#blocks.setPointerToBlock(N);
+    return;
   }
 
   /**
-   * A Macro Variable, defined as a `#` and a number
+   * Move the pointer to the GOTO block number
    */
-  VariableLiteral(ctx: CST.VariableLiteralCstChildren): MacroVariable {
-    const register = Number(getImage(ctx.Integer));
-    const macroVar = new MacroVariable(register);
-
-    macroVar.value = this.#memory.read(macroVar.register);
-
-    return macroVar;
-  }
-
-  /**
-   * If a number, then the visit the node, otherwise evaluate the macro var
-   */
-  ValueLiteral(ctx: CST.ValueLiteralCstChildren) {
-    if (ctx.NumericLiteral) {
-      return this.visit(
-        ctx.NumericLiteral
-      ) as VisitorReturnType<"NumericLiteral">;
-    }
-
-    if (ctx.VariableLiteral) {
-      const macroVar = this.visit(
-        ctx.VariableLiteral
-      ) as VisitorReturnType<"VariableLiteral">;
-      return macroVar.value;
-    }
-
-    return NaN;
+  GoToStatement(ctx: CST.GoToStatementCstChildren) {
+    const _debug = this.#debug.extend(`goto`);
+    const N = parseInt(getImage(ctx.LineNumber));
+    _debug("pointer was", this.#blocks.getPointer());
+    this.#blocks.setPointerToBlock(N);
+    return;
   }
 
   /**
@@ -407,20 +420,16 @@ export class MacroInterpreter extends BaseCstVisitor {
     if (ctx?.NumericLiteral) {
       return this.NumericLiteral(ctx.NumericLiteral[0].children);
     }
-
     if (ctx?.VariableLiteral) {
       const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
       return macroVar.value;
     }
-
     if (ctx?.FunctionExpression) {
       return this.FunctionExpression(ctx.FunctionExpression[0].children);
     }
-
     if (ctx?.BracketExpression) {
       return this.BracketExpression(ctx.BracketExpression[0].children);
     }
-
     return NaN;
     // throw new Error("AtomicExpression did not eval to a number");
   }
@@ -454,7 +463,6 @@ export class MacroInterpreter extends BaseCstVisitor {
   ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
     const { children } = unbox(ctx?.AtomicBooleanExpression);
     const boolExpr = this.AtomicBooleanExpression(children);
-    this.#debug.extend("AtomicBooleanExpression")(boolExpr);
     if (boolExpr === true) {
       if (ctx?.VariableAssignment) {
         return this.VariableAssignment(ctx.VariableAssignment[0].children);
@@ -495,56 +503,103 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   /**
+   * Interpret the conditional of a While loop
+   */
+  WhileLoopPredicate(ctx: CST.AtomicWhileExpressionCstChildren) {
+    const _debug = this.#debug.extend("AtomicWhileExpression");
+    const { children } = unbox(ctx.AtomicBooleanExpression);
+    const result = this.AtomicBooleanExpression(children);
+    _debug("result", result);
+    return result;
+  }
+
+  /**
    * Interpret a while loop
    */
-  WhileDoEndExpression(ctx: CST.WhileDoEndExpressionCstChildren) {
-    const condition = () => {
-      const { children } = unbox(ctx.AtomicBooleanExpression);
-      return this.AtomicBooleanExpression(children);
+  WhileDoExpression(ctx: CST.WhileDoExpressionCstChildren) {
+    const _debug = this.#debug.extend("WhileDoExpression");
+
+    const maxIterations = 10;
+    const boolExpr = (): boolean => {
+      return this.WhileLoopPredicate(ctx.WhileLoopPredicate[0]?.children);
     };
+    _debug("starting loop");
+    let condition = boolExpr();
+    let iterations = 0;
 
-    while (condition()) {
-      this.Lines(ctx.Lines[0].children);
+    do {
+      const { children } = unbox(ctx.Lines);
+      this.Lines(children); // @todo 👈🏻  THIS IS GOING RECURSIVE!!
+      iterations++;
+      condition = boolExpr();
+    } while (condition && iterations < maxIterations);
+  }
+
+  /**
+   * Parse all possible info out of this address
+   */
+  AddressedValue(
+    ctx: CST.AddressedValueCstChildren,
+    gCodeFlags: Record<string, boolean> = {}
+  ) {
+    const address = new AddressedValue(ctx);
+    const insight = new AddressInsight(address);
+
+    if (!hasDwell(gCodeFlags) && !hasG10(gCodeFlags)) {
+      this.#insights.collect(insight);
     }
+
+    return address;
   }
 
   /**
-   *
+   * A plain number, signed
    */
-  DoStatement(ctx: CST.DoStatementCstChildren) {
-    const _debug = this.#debug.extend(`do`);
-    const N = parseInt(getImage(ctx.LineNumber));
-    _debug("DO LINE NUM", N);
-    // _debug("pointer was", this.#blocks.getPointer());
-    // this.#blocks.setPointerToBlock(N);
-    return;
+  NumericLiteral(ctx: CST.NumericLiteralCstChildren): number {
+    const value = getImage(ctx.NumericValue);
+    const minus = ctx.Minus ? "-" : "";
+
+    return parseNumber(`${minus}${value}`);
   }
 
   /**
-   * Move the pointer to the starting GOTO block number
+   * A Macro Variable, defined as a `#` and a number
    */
-  EndStatement(ctx: CST.EndStatementCstChildren) {
-    const _debug = this.#debug.extend(`end`);
-    const N = parseInt(getImage(ctx.LineNumber));
-    _debug("END LINE NUM", N);
-    // _debug("pointer was", this.#blocks.getPointer());
-    // this.#blocks.setPointerToBlock(N);
-    return;
+  VariableLiteral(ctx: CST.VariableLiteralCstChildren): MacroVariable {
+    const register = Number(getImage(ctx.Integer));
+    const macroVar = new MacroVariable(register);
+
+    macroVar.value = this.#memory.read(macroVar.register);
+
+    return macroVar;
   }
 
   /**
-   * Move the pointer to the GOTO block number
+   * If a number, then the visit the node, otherwise evaluate the macro var
    */
-  GoToStatement(ctx: CST.GoToStatementCstChildren) {
-    const _debug = this.#debug.extend(`goto`);
-    const N = parseInt(getImage(ctx.LineNumber));
-    _debug("pointer was", this.#blocks.getPointer());
-    this.#blocks.setPointerToBlock(N);
-    return;
+  ValueLiteral(ctx: CST.ValueLiteralCstChildren): number {
+    if (ctx.NumericLiteral) {
+      const children = getChildren(ctx.NumericLiteral);
+      return this.NumericLiteral(children);
+    }
+
+    if (ctx.VariableLiteral) {
+      const children = getChildren(ctx.VariableLiteral);
+      const macroVar = this.VariableLiteral(children);
+      return macroVar.value;
+    }
+
+    return NaN;
   }
 
+  /**
+   * The main handler for processing the lines into blocks
+   */
   #processBlocks(opts: { maxIterations: number }) {
-    const _debug = this.#debug.extend("blocks");
+    const _debug = this.#debug.extend("_processBlocks");
+
+    _debug("Interpreting Blocks");
+    _debug("Block Count:", this.#blocks.length);
 
     const maxIterations = opts.maxIterations ?? 1_000_000;
     let iterations = 0;
@@ -576,15 +631,32 @@ export class MacroInterpreter extends BaseCstVisitor {
       iterations++;
     } while (!this.#blocks.pointerAtEnd);
   }
+
+  /**
+   * Given a LinesCstNode, traverse it and flatten into a list
+   */
+  #flattenLines(
+    ctx: CST.LinesCstChildren,
+    collector: CST.LineCstNode[] = []
+  ): CST.LineCstNode[] {
+    this.#debug("FLATTENING");
+
+    const temp = [...collector];
+    if (ctx?.Line) {
+      const lines = ctx.Line;
+      for (const line of lines) {
+        // if (line.name === "") console.log(line);
+        const whileExpr = unbox(line.children?.WhileDoExpression);
+        const linesNode = unbox(whileExpr?.children?.Lines);
+        if (linesNode?.children.Line) {
+          return this.#flattenLines(linesNode.children, temp);
+        }
+      }
+    }
+    return temp;
+  }
+
+  #blockScan() {
+    //
+  }
 }
-
-type InterpreterPropsToIgnore = "events" | "lines" | "memory";
-
-type InterpreterMethodsToMap = Exclude<
-  keyof MacroInterpreter,
-  InterpreterPropsToIgnore
->;
-
-type VisitorReturnType<T extends InterpreterMethodsToMap> = ReturnType<
-  MacroInterpreter[T]
->;

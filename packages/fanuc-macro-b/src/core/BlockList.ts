@@ -1,14 +1,15 @@
-import { PointerArray } from "../lib/PointerArray";
+import { GenericPointerList } from "../lib/GenericPointerList";
 import { Debuggers } from "../utils/debug";
 
 import type { CST } from "../types";
 
 export interface IBlock {
   N: number;
+  END?: number;
   line: CST.LineCstChildren;
 }
 
-export class BlockCollection extends PointerArray<IBlock> {
+export class BlockList extends GenericPointerList<IBlock> {
   #debug: debug.Debugger;
 
   constructor() {
@@ -20,6 +21,12 @@ export class BlockCollection extends PointerArray<IBlock> {
     this.#debug(`resetting`);
     this.setItems([]);
     this.resetPointer();
+  }
+
+  forEach(callback: (item: IBlock) => void) {
+    for (const item of this.items) {
+      callback(item);
+    }
   }
 
   setPointerToBlock(N: number) {

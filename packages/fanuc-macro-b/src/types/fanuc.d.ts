@@ -39,11 +39,12 @@ declare interface LineCstNode extends CstNode {
 
 declare type LineCstChildren = {
   ConditionalExpression?: ConditionalExpressionCstNode[];
+  WhileDoExpression?: WhileDoExpressionCstNode[];
+  EndStatement?: EndStatementCstNode[];
   GoToStatement?: GoToStatementCstNode[];
-  WhileDoEndExpression?: WhileDoEndExpressionCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
-  Expression?: ExpressionCstNode[];
   AddressedValue?: AddressedValueCstNode[];
+  Expression?: ExpressionCstNode[];
   LineNumber?: IToken[];
   M_Code?: IToken[];
   G_Code?: IToken[];
@@ -94,19 +95,6 @@ declare type GoToStatementCstChildren = {
   LineNumber: IToken[];
 };
 
-declare interface WhileDoEndExpressionCstNode extends CstNode {
-  name: "WhileDoEndExpression";
-  children: WhileDoEndExpressionCstChildren;
-}
-
-declare type WhileDoEndExpressionCstChildren = {
-  While: IToken[];
-  AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
-  DoStatement: DoStatementCstNode[];
-  Lines: LinesCstNode[];
-  EndStatement: EndStatementCstNode[];
-};
-
 declare interface ConditionalExpressionCstNode extends CstNode {
   name: "ConditionalExpression";
   children: ConditionalExpressionCstChildren;
@@ -120,6 +108,27 @@ declare type ConditionalExpressionCstChildren = {
   GoToStatement?: GoToStatementCstNode[];
 };
 
+declare interface WhileDoExpressionCstNode extends CstNode {
+  name: "WhileDoExpression";
+  children: WhileDoExpressionCstChildren;
+}
+
+declare type WhileDoExpressionCstChildren = {
+  WhileLoopPredicate: AtomicWhileExpressionCstNode[];
+  DoStatement: DoStatementCstNode[];
+  Lines: LinesCstNode[];
+};
+
+declare interface AtomicWhileExpressionCstNode extends CstNode {
+  name: "AtomicWhileExpression";
+  children: AtomicWhileExpressionCstChildren;
+}
+
+declare type AtomicWhileExpressionCstChildren = {
+  While: IToken[];
+  AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
+};
+
 declare interface AtomicBooleanExpressionCstNode extends CstNode {
   name: "AtomicBooleanExpression";
   children: AtomicBooleanExpressionCstChildren;
@@ -129,6 +138,18 @@ declare type AtomicBooleanExpressionCstChildren = {
   OpenBracket: IToken[];
   BooleanExpression: BooleanExpressionCstNode[];
   CloseBracket: IToken[];
+};
+
+declare interface AtomicExpressionCstNode extends CstNode {
+  name: "AtomicExpression";
+  children: AtomicExpressionCstChildren;
+}
+
+declare type AtomicExpressionCstChildren = {
+  FunctionExpression?: FunctionExpressionCstNode[];
+  BracketExpression?: BracketExpressionCstNode[];
+  NumericLiteral?: NumericLiteralCstNode[];
+  VariableLiteral?: VariableLiteralCstNode[];
 };
 
 declare interface BooleanExpressionCstNode extends CstNode {
@@ -183,18 +204,6 @@ declare type BracketExpressionCstChildren = {
   OpenBracket: IToken[];
   Expression: ExpressionCstNode[];
   CloseBracket: IToken[];
-};
-
-declare interface AtomicExpressionCstNode extends CstNode {
-  name: "AtomicExpression";
-  children: AtomicExpressionCstChildren;
-}
-
-declare type AtomicExpressionCstChildren = {
-  FunctionExpression?: FunctionExpressionCstNode[];
-  BracketExpression?: BracketExpressionCstNode[];
-  NumericLiteral?: NumericLiteralCstNode[];
-  VariableLiteral?: VariableLiteralCstNode[];
 };
 
 declare interface ExpressionCstNode extends CstNode {
@@ -290,7 +299,7 @@ declare type EndOfFileCstChildren = {
   Newline?: IToken[];
 };
 
-declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
+declare interface MacroNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   Programs(children: ProgramsCstChildren, param?: IN): OUT;
   Program(children: ProgramCstChildren, param?: IN): OUT;
   Lines(children: LinesCstChildren, param?: IN): OUT;
@@ -299,15 +308,16 @@ declare interface ICstNodeVisitor<IN, OUT> extends ICstVisitor<IN, OUT> {
   DoStatement(children: DoStatementCstChildren, param?: IN): OUT;
   EndStatement(children: EndStatementCstChildren, param?: IN): OUT;
   GoToStatement(children: GoToStatementCstChildren, param?: IN): OUT;
-  WhileDoEndExpression(children: WhileDoEndExpressionCstChildren, param?: IN): OUT;
   ConditionalExpression(children: ConditionalExpressionCstChildren, param?: IN): OUT;
+  WhileDoExpression(children: WhileDoExpressionCstChildren, param?: IN): OUT;
+  AtomicWhileExpression(children: AtomicWhileExpressionCstChildren, param?: IN): OUT;
   AtomicBooleanExpression(children: AtomicBooleanExpressionCstChildren, param?: IN): OUT;
+  AtomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   BooleanExpression(children: BooleanExpressionCstChildren, param?: IN): OUT;
   AdditionExpression(children: AdditionExpressionCstChildren, param?: IN): OUT;
   MultiplicationExpression(children: MultiplicationExpressionCstChildren, param?: IN): OUT;
   FunctionExpression(children: FunctionExpressionCstChildren, param?: IN): OUT;
   BracketExpression(children: BracketExpressionCstChildren, param?: IN): OUT;
-  AtomicExpression(children: AtomicExpressionCstChildren, param?: IN): OUT;
   Expression(children: ExpressionCstChildren, param?: IN): OUT;
   AddressedValue(children: AddressedValueCstChildren, param?: IN): OUT;
   NumericLiteral(children: NumericLiteralCstChildren, param?: IN): OUT;

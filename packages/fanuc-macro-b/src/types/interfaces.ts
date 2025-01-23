@@ -24,6 +24,10 @@ export interface IParsedLineData {
    */
   N: number;
   /**
+   * If the line has an `END n`, this is the numeric value that must match a `DO n`
+   */
+  END: number;
+  /**
    * Collection of all the `G` codes on the line
    */
   gCodes: IToken[];

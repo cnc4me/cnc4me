@@ -98,12 +98,12 @@ export class MacroParserRuleTree extends CstParser {
     this.MANY(() => {
       this.OR([
         { ALT: () => this.SUBRULE(this.ConditionalExpression) },
+        { ALT: () => this.SUBRULE(this.WhileDoExpression) },
+        { ALT: () => this.SUBRULE(this.EndStatement) },
         { ALT: () => this.SUBRULE(this.GoToStatement) },
-        { ALT: () => this.SUBRULE(this.WhileDoEndExpression) },
-        // { ALT: () => this.SUBRULE(this.EndStatement) },
-        { ALT: () => this.SUBRULE(this.VariableAssignment) }, // Part of Expression?
-        { ALT: () => this.SUBRULE(this.Expression) },
+        { ALT: () => this.SUBRULE(this.VariableAssignment) },
         { ALT: () => this.SUBRULE(this.AddressedValue) },
+        { ALT: () => this.SUBRULE(this.Expression) },
         { ALT: () => this.CONSUME(LineNumber) },
         { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.CONSUME(Gcode) },
@@ -131,7 +131,7 @@ export class MacroParserRuleTree extends CstParser {
    */
   DoStatement = this.RULE("DoStatement", () => {
     this.CONSUME(Do);
-    this.MAYBE_CONSUME_WHITESPACE();
+    this.OPTIONAL_WHITESPACE();
     this.CONSUME(Integer, { LABEL: "LineNumber" });
   });
 
@@ -140,7 +140,7 @@ export class MacroParserRuleTree extends CstParser {
    */
   EndStatement = this.RULE("EndStatement", () => {
     this.CONSUME(End);
-    this.MAYBE_CONSUME_WHITESPACE();
+    this.OPTIONAL_WHITESPACE();
     this.CONSUME(Integer, { LABEL: "LineNumber" });
   });
 
@@ -149,19 +149,8 @@ export class MacroParserRuleTree extends CstParser {
    */
   GoToStatement = this.RULE("GoToStatement", () => {
     this.CONSUME(GotoLine);
-    this.MAYBE_CONSUME_WHITESPACE();
+    this.OPTIONAL_WHITESPACE();
     this.CONSUME(Integer, { LABEL: "LineNumber" });
-  });
-
-  /**
-   * While loop construct
-   */
-  WhileDoEndExpression = this.RULE("WhileDoEndExpression", () => {
-    this.CONSUME(While);
-    this.SUBRULE(this.AtomicBooleanExpression);
-    this.SUBRULE(this.DoStatement);
-    this.SUBRULE1(this.Lines);
-    this.SUBRULE2(this.EndStatement);
   });
 
   /**
@@ -183,10 +172,38 @@ export class MacroParserRuleTree extends CstParser {
     ]);
   });
 
+  /**
+   * While loop construct
+   */
+  WhileDoExpression = this.RULE("WhileDoExpression", () => {
+    this.SUBRULE(this.AtomicWhileExpression, { LABEL: "WhileLoopPredicate" });
+    this.SUBRULE(this.DoStatement);
+    this.SUBRULE1(this.Lines);
+    // this.SUBRULE2(this.EndStatement);
+  });
+
+  AtomicWhileExpression = this.RULE("AtomicWhileExpression", () => {
+    this.CONSUME(While);
+    this.SUBRULE(this.AtomicBooleanExpression);
+  });
+
   AtomicBooleanExpression = this.RULE("AtomicBooleanExpression", () => {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.BooleanExpression);
     this.CONSUME(CloseBracket);
+  });
+
+  /**
+   * `BracketExpression` has the highest precedence and thus it appears
+   * in the "lowest" leaf in the Expression ParseTree.
+   */
+  AtomicExpression = this.RULE("AtomicExpression", () => {
+    this.OR([
+      { ALT: () => this.SUBRULE(this.FunctionExpression) },
+      { ALT: () => this.SUBRULE(this.BracketExpression) },
+      { ALT: () => this.SUBRULE(this.NumericLiteral) },
+      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+    ]);
   });
 
   /**
@@ -239,19 +256,6 @@ export class MacroParserRuleTree extends CstParser {
     this.CONSUME(OpenBracket);
     this.SUBRULE(this.Expression);
     this.CONSUME(CloseBracket);
-  });
-
-  /**
-   * `BracketExpression` has the highest precedence and thus it appears
-   * in the "lowest" leaf in the Expression ParseTree.
-   */
-  AtomicExpression = this.RULE("AtomicExpression", () => {
-    this.OR([
-      { ALT: () => this.SUBRULE(this.FunctionExpression) },
-      { ALT: () => this.SUBRULE(this.BracketExpression) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
-    ]);
   });
 
   /**
@@ -343,7 +347,7 @@ export class MacroParserRuleTree extends CstParser {
     this.OPTION(() => this.CONSUME(Newline));
   });
 
-  MAYBE_CONSUME_WHITESPACE = () => {
+  OPTIONAL_WHITESPACE() {
     this.OPTION(() => this.CONSUME(WhiteSpace));
-  };
+  }
 }
