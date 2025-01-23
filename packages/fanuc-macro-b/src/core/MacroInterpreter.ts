@@ -211,7 +211,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.EndStatement) {
-      const { children } = unbox(ctx.EndStatement);
+      const children = getChildren(ctx.EndStatement);
       const endId = getImage(children.LineNumber);
       parsed.END = Number(endId.slice(1));
     }
@@ -237,7 +237,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     if (ctx?.VariableAssignment) {
       parsed.hasVariable = true;
-      const { children } = unbox(ctx.VariableAssignment);
+      const children = getChildren(ctx.VariableAssignment);
       this.VariableAssignment(children);
     }
 
@@ -250,18 +250,18 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.WhileDoExpression) {
-      const { children } = unbox(ctx.WhileDoExpression);
+      const children = getChildren(ctx.WhileDoExpression);
       this.WhileDoExpression(children);
     }
 
     if (ctx?.GoToStatement) {
-      const { children } = unbox(ctx.GoToStatement);
+      const children = getChildren(ctx.GoToStatement);
       // @TODO can this simple visitors use visit() ?
       this.GoToStatement(children);
     }
 
     if (ctx?.ConditionalExpression) {
-      const { children } = unbox(ctx.ConditionalExpression);
+      const children = getChildren(ctx.ConditionalExpression);
       // @TODO can this simple visitors use visit() ?
       this.ConditionalExpression(children);
     }
@@ -461,7 +461,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
-    const { children } = unbox(ctx?.AtomicBooleanExpression);
+    const children = getChildren(ctx?.AtomicBooleanExpression);
     const boolExpr = this.AtomicBooleanExpression(children);
     if (boolExpr === true) {
       if (ctx?.VariableAssignment) {
@@ -479,7 +479,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   AtomicBooleanExpression(
     ctx: CST.AtomicBooleanExpressionCstChildren
   ): boolean {
-    const { children } = unbox(ctx?.BooleanExpression);
+    const children = getChildren(ctx?.BooleanExpression);
     const lhs = this.AtomicExpression(children.lhs[0].children);
     const rhs = this.AtomicExpression(children.rhs[0].children);
     const operator = unbox(children.BooleanOperator);
@@ -507,7 +507,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   WhileLoopPredicate(ctx: CST.AtomicWhileExpressionCstChildren) {
     const _debug = this.#debug.extend("AtomicWhileExpression");
-    const { children } = unbox(ctx.AtomicBooleanExpression);
+    const children = getChildren(ctx.AtomicBooleanExpression);
     const result = this.AtomicBooleanExpression(children);
     _debug("result", result);
     return result;
@@ -528,7 +528,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     let iterations = 0;
 
     do {
-      const { children } = unbox(ctx.Lines);
+      const children = getChildren(ctx.Lines);
       this.Lines(children); // @todo 👈🏻  THIS IS GOING RECURSIVE!!
       iterations++;
       condition = boolExpr();
