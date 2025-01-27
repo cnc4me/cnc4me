@@ -1,4 +1,4 @@
-import { tokenMatcher } from "chevrotain";
+import { type IToken, tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
 
 import { INTERPRETER } from "../config";
@@ -9,11 +9,18 @@ import {
   MacroVariable
 } from "../lib";
 import { NcProgram } from "../lib/NcProgram";
-import { getChild, getChildren } from "../utils/chevrotain";
-import { getImage, parseNumber, unbox, unwrapComment } from "../utils/common";
+import { getChildren } from "../utils/chevrotain";
+import {
+  getImage,
+  parseImageAsInteger,
+  parseNumber,
+  unbox,
+  unwrapComment
+} from "../utils/common";
 import { Debuggers } from "../utils/debug";
 import { hasDwell, hasG10 } from "../utils/flags";
-import { BlockList } from "./BlockList";
+import { BlockManager } from "./interpreter/BlockManager";
+import { TrackedBlock } from "./interpreter/TrackedBlock";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./parser/MacroParser";
 import { STDLIB } from "./StandardLibrary";
@@ -36,7 +43,6 @@ import type {
   MacroBuiltinFunctionNames,
   ValidG10OffsetGroups
 } from "../types";
-import type { IBlock } from "./BlockList";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
@@ -51,17 +57,11 @@ export class MacroInterpreter extends BaseCstVisitor {
     END_OF_PROGRAM: undefined;
   };
 
-  /**
-   * If true, then the interpreter does not evaluate, only records:
-   *
-   * - GOTO and N block numbers
-   * - DOn and ENDn fences
-   */
-  //#scanning = true;
   #linesCalls = 0;
+  #looping = false;
 
   #lines: IParsedLineData[] = [];
-  #blocks = new BlockList();
+  #blocks = new BlockManager();
 
   #debug = Debuggers.Interpreter;
   #memory = new MacroMemory();
@@ -104,17 +104,6 @@ export class MacroInterpreter extends BaseCstVisitor {
     return this.#blocks;
   }
 
-  // /**
-  //  * @todo why is this not returning the block numbers?
-  //  */
-  // getBlockMap() {
-  //   return this.#blocks
-  //     .map(([N, lineCtx]) => {
-  //       return ["N" + `${N}`.padStart(8, "0")].join(" ");
-  //     })
-  //     .join("\n");
-  // }
-
   getInsights(): InsightCollection {
     return this.#insights;
   }
@@ -124,14 +113,11 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   Program(ctx: CST.ProgramCstChildren): NcProgram {
     const { number, title } = this.ProgramNumberLine(
-      ctx.ProgramNumberLine[0].children
+      getChildren(ctx.ProgramNumberLine)
     );
-
-    const flat = this.#flattenLines(ctx.Lines[0].children);
-    this.#debug(flat);
-
-    const lines = this.Lines(ctx.Lines[0].children);
-    return NcProgram.create({ id: number, title, lines });
+    const lines = getChildren(ctx.Lines);
+    const parsedLines = this.Lines(lines);
+    return NcProgram.create({ id: number, title, lines: parsedLines });
   }
 
   /**
@@ -154,24 +140,13 @@ export class MacroInterpreter extends BaseCstVisitor {
   Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
     const _debug = this.#debug.extend("Lines");
     this.#linesCalls++;
-    _debug("assembling Blocks");
     _debug(`[CALL ${this.#linesCalls}]`);
 
     if (ctx?.Line) {
       const lines = ctx.Line;
       for (const line of lines) {
-        const block: IBlock = { N: NaN, line: {} };
-        if (line.children?.LineNumber) {
-          // const node = getChild(line, "LineNumber");
-          const token = getImage(line.children.LineNumber);
-          block.N = Number(token.slice(1));
-        }
-        if (line.children?.EndStatement) {
-          const children = getChildren(line.children.EndStatement);
-          block.END = Number(getImage(children.LineNumber));
-          _debug("found END");
-        }
-        block.line = line.children;
+        const block = new TrackedBlock(line);
+        _debug("tracking", block);
         this.#blocks.append(block);
       }
       _debug("assembled", this.#blocks.length, "blocks");
@@ -180,7 +155,8 @@ export class MacroInterpreter extends BaseCstVisitor {
           `There are too many blocks something is wrong [${this.#blocks.length}B:${lines.length}L]`
         );
       }
-      this.#blocks.forEach(item => {
+      // eslint-disable-next-line @typescript-eslint/no-unused-vars
+      this.#blocks.forEach(_item => {
         // this.#debug(item.line);
       });
       this.#processBlocks({ maxIterations: 20 });
@@ -206,14 +182,12 @@ export class MacroInterpreter extends BaseCstVisitor {
     };
 
     if (ctx?.LineNumber) {
-      const rawLineNumber = getImage(ctx.LineNumber);
-      parsed.N = Number(rawLineNumber.slice(1));
+      parsed.N = this.LineNumber(ctx.LineNumber);
     }
 
     if (ctx?.EndStatement) {
       const children = getChildren(ctx.EndStatement);
-      const endId = getImage(children.LineNumber);
-      parsed.END = Number(endId.slice(1));
+      parsed.END = this.EndStatement(children);
     }
 
     if (ctx?.G_Code) {
@@ -236,9 +210,9 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.VariableAssignment) {
-      parsed.hasVariable = true;
       const children = getChildren(ctx.VariableAssignment);
       this.VariableAssignment(children);
+      parsed.hasVariable = true;
     }
 
     if (ctx?.AddressedValue) {
@@ -295,59 +269,73 @@ export class MacroInterpreter extends BaseCstVisitor {
   /**
    *
    */
-  DoStatement(ctx: CST.DoStatementCstChildren) {
-    const _debug = this.#debug.extend(`do`);
-    const N = parseInt(getImage(ctx.LineNumber));
-    _debug("DO LINE NUM", N);
+  LineNumber(ctx: IToken[]): number {
+    const image = getImage(ctx);
+    return parseInt(image.replace("N", ""));
+  }
+
+  /**
+   *
+   */
+  DoStatement(ctx: CST.DoStatementCstChildren): number {
+    const _debug = this.#debug.extend(`DoStatement`);
+    const N = parseImageAsInteger(ctx.BlockNumber);
+    _debug("DO%s", N);
     // _debug("pointer was", this.#blocks.getPointer());
     // this.#blocks.setPointerToBlock(N);
-    return;
+    return N;
   }
 
   /**
    * Move the pointer to the starting GOTO block number
+   *
+   * @TODO This needs to update the pointer back to the WHILE/DO
    */
-  EndStatement(ctx: CST.EndStatementCstChildren) {
-    const _debug = this.#debug.extend(`end`);
-    const N = parseInt(getImage(ctx.LineNumber));
-    _debug("END LINE NUM", N);
-    // _debug("pointer was", this.#blocks.getPointer());
-    // this.#blocks.setPointerToBlock(N);
-    return;
+  EndStatement(ctx: CST.EndStatementCstChildren): number {
+    const _debug = this.#debug.extend(`EndStatement`);
+    const N = parseImageAsInteger(ctx.BlockNumber);
+    _debug("END%d", N);
+    if (this.#looping) {
+      this.#blocks.pointerToDoTag(N);
+    }
+    return N;
   }
 
   /**
    * Move the pointer to the GOTO block number
    */
-  GoToStatement(ctx: CST.GoToStatementCstChildren) {
-    const _debug = this.#debug.extend(`goto`);
-    const N = parseInt(getImage(ctx.LineNumber));
+  GoToStatement(ctx: CST.GoToStatementCstChildren): number {
+    const _debug = this.#debug.extend(`GoToStatement`);
+    const N = parseImageAsInteger(ctx.BlockNumber);
     _debug("pointer was", this.#blocks.getPointer());
-    this.#blocks.setPointerToBlock(N);
-    return;
+    this.#blocks.pointerToBlock(N);
+    return N;
   }
 
   /**
    * Update a macro variable regsiter with a value
    */
   VariableAssignment(ctx: CST.VariableAssignmentCstChildren) {
+    const _debug = this.#debug.extend(`VariableAssignment`);
     let valueToAssign: number = NaN;
-    const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
+    const macroVar = this.VariableLiteral(getChildren(ctx.VariableLiteral));
 
     if (ctx?.Expression) {
       valueToAssign = this.Expression(ctx.Expression[0].children);
     }
 
-    // const currentValue = this.#memory.read(macroVar.register);
+    const currentValue = this.#memory.read(macroVar.register);
 
     this.#memory.write(macroVar.register, valueToAssign);
+    _debug("#%d was %d is %d", macroVar.register, currentValue, valueToAssign);
   }
 
   /**
    * This addition -> multiplication -> atomic
    */
   Expression(ctx: CST.ExpressionCstChildren): number {
-    return this.AdditionExpression(ctx.AdditionExpression[0].children);
+    const children = getChildren(ctx.AdditionExpression);
+    return this.AdditionExpression(children);
   }
 
   /**
@@ -355,7 +343,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    * `Plus` and `Minus` tokens have the category `AdditionOperator`
    */
   AdditionExpression(ctx: CST.AdditionExpressionCstChildren): number {
-    let lhsValue: number = this.MultiplicationExpression(ctx.lhs[0].children);
+    let lhsValue: number = this.MultiplicationExpression(getChildren(ctx.lhs));
 
     // "rhs" key may be undefined as the grammar defines it as
     // optional(MANY === zero or more).
@@ -388,7 +376,7 @@ export class MacroInterpreter extends BaseCstVisitor {
   MultiplicationExpression(
     ctx: CST.MultiplicationExpressionCstChildren
   ): number {
-    let lhsValue: number = this.AtomicExpression(ctx.lhs[0].children);
+    let lhsValue: number = this.AtomicExpression(getChildren(ctx.lhs));
 
     // "rhs" key may be undefined as the grammar defines it as optional (MANY === zero or more).
     if (ctx?.rhs) {
@@ -418,35 +406,36 @@ export class MacroInterpreter extends BaseCstVisitor {
 
   AtomicExpression(ctx: CST.AtomicExpressionCstChildren): number {
     if (ctx?.NumericLiteral) {
-      return this.NumericLiteral(ctx.NumericLiteral[0].children);
+      return this.NumericLiteral(getChildren(ctx.NumericLiteral));
     }
     if (ctx?.VariableLiteral) {
-      const macroVar = this.VariableLiteral(ctx.VariableLiteral[0].children);
+      const macroVar = this.VariableLiteral(getChildren(ctx.VariableLiteral));
       return macroVar.value;
     }
     if (ctx?.FunctionExpression) {
-      return this.FunctionExpression(ctx.FunctionExpression[0].children);
+      return this.FunctionExpression(getChildren(ctx.FunctionExpression));
     }
     if (ctx?.BracketExpression) {
-      return this.BracketExpression(ctx.BracketExpression[0].children);
+      return this.BracketExpression(getChildren(ctx.BracketExpression));
     }
     return NaN;
-    // throw new Error("AtomicExpression did not eval to a number");
   }
 
   /**
    * Ignore the brackets and return the children
    */
   BracketExpression(ctx: CST.BracketExpressionCstChildren) {
-    return this.Expression(ctx.Expression[0].children);
+    const children = getChildren(ctx.Expression);
+    return this.Expression(children);
   }
 
   /**
    * Evaluate one of the built-in functions
    */
   FunctionExpression(ctx: CST.FunctionExpressionCstChildren): number {
-    const func = ctx?.FunctionName[0].image as MacroBuiltinFunctionNames;
-    const value = this.BracketExpression(ctx?.BracketExpression[0].children);
+    const func = getImage(ctx?.FunctionName) as MacroBuiltinFunctionNames;
+    const children = getChildren(ctx?.BracketExpression);
+    const value = this.BracketExpression(children);
 
     if (typeof value !== "number") {
       throw new Error(
@@ -465,10 +454,10 @@ export class MacroInterpreter extends BaseCstVisitor {
     const boolExpr = this.AtomicBooleanExpression(children);
     if (boolExpr === true) {
       if (ctx?.VariableAssignment) {
-        return this.VariableAssignment(ctx.VariableAssignment[0].children);
+        return this.VariableAssignment(getChildren(ctx.VariableAssignment));
       }
       if (ctx?.GoToStatement) {
-        this.GoToStatement(ctx.GoToStatement[0].children);
+        this.GoToStatement(getChildren(ctx.GoToStatement));
       }
     }
   }
@@ -479,37 +468,39 @@ export class MacroInterpreter extends BaseCstVisitor {
   AtomicBooleanExpression(
     ctx: CST.AtomicBooleanExpressionCstChildren
   ): boolean {
+    const _debug = this.#debug.extend("AtomicBooleanExpression");
     const children = getChildren(ctx?.BooleanExpression);
     const lhs = this.AtomicExpression(children.lhs[0].children);
     const rhs = this.AtomicExpression(children.rhs[0].children);
     const operator = unbox(children.BooleanOperator);
-    this.#debug.extend("AtomicBooleanExpression")(lhs, operator.image, rhs);
 
+    let result = false;
     if (tokenMatcher(operator, EqualTo)) {
-      return lhs === rhs;
+      result = lhs === rhs;
     } else if (tokenMatcher(operator, NotEqualTo)) {
-      return lhs !== rhs;
+      result = lhs !== rhs;
     } else if (tokenMatcher(operator, GreaterThan)) {
-      return lhs > rhs;
+      result = lhs > rhs;
     } else if (tokenMatcher(operator, GreaterThanOrEq)) {
-      return lhs >= rhs;
+      result = lhs >= rhs;
     } else if (tokenMatcher(operator, LessThan)) {
-      return lhs < rhs;
+      result = lhs < rhs;
     } else if (tokenMatcher(operator, LessThanOrEq)) {
-      return lhs <= rhs;
-    } else {
-      return false;
+      result = lhs <= rhs;
     }
+    _debug(lhs, operator.image, rhs);
+    _debug(result);
+    return result;
   }
 
   /**
    * Interpret the conditional of a While loop
    */
   WhileLoopPredicate(ctx: CST.AtomicWhileExpressionCstChildren) {
-    const _debug = this.#debug.extend("AtomicWhileExpression");
+    const _debug = this.#debug.extend("WhileLoopPredicate");
     const children = getChildren(ctx.AtomicBooleanExpression);
     const result = this.AtomicBooleanExpression(children);
-    _debug("result", result);
+    _debug(result);
     return result;
   }
 
@@ -518,21 +509,16 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   WhileDoExpression(ctx: CST.WhileDoExpressionCstChildren) {
     const _debug = this.#debug.extend("WhileDoExpression");
+    const children = getChildren(ctx.WhileLoopPredicate);
+    this.#looping = this.WhileLoopPredicate(children);
 
-    const maxIterations = 10;
-    const boolExpr = (): boolean => {
-      return this.WhileLoopPredicate(ctx.WhileLoopPredicate[0]?.children);
-    };
-    _debug("starting loop");
-    let condition = boolExpr();
-    let iterations = 0;
-
-    do {
-      const children = getChildren(ctx.Lines);
-      this.Lines(children); // @todo 👈🏻  THIS IS GOING RECURSIVE!!
-      iterations++;
-      condition = boolExpr();
-    } while (condition && iterations < maxIterations);
+    if (this.#looping) {
+      _debug("continuing...");
+    } else {
+      _debug("jumping to END");
+      const n = this.DoStatement(getChildren(ctx.DoStatement));
+      this.#blocks.pointerToEndTag(n);
+    }
   }
 
   /**
@@ -596,9 +582,8 @@ export class MacroInterpreter extends BaseCstVisitor {
    * The main handler for processing the lines into blocks
    */
   #processBlocks(opts: { maxIterations: number }) {
-    const _debug = this.#debug.extend("_processBlocks");
+    const _debug = this.#debug.extend("#processBlocks");
 
-    _debug("Interpreting Blocks");
     _debug("Block Count:", this.#blocks.length);
 
     const maxIterations = opts.maxIterations ?? 1_000_000;
@@ -611,7 +596,7 @@ export class MacroInterpreter extends BaseCstVisitor {
         );
       }
       const currentPointer = this.#blocks.getPointer();
-      const block = this.#blocks.read() as IBlock;
+      const block = this.#blocks.read();
 
       if (block?.line) {
         const visited = this.Line(block.line);
@@ -623,6 +608,10 @@ export class MacroInterpreter extends BaseCstVisitor {
         void this.#events.emit("LINE", visited);
       }
 
+      if (this.#looping) {
+        // this.#blocks.pointerToDoTag()
+      }
+
       // Check if the pointer was externally modified
       if (this.#blocks.getPointer() === currentPointer) {
         this.#blocks.advancePointer();
@@ -630,33 +619,5 @@ export class MacroInterpreter extends BaseCstVisitor {
       }
       iterations++;
     } while (!this.#blocks.pointerAtEnd);
-  }
-
-  /**
-   * Given a LinesCstNode, traverse it and flatten into a list
-   */
-  #flattenLines(
-    ctx: CST.LinesCstChildren,
-    collector: CST.LineCstNode[] = []
-  ): CST.LineCstNode[] {
-    this.#debug("FLATTENING");
-
-    const temp = [...collector];
-    if (ctx?.Line) {
-      const lines = ctx.Line;
-      for (const line of lines) {
-        // if (line.name === "") console.log(line);
-        const whileExpr = unbox(line.children?.WhileDoExpression);
-        const linesNode = unbox(whileExpr?.children?.Lines);
-        if (linesNode?.children.Line) {
-          return this.#flattenLines(linesNode.children, temp);
-        }
-      }
-    }
-    return temp;
-  }
-
-  #blockScan() {
-    //
   }
 }

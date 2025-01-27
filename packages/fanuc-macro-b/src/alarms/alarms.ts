@@ -1,4 +1,4 @@
-// THIS FILE WAS GENERATED @ 2025-01-22T23:28:14.141Z
+// THIS FILE WAS GENERATED @ 2025-01-25T15:13:12.669Z
 
 /**
  * Base error class for {@link MacroRuntime} to throw machine alarms.

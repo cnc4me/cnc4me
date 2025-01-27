@@ -46,6 +46,20 @@ export function getImage(token: IToken | IToken[]): string {
 }
 
 /**
+ * Return the image property parsed as an integer
+ */
+export function parseImageAsInteger(token: IToken | IToken[]): number {
+  return parseInt(unbox(token).image);
+}
+
+/**
+ * Return the image property parsed as a float
+ */
+export function parseImageAsFloat(token: IToken | IToken[]): number {
+  return parseFloat(unbox(token).image);
+}
+
+/**
  * Pad an integer with zeros
  */
 export function zeroPad(input: number | string, length = 4) {
@@ -56,7 +70,7 @@ export function zeroPad(input: number | string, length = 4) {
  * Trim the first alphabetic character from a string
  */
 export function stripFirstChar(address: string): string {
-  return address.replace(/^[A-Z]/, "");
+  return address.replace(/^[a-zA-Z]/, "");
 }
 
 /**

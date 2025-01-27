@@ -34,7 +34,6 @@ import { FANUC_MACRO_B_GRAMMAR } from "./MacroGrammar";
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
 
 const $d = Debuggers.Parser;
-const $t = $d.extend("token");
 
 export class MacroParserRuleTree extends CstParser {
   /**
@@ -46,7 +45,8 @@ export class MacroParserRuleTree extends CstParser {
     token: S,
     options?: ConsumeMethodOpts
   ) {
-    $t(token.tokenTypeIdx, token.name);
+    const _debug = $d.extend("consume");
+    _debug(String(token.tokenTypeIdx).padStart(2, " "), token.name);
     return super.CONSUME(token, options) as Omit<IToken, "tokenType"> & {
       tokenType: S;
     };
@@ -77,8 +77,8 @@ export class MacroParserRuleTree extends CstParser {
     this.OPTION(() => this.CONSUME(Newline));
     this.SUBRULE(this.ProgramNumberLine);
     this.SUBRULE(this.Lines);
-    this.OPTION2(() => this.CONSUME2(Newline));
-    this.CONSUME2(Percent);
+    this.OPTION1(() => this.CONSUME1(Newline));
+    this.CONSUME1(Percent);
   });
 
   /**
@@ -131,8 +131,8 @@ export class MacroParserRuleTree extends CstParser {
    */
   DoStatement = this.RULE("DoStatement", () => {
     this.CONSUME(Do);
-    this.OPTIONAL_WHITESPACE();
-    this.CONSUME(Integer, { LABEL: "LineNumber" });
+    this.OPTION(() => this.CONSUME(WhiteSpace));
+    this.CONSUME(Integer, { LABEL: "BlockNumber" });
   });
 
   /**
@@ -140,8 +140,8 @@ export class MacroParserRuleTree extends CstParser {
    */
   EndStatement = this.RULE("EndStatement", () => {
     this.CONSUME(End);
-    this.OPTIONAL_WHITESPACE();
-    this.CONSUME(Integer, { LABEL: "LineNumber" });
+    this.OPTION(() => this.CONSUME(WhiteSpace));
+    this.CONSUME(Integer, { LABEL: "BlockNumber" });
   });
 
   /**
@@ -149,8 +149,8 @@ export class MacroParserRuleTree extends CstParser {
    */
   GoToStatement = this.RULE("GoToStatement", () => {
     this.CONSUME(GotoLine);
-    this.OPTIONAL_WHITESPACE();
-    this.CONSUME(Integer, { LABEL: "LineNumber" });
+    this.OPTION(() => this.CONSUME(WhiteSpace));
+    this.CONSUME(Integer, { LABEL: "BlockNumber" });
   });
 
   /**
@@ -163,11 +163,17 @@ export class MacroParserRuleTree extends CstParser {
       {
         ALT: () => {
           this.CONSUME(Then);
-          this.SUBRULE(this.VariableAssignment);
+          this.OPTION(() => {
+            this.CONSUME(WhiteSpace);
+            this.SUBRULE(this.VariableAssignment);
+          });
         }
       },
       {
-        ALT: () => this.SUBRULE(this.GoToStatement)
+        ALT: () => {
+          this.OPTION1(() => this.CONSUME1(WhiteSpace));
+          this.SUBRULE(this.GoToStatement);
+        }
       }
     ]);
   });
@@ -178,7 +184,7 @@ export class MacroParserRuleTree extends CstParser {
   WhileDoExpression = this.RULE("WhileDoExpression", () => {
     this.SUBRULE(this.AtomicWhileExpression, { LABEL: "WhileLoopPredicate" });
     this.SUBRULE(this.DoStatement);
-    this.SUBRULE1(this.Lines);
+    // this.SUBRULE1(this.Lines); // @TODO 👈🏻 This is causing recursion...
     // this.SUBRULE2(this.EndStatement);
   });
 
@@ -346,8 +352,4 @@ export class MacroParserRuleTree extends CstParser {
     this.CONSUME(Percent);
     this.OPTION(() => this.CONSUME(Newline));
   });
-
-  OPTIONAL_WHITESPACE() {
-    this.OPTION(() => this.CONSUME(WhiteSpace));
-  }
 }

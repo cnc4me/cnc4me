@@ -1,17 +1,17 @@
-import gcodes from "./Reference.gcodes.json";
-import mcodes from "./Reference.mcodes.json";
+import gcodes from "./gcodes.json";
+import mcodes from "./mcodes.json";
 
 export const G = gcodes as GCode[];
 export const M = mcodes as MCode[];
 
-export const Reference = {
+export const CodeExplain = {
   /**
-   * Find the Reference Data for a G Code
+   * Find the explination for a G Code
    */
   G: (code: string) => G.find(g => g.code === code),
 
   /**
-   * Find the Reference Data for an M Code
+   * Find the explination for an M Code
    */
   M: (code: string) => M.find(m => m.code === code)
 };

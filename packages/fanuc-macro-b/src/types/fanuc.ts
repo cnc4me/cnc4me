@@ -70,7 +70,7 @@ export interface DoStatementCstNode extends CstNode {
 export type DoStatementCstChildren = {
   Do: IToken[];
   WhiteSpace?: IToken[];
-  LineNumber: IToken[];
+  BlockNumber: IToken[];
 };
 
 export interface EndStatementCstNode extends CstNode {
@@ -81,7 +81,7 @@ export interface EndStatementCstNode extends CstNode {
 export type EndStatementCstChildren = {
   End: IToken[];
   WhiteSpace?: IToken[];
-  LineNumber: IToken[];
+  BlockNumber: IToken[];
 };
 
 export interface GoToStatementCstNode extends CstNode {
@@ -92,7 +92,7 @@ export interface GoToStatementCstNode extends CstNode {
 export type GoToStatementCstChildren = {
   GotoLine: IToken[];
   WhiteSpace?: IToken[];
-  LineNumber: IToken[];
+  BlockNumber: IToken[];
 };
 
 export interface ConditionalExpressionCstNode extends CstNode {
@@ -104,6 +104,7 @@ export type ConditionalExpressionCstChildren = {
   If: IToken[];
   AtomicBooleanExpression: AtomicBooleanExpressionCstNode[];
   Then?: IToken[];
+  WhiteSpace?: (IToken)[];
   VariableAssignment?: VariableAssignmentCstNode[];
   GoToStatement?: GoToStatementCstNode[];
 };
@@ -116,7 +117,6 @@ export interface WhileDoExpressionCstNode extends CstNode {
 export type WhileDoExpressionCstChildren = {
   WhileLoopPredicate: AtomicWhileExpressionCstNode[];
   DoStatement: DoStatementCstNode[];
-  Lines: LinesCstNode[];
 };
 
 export interface AtomicWhileExpressionCstNode extends CstNode {
