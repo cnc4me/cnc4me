@@ -97,12 +97,12 @@ export class MacroParserRuleTree extends CstParser {
   public Line = this.RULE("Line", () => {
     this.MANY(() => {
       this.OR([
-        { ALT: () => this.SUBRULE(this.ConditionalExpression) },
-        { ALT: () => this.SUBRULE(this.WhileDoExpression) },
+        { ALT: () => this.SUBRULE(this.AddressedValue) },
         { ALT: () => this.SUBRULE(this.EndStatement) },
         { ALT: () => this.SUBRULE(this.GoToStatement) },
         { ALT: () => this.SUBRULE(this.VariableAssignment) },
-        { ALT: () => this.SUBRULE(this.AddressedValue) },
+        { ALT: () => this.SUBRULE(this.ConditionalExpression) },
+        { ALT: () => this.SUBRULE(this.WhileDoExpression) },
         { ALT: () => this.SUBRULE(this.Expression) },
         { ALT: () => this.CONSUME(LineNumber) },
         { ALT: () => this.CONSUME(Mcode) },
@@ -163,10 +163,8 @@ export class MacroParserRuleTree extends CstParser {
       {
         ALT: () => {
           this.CONSUME(Then);
-          this.OPTION(() => {
-            this.CONSUME(WhiteSpace);
-            this.SUBRULE(this.VariableAssignment);
-          });
+          this.OPTION(() => this.CONSUME(WhiteSpace));
+          this.SUBRULE(this.VariableAssignment);
         }
       },
       {
