@@ -168,6 +168,14 @@ export class MacroInterpreter extends BaseCstVisitor {
       hasVariable: false
     };
 
+    if (ctx?.Comment) {
+      for (const comment of ctx.Comment) {
+        const rawComment = getImage(comment);
+        // debug(rawComment);
+        parsed.comments.push(unwrapComment(rawComment));
+      }
+    }
+
     if (ctx?.LineNumber) {
       parsed.N = this.LineNumber(ctx.LineNumber);
     }
@@ -196,12 +204,6 @@ export class MacroInterpreter extends BaseCstVisitor {
       }
     }
 
-    if (ctx?.VariableAssignment) {
-      const children = getChildren(ctx.VariableAssignment);
-      this.VariableAssignment(children);
-      parsed.hasVariable = true;
-    }
-
     if (ctx?.AddressedValue) {
       ctx.AddressedValue.forEach(({ children }) => {
         const parsedAddr = this.AddressedValue(children, parsed.gCodeMap);
@@ -215,24 +217,27 @@ export class MacroInterpreter extends BaseCstVisitor {
       this.WhileDoExpression(children);
     }
 
-    if (ctx?.GoToStatement) {
-      const children = getChildren(ctx.GoToStatement);
-      // @TODO can this simple visitors use visit() ?
-      this.GoToStatement(children);
-    }
-
     if (ctx?.ConditionalExpression) {
       const children = getChildren(ctx.ConditionalExpression);
       // @TODO can this simple visitors use visit() ?
       this.ConditionalExpression(children);
     }
 
-    if (ctx?.Comment) {
-      for (const comment of ctx.Comment) {
-        const rawComment = getImage(comment);
-        // debug(rawComment);
-        parsed.comments.push(unwrapComment(rawComment));
-      }
+    if (ctx?.GoToStatement) {
+      const children = getChildren(ctx.GoToStatement);
+      // @TODO can this simple visitors use visit() ?
+      this.GoToStatement(children);
+    }
+
+    /**
+     * THIS CANNOT COME BEFORE if `(ctx?.ConditionalExpression)`
+     * It will evaluate the VariableAssignment before the conditional...
+     * @TODO guard this better than ordering...
+     */
+    if (ctx?.VariableAssignment) {
+      const children = getChildren(ctx.VariableAssignment);
+      this.VariableAssignment(children);
+      parsed.hasVariable = true;
     }
 
     if ("G10" in parsed.gCodeMap) {
@@ -437,13 +442,17 @@ export class MacroInterpreter extends BaseCstVisitor {
   }
 
   ConditionalExpression(ctx: CST.ConditionalExpressionCstChildren) {
+    const _debug = this.#debug.extend("ConditionalExpression");
     const children = getChildren(ctx?.AtomicBooleanExpression);
     const boolExpr = this.AtomicBooleanExpression(children);
+    _debug(boolExpr);
     if (boolExpr === true) {
       if (ctx?.VariableAssignment) {
+        _debug("=> VariableAssignment");
         return this.VariableAssignment(getChildren(ctx.VariableAssignment));
       }
       if (ctx?.GoToStatement) {
+        _debug("branching with GOTO");
         this.GoToStatement(getChildren(ctx.GoToStatement));
       }
     }

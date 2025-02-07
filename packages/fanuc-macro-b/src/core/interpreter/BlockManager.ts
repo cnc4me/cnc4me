@@ -1,8 +1,6 @@
 import { BlockTrackingError } from "../../errors/interpreter";
 import { GenericPointerList } from "../../lib/GenericPointerList";
-import { extractSourceLine } from "../../utils/chevrotain";
 import { Debuggers } from "../../utils/debug";
-import { stringifyCst } from "../../utils/stringify";
 import { TrackedBlock, TrackingType } from "./TrackedBlock";
 
 import type { CST } from "../../types";
@@ -24,6 +22,9 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
     this.#debug(`resetting`);
     this.setItems([]);
     this.resetPointer();
+    this.#registry.N = [];
+    this.#registry.Do = [];
+    this.#registry.End = [];
   }
 
   /**

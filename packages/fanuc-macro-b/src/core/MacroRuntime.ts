@@ -9,7 +9,7 @@ import ProgramNumber from "../lib/ProgramNumber";
 import { SystemVariable } from "../memory";
 import { Debuggers } from "../utils/debug";
 import { FanucMacroB } from "./FanucMacroB";
-import { MacroInterpreter } from "./MacroInterpreter";
+import { MacroInterpreter } from "./interpreter/MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroMemory } from "./MacroMemory";
 import { MacroParser } from "./parser/MacroParser";
@@ -44,6 +44,20 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
 
   #machine!: CncMachine;
   #debug = Debuggers.Runtime;
+
+  static create(
+    opts?: Partial<MacroRuntimeConfig> & { loadAndActivate: string }
+  ): MacroRuntime {
+    let runtime: MacroRuntime;
+    if (opts?.loadAndActivate) {
+      const { loadAndActivate, ...runtimeOptions } = opts;
+      runtime = new MacroRuntime(runtimeOptions);
+      runtime.loadProgram(loadAndActivate, { setActive: true });
+    } else {
+      runtime = new MacroRuntime(opts);
+    }
+    return runtime;
+  }
 
   constructor(config?: Partial<MacroRuntimeConfig>) {
     this.#debug("initializing");
@@ -97,6 +111,20 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
     this.#debug("resetting");
     this.#programs = {};
     this.#fmb.reset();
+  }
+
+  configure(config?: Partial<MacroRuntimeConfig>) {
+    this.#debug("configuring");
+    if (config?.machine) {
+      this.#debug("simulating with machine");
+      this.#machine = config.machine;
+      // this.Interpreter.on("LINE", line => {
+      //   this.#machine.queueLine(line);
+      // });
+      this.#machine.onAny((event, data) => {
+        void this.#events.emit(`MACHINE:${event}`, data);
+      });
+    }
   }
 
   getErrors() {
