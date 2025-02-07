@@ -1,4 +1,4 @@
-import type { MacroBuiltinFunctionNames } from "../types";
+import type { MacroBuiltinFunctionNames } from "../../types";
 
 /**
  * These are built in language functions for Fanuc Macro B

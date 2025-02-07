@@ -1,29 +1,26 @@
 import { type IToken, tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
 
-import { INTERPRETER } from "../config";
+import { INTERPRETER } from "../../config";
 import {
   AddressedValue,
   AddressInsight,
   InsightCollection,
   MacroVariable
-} from "../lib";
-import { NcProgram } from "../lib/NcProgram";
-import { getChildren } from "../utils/chevrotain";
+} from "../../lib";
+import { NcProgram } from "../../lib/NcProgram";
+import { getChildren } from "../../utils/chevrotain";
 import {
   getImage,
   parseImageAsInteger,
   parseNumber,
   unbox,
   unwrapComment
-} from "../utils/common";
-import { Debuggers } from "../utils/debug";
-import { hasDwell, hasG10 } from "../utils/flags";
-import { BlockManager } from "./interpreter/BlockManager";
-import { TrackedBlock } from "./interpreter/TrackedBlock";
-import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./parser/MacroParser";
-import { STDLIB } from "./StandardLibrary";
+} from "../../utils/common";
+import { Debuggers } from "../../utils/debug";
+import { hasDwell, hasG10 } from "../../utils/flags";
+import { MacroMemory } from "../MacroMemory";
+import { MacroParser } from "../parser/MacroParser";
 import {
   EqualTo,
   GreaterThan,
@@ -34,7 +31,9 @@ import {
   NotEqualTo,
   Plus,
   Product
-} from "./tokens";
+} from "../tokens";
+import { BlockManager } from "./BlockManager";
+import { STDLIB } from "./StandardLibrary";
 
 import type {
   CST,
@@ -42,7 +41,7 @@ import type {
   IProgramNumberLine,
   MacroBuiltinFunctionNames,
   ValidG10OffsetGroups
-} from "../types";
+} from "../../types";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
   useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
@@ -57,21 +56,24 @@ export class MacroInterpreter extends BaseCstVisitor {
     END_OF_PROGRAM: undefined;
   };
 
-  #linesCalls = 0;
+  #memory: MacroMemory;
+  #blocks: BlockManager;
+  #insights: InsightCollection;
+
   #looping = false;
-
   #lines: IParsedLineData[] = [];
-  #blocks = new BlockManager();
-
   #debug = Debuggers.Interpreter;
-  #memory = new MacroMemory();
-  #insights = new InsightCollection();
   #events = new Emittery<typeof MacroInterpreter.EVENTS>();
 
   constructor() {
     super();
-    this.#debug("initializing & validating");
+    this.#debug("initializing");
     this.validateVisitor();
+    this.#debug("validation complete");
+    this.#memory = new MacroMemory();
+    this.#blocks = new BlockManager();
+    this.#insights = new InsightCollection();
+    this.#debug("ready");
   }
 
   /**
@@ -91,7 +93,6 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   reset() {
     this.#lines = [];
-    this.#linesCalls = 0;
     this.#blocks.reset();
     this.#memory.reset();
   }
@@ -139,27 +140,13 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   Lines(ctx: CST.LinesCstChildren): IParsedLineData[] {
     const _debug = this.#debug.extend("Lines");
-    this.#linesCalls++;
-    _debug(`[CALL ${this.#linesCalls}]`);
-
     if (ctx?.Line) {
       const lines = ctx.Line;
       for (const line of lines) {
-        const block = new TrackedBlock(line);
-        _debug("tracking", block);
-        this.#blocks.append(block);
+        this.#blocks.trackLine(line);
       }
       _debug("assembled", this.#blocks.length, "blocks");
-      if (this.#blocks.length > lines.length * 2) {
-        throw new Error(
-          `There are too many blocks something is wrong [${this.#blocks.length}B:${lines.length}L]`
-        );
-      }
-      // eslint-disable-next-line @typescript-eslint/no-unused-vars
-      this.#blocks.forEach(_item => {
-        // this.#debug(item.line);
-      });
-      this.#processBlocks({ maxIterations: 20 });
+      this.#processBlocks({ maxIterations: 1_000_000 });
     }
     return this.#lines;
   }
@@ -586,7 +573,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     _debug("Block Count:", this.#blocks.length);
 
-    const maxIterations = opts.maxIterations ?? 1_000_000;
+    const maxIterations = opts.maxIterations ?? 100;
     let iterations = 0;
     do {
       _debug(`[ITERATION ${iterations}]`);
@@ -618,6 +605,6 @@ export class MacroInterpreter extends BaseCstVisitor {
         _debug("pointer is", this.#blocks.getPointer());
       }
       iterations++;
-    } while (!this.#blocks.pointerAtEnd);
+    } while (this.#blocks.pointerCanAdvance);
   }
 }

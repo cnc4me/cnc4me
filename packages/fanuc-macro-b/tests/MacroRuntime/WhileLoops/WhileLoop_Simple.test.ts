@@ -1,6 +1,6 @@
 import { beforeEach, describe, expect, it } from "vitest";
 
-import { MacroRuntime } from "../../src";
+import { MacroRuntime } from "../../../src";
 
 const LOOPING = `%
 O0001 (True Test)
@@ -20,7 +20,7 @@ END1
 
 const runtime = new MacroRuntime();
 
-describe("Evaluating a While / Do / End", { timeout: 100 }, () => {
+describe("Evaluating a Simple While Loops", () => {
   beforeEach(() => runtime.reset());
 
   it(`skips the loop block when the condition is false`, () => {
@@ -34,6 +34,6 @@ describe("Evaluating a While / Do / End", { timeout: 100 }, () => {
     runtime.loadProgram(LOOPING, { setActive: true }).run();
 
     const res = runtime.readRegister(100);
-    expect(res, "Should be 5 after looping").toBe(6);
+    expect(res).toBe(6);
   });
 });

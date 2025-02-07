@@ -1,7 +1,7 @@
 import { range } from "../utils/common";
 import { Debuggers } from "../utils/debug";
 import { extractOffsets } from "../utils/extractOffsets";
-import { MacroInterpreter } from "./MacroInterpreter";
+import { MacroInterpreter } from "./interpreter/MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./parser/MacroParser";
 

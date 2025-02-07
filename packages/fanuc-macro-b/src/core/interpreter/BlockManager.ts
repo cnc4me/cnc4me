@@ -1,23 +1,23 @@
+import { BlockTrackingError } from "../../errors/interpreter";
 import { GenericPointerList } from "../../lib/GenericPointerList";
+import { extractSourceLine } from "../../utils/chevrotain";
 import { Debuggers } from "../../utils/debug";
+import { stringifyCst } from "../../utils/stringify";
 import { TrackedBlock, TrackingType } from "./TrackedBlock";
 
 import type { CST } from "../../types";
 
-export interface IBlock {
-  N: number;
-  DO?: number;
-  END?: number;
-  id: string;
-  line: CST.LineCstChildren;
-}
-
 export class BlockManager extends GenericPointerList<TrackedBlock> {
+  #registry: Record<Exclude<TrackingType, TrackingType.Untracked>, number[]> = {
+    [TrackingType.N]: [],
+    [TrackingType.Do]: [],
+    [TrackingType.End]: []
+  };
   #debug: debug.Debugger;
 
   constructor() {
     super();
-    this.#debug = Debuggers.Interpreter.extend("blocks");
+    this.#debug = Debuggers.Interpreter.extend("BlockManager");
   }
 
   reset() {
@@ -26,16 +26,21 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
     this.resetPointer();
   }
 
-  forEach(callback: (item: BlockManager["items"][number]) => void) {
-    for (const item of this.items) {
-      callback(item);
-    }
+  /**
+   * Track a Line of gcode as a whole block
+   *
+   * @param node - LineCstNode to be tracked
+   */
+  trackLine(node: CST.LineCstNode) {
+    const block = new TrackedBlock(node);
+    this.#recordTracking(block);
+    this.append(block);
   }
 
   pointerToBlock(N: number): void {
     this.#debug(`pointer to block ${N}`);
     const nodeIdx = this.findIndex(block => {
-      return block.tracking === TrackingType.Block && block.N === N;
+      return block.tracking === TrackingType.N && block.N === N;
     });
     if (nodeIdx < 0) {
       throw new Error(`Block ${N} not found`);
@@ -65,6 +70,26 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
     this.#updatePointer(nodeIdx);
   }
 
+  #recordTracking(block: TrackedBlock) {
+    if (block.tracking !== TrackingType.Untracked) {
+      if (this.#isRegistered(block)) {
+        throw new BlockTrackingError(block);
+      }
+      this.#registry[block.tracking].push(block.id);
+      this.#debug("registered", block.tagImage);
+    }
+  }
+
+  #isRegistered(block: TrackedBlock) {
+    if (block.tracking === TrackingType.Untracked) return false;
+    return this.#registry[block.tracking].includes(block.id);
+  }
+
+  /**
+   * Updates the internal pointer to a specific TrackedBlock instance.
+   *
+   * @param pointerIdx - The index of the block in the list to set as the new pointer.
+   */
   #updatePointer(pointerIdx: number) {
     this.setPointer(pointerIdx);
     this.#debug("pointer is", this.pointer);

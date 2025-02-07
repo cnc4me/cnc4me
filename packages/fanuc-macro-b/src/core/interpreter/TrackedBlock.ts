@@ -5,7 +5,7 @@ import type { LineCstChildren, LineCstNode } from "../../types/fanuc";
 
 export enum TrackingType {
   Untracked = "Untracked",
-  Block = "Block",
+  N = "N",
   Do = "Do",
   End = "End"
 }
@@ -15,16 +15,18 @@ export class TrackedBlock {
   id = NaN;
   tracking: TrackingType;
   line: LineCstChildren;
+  tagImage: string;
 
   constructor(node: LineCstNode) {
     this.tracking = TrackingType.Untracked;
     this.line = node.children;
+    this.tagImage = "";
 
     if (this.line?.LineNumber) {
       // N1
       const image = getImage(this.line.LineNumber);
       this.N = parseInt(image.replace("N", ""));
-      this.tracking = TrackingType.Block;
+      this.tracking = TrackingType.N;
     } else if (this.line?.WhileDoExpression) {
       // DO1
       const { WhileDoExpression } = this.line;
@@ -41,15 +43,18 @@ export class TrackedBlock {
       this.id = parseImageAsInteger(BlockNumber);
       this.tracking = TrackingType.End;
     }
+    if (this.tracking !== TrackingType.Untracked) {
+      this.tagImage = this.#writeTagImage();
+    }
   }
 
-  get tagImage(): string {
+  #writeTagImage(): string {
     const word =
-      this.tracking === TrackingType.Block //
+      this.tracking === TrackingType.N //
         ? "N"
         : this.tracking.toUpperCase();
     const num =
-      this.tracking === TrackingType.Block //
+      this.tracking === TrackingType.N //
         ? this.N
         : this.id;
     return `${word}${num}`;

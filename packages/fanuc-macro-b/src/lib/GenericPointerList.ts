@@ -10,8 +10,22 @@ export class GenericPointerList<T> {
     return this.items.length;
   }
 
+  /**
+   * Checks if the current pointer can be advanced to point to the next item in the list.
+   *
+   * @returns true if the pointer is not at the end of the list, false otherwise.
+   */
+  get pointerCanAdvance() {
+    return this.pointer !== this.items.length;
+  }
+
+  /**
+   * Checks if the current pointer has reached the end of the list.
+   *
+   * @returns true if the pointer is at the end of the list, false otherwise.
+   */
   get pointerAtEnd() {
-    return this.pointer === this.items.length;
+    return this.pointerCanAdvance === false;
   }
 
   /**
@@ -38,20 +52,34 @@ export class GenericPointerList<T> {
     this.pointer = 0;
   }
 
+  fromPointer() {
+    return this.items.slice(this.pointer);
+  }
+
   getPointer(): number {
     return this.pointer;
   }
 
-  setPointer(index: number | "head") {
-    if (index === "head") {
-      this.resetPointer();
-    } else if (index >= 0 && index < this.items.length) {
+  /**
+   * Sets the pointer to a specific index in the list.
+   * If the index is out of bounds, an Error is thrown.
+   *
+   * @param index The new index for the pointer.
+   * @throws {Error} If the new index is out of bounds.
+   */
+  setPointer(index: number) {
+    if (index >= 0 && index < this.items.length) {
       this.pointer = index;
     } else {
       throw new Error("Pointer out of bounds");
     }
   }
 
+  /**
+   * Advances the pointer to the next item in the list.
+   *
+   * @throws {Error} If the pointer is already at the end of the list.
+   */
   advancePointer() {
     if (this.pointerAtEnd) {
       throw new Error(`Cannot advance pointer. Pointer at end.`);
@@ -59,11 +87,23 @@ export class GenericPointerList<T> {
     this.pointer = this.pointer + 1;
   }
 
-  findIndex(comparator: (item: T) => boolean) {
-    return this.items.findIndex(item => comparator(item));
+  find(predicate: (item: T) => boolean) {
+    return this.items.find(predicate);
   }
 
-  fromPointer() {
-    return this.items.slice(this.pointer);
+  filter(predicate: (item: T) => boolean) {
+    return this.items.filter(predicate);
+  }
+
+  findIndex(predicate: (item: T) => boolean) {
+    return this.items.findIndex(predicate);
+  }
+
+  forEach(predicate: (item: T) => void) {
+    return this.items.forEach(predicate);
+  }
+
+  map<R>(predicate: (item: T) => R) {
+    return this.items.map(predicate);
   }
 }
