@@ -1,14 +1,47 @@
 import React, { useCallback, useEffect, useRef } from "react";
 
-import type { CanvasProps, DrawProp } from "../types";
+import { drawGrid } from "../grid";
 
-function Canvas(props: CanvasProps & DrawProp) {
+import type { AppState } from "./reducer";
+
+export type Dimensions = { width: number; height: number };
+
+export type CanvasProps = {
+  state: AppState;
+  onCanvasResize: (dims: Dimensions) => void;
+} & React.DetailedHTMLProps<
+  React.CanvasHTMLAttributes<HTMLCanvasElement>,
+  HTMLCanvasElement
+>;
+
+const Canvas: React.FC<CanvasProps> = ({
+  state,
+  onCanvasResize,
+  ...rest // This needs to be only CanvasHTMLAttributes
+}) => {
   const canvasRef = useRef<HTMLCanvasElement>(null);
-  const { draw, ...rest } = props;
+
+  const draw = (ctx: CanvasRenderingContext2D) => {
+    // const { width, height } = ctx.canvas;
+    // ctx.clearRect(0, 0, width, height);
+    // console.log("drawing", shapes);
+    state.shapes.forEach(shape => {
+      if (shape.type === "line") {
+        const { x1, y1, x2, y2, color, strokeWidth } = shape;
+        ctx.beginPath();
+        ctx.moveTo(x1, y1);
+        ctx.lineTo(x2, y2);
+        ctx.strokeStyle = color ?? state.lineColor;
+        ctx.lineWidth = strokeWidth ?? state.lineWidth;
+        ctx.stroke();
+      }
+    });
+  };
+
+  const griddyDraw = (ctx: CanvasRenderingContext2D) => draw(drawGrid(ctx));
 
   // Resize canvas dimensions based on its parent's size
   const resizeCanvas = useCallback(() => {
-    console.log("resizing");
     const canvas = canvasRef.current;
     if (!canvas) return;
 
@@ -21,11 +54,22 @@ function Canvas(props: CanvasProps & DrawProp) {
     canvas.width = clientWidth;
     canvas.height = clientHeight;
 
+    onCanvasResize({ width: clientWidth, height: clientHeight });
+
     const context = canvas.getContext("2d");
-    if (context && draw) {
-      draw(context);
+    if (context) {
+      griddyDraw(context);
     }
-  }, [draw]);
+  }, [canvasRef]);
+
+  useEffect(() => {
+    const canvas = canvasRef.current;
+    if (!canvas) return;
+    const context = canvas.getContext("2d");
+    if (context) {
+      griddyDraw(context);
+    }
+  }, [state.shapes]);
 
   // Hook to handle window resize
   useEffect(() => {
@@ -47,6 +91,6 @@ function Canvas(props: CanvasProps & DrawProp) {
       {...rest}
     />
   );
-}
+};
 
 export default Canvas;

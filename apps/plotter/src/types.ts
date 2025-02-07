@@ -6,13 +6,21 @@ export { CssColor };
 
 export type ShapeType = "line" | "arc";
 
-export interface Shape {
-  type: ShapeType;
-  color?: string;
-  strokeWidth?: number;
-}
+export type IPosition = {
+  x: number;
+  y: number;
+};
 
-export interface Line extends Shape {
+export type IStroke = {
+  color: string;
+  strokeWidth: number;
+};
+
+export type IShape = IStroke & {
+  type: ShapeType;
+};
+
+export interface Line extends Partial<IShape> {
   type: "line";
   x1: number;
   y1: number;
@@ -20,7 +28,7 @@ export interface Line extends Shape {
   y2: number;
 }
 
-export interface Arc extends Shape {
+export interface Arc extends Partial<IShape> {
   type: "arc";
   cx: number;
   cy: number;
@@ -30,12 +38,3 @@ export interface Arc extends Shape {
 }
 
 export type Shapes = Line | Arc;
-
-export type CanvasProps = React.DetailedHTMLProps<
-  React.CanvasHTMLAttributes<HTMLCanvasElement>,
-  HTMLCanvasElement
->;
-
-export type DrawProp = {
-  draw(ctx: CanvasRenderingContext2D): void;
-};
