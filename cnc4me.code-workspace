@@ -2,7 +2,7 @@
   "folders": [
     {
       "name": "🚀 @cnc4me/macro-playground",
-      "path": "apps/website"
+      "path": "apps/macro-playground"
     },
     {
       "name": "🚀 @cnc4me/macro-parser-explorer",
@@ -11,6 +11,10 @@
     {
       "name": "🚀 @cnc4me/spindle-demo",
       "path": "apps/spindle-demo"
+    },
+    {
+      "name": "🚀 @cnc4me/plotter",
+      "path": "apps/plotter"
     },
     {
       "name": "📦 @cnc4me/chevrotain-live",

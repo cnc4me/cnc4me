@@ -66,8 +66,8 @@ export default [
   },
   {
     files: [
-      "./apps/macro-website/**/*.ts",
-      "./apps/macro-website/**/*.tsx",
+      "./apps/**/*.ts",
+      "./apps/**/*.tsx",
       "./apps/macro-website/next.config.js",
     ],
     languageOptions: {

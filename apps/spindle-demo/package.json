@@ -22,13 +22,13 @@
     "@emotion/styled": "^11.14.0",
     "@fontsource/roboto": "^5.1.0",
     "@mui/material": "^6.2.1",
-    "react": "^18.3.1",
-    "react-dom": "^18.3.1"
+    "react": "catalog:",
+    "react-dom": "catalog:"
   },
   "devDependencies": {
     "@types/node": "catalog:",
-    "@types/react": "^18.3.12",
-    "@types/react-dom": "^18.3.1",
+    "@types/react": "catalog:",
+    "@types/react-dom": "catalog:",
     "@vitejs/plugin-react": "^4.3.4",
     "eslint": "catalog:",
     "eslint-config-prettier": "catalog:",
