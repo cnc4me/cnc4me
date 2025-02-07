@@ -18,9 +18,9 @@ WHILE [#200 LE 5] DO1
 END1
 %`;
 
-const runtime = new MacroRuntime();
-
 describe("Evaluating a Simple While Loops", () => {
+  const runtime = new MacroRuntime();
+
   beforeEach(() => runtime.reset());
 
   it(`skips the loop block when the condition is false`, () => {

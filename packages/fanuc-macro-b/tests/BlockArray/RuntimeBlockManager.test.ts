@@ -1,6 +1,8 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { MacroRuntime } from "../../src";
+
+import type { BlockManager } from "../../src/core/interpreter/BlockManager";
 
 const code = `%
 O1234 (code1)
@@ -15,12 +17,14 @@ N8 G54
 N9 M30
 %`;
 
-const runtime = new MacroRuntime();
-
 describe("interpreting expressions with block numbers", () => {
-  runtime.loadProgram(code, { setActive: true }).run();
+  const runtime = MacroRuntime.create({ loadAndActivate: code });
+  let blocks: BlockManager;
 
-  const blocks = runtime.Interpreter.getBlocks();
+  beforeAll(() => {
+    runtime.loadProgram(code, { setActive: true }).run();
+    blocks = runtime.Interpreter.getBlocks();
+  });
 
   beforeEach(() => blocks.resetPointer());
 
@@ -48,7 +52,7 @@ describe("interpreting expressions with block numbers", () => {
   });
 
   it("can find and start from a block number", () => {
-    blocks.setPointerToBlock(5);
+    blocks.pointerToBlock(5);
     const set = blocks.fromPointer();
 
     expect(set).toHaveLength(6);
@@ -60,15 +64,15 @@ describe("interpreting expressions with block numbers", () => {
   });
 
   it("can jump to block numbers", () => {
-    blocks.setPointerToBlock(5);
+    blocks.pointerToBlock(5);
     expect(blocks.read()).toMatchObject({ N: 5 });
 
-    blocks.setPointerToBlock(8);
+    blocks.pointerToBlock(8);
     expect(blocks.read()).toMatchObject({ N: 8 });
   });
 
   it("can read and advance the pointer", () => {
-    blocks.setPointerToBlock(7);
+    blocks.pointerToBlock(7);
 
     expect(blocks.fromPointer()).toHaveLength(4);
 
@@ -84,7 +88,7 @@ describe("interpreting expressions with block numbers", () => {
 
   it("fails to set the pointer to an invalid block number", () => {
     expect(() => {
-      blocks.setPointerToBlock(100000);
+      blocks.pointerToBlock(100000);
     }).toThrowError();
   });
 

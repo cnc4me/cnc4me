@@ -1,4 +1,4 @@
-import { beforeEach, describe, expect, it } from "vitest";
+import { beforeAll, beforeEach, describe, expect, it } from "vitest";
 
 import { MacroRuntime } from "../../src";
 
@@ -22,21 +22,13 @@ G91 G28 Z0.
 M30
 %`;
 
-describe("running a simple program with the MacroRuntime", () => {
-  const runtime = new MacroRuntime();
+const runtime = MacroRuntime.create({ loadAndActivate: SAMPLE_CODE });
 
-  runtime.loadProgram(SAMPLE_CODE, { setActive: true });
+describe("running a simple program with the MacroRuntime", () => {
+  // beforeAll(() => runtime.run());
 
   it("loads and activates a program", () => {
     expect(runtime.getProgramCount()).toBe(1);
     expect(runtime.getActiveProgramNumber()).toBe(TEST_PROGRAM_NUMBER);
   });
-
-  it.skip("can get the lines of the activate program", () => {
-    const prg = runtime.getActiveProgram();
-
-    expect(prg).toBe(TEST_PROGRAM_NUMBER);
-  });
-
-  it("loads and automatically activates a program", () => {});
 });

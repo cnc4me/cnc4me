@@ -22,11 +22,12 @@
   },
   "include": [
     "vite.config.*",
+    "vitest.config.*",
     "src/**/*.ts",
     "src/lib/*.json",
     "demo",
     "tests",
-    "scripts"
+    "scripts",
   ],
   "exclude": [
     "dist",

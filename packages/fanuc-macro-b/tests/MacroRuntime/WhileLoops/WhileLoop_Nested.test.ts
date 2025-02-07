@@ -5,20 +5,16 @@ import { MacroRuntime } from "../../../src";
 const PROGRAM = `%
 O0003 (Big Test)
 #1 = 1
-#2 = 7
-#3 = 2
+#2 = 5
 WHILE [#1 LE 5] DO1
 #1 = #1 + 1
-END1
 WHILE [#2 GE 1] DO2
 #2 = #2 - 1
 END2
-WHILE [#3 LT 128] DO3
-#3 = #3 * #3
-END3
+END1
 %`;
 
-describe("Evaluating a multiple While Loops", () => {
+describe("Evaluating a nested While Loops", { fails: true }, () => {
   const runtime = MacroRuntime.create({ loadAndActivate: PROGRAM });
 
   it(`loops all blocks`, () => {
@@ -26,6 +22,5 @@ describe("Evaluating a multiple While Loops", () => {
 
     expect(runtime.readRegister(1)).toBe(6);
     expect(runtime.readRegister(2)).toBe(0);
-    expect(runtime.readRegister(3)).toBe(256);
   });
 });

@@ -28,9 +28,8 @@ M30
 
 const runtime = new MacroRuntime();
 
-beforeEach(() => runtime.reset());
-
 describe.skip("Loading multiple programs with the MacroRuntime", () => {
+  beforeEach(() => runtime.reset());
   runtime.loadProgram(multiProgram);
 
   it("loads multiple programs in one file", () => {

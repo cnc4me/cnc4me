@@ -34,9 +34,9 @@ N7 #3 = 5
 M30
 %`;
 
-const runtime = new MacroRuntime();
-
 describe("Evaluating GOTO n", () => {
+  const runtime = new MacroRuntime();
+
   beforeEach(() => runtime.reset());
 
   it(`jumps execution to the specified block number`, () => {

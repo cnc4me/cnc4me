@@ -1,4 +1,3 @@
-/// <reference types="vitest" />
 import { readdirSync } from "node:fs";
 import path from "node:path";
 
@@ -34,17 +33,6 @@ export default defineConfig({
         assetFileNames: `[name].[ext]`
       },
       external: [...EXCLUDE.scripts, ...EXCLUDE.tests]
-    }
-  },
-  test: {
-    setupFiles: ["./tests/_vitest/setup.ts"],
-    coverage: {
-      provider: "v8"
-    },
-    poolOptions: {
-      forks: {
-        singleFork: true
-      }
     }
   },
   plugins: [
