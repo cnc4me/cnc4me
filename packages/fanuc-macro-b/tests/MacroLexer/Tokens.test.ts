@@ -1,7 +1,5 @@
 import { describe, expect, it } from "vitest";
-
 import { MacroLexer } from "../../src";
-import { FANUC_MACRO_B_FNS } from "../../src/lib";
 import {
   Address,
   BuiltinFunction,
@@ -25,9 +23,9 @@ import {
   Product,
   Then,
   Var,
-  While
+  While,
 } from "../../src/core/tokens";
-
+import { FANUC_MACRO_B_FNS } from "../../src/lib";
 import type { TokenType } from "chevrotain";
 
 const BASIC_CASES: TestCaseData[] = [
@@ -39,7 +37,7 @@ const BASIC_CASES: TestCaseData[] = [
   ["/", Divide],
   ["*", Product],
   ["#", Var],
-  ["=", Equals]
+  ["=", Equals],
 ];
 
 const KEYWORD_CASES: TestCaseData[] = [
@@ -54,22 +52,22 @@ const KEYWORD_CASES: TestCaseData[] = [
   ["LT", LessThan],
   ["LE", LessThanOrEq],
   ["GT", GreaterThan],
-  ["GE", GreaterThanOrEq]
+  ["GE", GreaterThanOrEq],
 ];
 
 const ADDRESS_CASES = "ABCDEFHIJKLPQRSTUVWXYZ" // Missing G,M,N,O on purpose, they are reserved
   .split("")
-  .map(ltr => [ltr, Address]) as TestCaseData[];
+  .map((ltr) => [ltr, Address]) as TestCaseData[];
 
 const FUNCTION_CASES = FANUC_MACRO_B_FNS.map(
-  fn => [fn, BuiltinFunction] as TestCaseData
+  (fn) => [fn, BuiltinFunction] as TestCaseData,
 );
 
 const TEST_GROUPS: [label: string, cases: TestCaseData[]][] = [
   ["basic", BASIC_CASES],
   ["address", ADDRESS_CASES],
   ["function", FUNCTION_CASES],
-  ["keyword", KEYWORD_CASES]
+  ["keyword", KEYWORD_CASES],
 ];
 
 const lexer = new MacroLexer();

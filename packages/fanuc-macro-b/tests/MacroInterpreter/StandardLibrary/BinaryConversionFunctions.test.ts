@@ -4,7 +4,6 @@
  */
 
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../../src";
 
 const BIN_TEST_CASES: TestCases = [
@@ -16,7 +15,7 @@ const BIN_TEST_CASES: TestCases = [
   [`BIN[5]`, 101],
   [`BIN[22]`, 10110],
   [`BIN[121]`, 1111001],
-  [`BIN[999]`, 1111100111]
+  [`BIN[999]`, 1111100111],
 ];
 
 const BCD_TEST_CASES: TestCases = [
@@ -28,7 +27,7 @@ const BCD_TEST_CASES: TestCases = [
   [`BCD[101]`, 5],
   [`BCD[22]`, 10110],
   [`BCD[121]`, 1111001],
-  [`BCD[999]`, 1111100111]
+  [`BCD[999]`, 1111100111],
 ];
 
 describe("Interpreting BuiltinFunctions", () => {

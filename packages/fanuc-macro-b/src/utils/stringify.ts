@@ -1,8 +1,7 @@
 import { getChildren } from "./chevrotain";
 import { box } from "./common";
-
-import type { OneOrMany } from "../types/generics";
 import type { CstChildrenDictionary, IToken } from "chevrotain";
+import type { OneOrMany } from "../types/generics";
 
 /**
  * Given a CstChildrenDictionary object, this function iterates over all of its keys.

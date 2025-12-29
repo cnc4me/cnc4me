@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { MacroLexer } from "../../src";
 import { ProgramNumber } from "../../src/core/tokens";
 
@@ -10,8 +9,8 @@ describe.each([
   ["O01"],
   ["O001"],
   ["O0001"],
-  ["O9999"] //
-] as const)(`tokenizing program numbers`, prgNum => {
+  ["O9999"], //
+] as const)(`tokenizing program numbers`, (prgNum) => {
   it(`correctly identifies "${prgNum}"`, () => {
     const tokens = lexer.tokenize(prgNum);
 

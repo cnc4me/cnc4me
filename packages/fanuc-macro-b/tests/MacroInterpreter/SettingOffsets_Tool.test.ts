@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../src";
 import { MemoryConstants } from "../../src/memory";
 
@@ -30,7 +29,7 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     expect(result).toMatchObject({
       L: MemoryConstants.OFFSET_GROUPS.TOOL.LENGTH,
       P: 5,
-      R: 6.5132
+      R: 6.5132,
     });
   });
 
@@ -41,7 +40,7 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     expect(result).toMatchObject({
       L: MemoryConstants.OFFSET_GROUPS.TOOL.LENGTH_COMP,
       P: 156,
-      R: 0.002
+      R: 0.002,
     });
   });
 
@@ -52,7 +51,7 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     expect(result).toMatchObject({
       L: MemoryConstants.OFFSET_GROUPS.TOOL.DIAMETER,
       P: 33,
-      R: 0.375
+      R: 0.375,
     });
   });
 
@@ -63,7 +62,7 @@ describe("testing the FanucMacroB#evalG10() method for extracting Tool Offsets",
     expect(result).toMatchObject({
       L: MemoryConstants.OFFSET_GROUPS.TOOL.DIAMETER_COMP,
       P: 298,
-      R: -0.0012
+      R: -0.0012,
     });
   });
 });

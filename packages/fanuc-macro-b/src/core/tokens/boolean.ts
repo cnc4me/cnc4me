@@ -1,64 +1,63 @@
 import { Address } from "./addresses";
-import { createCategory, Keyword } from "./token.utils";
-import { createToken } from "./token.utils";
+import { createCategory, createToken, Keyword } from "./token.utils";
 
 export const BooleanOperator = createCategory("BooleanOperator");
 
 const sharedConfig = {
   longer_alt: Address,
-  categories: [BooleanOperator, Keyword]
+  categories: [BooleanOperator, Keyword],
 };
 
 export const EqualTo = createToken({
   name: "EqualTo",
   pattern: /EQ/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const NotEqualTo = createToken({
   name: "NotEqualTo",
   pattern: /NE/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const LessThan = createToken({
   name: "LessThan",
   pattern: /LT/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const LessThanOrEq = createToken({
   name: "LessThanOrEq",
   pattern: /LE/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const GreaterThan = createToken({
   name: "GreaterThan",
   pattern: /GT/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const GreaterThanOrEq = createToken({
   name: "GreaterThanOrEq",
   pattern: /GE/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const Or = createToken({
   name: "Or",
   pattern: /OR/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const And = createToken({
   name: "And",
   pattern: /AND/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const XOr = createToken({
   name: "XOr",
   pattern: /XOR/,
-  ...sharedConfig
+  ...sharedConfig,
 });

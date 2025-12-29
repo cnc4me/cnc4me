@@ -1,7 +1,4 @@
-/* eslint-disable @typescript-eslint/no-explicit-any */
-/* eslint-disable @typescript-eslint/no-empty-object-type */
 import "@vitest/expect";
-
 import type { TokenType } from "chevrotain";
 
 interface CustomMatchers<R = unknown> {
@@ -9,7 +6,5 @@ interface CustomMatchers<R = unknown> {
 }
 
 declare module "vitest" {
-  /* @eslint-disable-line prettier/prettier */
-  interface Assertion<T = any> extends CustomMatchers<T> {}
-  interface AsymmetricMatchersContaining extends CustomMatchers {}
+  interface Matchers<T = any> extends CustomMatchers<T> {}
 }

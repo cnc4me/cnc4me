@@ -1,36 +1,35 @@
-import { Keyword } from "./token.utils";
-import { createToken } from "./token.utils";
+import { createToken, Keyword } from "./token.utils";
 
 export const Address = createToken({
   name: "Address",
-  pattern: /[A-Z]/
+  pattern: /[A-Z]/,
 });
 
 const sharedConfig = {
   longer_alt: Address,
-  categories: Keyword
+  categories: Keyword,
 };
 
 export const Gcode = createToken({
   name: "G_Code",
   pattern: /G\d+(\.\d+)?/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const Mcode = createToken({
   name: "M_Code",
   pattern: /M\d+(\.)?/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const LineNumber = createToken({
   name: "LineNumber",
   pattern: /N\d+/,
-  ...sharedConfig
+  ...sharedConfig,
 });
 
 export const ProgramNumber = createToken({
   name: "ProgramNumber",
   pattern: /O\d+/,
-  ...sharedConfig
+  ...sharedConfig,
 });

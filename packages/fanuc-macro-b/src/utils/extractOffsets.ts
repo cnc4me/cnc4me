@@ -1,5 +1,4 @@
 import { hasG10 } from "./flags";
-
 import type { IParsedLineData, PossibleG10LineValues } from "../types";
 
 /**
@@ -16,7 +15,7 @@ export function extractOffsets(line: IParsedLineData): PossibleG10LineValues {
   return addresses.reduce((values, currAddr) => {
     return {
       ...values,
-      [currAddr.prefix]: currAddr.value
+      [currAddr.prefix]: currAddr.value,
     };
   }, {} as PossibleG10LineValues);
 }

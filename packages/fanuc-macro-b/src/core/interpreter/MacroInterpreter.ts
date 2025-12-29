@@ -1,12 +1,11 @@
-import { type IToken, tokenMatcher } from "chevrotain";
+import { tokenMatcher } from "chevrotain";
 import Emittery from "emittery";
-
 import { INTERPRETER } from "../../config";
 import {
   AddressedValue,
   AddressInsight,
   InsightCollection,
-  MacroVariable
+  MacroVariable,
 } from "../../lib";
 import { NcProgram } from "../../lib/NcProgram";
 import { getChildren } from "../../utils/chevrotain";
@@ -15,7 +14,7 @@ import {
   parseImageAsInteger,
   parseNumber,
   unbox,
-  unwrapComment
+  unwrapComment,
 } from "../../utils/common";
 import { Debuggers } from "../../utils/debug";
 import { hasDwell, hasG10 } from "../../utils/flags";
@@ -30,21 +29,21 @@ import {
   Modulus,
   NotEqualTo,
   Plus,
-  Product
+  Product,
 } from "../tokens";
 import { BlockManager } from "./BlockManager";
 import { STDLIB } from "./StandardLibrary";
-
+import type { IToken } from "chevrotain";
 import type {
   CST,
   IParsedLineData,
   IProgramNumberLine,
   MacroBuiltinFunctionNames,
-  ValidG10OffsetGroups
+  ValidG10OffsetGroups,
 } from "../../types";
 
 const BaseCstVisitor = MacroParser.getBaseCstVisitor({
-  useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS
+  useConstructorDefaults: INTERPRETER.USE_CONSTRUCTOR_WITH_DEFAULTS,
 });
 
 /**
@@ -114,7 +113,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   Program(ctx: CST.ProgramCstChildren): NcProgram {
     const { number, title } = this.ProgramNumberLine(
-      getChildren(ctx.ProgramNumberLine)
+      getChildren(ctx.ProgramNumberLine),
     );
     const lines = getChildren(ctx.Lines);
     const parsedLines = this.Lines(lines);
@@ -165,7 +164,7 @@ export class MacroInterpreter extends BaseCstVisitor {
       gCodeMap: {},
       mCodeMap: {},
       addressMap: {},
-      hasVariable: false
+      hasVariable: false,
     };
 
     if (ctx?.Comment) {
@@ -186,7 +185,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.G_Code) {
-      ctx.G_Code.forEach(token => {
+      ctx.G_Code.forEach((token) => {
         // debug(getImage(token));
         parsed.gCodes.push(token);
         parsed.gCodeMap[token.image] = true;
@@ -194,7 +193,7 @@ export class MacroInterpreter extends BaseCstVisitor {
     }
 
     if (ctx?.M_Code) {
-      ctx.M_Code.forEach(token => {
+      ctx.M_Code.forEach((token) => {
         // debug(getImage(token));
         parsed.mCodes.push(token);
         parsed.mCodeMap[token.image] = true;
@@ -250,7 +249,7 @@ export class MacroInterpreter extends BaseCstVisitor {
         X: addressMap["X"],
         Y: addressMap["Y"],
         Z: addressMap["Z"],
-        B: addressMap["B"]
+        B: addressMap["B"],
       });
     }
 
@@ -366,7 +365,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    * `Product` and `Divide` tokens have the category `MultiplicationOperator`
    */
   MultiplicationExpression(
-    ctx: CST.MultiplicationExpressionCstChildren
+    ctx: CST.MultiplicationExpressionCstChildren,
   ): number {
     let lhsValue: number = this.AtomicExpression(getChildren(ctx.lhs));
 
@@ -431,7 +430,7 @@ export class MacroInterpreter extends BaseCstVisitor {
 
     if (typeof value !== "number") {
       throw new Error(
-        `Evaluting the input for ${func} failed to produce a number.`
+        `Evaluting the input for ${func} failed to produce a number.`,
         // `There was an error evaluting the BracketExpression for the input of ${func}.`
       );
     }
@@ -462,7 +461,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    * Evaluate a BooleanExpression into a boolean value
    */
   AtomicBooleanExpression(
-    ctx: CST.AtomicBooleanExpressionCstChildren
+    ctx: CST.AtomicBooleanExpressionCstChildren,
   ): boolean {
     const _debug = this.#debug.extend("AtomicBooleanExpression");
     const children = getChildren(ctx?.BooleanExpression);
@@ -522,7 +521,7 @@ export class MacroInterpreter extends BaseCstVisitor {
    */
   AddressedValue(
     ctx: CST.AddressedValueCstChildren,
-    gCodeFlags: Record<string, boolean> = {}
+    gCodeFlags: Record<string, boolean> = {},
   ) {
     const address = new AddressedValue(ctx);
     const insight = new AddressInsight(address);
@@ -588,7 +587,7 @@ export class MacroInterpreter extends BaseCstVisitor {
       _debug(`[ITERATION ${iterations}]`);
       if (iterations > maxIterations) {
         throw new Error(
-          `Max iterations (${maxIterations}) reached. Possible infinte loop.`
+          `Max iterations (${maxIterations}) reached. Possible infinte loop.`,
         );
       }
       const currentPointer = this.#blocks.getPointer();

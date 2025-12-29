@@ -1,6 +1,5 @@
 import { readdirSync } from "node:fs";
 import path from "node:path";
-
 import define from "rollup-plugin-define";
 import { defineConfig } from "vite";
 import dts from "vite-plugin-dts";
@@ -9,17 +8,17 @@ const testsDir = path.join(__dirname, "tests");
 const scriptDir = path.join(__dirname, "scripts");
 
 const EXCLUDE = {
-  scripts: readdirSync(scriptDir).map(filename =>
-    path.join(scriptDir, filename)
+  scripts: readdirSync(scriptDir).map((filename) =>
+    path.join(scriptDir, filename),
   ),
-  tests: readdirSync(testsDir).map(filename => path.join(testsDir, filename))
+  tests: readdirSync(testsDir).map((filename) => path.join(testsDir, filename)),
 };
 
 export default defineConfig({
   root: ".",
   esbuild: {
     minifyIdentifiers: false,
-    keepNames: true
+    keepNames: true,
   },
   build: {
     outDir: "./dist",
@@ -30,17 +29,17 @@ export default defineConfig({
         format: "es",
         entryFileNames: `[name].js`,
         chunkFileNames: `[name].js`,
-        assetFileNames: `[name].[ext]`
+        assetFileNames: `[name].[ext]`,
       },
-      external: [...EXCLUDE.scripts, ...EXCLUDE.tests]
-    }
+      external: [...EXCLUDE.scripts, ...EXCLUDE.tests],
+    },
   },
   plugins: [
     // nodeExternals(),
     define({
       replacements: {
-        "process.env.NODE_ENV": `"production"`
-      }
+        "process.env.NODE_ENV": `"production"`,
+      },
     }),
     dts({
       rollupTypes: true,
@@ -48,8 +47,8 @@ export default defineConfig({
       exclude: [
         "vite.config.mts", //
         "src/lib/xstate",
-        ...Object.keys(EXCLUDE)
-      ]
-    })
-  ]
+        ...Object.keys(EXCLUDE),
+      ],
+    }),
+  ],
 });

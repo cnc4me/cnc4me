@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../../src";
 
 const SQUARE_ROOT_TWO = Math.sqrt(2);
@@ -48,7 +47,7 @@ const TEST_CASES: TestCases = [
   // Inverse Tangent
   [`ATAN[1]`, 45],
   [`ATAN[${1 / SQUARE_ROOT_THREE}]`, 30],
-  [`ATAN[${SQUARE_ROOT_THREE}]`, 60]
+  [`ATAN[${SQUARE_ROOT_THREE}]`, 60],
 ];
 
 describe("Interpreting BuiltinFunctions", () => {

@@ -1,5 +1,4 @@
 import { max, min, unique } from "radashi";
-
 import type { IBaseInsight } from "../types";
 import type { AddressedValue } from "./AddressedValue";
 
@@ -50,7 +49,7 @@ export class InsightCollection {
    * Get insight values, by context
    */
   values(ctx: string): number[] {
-    return this.get(ctx).map(insight => insight.value);
+    return this.get(ctx).map((insight) => insight.value);
   }
 
   /**

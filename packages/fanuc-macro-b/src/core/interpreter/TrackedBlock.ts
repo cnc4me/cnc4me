@@ -1,13 +1,12 @@
 import { getChildren } from "../../utils/chevrotain";
 import { getImage, parseImageAsInteger } from "../../utils/common";
-
 import type { LineCstChildren, LineCstNode } from "../../types/fanuc";
 
 export enum TrackingType {
   Untracked = "Untracked",
   N = "N",
   Do = "Do",
-  End = "End"
+  End = "End",
 }
 
 export class TrackedBlock {

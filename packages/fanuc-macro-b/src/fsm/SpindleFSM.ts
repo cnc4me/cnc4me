@@ -1,8 +1,7 @@
 import Emittery from "emittery";
-import { Callback, StateMachine, t } from "typescript-fsm";
-
+import { StateMachine, t } from "typescript-fsm";
 import { Debuggers } from "../utils/debug";
-
+import type { Callback } from "typescript-fsm";
 import type { DeepPartial } from "../types/generics";
 
 enum States {
@@ -10,7 +9,7 @@ enum States {
   Fault = "Fault",
   Running = "Running",
   Accelerating = "Accelerating",
-  Decelerating = "Decelerating"
+  Decelerating = "Decelerating",
 }
 
 enum Events {
@@ -18,7 +17,7 @@ enum Events {
   Forward = "Forward",
   Reverse = "Reverse",
   FaultOccurred = "FaultOccurred",
-  ReachedTargetRPM = "ReachedTargetRPM"
+  ReachedTargetRPM = "ReachedTargetRPM",
 }
 
 /**
@@ -28,7 +27,7 @@ enum Events {
 enum Rotation {
   Forward = 1,
   Stopped = 0,
-  Reverse = -1
+  Reverse = -1,
 }
 
 export interface SpindleFsmConfig {
@@ -67,7 +66,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   constructor(config?: DeepPartial<SpindleFsmConfig>) {
     super(States.Idle, [], {
       // This overrides console.error
-      error: (msg: string) => void this.#events.emit("FAULT", msg)
+      error: (msg: string) => void this.#events.emit("FAULT", msg),
     });
 
     $d(`initializing`);
@@ -76,12 +75,12 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
       throwOnFault: config?.throwOnFault ?? false,
       rpm: {
         max: config?.rpm?.max ?? 8000,
-        onExceedMaxRPM: config?.rpm?.onExceedMaxRPM ?? "fault"
+        onExceedMaxRPM: config?.rpm?.onExceedMaxRPM ?? "fault",
       },
       acceleration: {
         simulate: config?.acceleration?.simulate ?? true,
-        timeout: config?.acceleration?.timeout ?? 250
-      }
+        timeout: config?.acceleration?.timeout ?? 250,
+      },
     };
 
     $d(this.#config);
@@ -96,18 +95,23 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     /* eslint-disable prettier/prettier */
     this.addTransitions([
       //    fromState        event                toState          callback
-      t(s.Idle,         e.Forward,          s.Accelerating, this.#onForward),
-      t(s.Idle,         e.Reverse,          s.Accelerating, this.#onReverse),
-      t(s.Running,      e.Forward,          s.Accelerating, this.#onForward), // Change speed or direction
-      t(s.Running,      e.Reverse,          s.Accelerating, this.#onReverse), // Change speed or direction
-      t(s.Accelerating, e.ReachedTargetRPM, s.Running,      this.#onReachedTargetRPM),
-      t(s.Running,      e.Stop,             s.Decelerating, this.#stopping),
-      t(s.Accelerating, e.Stop,             s.Decelerating, this.#stopping),
-      t(s.Decelerating, e.ReachedTargetRPM, s.Idle,         this.#onStopped),
-      t(s.Accelerating, e.FaultOccurred,    s.Fault,        this.#onFault),
-      t(s.Running,      e.FaultOccurred,    s.Fault,        this.#onFault),
-      t(s.Decelerating, e.FaultOccurred,    s.Fault,        this.#onFault),
-      t(s.Idle,         e.FaultOccurred,    s.Fault,        this.#onFault),
+      t(s.Idle, e.Forward, s.Accelerating, this.#onForward),
+      t(s.Idle, e.Reverse, s.Accelerating, this.#onReverse),
+      t(s.Running, e.Forward, s.Accelerating, this.#onForward), // Change speed or direction
+      t(s.Running, e.Reverse, s.Accelerating, this.#onReverse), // Change speed or direction
+      t(
+        s.Accelerating,
+        e.ReachedTargetRPM,
+        s.Running,
+        this.#onReachedTargetRPM,
+      ),
+      t(s.Running, e.Stop, s.Decelerating, this.#stopping),
+      t(s.Accelerating, e.Stop, s.Decelerating, this.#stopping),
+      t(s.Decelerating, e.ReachedTargetRPM, s.Idle, this.#onStopped),
+      t(s.Accelerating, e.FaultOccurred, s.Fault, this.#onFault),
+      t(s.Running, e.FaultOccurred, s.Fault, this.#onFault),
+      t(s.Decelerating, e.FaultOccurred, s.Fault, this.#onFault),
+      t(s.Idle, e.FaultOccurred, s.Fault, this.#onFault),
     ]);
     $d("State", this.getState());
     // end-constructor
@@ -135,17 +139,16 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     return {
       currentRPM: this.#rpm.current,
       directon: this.direction,
-    }
+    };
   }
 
   get simulation() {
-    return this.#config.acceleration.simulate ;
+    return this.#config.acceleration.simulate;
   }
 
   set simulation(state: boolean) {
     this.#config.acceleration.simulate = state;
   }
-
 
   /**
    * Generic state testing method
@@ -160,7 +163,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   async M3(targetRPM: number) {
     $d("Command:", "M3");
     await this.#setTargetRPM(targetRPM);
-    await this.dispatch(Events.Forward).catch(err => {
+    await this.dispatch(Events.Forward).catch((err) => {
       if (this.#config.throwOnFault) throw err;
     });
   }
@@ -171,7 +174,7 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
   async M4(targetRPM: number) {
     $d("Command:", "M4");
     await this.#setTargetRPM(targetRPM);
-    await this.dispatch(Events.Reverse).catch(err => {
+    await this.dispatch(Events.Reverse).catch((err) => {
       if (this.#config.throwOnFault) throw err;
     });
   }
@@ -233,18 +236,17 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     void this.#events.emit("FAULT", fault);
   }
 
-
   async #setTargetRPM(targetRPM: number) {
     $d(targetRPM, "RPM commanded");
     if (targetRPM < this.#config.rpm.max) {
       this.#rpm.target = targetRPM;
-      $d(this.#rpm.target, "target set")
+      $d(this.#rpm.target, "target set");
       return;
     }
     if (this.#config.rpm.onExceedMaxRPM === "fault") {
       await this.dispatch(
         Events.FaultOccurred,
-        "Commanded RPM exceeds maximum RPM"
+        "Commanded RPM exceeds maximum RPM",
       );
     } else {
       this.#rpm.target = this.#config.rpm.max;
@@ -252,15 +254,15 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     }
     void this.#events.emit("RPM_CHANGED", {
       current: this.rpms,
-      target: this.#rpm.target
-    })
+      target: this.#rpm.target,
+    });
   }
 
   async #simulateAcceleration() {
     if (this.#config.acceleration.simulate) {
       $d(`simulating acceleration`);
       await this.#dwell();
-      $d("target RPM reached")
+      $d("target RPM reached");
     }
   }
 
@@ -268,12 +270,12 @@ export class SpindleFSM extends StateMachine<States, Events, ICallbacks> {
     if (this.#config.acceleration.simulate) {
       $d(`simulating deceleration`);
       await this.#dwell();
-      $d("target RPM reached")
+      $d("target RPM reached");
     }
   }
 
   async #dwell() {
-    return await new Promise(resolve => {
+    return await new Promise((resolve) => {
       setTimeout(resolve, this.#config.acceleration.timeout);
     });
   }

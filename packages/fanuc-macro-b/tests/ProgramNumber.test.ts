@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import ProgramNumber from "../src/lib/ProgramNumber";
 
 describe("running a simple program with the MacroRuntime", () => {

@@ -1,18 +1,17 @@
 /* eslint-disable @typescript-eslint/require-await */
 import { createActor } from "xstate";
-
 import { AxisFSM } from "./Axis.xstate";
 
 async function slowly(functions: (() => Promise<void>)[], delay: number) {
   for (const func of functions) {
-    await new Promise(resolve => {
+    await new Promise((resolve) => {
       void func().then(() => setTimeout(resolve, delay));
     });
   }
 }
 
 const axis = createActor(AxisFSM, {
-  input: { label: "X", limits: 1200 }
+  input: { label: "X", limits: 1200 },
 });
 
 axis.on("overtravel", ({ message }) => {
@@ -27,7 +26,7 @@ axis.on("in_motion", ({ from, to }) => {
   console.log("\tin_motion from", from, "to", to);
 });
 
-axis.subscribe(snapshot => {
+axis.subscribe((snapshot) => {
   // console.dir(snapshot.context, { depth: 1 });
   console.log("\n============", snapshot.value, "============");
   console.log("target position:", snapshot.context.pTarget);

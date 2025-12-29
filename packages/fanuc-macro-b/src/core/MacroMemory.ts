@@ -1,10 +1,9 @@
 import Emittery from "emittery";
 import { match, Pattern } from "ts-pattern";
-
-import { MemoryConstants, RegisterMap, type SystemVariable } from "../memory";
+import { MemoryConstants, RegisterMap } from "../memory";
 import { range } from "../utils/common";
 import { Debuggers } from "../utils/debug";
-
+import type { SystemVariable } from "../memory";
 import type {
   G10ToolOffsets,
   G10WorkOffsets,
@@ -12,7 +11,7 @@ import type {
   ToolOffsetArray,
   ToolOffsetDict,
   WorkCoordinateArray,
-  WorkCoordinateRecord
+  WorkCoordinateRecord,
 } from "../types";
 
 const { WORK, TOOL } = MemoryConstants.OFFSET_GROUPS;
@@ -31,7 +30,7 @@ export class MacroMemory {
     ...range(100, 199),
     ...range(500, 9999),
     ...range(3000, 4999),
-    ...range(5000, 14000)
+    ...range(5000, 14000),
   ];
 
   #vars: VariableDictionary = {};
@@ -72,7 +71,7 @@ export class MacroMemory {
    */
   write(
     register: number | SystemVariable,
-    value: number
+    value: number,
   ): Omit<MacroMemoryEvents["REGISTER_UPDATE"], "register"> {
     const previous = this.#read(register);
 
@@ -169,7 +168,7 @@ export class MacroMemory {
       length: this.getToolLength(toolNum),
       diameter: this.getToolDiameter(toolNum),
       lengthComp: this.getToolLengthComp(toolNum),
-      diameterComp: this.getToolDiameterComp(toolNum)
+      diameterComp: this.getToolDiameterComp(toolNum),
     };
   }
 
@@ -337,14 +336,14 @@ export class MacroMemory {
    * Get set axis locations for a given work offset
    */
   #getCommonWorkOffsetWorkCoordinateRecord(
-    commonOffset: number
+    commonOffset: number,
   ): WorkCoordinateRecord {
     return ["X", "Y", "Z", "B"].reduce((locations, axis) => {
       const reg = RegisterMap.WorkOffset(commonOffset - 53, axis);
 
       return {
         ...locations,
-        [axis]: this.#vars[reg]
+        [axis]: this.#vars[reg],
         // [axis]: this.read(reg)
       };
     }, {} as WorkCoordinateRecord);
@@ -359,7 +358,7 @@ export class MacroMemory {
 
       return {
         ...locations,
-        [axis]: this.#vars[reg]
+        [axis]: this.#vars[reg],
         // [axis]: this.read(reg)
       };
     }, {} as WorkCoordinateRecord);

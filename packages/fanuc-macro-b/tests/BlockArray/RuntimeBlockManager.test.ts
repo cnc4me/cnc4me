@@ -1,7 +1,5 @@
 import { beforeAll, beforeEach, describe, expect, it } from "vitest";
-
 import { MacroRuntime } from "../../src";
-
 import type { BlockManager } from "../../src/core/interpreter/BlockManager";
 
 const code = `%

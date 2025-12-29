@@ -1,8 +1,7 @@
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../../src";
 
-const E_TO_THE_POWER = (x: number) => Math.pow(Math.E, x);
+const E_TO_THE_POWER = (x: number) => Math.E ** x;
 
 const TEST_CASES: TestCases = [
   // Absolute Value
@@ -39,7 +38,7 @@ const TEST_CASES: TestCases = [
   [`SQRT[36]`, 6],
   [`SQRT[49]`, 7],
   [`SQRT[144]`, 12],
-  [`SQRT[1580049]`, 1257]
+  [`SQRT[1580049]`, 1257],
 ];
 
 describe("Interpreting BuiltinFunctions", () => {

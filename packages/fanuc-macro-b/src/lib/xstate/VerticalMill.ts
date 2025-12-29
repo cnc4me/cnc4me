@@ -1,7 +1,5 @@
 import { assign, createActor, sendTo, setup } from "xstate";
-
 import { AxisFSM } from "./Axis.xstate";
-
 import type { ActorRefLike } from "xstate";
 
 export const VerticalMill = setup({
@@ -24,8 +22,8 @@ export const VerticalMill = setup({
       sendTo("X", { type: "reset" });
       sendTo("Y", { type: "reset" });
       sendTo("Z", { type: "reset" });
-    }
-  }
+    },
+  },
 }).createMachine({
   /** @xstate-layout N4IgpgJg5mDOIC5QDUwCcAuBLAxgQwBsBZLAggOiwgLAGI04wMBtABgF1FQAHAe1izZeAOy4gAHogCMATgAsAJnIB2KQA5lAVgA0IAJ6IFANlYrNAZikLNAXxu7UmXIRJlK1OgFteANzAB9DF5-PgEhYTZOJBBQwSwRMUkEKTllc3INHX1pBTVyW3sQR2x8YlIKDDQ8PwIsYSh6RhYOMVjwxMQZBXS1GVYja10DBHNjcgVWSxS1BWVUuTsHdBKXcvJK6rBa+sa8HAALEP44kUjW4-bopPMB8nNNGXMtIcQ5Vhlxyal7qWVrY36iyKy2cZTcGxqdQavmWVRq-ggTDAOAwkDO0Ta8VEV063QyfQGWWGciMeWUX2ms1S5nkQOKoNcFDqRzCWNo3j8gWCmNOLQxFyxHRGinIrCkmkJLwQcgeKgpchmczStMK9NKjPIMMwcK2jVgTHRPAFCRxyWpGWe2WlpLlUwVVOVCyBwl4iPg0TVqzI51ZJtASQAtEYpUG6SD1WsqDQfSdsf7pMo+uQZGo5E8iYhLEZxhYpKwSZo5PJEwUlk4I+CddsoDHLvGEBYlIXSZbiQo5Mnc-mjIXiyqyyswUzhCzY7XBabFFLFKZlGojGnE2oZmorKXgeWvRQtRCtuO-RJpN90vdHq3XiTO5Zu73Uiq7EA */
   id: "VerticalMill",
@@ -37,39 +35,39 @@ export const VerticalMill = setup({
   context: ({ spawn }) => ({
     X: spawn("X", { input: { label: "X", limits: 500 } }),
     Y: spawn("Y", { input: { label: "Y", limits: 500 } }),
-    Z: spawn("Z", { input: { label: "Z", limits: 500 } })
+    Z: spawn("Z", { input: { label: "Z", limits: 500 } }),
   }),
 
   states: {
     idle: {
       on: {
         reset: {
-          reenter: true
+          reenter: true,
         },
         position_to: {
           target: "traveling",
           description: "The axis was commanded a new position.",
           actions: ({ event }) => {
             console.log(event);
-          }
-        }
+          },
+        },
       },
-      description: "The axis is not moving and is ready to receive commands."
+      description: "The axis is not moving and is ready to receive commands.",
     },
 
     traveling: {
       on: {
         reset: {
-          target: "idle"
+          target: "idle",
         },
         reach_position: {
-          target: "in_position"
+          target: "in_position",
         },
         overtravel_detected: {
-          target: "overtravel"
-        }
+          target: "overtravel",
+        },
       },
-      description: "The axis is currently moving towards a target position."
+      description: "The axis is currently moving towards a target position.",
     },
 
     in_position: {
@@ -77,21 +75,21 @@ export const VerticalMill = setup({
       on: {
         position_to: {
           target: "traveling",
-          description: "Move to a new position."
-        }
+          description: "Move to a new position.",
+        },
       },
-      description: "The axis has reached the target position."
+      description: "The axis has reached the target position.",
     },
 
     overtravel: {
       on: {
         reset: {
-          target: "idle"
-        }
+          target: "idle",
+        },
       },
-      description: "The axis has moved beyond its safe travel limits."
-    }
-  }
+      description: "The axis has moved beyond its safe travel limits.",
+    },
+  },
 });
 
 type AxisVector =

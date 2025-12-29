@@ -1,5 +1,4 @@
 import { Chance } from "chance";
-
 import type { WorkCoordinateRecord } from "../../src";
 
 const chance = Chance();
@@ -17,5 +16,5 @@ export const getRandomAxisLocations = (): WorkCoordinateRecord => ({
   X: rX(),
   Y: rY(),
   Z: rZ(),
-  B: rB()
+  B: rB(),
 });

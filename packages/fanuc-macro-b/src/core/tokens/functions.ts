@@ -1,5 +1,4 @@
-import { Keyword } from "./token.utils";
-import { createToken } from "./token.utils";
+import { createToken, Keyword } from "./token.utils";
 
 export const FANUC_MACRO_B_FNS = [
   "ABS",
@@ -16,13 +15,13 @@ export const FANUC_MACRO_B_FNS = [
   "ROUND",
   "SIN",
   "SQRT",
-  "TAN"
+  "TAN",
 ] as const;
 
 export const BuiltinFunction = createToken({
   name: "BuiltinFunction",
   pattern: new RegExp(FANUC_MACRO_B_FNS.join("|")),
-  categories: Keyword
+  categories: Keyword,
 });
 
 export type MacroBuiltinFunctionNames = (typeof FANUC_MACRO_B_FNS)[number];

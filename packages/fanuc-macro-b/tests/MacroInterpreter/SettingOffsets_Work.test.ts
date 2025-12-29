@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../src";
 
 /**
@@ -29,7 +28,7 @@ describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
       X: 7.5,
       Y: 21.5189,
       Z: 3.0025,
-      B: 270
+      B: 270,
     });
   });
 
@@ -43,7 +42,7 @@ describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
       X: -1.2365,
       Y: 2.3584,
       Z: 9.3201,
-      B: 63.5
+      B: 63.5,
     });
   });
 
@@ -57,7 +56,7 @@ describe("use FanucMacroB#evalG10() to extract Work Offsets", () => {
       X: 5.0023,
       Y: 12.3225,
       Z: 5.5201,
-      B: 90.0
+      B: 90.0,
     });
   });
 });

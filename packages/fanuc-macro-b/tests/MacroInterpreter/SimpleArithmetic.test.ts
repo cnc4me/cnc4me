@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../src";
 
 const MATCH_PRECISION = 6;
@@ -15,7 +14,7 @@ const TEST_CASES: Record<string, [expr: string, answer: number][]> = {
     ["2      +      2", 4],
     ["    5+   5  ", 10],
     ["321+0.123", 321.123],
-    [".1+.2", 0.3]
+    [".1+.2", 0.3],
   ],
   Subtraction: [
     [`2-1`, 1],
@@ -24,7 +23,7 @@ const TEST_CASES: Record<string, [expr: string, answer: number][]> = {
     [`100 - 50`, 50],
     [`54.321 - .321`, 54],
     [`0.2 - 0.1`, 0.1],
-    [`10000000 - .1`, 9999999.9]
+    [`10000000 - .1`, 9999999.9],
   ],
   Multiplication: [
     [`2*2`, 4],
@@ -32,7 +31,7 @@ const TEST_CASES: Record<string, [expr: string, answer: number][]> = {
     [`8*8`, 64],
     [`16 * 16`, 256],
     [`1*2*3*4*5`, 120],
-    [`1234 * 0`, 0]
+    [`1234 * 0`, 0],
   ],
   Division: [
     [`2/2`, 1],
@@ -40,7 +39,7 @@ const TEST_CASES: Record<string, [expr: string, answer: number][]> = {
     [`32/4`, 8],
     [`666 / 333`, 2],
     [`10 / 0.5`, 20],
-    [`0.1 / 0.2`, 0.5]
+    [`0.1 / 0.2`, 0.5],
   ],
   Modulus: [
     [`10 MOD 10`, 0],
@@ -66,23 +65,21 @@ const TEST_CASES: Record<string, [expr: string, answer: number][]> = {
     [`0 MOD -5`, 0],
 
     // Large numbers with small modulus
-    [`10000000 MOD 7`, 3]
-  ]
+    [`10000000 MOD 7`, 3],
+  ],
 };
 
 const fmb = new FanucMacroB();
 
-describe.each(Object.keys(TEST_CASES))(
-  "Interpreting %s Expressions",
-  testGroup => {
-    it.each(TEST_CASES[testGroup])(
-      `parsing '%s' should equal '%s'`,
-      (expr, answer) => {
-        const { error, result } = fmb.evalExpr(expr);
+describe.each(
+  Object.keys(TEST_CASES),
+)("Interpreting %s Expressions", (testGroup) => {
+  it.each(
+    TEST_CASES[testGroup],
+  )(`parsing '%s' should equal '%s'`, (expr, answer) => {
+    const { error, result } = fmb.evalExpr(expr);
 
-        expect(error).toBeFalsy();
-        expect(result).toBeCloseTo(answer, MATCH_PRECISION);
-      }
-    );
-  }
-);
+    expect(error).toBeFalsy();
+    expect(result).toBeCloseTo(answer, MATCH_PRECISION);
+  });
+});

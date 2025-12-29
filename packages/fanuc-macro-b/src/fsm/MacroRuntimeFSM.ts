@@ -1,7 +1,5 @@
 import { StateMachine, t } from "typescript-fsm";
-
 import { Debuggers } from "../utils/debug";
-
 import type { Callback } from "typescript-fsm";
 
 export enum States {
@@ -9,7 +7,7 @@ export enum States {
   error = "error",
   stopped = "stopped",
   paused = "paused",
-  running = "running"
+  running = "running",
 }
 type StateName = keyof typeof States;
 
@@ -20,7 +18,7 @@ export enum Events {
   resume = "resume",
   reset = "reset",
   finish = "finish",
-  error = "error"
+  error = "error",
 }
 
 const $d = Debuggers.Runtime;
@@ -38,7 +36,7 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     onRunning: () => {},
     onPaused: () => {},
     onError: () => {},
-    onFinished: () => {}
+    onFinished: () => {},
   };
 
   constructor(callbacks?: Partial<StateHandlerMap<StateName>>) {
@@ -50,13 +48,13 @@ export class MacroRuntimeFSM extends StateMachine<States, Events> {
     /* eslint-disable prettier/prettier */
     const transitions = [
       // fromState  event     toState      callback
-      t(s.stopped, e.start,  s.running,  () => this.callbacks.onRunning()),
-      t(s.error,   e.reset,  s.stopped,  () => this.callbacks.onStopped()),
-      t(s.running, e.pause,  s.paused,   () => this.callbacks.onPaused()),
-      t(s.paused,  e.resume, s.running,  () => this.callbacks.onRunning()),
-      t(s.running, e.stop,   s.stopped,  () => this.callbacks.onStopped()),
-      t(s.running, e.error,  s.error,    () => this.callbacks.onError()),
-      t(s.running, e.finish, s.finished, () => this.callbacks.onFinished())
+      t(s.stopped, e.start, s.running, () => this.callbacks.onRunning()),
+      t(s.error, e.reset, s.stopped, () => this.callbacks.onStopped()),
+      t(s.running, e.pause, s.paused, () => this.callbacks.onPaused()),
+      t(s.paused, e.resume, s.running, () => this.callbacks.onRunning()),
+      t(s.running, e.stop, s.stopped, () => this.callbacks.onStopped()),
+      t(s.running, e.error, s.error, () => this.callbacks.onError()),
+      t(s.running, e.finish, s.finished, () => this.callbacks.onFinished()),
     ];
     /* eslint-enable prettier/prettier */
 

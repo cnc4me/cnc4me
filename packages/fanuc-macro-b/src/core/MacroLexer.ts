@@ -1,11 +1,9 @@
 import { Lexer } from "chevrotain";
-
 import { InputUndefined, LexingError } from "../errors/lexer";
 import { Debuggers } from "../utils/debug";
 import { FANUC_MACRO_B_GRAMMAR } from "./parser/MacroGrammar";
-
-import type { ErrorProducer } from "../types";
 import type { ILexerDefinitionError, ILexingResult, IToken } from "chevrotain";
+import type { ErrorProducer } from "../types";
 
 export class MacroLexer implements ErrorProducer<LexingError> {
   #instance: Lexer;
@@ -18,7 +16,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
     this.#result = {
       tokens: [],
       errors: [],
-      groups: {}
+      groups: {},
     };
   }
 
@@ -55,7 +53,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
   }
 
   getErrors(): LexingError[] {
-    return this.#result.errors.map(err => new LexingError(err));
+    return this.#result.errors.map((err) => new LexingError(err));
   }
 
   reset(): void {
@@ -63,7 +61,7 @@ export class MacroLexer implements ErrorProducer<LexingError> {
     this.#result = {
       tokens: [],
       errors: [],
-      groups: {}
+      groups: {},
     };
   }
 }

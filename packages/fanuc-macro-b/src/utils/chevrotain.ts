@@ -1,7 +1,5 @@
-import { type CstChildrenDictionary, CstNode, type IToken } from "chevrotain";
-
 import { unbox } from "./common";
-
+import type { CstChildrenDictionary, CstNode } from "chevrotain";
 import type { OneOrMany } from "../types/generics";
 
 /**
@@ -9,7 +7,7 @@ import type { OneOrMany } from "../types/generics";
  */
 export function getChild<T extends CstNode, M extends keyof T["children"]>(
   ctx: T,
-  childNode: M
+  childNode: M,
 ) {
   const node = getChildren(ctx);
   return node[childNode];
@@ -25,7 +23,7 @@ export function getChildren<T extends OneOrMany<CstNode>>(ctx: T) {
 
 export function extractSourceLine(
   children: CstChildrenDictionary,
-  set?: Set<number>
+  set?: Set<number>,
 ): number {
   const line = set ?? new Set<number>();
   for (const value of Object.values(children)) {

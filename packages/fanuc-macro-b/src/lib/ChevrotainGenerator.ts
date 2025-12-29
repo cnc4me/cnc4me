@@ -1,9 +1,8 @@
 import { createSyntaxDiagramsCode, generateCstDts } from "chevrotain";
-
 import type {
   BaseParser,
   GenerateDtsOptions,
-  ICreateSyntaxDiagramsConfig
+  ICreateSyntaxDiagramsConfig,
 } from "chevrotain";
 
 export class ChevrotainGenerator {
@@ -19,7 +18,7 @@ export class ChevrotainGenerator {
   getCstDts(config?: GenerateCstDtsOptions) {
     const defaults: GenerateDtsOptions = {
       includeVisitorInterface: true,
-      visitorInterfaceName: "ICstNodeVisitor"
+      visitorInterfaceName: "ICstNodeVisitor",
     };
 
     const ast = this.#parser.getGAstProductions();

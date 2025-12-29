@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-
 import { MacroLexer } from "../../src";
 import { Do, End, GotoLine, Integer } from "../../src/core/tokens";
 
@@ -16,7 +15,7 @@ const testCases = [
   { input: "GOTO1", tokenType: GotoLine, expectedInteger: "1" },
   { input: "GOTO 2", tokenType: GotoLine, expectedInteger: "2" },
   { input: "GOTO12345", tokenType: GotoLine, expectedInteger: "12345" },
-  { input: "GOTO 98765", tokenType: GotoLine, expectedInteger: "98765" }
+  { input: "GOTO 98765", tokenType: GotoLine, expectedInteger: "98765" },
 ];
 
 describe(`tokenizing control flow tokens with block numbers`, () => {

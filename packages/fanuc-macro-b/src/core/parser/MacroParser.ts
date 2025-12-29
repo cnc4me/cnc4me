@@ -1,9 +1,8 @@
 import { ParsingError } from "../../errors/parser";
 import { Debuggers } from "../../utils/debug";
 import { MacroParserRuleTree } from "./MacroParserRuleTree";
-
-import type { ErrorProducer } from "../../types";
 import type { IToken } from "chevrotain";
+import type { ErrorProducer } from "../../types";
 
 export class MacroParser
   extends MacroParserRuleTree
@@ -37,6 +36,6 @@ export class MacroParser
   }
 
   getErrors() {
-    return this.errors.map(err => new ParsingError(err));
+    return this.errors.map((err) => new ParsingError(err));
   }
 }

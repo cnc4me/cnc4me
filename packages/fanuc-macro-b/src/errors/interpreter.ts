@@ -1,5 +1,4 @@
 import { extractSourceLine } from "../utils/chevrotain";
-
 import type { TrackedBlock } from "../core/interpreter/TrackedBlock";
 
 export class MacroInterpreterError extends Error {

@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../src";
 
 const code = `

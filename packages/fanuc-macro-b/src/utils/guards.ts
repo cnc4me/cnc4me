@@ -1,5 +1,4 @@
 import { isRecognitionException } from "chevrotain";
-
 import type { ILexingError, IRecognitionException } from "chevrotain";
 
 export function isParsingError(obj: unknown): obj is IRecognitionException {
@@ -16,8 +15,8 @@ export function isLexingError(obj: unknown): obj is ILexingError {
     "line",
     "column",
     "length",
-    "message"
+    "message",
   ];
 
-  return requiredKeys.every(key => key in obj);
+  return requiredKeys.every((key) => key in obj);
 }

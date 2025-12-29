@@ -1,5 +1,4 @@
 import { beforeEach, describe, expect, it } from "vitest";
-
 import { MacroLexer } from "../../src";
 import { Gcode } from "../../src/core/tokens";
 import { range } from "../../src/utils/common";
@@ -7,15 +6,17 @@ import { range } from "../../src/utils/common";
 const lexer = new MacroLexer();
 
 const TEST_CASES = [
-  ...range(1, 9).map(n => [`G${n}`]), // Single Digit
-  ...range(54, 59).map(n => [`G${n}`]), // Work Offsets
+  ...range(1, 9).map((n) => [`G${n}`]), // Single Digit
+  ...range(54, 59).map((n) => [`G${n}`]), // Work Offsets
   ["G200"], // Three Digit
-  ["G54.1"] // With Decimal
+  ["G54.1"], // With Decimal
 ];
 
 beforeEach(() => lexer.reset());
 
-describe.each(TEST_CASES)(`can tokenize the string "%s" as a G Code`, input => {
+describe.each(
+  TEST_CASES,
+)(`can tokenize the string "%s" as a G Code`, (input) => {
   const tokens = lexer.tokenize(input);
 
   it("has no errors", () => {

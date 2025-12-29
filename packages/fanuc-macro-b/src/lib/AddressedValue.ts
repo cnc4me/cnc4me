@@ -1,5 +1,5 @@
-import { AddressedValueCstChildren } from "../types/fanuc";
 import { getImage, parseNumber, stripFirstChar } from "../utils/common";
+import type { AddressedValueCstChildren } from "../types/fanuc";
 
 export class AddressedValue {
   value: number;
@@ -24,8 +24,6 @@ export class AddressedValue {
       const minus = this._isNegative ? "-" : "";
       this.value = parseNumber(`${minus}${getImage(ctx.NumericValue)}`);
     }
-
-    return this;
   }
 
   get prefix() {

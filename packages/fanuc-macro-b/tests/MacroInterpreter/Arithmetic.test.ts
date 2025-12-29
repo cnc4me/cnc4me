@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { FanucMacroB } from "../../src";
 
 const MATCH_PRECISION = 6;
@@ -35,7 +34,7 @@ const TEST_CASES: [expr: string, answer: number][] = [
   ["2*[3+5]*[4-2]", 32], // More complex with multiple brackets
   ["[5*3]+[4*2]", 23], // Addition of products with brackets
   ["[[5+5]*2]/2", 10], // Nested multiplication and division with brackets
-  ["2+[3*4-[2*3]]", 8] // Nested brackets with subtraction inside
+  ["2+[3*4-[2*3]]", 8], // Nested brackets with subtraction inside
 ];
 
 describe("interpreting expressions into a variable", () => {

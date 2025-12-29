@@ -4,7 +4,6 @@ import { extractOffsets } from "../utils/extractOffsets";
 import { MacroInterpreter } from "./interpreter/MacroInterpreter";
 import { MacroLexer } from "./MacroLexer";
 import { MacroParser } from "./parser/MacroParser";
-
 import type { MacroLexerError } from "../errors/lexer";
 import type { MacroParserError } from "../errors/parser";
 import type { ErrorProducer, IParsedLineData, MacroValueArray } from "../types";
@@ -17,7 +16,7 @@ export class FanucMacroB
   interpreter: MacroInterpreter;
 
   options = {
-    debug: false
+    debug: false,
   };
 
   #debug = Debuggers.Main;
@@ -64,7 +63,7 @@ export class FanucMacroB
   getErrors() {
     return [
       ...this.lexer.getErrors(), //
-      ...this.parser.getErrors() //
+      ...this.parser.getErrors(), //
     ];
   }
 
@@ -73,11 +72,11 @@ export class FanucMacroB
    * and the value is it's currently set value.
    */
   getSetMemoryRegisters(
-    opts?: Partial<GetMemoryOptions>
+    opts?: Partial<GetMemoryOptions>,
   ): Record<number, number> {
     if (opts?.range) {
       const entries: MacroValueArray = [];
-      range(...opts.range).forEach(register => {
+      range(...opts.range).forEach((register) => {
         entries.push([register, this.memory.read(register)]);
       });
       return Object.fromEntries(entries);
@@ -103,7 +102,7 @@ export class FanucMacroB
     // this.#debug(result);
     return {
       error,
-      result: extractOffsets(result[0])
+      result: extractOffsets(result[0]),
     };
   }
 
@@ -117,7 +116,7 @@ export class FanucMacroB
       error: null,
       // @ts-expect-error additionExpression is missing?
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      result: this.interpreter.Expression(cst?.children) // @todo fix this type error
+      result: this.interpreter.Expression(cst?.children), // @todo fix this type error
     };
   }
 
@@ -131,7 +130,7 @@ export class FanucMacroB
       error: null,
       // @ts-expect-error additionExpression is missing?
       // eslint-disable-next-line @typescript-eslint/no-unsafe-assignment, @typescript-eslint/no-unsafe-call
-      result: this.interpreter.FunctionExpression(cst?.children) // @todo fix this type error
+      result: this.interpreter.FunctionExpression(cst?.children), // @todo fix this type error
     };
   }
 
@@ -144,7 +143,7 @@ export class FanucMacroB
     return {
       error: null,
       // @ts-expect-error program type is wonky
-      result: this.interpreter.Program(cst?.children) // @todo fix this type error
+      result: this.interpreter.Program(cst?.children), // @todo fix this type error
     };
   }
 
@@ -154,7 +153,9 @@ export class FanucMacroB
     if (this.options.debug) {
       //@TODO this is hacky to find a bug, log better
       console.log("=============== MacroInterpreter.#tokens ===============");
-      console.log(tokens.map(t => `<${t.tokenType.name} image="${t.image}">`));
+      console.log(
+        tokens.map((t) => `<${t.tokenType.name} image="${t.image}">`),
+      );
     }
   }
 }

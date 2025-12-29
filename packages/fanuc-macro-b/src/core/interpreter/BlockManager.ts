@@ -2,14 +2,13 @@ import { BlockTrackingError } from "../../errors/interpreter";
 import { GenericPointerList } from "../../lib/GenericPointerList";
 import { Debuggers } from "../../utils/debug";
 import { TrackedBlock, TrackingType } from "./TrackedBlock";
-
 import type { CST } from "../../types";
 
 export class BlockManager extends GenericPointerList<TrackedBlock> {
   #registry: Record<Exclude<TrackingType, TrackingType.Untracked>, number[]> = {
     [TrackingType.N]: [],
     [TrackingType.Do]: [],
-    [TrackingType.End]: []
+    [TrackingType.End]: [],
   };
   #debug: debug.Debugger;
 
@@ -40,7 +39,7 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
 
   pointerToBlock(N: number): void {
     this.#debug(`pointer to block ${N}`);
-    const nodeIdx = this.findIndex(block => {
+    const nodeIdx = this.findIndex((block) => {
       return block.tracking === TrackingType.N && block.N === N;
     });
     if (nodeIdx < 0) {
@@ -51,7 +50,7 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
 
   pointerToDoTag(id: number): void {
     this.#debug(`pointer to tag "DO${id}"`);
-    const nodeIdx = this.findIndex(block => {
+    const nodeIdx = this.findIndex((block) => {
       return block.tracking === TrackingType.Do && block.id === id;
     });
     if (nodeIdx < 0) {
@@ -62,7 +61,7 @@ export class BlockManager extends GenericPointerList<TrackedBlock> {
 
   pointerToEndTag(id: number): void {
     this.#debug(`pointer to tag "END${id}"`);
-    const nodeIdx = this.findIndex(block => {
+    const nodeIdx = this.findIndex((block) => {
       return block.tracking === TrackingType.End && block.id === id;
     });
     if (nodeIdx < 0) {

@@ -1,29 +1,28 @@
 import Emittery from "emittery";
-import { Callback, StateMachine, t } from "typescript-fsm";
-
+import { StateMachine, t } from "typescript-fsm";
 import { Debuggers } from "../utils/debug";
-
+import type { Debugger } from "debug";
+import type { Callback } from "typescript-fsm";
 import type {
   AxisFsmEvents,
   AxisLabel,
   AxisLimits,
   AxisLimitsInput,
   FsmCallback,
-  MotionType
+  MotionType,
 } from "./fsm.types";
-import type { Debugger } from "debug";
 
 enum States {
   Idle = "Idle",
   Fault = "Fault",
-  Traveling = "Traveling"
+  Traveling = "Traveling",
 }
 
 enum Events {
   Move = "Move",
   Reset = "Reset",
   MoveComplete = "MoveComplete",
-  FaultOccurred = "FaultOccurred"
+  FaultOccurred = "FaultOccurred",
 }
 
 interface AxisFsmConfig {
@@ -59,7 +58,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
   constructor(label: AxisLabel, config: AxisFsmConfig) {
     super(States.Idle, [], {
       // This overrides console.error
-      error: (msg: string) => void this.#events.emit("FAULT", msg)
+      error: (msg: string) => void this.#events.emit("FAULT", msg),
     });
     this.#targetPosition = NaN;
     this.#currentPosition = NaN;
@@ -67,7 +66,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
       label,
       limits: parseLimits(config.limits),
       travelTimeout: config?.travelTimeout ?? 250,
-      throwOnFault: config?.throwOnFault ?? false
+      throwOnFault: config?.throwOnFault ?? false,
     };
     this.#debug = $d.extend(this.#config.label);
     this.#debug(`initializing`);
@@ -79,13 +78,13 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
     /* eslint-disable prettier/prettier */
     this.addTransitions([
       // fromState     event         toState       callback
-      t(s.Idle,       e.Move,          s.Traveling, this.#onTraveling),
-      t(s.Traveling,  e.Move,          s.Traveling, this.#onTraveling),
-      t(s.Traveling,  e.MoveComplete,  s.Idle,      this.#onMoveComplete),
-      t(s.Idle,       e.FaultOccurred, s.Fault,     this.#onFault),
-      t(s.Traveling,  e.FaultOccurred, s.Fault,     this.#onFault),
-      t(s.Traveling,  e.Reset,         s.Idle,      this.#onReset),
-      t(s.Fault,      e.Reset,         s.Idle,      this.#onReset),
+      t(s.Idle, e.Move, s.Traveling, this.#onTraveling),
+      t(s.Traveling, e.Move, s.Traveling, this.#onTraveling),
+      t(s.Traveling, e.MoveComplete, s.Idle, this.#onMoveComplete),
+      t(s.Idle, e.FaultOccurred, s.Fault, this.#onFault),
+      t(s.Traveling, e.FaultOccurred, s.Fault, this.#onFault),
+      t(s.Traveling, e.Reset, s.Idle, this.#onReset),
+      t(s.Fault, e.Reset, s.Idle, this.#onReset),
     ]);
     /* eslint-enable prettier/prettier */
     this.#logState();
@@ -179,7 +178,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
       void this.#events.emit("TRAVELING", {
         type: motionType,
         to: this.#targetPosition,
-        from: this.#currentPosition
+        from: this.#currentPosition,
       });
       await dwell(this.#config.travelTimeout);
       await this.dispatch(Events.MoveComplete);
@@ -233,7 +232,7 @@ export class AxisFSM extends StateMachine<States, Events, ICallbacks> {
 // Helper Functions
 //
 async function dwell(timeout: number) {
-  return await new Promise(resolve => setTimeout(resolve, timeout));
+  return await new Promise((resolve) => setTimeout(resolve, timeout));
 }
 
 function parseLimits(limits: AxisLimitsInput): AxisLimits {

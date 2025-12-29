@@ -1,5 +1,4 @@
 import { CstParser } from "chevrotain";
-
 import { Debuggers } from "../../utils/debug";
 import {
   AdditionOperator,
@@ -27,10 +26,9 @@ import {
   Then,
   Var,
   While,
-  WhiteSpace
+  WhiteSpace,
 } from "../tokens";
 import { FANUC_MACRO_B_GRAMMAR } from "./MacroGrammar";
-
 import type { ConsumeMethodOpts, IToken, TokenType } from "chevrotain";
 
 const $d = Debuggers.Parser;
@@ -43,7 +41,7 @@ export class MacroParserRuleTree extends CstParser {
    */
   public override CONSUME<S extends TokenType>(
     token: S,
-    options?: ConsumeMethodOpts
+    options?: ConsumeMethodOpts,
   ) {
     const _debug = $d.extend("consume");
     _debug(String(token.tokenTypeIdx).padStart(2, " "), token.name);
@@ -65,7 +63,7 @@ export class MacroParserRuleTree extends CstParser {
   public Programs = this.RULE("Programs", () => {
     this.MANY_SEP({
       SEP: Newline,
-      DEF: () => this.SUBRULE(this.Program)
+      DEF: () => this.SUBRULE(this.Program),
     });
   });
 
@@ -87,7 +85,7 @@ export class MacroParserRuleTree extends CstParser {
   public Lines = this.RULE("Lines", () => {
     this.MANY_SEP({
       SEP: Newline,
-      DEF: () => this.SUBRULE(this.Line)
+      DEF: () => this.SUBRULE(this.Line),
     });
   });
 
@@ -107,7 +105,7 @@ export class MacroParserRuleTree extends CstParser {
         { ALT: () => this.CONSUME(LineNumber) },
         { ALT: () => this.CONSUME(Mcode) },
         { ALT: () => this.CONSUME(Gcode) },
-        { ALT: () => this.CONSUME(Comment) }
+        { ALT: () => this.CONSUME(Comment) },
       ]);
     });
   });
@@ -165,14 +163,14 @@ export class MacroParserRuleTree extends CstParser {
           this.CONSUME(Then);
           this.OPTION(() => this.CONSUME(WhiteSpace));
           this.SUBRULE(this.VariableAssignment);
-        }
+        },
       },
       {
         ALT: () => {
           this.OPTION1(() => this.CONSUME1(WhiteSpace));
           this.SUBRULE(this.GoToStatement);
-        }
-      }
+        },
+      },
     ]);
   });
 
@@ -206,7 +204,7 @@ export class MacroParserRuleTree extends CstParser {
       { ALT: () => this.SUBRULE(this.FunctionExpression) },
       { ALT: () => this.SUBRULE(this.BracketExpression) },
       { ALT: () => this.SUBRULE(this.NumericLiteral) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
     ]);
   });
 
@@ -281,7 +279,7 @@ export class MacroParserRuleTree extends CstParser {
     this.OR([
       { ALT: () => this.CONSUME(NumericValue) },
       { ALT: () => this.SUBRULE(this.BracketExpression) },
-      { ALT: () => this.SUBRULE(this.VariableLiteral) }
+      { ALT: () => this.SUBRULE(this.VariableLiteral) },
     ]);
   });
 
@@ -322,7 +320,7 @@ export class MacroParserRuleTree extends CstParser {
   ValueLiteral = this.RULE("ValueLiteral", () => {
     this.OR([
       { ALT: () => this.SUBRULE(this.VariableLiteral) },
-      { ALT: () => this.SUBRULE(this.NumericLiteral) }
+      { ALT: () => this.SUBRULE(this.NumericLiteral) },
     ]);
   });
 

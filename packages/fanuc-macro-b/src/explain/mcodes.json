@@ -8,5 +8,100 @@
     "code": "M01",
     "function": "Optional Program Stop",
     "group": "01"
+  },
+  {
+    "code": "M02",
+    "function": "End of Program",
+    "group": "01"
+  },
+  {
+    "code": "M03",
+    "function": "Spindle On (CW)",
+    "group": "02"
+  },
+  {
+    "code": "M04",
+    "function": "Spindle On (CCW)",
+    "group": "02"
+  },
+  {
+    "code": "M05",
+    "function": "Spindle Stop",
+    "group": "02"
+  },
+  {
+    "code": "M06",
+    "function": "Tool Change",
+    "group": "06"
+  },
+  {
+    "code": "M07",
+    "function": "Mist Coolant On",
+    "group": "08"
+  },
+  {
+    "code": "M08",
+    "function": "Flood Coolant On",
+    "group": "08"
+  },
+  {
+    "code": "M09",
+    "function": "Coolant Off",
+    "group": "08"
+  },
+  {
+    "code": "M10",
+    "function": "Clamp On (Chuck / Fixture)",
+    "group": "10"
+  },
+  {
+    "code": "M11",
+    "function": "Clamp Off (Chuck / Fixture)",
+    "group": "10"
+  },
+  {
+    "code": "M19",
+    "function": "Spindle Orientation",
+    "group": "02"
+  },
+  {
+    "code": "M30",
+    "function": "End of Program and Reset",
+    "group": "01"
+  },
+  {
+    "code": "M41",
+    "function": "Low Gear Range Select",
+    "group": "13"
+  },
+  {
+    "code": "M42",
+    "function": "High Gear Range Select",
+    "group": "13"
+  },
+  {
+    "code": "M48",
+    "function": "Enable Feedrate Override",
+    "group": "09"
+  },
+  {
+    "code": "M49",
+    "function": "Disable Feedrate Override",
+    "group": "09"
+  },
+  {
+    "code": "M60",
+    "function": "Automatic Pallet Change",
+    "group": "15"
+  },
+  {
+    "code": "M98",
+    "function": "Call Subprogram",
+    "group": "16"
+  },
+  {
+    "code": "M99",
+    "function": "Return from Subprogram / Loop",
+    "group": "16"
   }
 ]

@@ -1,10 +1,8 @@
 import Emittery from "emittery";
 import PQueue from "p-queue";
-
 import { Debuggers } from "../utils/debug";
 import { AxisFSM } from "./AxisFSM";
 import { SpindleFSM } from "./SpindleFSM";
-
 import type { IParsedLineData } from "../types";
 import type {
   AxisFsmEvents,
@@ -12,7 +10,7 @@ import type {
   AxisLimits,
   AxisLimitsInput,
   MotionType,
-  Position
+  Position,
 } from "./fsm.types";
 
 export class CncMachine {
@@ -50,7 +48,7 @@ export class CncMachine {
       throwOnFault: boolean;
       axisTravelTimeout: number;
       spindle: ConstructorParameters<typeof SpindleFSM>[0];
-    }>
+    }>,
   ) {
     const travelTimeout = config?.axisTravelTimeout ?? 200;
 
@@ -61,16 +59,16 @@ export class CncMachine {
     this.axes = {
       X: new AxisFSM("X", {
         limits: config?.limits?.X ?? 30,
-        travelTimeout
+        travelTimeout,
       }),
       Y: new AxisFSM("Y", {
         limits: config?.limits?.Y ?? 30,
-        travelTimeout
+        travelTimeout,
       }),
       Z: new AxisFSM("Z", {
         limits: config?.limits?.Z ?? 12,
-        travelTimeout
-      })
+        travelTimeout,
+      }),
     };
 
     this.#debug(`initialized with config`);
@@ -78,9 +76,9 @@ export class CncMachine {
       home: {
         X: config?.home?.X ?? 0,
         Y: config?.home?.Y ?? 0,
-        Z: config?.home?.Z ?? 0
+        Z: config?.home?.Z ?? 0,
       },
-      throwOnFault: config?.throwOnFault ?? false
+      throwOnFault: config?.throwOnFault ?? false,
     };
 
     this.#debug(this.#config);
@@ -113,20 +111,20 @@ export class CncMachine {
     return {
       X: this.axes.X.position,
       Y: this.axes.Y.position,
-      Z: this.axes.Z.position
+      Z: this.axes.Z.position,
     };
   }
 
   getStats() {
     return {
       positions: this.getPosition(),
-      spindle: this.spindle.stats
+      spindle: this.spindle.stats,
     };
   }
 
   setHome(
     axis: keyof typeof this.axes,
-    location: number | ((limits: AxisLimits) => number)
+    location: number | ((limits: AxisLimits) => number),
   ) {
     const home =
       typeof location === "number"
@@ -145,7 +143,7 @@ export class CncMachine {
     return Promise.all([
       this.axes.X.reset(),
       this.axes.Y.reset(),
-      this.axes.Z.reset()
+      this.axes.Z.reset(),
     ]);
   }
 

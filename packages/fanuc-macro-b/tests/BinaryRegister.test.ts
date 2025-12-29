@@ -1,5 +1,4 @@
 import { describe, expect, it } from "vitest";
-
 import { BinaryRegister } from "../src/lib/BinaryRegister";
 
 describe("BinaryRegister stores and manipulates a memory register.", () => {

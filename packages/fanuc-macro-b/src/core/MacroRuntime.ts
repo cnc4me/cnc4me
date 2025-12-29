@@ -1,20 +1,14 @@
 import Emittery from "emittery";
-
 import { LexingError } from "../errors/lexer";
 import { ParsingError } from "../errors/parser";
 import { InvalidProgramNumber, ProgramNumberNotFound } from "../errors/runtime";
 import { MacroRuntimeFSM } from "../fsm/MacroRuntimeFSM";
-import { InsightCollection } from "../lib/Insights";
 import ProgramNumber from "../lib/ProgramNumber";
 import { SystemVariable } from "../memory";
 import { Debuggers } from "../utils/debug";
 import { FanucMacroB } from "./FanucMacroB";
-import { MacroInterpreter } from "./interpreter/MacroInterpreter";
-import { MacroLexer } from "./MacroLexer";
-import { MacroMemory } from "./MacroMemory";
-import { MacroParser } from "./parser/MacroParser";
-
 import type { CncMachine } from "../fsm/CncMachine";
+import type { InsightCollection } from "../lib/Insights";
 import type { NcProgram } from "../lib/NcProgram";
 import type {
   CST,
@@ -22,8 +16,12 @@ import type {
   IParsedLineData,
   MacroCombinedError,
   PrefixObjectKeys,
-  ProgramLoadOptions
+  ProgramLoadOptions,
 } from "../types";
+import type { MacroInterpreter } from "./interpreter/MacroInterpreter";
+import type { MacroLexer } from "./MacroLexer";
+import type { MacroMemory } from "./MacroMemory";
+import type { MacroParser } from "./parser/MacroParser";
 
 export interface MacroRuntimeConfig {
   machine?: CncMachine;
@@ -46,7 +44,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
   #debug = Debuggers.Runtime;
 
   static create(
-    opts?: Partial<MacroRuntimeConfig> & { loadAndActivate: string }
+    opts?: Partial<MacroRuntimeConfig> & { loadAndActivate: string },
   ): MacroRuntime {
     let runtime: MacroRuntime;
     if (opts?.loadAndActivate) {
@@ -194,7 +192,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
       "%",
       "O0000", // MDI Program Number
       ...input, // input lines
-      "%"
+      "%",
     ].join("\n");
     this.setActiveProgram(0);
     return this;
@@ -271,7 +269,7 @@ export class MacroRuntime implements ErrorProducer<MacroCombinedError> {
    * Retrieve a record of errors
    */
   getErrorMessages(): string[] {
-    return this.getErrors().map(err => {
+    return this.getErrors().map((err) => {
       if (err instanceof LexingError || err instanceof ParsingError) {
         return err.message;
       }
