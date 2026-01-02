@@ -6,18 +6,22 @@
 
 # Type Alias: WithResult\<T, R\>
 
-> **WithResult**\<`T`, `R`\>: [`T`](../types/WithResult.html#t) & `object`
+> **WithResult**\<`T`, `R`\> = `T` & `object`
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:7](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L7)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:7](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/generics.ts#L7)
 
-## Type declaration
+## Type Declaration
 
 ### result
 
-> **result**: [`R`](../types/WithResult.html#r)
+> **result**: `R`
 
 ## Type Parameters
 
-• **T**
+### T
 
-• **R**
+`T`
+
+### R
+
+`R`

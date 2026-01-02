@@ -6,7 +6,7 @@
 
 # Class: MacroInterpreter
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:50](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L50)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:52](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L52)
 
 Macro Interpreter
 
@@ -16,15 +16,15 @@ Macro Interpreter
 
 ## Constructors
 
-### new MacroInterpreter()
+### Constructor
 
-> **new MacroInterpreter**(): [`MacroInterpreter`](MacroInterpreter.md)
+> **new MacroInterpreter**(): `MacroInterpreter`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:62](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L62)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:67](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L67)
 
 #### Returns
 
-[`MacroInterpreter`](MacroInterpreter.md)
+`MacroInterpreter`
 
 #### Overrides
 
@@ -34,9 +34,9 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:62](https://git
 
 ### on()
 
-> **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
+> **on**: \<`Name`\>(`eventName`, `listener`, `options?`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:76](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L76)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:85](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L85)
 
 Subscribe to one or more events.
 
@@ -44,7 +44,9 @@ Using the same listener multiple times for the same event will result in only on
 
 #### Type Parameters
 
-• **Name** *extends* keyof OmnipresentEventData \| `"LINE"` \| `"END_OF_PROGRAM"`
+##### Name
+
+`Name` *extends* keyof OmnipresentEventData \| `"LINE"` \| `"END_OF_PROGRAM"`
 
 #### Parameters
 
@@ -55,6 +57,12 @@ Using the same listener multiple times for the same event will result in only on
 ##### listener
 
 (`eventData`) => `void` \| `Promise`\<`void`\>
+
+##### options?
+
+###### signal?
+
+`AbortSignal`
 
 #### Returns
 
@@ -85,9 +93,9 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 ### onAny()
 
-> **onAny**: (`listener`) => `UnsubscribeFunction`
+> **onAny**: (`listener`, `options?`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:77](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L77)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:86](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L86)
 
 Subscribe to be notified about any event.
 
@@ -96,6 +104,12 @@ Subscribe to be notified about any event.
 ##### listener
 
 (`eventName`, `eventData`) => `void` \| `Promise`\<`void`\>
+
+##### options?
+
+###### signal?
+
+`AbortSignal`
 
 #### Returns
 
@@ -109,7 +123,7 @@ A method to unsubscribe.
 
 > `static` **EVENTS**: `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:51](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L51)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:53](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L53)
 
 #### END\_OF\_PROGRAM
 
@@ -127,7 +141,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:51](https://git
 
 > **get** **memory**(): [`MacroMemory`](MacroMemory.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:72](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L72)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:81](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L81)
 
 Get the interpreter's [MacroMemory](MacroMemory.md)
 
@@ -141,7 +155,7 @@ Get the interpreter's [MacroMemory](MacroMemory.md)
 
 > **AdditionExpression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:323](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L323)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:336](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L336)
 
 This handles subtraction as well since both the
 `Plus` and `Minus` tokens have the category `AdditionOperator`
@@ -150,7 +164,7 @@ This handles subtraction as well since both the
 
 ##### ctx
 
-[`AdditionExpressionCstChildren`](../namespaces/CST/type-aliases/AdditionExpressionCstChildren.md)
+[`AdditionExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/AdditionExpressionCstChildren.md)
 
 #### Returns
 
@@ -162,7 +176,7 @@ This handles subtraction as well since both the
 
 > **AddressedValue**(`ctx`, `gCodeFlags`): `AddressedValue`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:491](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L491)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:522](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L522)
 
 Parse all possible info out of this address
 
@@ -170,7 +184,7 @@ Parse all possible info out of this address
 
 ##### ctx
 
-[`AddressedValueCstChildren`](../namespaces/CST/type-aliases/AddressedValueCstChildren.md)
+[`AddressedValueCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/AddressedValueCstChildren.md)
 
 ##### gCodeFlags
 
@@ -186,7 +200,7 @@ Parse all possible info out of this address
 
 > **AtomicBooleanExpression**(`ctx`): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:446](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L446)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:463](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L463)
 
 Evaluate a BooleanExpression into a boolean value
 
@@ -194,7 +208,7 @@ Evaluate a BooleanExpression into a boolean value
 
 ##### ctx
 
-[`AtomicBooleanExpressionCstChildren`](../namespaces/CST/type-aliases/AtomicBooleanExpressionCstChildren.md)
+[`AtomicBooleanExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/AtomicBooleanExpressionCstChildren.md)
 
 #### Returns
 
@@ -206,13 +220,13 @@ Evaluate a BooleanExpression into a boolean value
 
 > **AtomicExpression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:385](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L385)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:398](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L398)
 
 #### Parameters
 
 ##### ctx
 
-[`AtomicExpressionCstChildren`](../namespaces/CST/type-aliases/AtomicExpressionCstChildren.md)
+[`AtomicExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/AtomicExpressionCstChildren.md)
 
 #### Returns
 
@@ -224,7 +238,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:385](https://gi
 
 > **BracketExpression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:406](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L406)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:418](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L418)
 
 Ignore the brackets and return the children
 
@@ -232,7 +246,7 @@ Ignore the brackets and return the children
 
 ##### ctx
 
-[`BracketExpressionCstChildren`](../namespaces/CST/type-aliases/BracketExpressionCstChildren.md)
+[`BracketExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/BracketExpressionCstChildren.md)
 
 #### Returns
 
@@ -244,13 +258,13 @@ Ignore the brackets and return the children
 
 > **ConditionalExpression**(`ctx`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:429](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L429)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:443](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L443)
 
 #### Parameters
 
 ##### ctx
 
-[`ConditionalExpressionCstChildren`](../namespaces/CST/type-aliases/ConditionalExpressionCstChildren.md)
+[`ConditionalExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/ConditionalExpressionCstChildren.md)
 
 #### Returns
 
@@ -260,27 +274,27 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:429](https://gi
 
 ### DoStatement()
 
-> **DoStatement**(`ctx`): `void`
+> **DoStatement**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:264](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L264)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:271](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L271)
 
 #### Parameters
 
 ##### ctx
 
-[`DoStatementCstChildren`](../namespaces/CST/type-aliases/DoStatementCstChildren.md)
+[`DoStatementCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/DoStatementCstChildren.md)
 
 #### Returns
 
-`void`
+`number`
 
 ***
 
 ### EndStatement()
 
-> **EndStatement**(`ctx`): `void`
+> **EndStatement**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:276](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L276)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:285](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L285)
 
 Move the pointer to the starting GOTO block number
 
@@ -288,11 +302,15 @@ Move the pointer to the starting GOTO block number
 
 ##### ctx
 
-[`EndStatementCstChildren`](../namespaces/CST/type-aliases/EndStatementCstChildren.md)
+[`EndStatementCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/EndStatementCstChildren.md)
 
 #### Returns
 
-`void`
+`number`
+
+#### TODO
+
+This needs to update the pointer back to the WHILE/DO
 
 ***
 
@@ -300,7 +318,7 @@ Move the pointer to the starting GOTO block number
 
 > **Expression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:315](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L315)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:327](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L327)
 
 This addition -> multiplication -> atomic
 
@@ -308,7 +326,7 @@ This addition -> multiplication -> atomic
 
 ##### ctx
 
-[`ExpressionCstChildren`](../namespaces/CST/type-aliases/ExpressionCstChildren.md)
+[`ExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/ExpressionCstChildren.md)
 
 #### Returns
 
@@ -320,7 +338,7 @@ This addition -> multiplication -> atomic
 
 > **FunctionExpression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:413](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L413)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:426](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L426)
 
 Evaluate one of the built-in functions
 
@@ -328,7 +346,7 @@ Evaluate one of the built-in functions
 
 ##### ctx
 
-[`FunctionExpressionCstChildren`](../namespaces/CST/type-aliases/FunctionExpressionCstChildren.md)
+[`FunctionExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/FunctionExpressionCstChildren.md)
 
 #### Returns
 
@@ -338,13 +356,13 @@ Evaluate one of the built-in functions
 
 ### getBlocks()
 
-> **getBlocks**(): `BlockCollection`
+> **getBlocks**(): `BlockManager`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:94](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L94)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:103](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L103)
 
 #### Returns
 
-`BlockCollection`
+`BlockManager`
 
 ***
 
@@ -352,7 +370,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:94](https://git
 
 > **getInsights**(): `InsightCollection`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:109](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L109)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:107](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L107)
 
 #### Returns
 
@@ -364,7 +382,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:109](https://gi
 
 > **getRawLines**(): [`IParsedLineData`](../interfaces/IParsedLineData.md)[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:90](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L90)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:99](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L99)
 
 #### Returns
 
@@ -374,9 +392,9 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:90](https://git
 
 ### GoToStatement()
 
-> **GoToStatement**(`ctx`): `void`
+> **GoToStatement**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:288](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L288)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:298](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L298)
 
 Move the pointer to the GOTO block number
 
@@ -384,11 +402,11 @@ Move the pointer to the GOTO block number
 
 ##### ctx
 
-[`GoToStatementCstChildren`](../namespaces/CST/type-aliases/GoToStatementCstChildren.md)
+[`GoToStatementCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/GoToStatementCstChildren.md)
 
 #### Returns
 
-`void`
+`number`
 
 ***
 
@@ -396,7 +414,7 @@ Move the pointer to the GOTO block number
 
 > **Line**(`ctx`): [`IParsedLineData`](../interfaces/IParsedLineData.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:167](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L167)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:156](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L156)
 
 Get the complete contents of a line of G code
 
@@ -404,7 +422,7 @@ Get the complete contents of a line of G code
 
 ##### ctx
 
-[`LineCstChildren`](../namespaces/CST/type-aliases/LineCstChildren.md)
+[`LineCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/LineCstChildren.md)
 
 #### Returns
 
@@ -412,11 +430,29 @@ Get the complete contents of a line of G code
 
 ***
 
+### LineNumber()
+
+> **LineNumber**(`ctx`): `number`
+
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:263](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L263)
+
+#### Parameters
+
+##### ctx
+
+`IToken`[]
+
+#### Returns
+
+`number`
+
+***
+
 ### Lines()
 
 > **Lines**(`ctx`): [`IParsedLineData`](../interfaces/IParsedLineData.md)[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:141](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L141)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:140](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L140)
 
 Iterate over the lines to extract the contents
 
@@ -424,7 +460,7 @@ Iterate over the lines to extract the contents
 
 ##### ctx
 
-[`LinesCstChildren`](../namespaces/CST/type-aliases/LinesCstChildren.md)
+[`LinesCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/LinesCstChildren.md)
 
 #### Returns
 
@@ -436,7 +472,7 @@ Iterate over the lines to extract the contents
 
 > **MultiplicationExpression**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:354](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L354)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:367](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L367)
 
 This handles division as well since both the
 `Product` and `Divide` tokens have the category `MultiplicationOperator`
@@ -445,7 +481,7 @@ This handles division as well since both the
 
 ##### ctx
 
-[`MultiplicationExpressionCstChildren`](../namespaces/CST/type-aliases/MultiplicationExpressionCstChildren.md)
+[`MultiplicationExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/MultiplicationExpressionCstChildren.md)
 
 #### Returns
 
@@ -457,7 +493,7 @@ This handles division as well since both the
 
 > **NumericLiteral**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:508](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L508)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:539](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L539)
 
 A plain number, signed
 
@@ -465,7 +501,7 @@ A plain number, signed
 
 ##### ctx
 
-[`NumericLiteralCstChildren`](../namespaces/CST/type-aliases/NumericLiteralCstChildren.md)
+[`NumericLiteralCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/NumericLiteralCstChildren.md)
 
 #### Returns
 
@@ -477,7 +513,7 @@ A plain number, signed
 
 > **Program**(`ctx`): `NcProgram`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:116](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L116)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:114](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L114)
 
 Root Node for valid NC Programs
 
@@ -485,7 +521,7 @@ Root Node for valid NC Programs
 
 ##### ctx
 
-[`ProgramCstChildren`](../namespaces/CST/type-aliases/ProgramCstChildren.md)
+[`ProgramCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/ProgramCstChildren.md)
 
 #### Returns
 
@@ -497,7 +533,7 @@ Root Node for valid NC Programs
 
 > **ProgramNumberLine**(`ctx`): [`IProgramNumberLine`](../type-aliases/IProgramNumberLine.md)
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:127](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L127)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:126](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L126)
 
 Get the Program title and number
 
@@ -505,7 +541,7 @@ Get the Program title and number
 
 ##### ctx
 
-[`ProgramNumberLineCstChildren`](../namespaces/CST/type-aliases/ProgramNumberLineCstChildren.md)
+[`ProgramNumberLineCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/ProgramNumberLineCstChildren.md)
 
 #### Returns
 
@@ -517,7 +553,7 @@ Get the Program title and number
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:84](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L84)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:93](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L93)
 
 Reset the Interpreter
 
@@ -552,7 +588,7 @@ Will throw an error if the visitor is missing any required methods
 
 > **ValueLiteral**(`ctx`): `number`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:530](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L530)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:561](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L561)
 
 If a number, then the visit the node, otherwise evaluate the macro var
 
@@ -560,7 +596,7 @@ If a number, then the visit the node, otherwise evaluate the macro var
 
 ##### ctx
 
-[`ValueLiteralCstChildren`](../namespaces/CST/type-aliases/ValueLiteralCstChildren.md)
+[`ValueLiteralCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/ValueLiteralCstChildren.md)
 
 #### Returns
 
@@ -572,7 +608,7 @@ If a number, then the visit the node, otherwise evaluate the macro var
 
 > **VariableAssignment**(`ctx`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:299](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L299)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:309](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L309)
 
 Update a macro variable regsiter with a value
 
@@ -580,7 +616,7 @@ Update a macro variable regsiter with a value
 
 ##### ctx
 
-[`VariableAssignmentCstChildren`](../namespaces/CST/type-aliases/VariableAssignmentCstChildren.md)
+[`VariableAssignmentCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/VariableAssignmentCstChildren.md)
 
 #### Returns
 
@@ -592,7 +628,7 @@ Update a macro variable regsiter with a value
 
 > **VariableLiteral**(`ctx`): `MacroVariable`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:518](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L518)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:549](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L549)
 
 A Macro Variable, defined as a `#` and a number
 
@@ -600,7 +636,7 @@ A Macro Variable, defined as a `#` and a number
 
 ##### ctx
 
-[`VariableLiteralCstChildren`](../namespaces/CST/type-aliases/VariableLiteralCstChildren.md)
+[`VariableLiteralCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/VariableLiteralCstChildren.md)
 
 #### Returns
 
@@ -610,7 +646,7 @@ A Macro Variable, defined as a `#` and a number
 
 ### visit()
 
-> **visit**(`cstNode`, `param`?): `any`
+> **visit**(`cstNode`, `param?`): `any`
 
 Defined in: node\_modules/.pnpm/@chevrotain+types@10.5.0/node\_modules/@chevrotain/types/api.d.ts:1911
 
@@ -638,7 +674,7 @@ Defined in: node\_modules/.pnpm/@chevrotain+types@10.5.0/node\_modules/@chevrota
 
 > **WhileDoExpression**(`ctx`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroInterpreter.ts:475](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroInterpreter.ts#L475)
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:505](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L505)
 
 Interpret a while loop
 
@@ -646,8 +682,28 @@ Interpret a while loop
 
 ##### ctx
 
-[`WhileDoExpressionCstChildren`](../namespaces/CST/type-aliases/WhileDoExpressionCstChildren.md)
+[`WhileDoExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/WhileDoExpressionCstChildren.md)
 
 #### Returns
 
 `void`
+
+***
+
+### WhileLoopPredicate()
+
+> **WhileLoopPredicate**(`ctx`): `boolean`
+
+Defined in: [packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts:494](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/interpreter/MacroInterpreter.ts#L494)
+
+Interpret the conditional of a While loop
+
+#### Parameters
+
+##### ctx
+
+[`AtomicWhileExpressionCstChildren`](../Fanuc-Macro-B/namespaces/CST/type-aliases/AtomicWhileExpressionCstChildren.md)
+
+#### Returns
+
+`boolean`

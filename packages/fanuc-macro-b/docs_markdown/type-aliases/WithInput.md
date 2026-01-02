@@ -6,18 +6,22 @@
 
 # Type Alias: WithInput\<T, I\>
 
-> **WithInput**\<`T`, `I`\>: [`T`](../types/WithInput.html#t) & `object`
+> **WithInput**\<`T`, `I`\> = `T` & `object`
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:5](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/generics.ts#L5)
 
-## Type declaration
+## Type Declaration
 
 ### input
 
-> **input**: [`I`](../types/WithInput.html#i)
+> **input**: `I`
 
 ## Type Parameters
 
-• **T**
+### T
 
-• **I**
+`T`
+
+### I
+
+`I`

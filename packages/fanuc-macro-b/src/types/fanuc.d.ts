@@ -38,12 +38,12 @@ declare interface LineCstNode extends CstNode {
 }
 
 declare type LineCstChildren = {
-  ConditionalExpression?: ConditionalExpressionCstNode[];
-  WhileDoExpression?: WhileDoExpressionCstNode[];
+  AddressedValue?: AddressedValueCstNode[];
   EndStatement?: EndStatementCstNode[];
   GoToStatement?: GoToStatementCstNode[];
   VariableAssignment?: VariableAssignmentCstNode[];
-  AddressedValue?: AddressedValueCstNode[];
+  ConditionalExpression?: ConditionalExpressionCstNode[];
+  WhileDoExpression?: WhileDoExpressionCstNode[];
   Expression?: ExpressionCstNode[];
   LineNumber?: IToken[];
   M_Code?: IToken[];

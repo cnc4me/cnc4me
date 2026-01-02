@@ -1,10 +1,10 @@
 import path from "node:path";
 import tsconfigPaths from "vite-tsconfig-paths";
-import { defineConfig } from "vitest/config";
+import { defineProject } from "vitest/config";
 
 const setupFile = path.join(__dirname, "tests/_vitest/setup.ts");
 
-export default defineConfig({
+export default defineProject({
   root: ".",
   test: {
     setupFiles: [setupFile],

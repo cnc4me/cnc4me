@@ -6,7 +6,7 @@
 
 # Class: MacroLexer
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:10](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L10)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:8](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L8)
 
 ## Implements
 
@@ -14,15 +14,15 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:10](https://github.co
 
 ## Constructors
 
-### new MacroLexer()
+### Constructor
 
-> **new MacroLexer**(): [`MacroLexer`](MacroLexer.md)
+> **new MacroLexer**(): `MacroLexer`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:15](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L15)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:13](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L13)
 
 #### Returns
 
-[`MacroLexer`](MacroLexer.md)
+`MacroLexer`
 
 ## Accessors
 
@@ -32,7 +32,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:15](https://github.co
 
 > **get** **definitionErrors**(): `ILexerDefinitionError`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:33](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L33)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:31](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L31)
 
 ##### Returns
 
@@ -46,7 +46,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:33](https://github.co
 
 > **get** **hasErrors**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:29](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L29)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:27](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L27)
 
 ##### Returns
 
@@ -64,7 +64,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:29](https://github.co
 
 > **get** **hasTokens**(): `boolean`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:25](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L25)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:23](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L23)
 
 ##### Returns
 
@@ -76,7 +76,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:25](https://github.co
 
 > **getErrors**(): [`LexingError`](../variables/Errors.md#lexingerror)[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:57](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L57)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:55](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L55)
 
 #### Returns
 
@@ -92,7 +92,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:57](https://github.co
 
 > **getGroups**(): `object`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:49](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L49)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:47](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L47)
 
 #### Returns
 
@@ -104,7 +104,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:49](https://github.co
 
 > **getTokens**(): `IToken`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:53](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L53)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:51](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L51)
 
 #### Returns
 
@@ -116,7 +116,7 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:53](https://github.co
 
 > **reset**(): `void`
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:61](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L61)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:59](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L59)
 
 #### Returns
 
@@ -126,9 +126,9 @@ Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:61](https://github.co
 
 ### tokenize()
 
-> **tokenize**(`input`, `initialMode`?): `IToken`[]
+> **tokenize**(`input`, `initialMode?`): `IToken`[]
 
-Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:37](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/core/MacroLexer.ts#L37)
+Defined in: [packages/fanuc-macro-b/src/core/MacroLexer.ts:35](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/core/MacroLexer.ts#L35)
 
 #### Parameters
 

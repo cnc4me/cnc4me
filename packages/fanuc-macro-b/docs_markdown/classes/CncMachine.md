@@ -6,25 +6,25 @@
 
 # Class: CncMachine
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:18](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L18)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:16](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L16)
 
 ## Constructors
 
-### new CncMachine()
+### Constructor
 
-> **new CncMachine**(`config`?): [`CncMachine`](CncMachine.md)
+> **new CncMachine**(`config?`): `CncMachine`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:46](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L46)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:44](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L44)
 
 #### Parameters
 
 ##### config?
 
-`Partial`\<\{ `axisTravelTimeout`: `number`; `home`: `Partial`\<`Record`\<`AxisLabel`, `number`\>\>; `limits`: `Partial`\<`Record`\<`AxisLabel`, `AxisLimitsInput`\>\>; `spindle`: `undefined` \| \{ `acceleration`: \{ `simulate`: `boolean`; `timeout`: `number`; \}; `rpm`: \{ `max`: `number`; `onExceedMaxRPM`: `"fault"` \| `"clamp"`; \}; `throwOnFault`: `boolean`; \}; `throwOnFault`: `boolean`; \}\>
+`Partial`\<\{ `axisTravelTimeout`: `number`; `home`: `Partial`\<`Record`\<`AxisLabel`, `number`\>\>; `limits`: `Partial`\<`Record`\<`AxisLabel`, `AxisLimitsInput`\>\>; `spindle`: \{ `acceleration?`: \{ `simulate?`: `boolean`; `timeout?`: `number`; \}; `rpm?`: \{ `max?`: `number`; `onExceedMaxRPM?`: `"fault"` \| `"clamp"`; \}; `throwOnFault?`: `boolean`; \} \| `undefined`; `throwOnFault`: `boolean`; \}\>
 
 #### Returns
 
-[`CncMachine`](CncMachine.md)
+`CncMachine`
 
 ## Properties
 
@@ -32,7 +32,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:46](https://github.com
 
 > **activeMotionType**: `MotionType` = `"G0"`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:30](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L30)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:28](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L28)
 
 ***
 
@@ -40,7 +40,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:30](https://github.com
 
 > **axes**: `object`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:23](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L23)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:21](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L21)
 
 #### X
 
@@ -58,9 +58,9 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:23](https://github.com
 
 ### on()
 
-> **on**: \<`Name`\>(`eventName`, `listener`) => `UnsubscribeFunction`
+> **on**: \<`Name`\>(`eventName`, `listener`, `options?`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:89](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L89)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:87](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L87)
 
 Subscribe to one or more events.
 
@@ -68,7 +68,9 @@ Using the same listener multiple times for the same event will result in only on
 
 #### Type Parameters
 
-• **Name** *extends* keyof OmnipresentEventData \| `"FAULT"` \| `"RESET"` \| `"MOTION_COMPLETE"` \| `"TRAVELING"`
+##### Name
+
+`Name` *extends* keyof OmnipresentEventData \| `"FAULT"` \| `"RESET"` \| `"MOTION_COMPLETE"` \| `"TRAVELING"`
 
 #### Parameters
 
@@ -79,6 +81,12 @@ Using the same listener multiple times for the same event will result in only on
 ##### listener
 
 (`eventData`) => `void` \| `Promise`\<`void`\>
+
+##### options?
+
+###### signal?
+
+`AbortSignal`
 
 #### Returns
 
@@ -109,9 +117,9 @@ emitter.emit('🐶', '🍖'); // log => '🍖'
 
 ### onAny()
 
-> **onAny**: (`listener`) => `UnsubscribeFunction`
+> **onAny**: (`listener`, `options?`) => `UnsubscribeFunction`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:90](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L90)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:88](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L88)
 
 Subscribe to be notified about any event.
 
@@ -120,6 +128,12 @@ Subscribe to be notified about any event.
 ##### listener
 
 (`eventName`, `eventData`) => `void` \| `Promise`\<`void`\>
+
+##### options?
+
+###### signal?
+
+`AbortSignal`
 
 #### Returns
 
@@ -133,7 +147,7 @@ A method to unsubscribe.
 
 > **spindle**: [`SpindleFSM`](SpindleFSM.md)
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:29](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L29)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:27](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L27)
 
 ***
 
@@ -141,13 +155,13 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:29](https://github.com
 
 > `static` **EVENTS**: `Omit`\<`AxisFsmEvents`, `"MOTION_COMPLETE"`\> & `object`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:19](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L19)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:17](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L17)
 
-#### Type declaration
+#### Type Declaration
 
 ##### MOTION\_COMPLETE
 
-> **MOTION\_COMPLETE**: `Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+> **MOTION\_COMPLETE**: `Position`
 
 ## Methods
 
@@ -155,7 +169,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:19](https://github.com
 
 > **G0**(`position`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:102](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L102)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:100](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L100)
 
 Rapid Move
 
@@ -163,7 +177,7 @@ Rapid Move
 
 ##### position
 
-`Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+`Position`
 
 #### Returns
 
@@ -175,7 +189,7 @@ Rapid Move
 
 > **G1**(`position`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:105](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L105)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:103](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L103)
 
 Feed Move
 
@@ -183,7 +197,7 @@ Feed Move
 
 ##### position
 
-`Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+`Position`
 
 #### Returns
 
@@ -193,13 +207,13 @@ Feed Move
 
 ### getPosition()
 
-> **getPosition**(): `Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+> **getPosition**(): `Position`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:112](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L112)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:110](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L110)
 
 #### Returns
 
-`Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+`Position`
 
 ***
 
@@ -207,7 +221,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:112](https://github.co
 
 > **getStats**(): `object`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:120](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L120)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:118](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L118)
 
 #### Returns
 
@@ -235,7 +249,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:120](https://github.co
 
 > **M3**(`rpm`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:93](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L93)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:91](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L91)
 
 Spindle Forward
 
@@ -255,7 +269,7 @@ Spindle Forward
 
 > **M4**(`rpm`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:96](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L96)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:94](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L94)
 
 Spindle Reverse
 
@@ -275,7 +289,7 @@ Spindle Reverse
 
 > **M5**(): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:99](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L99)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:97](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L97)
 
 Spindle Stop
 
@@ -289,7 +303,7 @@ Spindle Stop
 
 > **queueLine**(`line`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:157](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L157)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:155](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L155)
 
 Handle lines from the interpreter to simulate the machine
 
@@ -311,7 +325,7 @@ Handle lines from the interpreter to simulate the machine
 
 > **reset**(): `Promise`\<\[`void`, `void`, `void`\]\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:144](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L144)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:142](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L142)
 
 #### Returns
 
@@ -323,7 +337,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:144](https://github.co
 
 > **setHome**(`axis`, `location`): `void`
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:127](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L127)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:125](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L125)
 
 #### Parameters
 
@@ -345,7 +359,7 @@ Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:127](https://github.co
 
 > **travel**(`position`): `Promise`\<`void`\>
 
-Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:108](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L108)
+Defined in: [packages/fanuc-macro-b/src/fsm/CncMachine.ts:106](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/fsm/CncMachine.ts#L106)
 
 Travel to a new position with the active motion type
 
@@ -353,7 +367,7 @@ Travel to a new position with the active motion type
 
 ##### position
 
-`Partial`\<`Record`\<`"X"` \| `"Y"` \| `"Z"`, `number`\>\>
+`Position`
 
 #### Returns
 

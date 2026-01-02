@@ -6,25 +6,29 @@
 
 # Type Alias: ErrorHandler()\<E, R\>
 
-> **ErrorHandler**\<`E`, `R`\>: (`err`, `result`) => `void`
+> **ErrorHandler**\<`E`, `R`\> = (`err`, `result`) => `void`
 
-Defined in: [packages/fanuc-macro-b/src/types/generics.ts:3](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/generics.ts#L3)
+Defined in: [packages/fanuc-macro-b/src/types/generics.ts:3](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/generics.ts#L3)
 
 ## Type Parameters
 
-• **E**
+### E
 
-• **R**
+`E`
+
+### R
+
+`R`
 
 ## Parameters
 
 ### err
 
-[`E`](../types/ErrorHandler.html#e)
+`E`
 
 ### result
 
-[`R`](../types/ErrorHandler.html#r)
+`R`
 
 ## Returns
 

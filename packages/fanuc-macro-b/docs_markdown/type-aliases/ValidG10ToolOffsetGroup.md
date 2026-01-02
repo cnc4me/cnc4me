@@ -6,6 +6,6 @@
 
 # Type Alias: ValidG10ToolOffsetGroup
 
-> **ValidG10ToolOffsetGroup**: `10` \| `11` \| `12` \| `13`
+> **ValidG10ToolOffsetGroup** = `10` \| `11` \| `12` \| `13`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:5](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L5)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:5](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L5)

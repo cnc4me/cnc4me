@@ -6,19 +6,21 @@
 
 # Interface: RuntimeOutput\<T\>
 
-Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:11](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/runtime.ts#L11)
+Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:11](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/runtime.ts#L11)
 
 ## Type Parameters
 
-• **T**
+### T
+
+`T`
 
 ## Properties
 
 ### result
 
-> **result**: [`T`](RuntimeOutput.html#t)
+> **result**: `T`
 
-Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:13](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/runtime.ts#L13)
+Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:13](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/runtime.ts#L13)
 
 ***
 
@@ -26,4 +28,4 @@ Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:13](https://github.com/
 
 > **timing**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:14](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/runtime.ts#L14)
+Defined in: [packages/fanuc-macro-b/src/types/runtime.ts:14](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/runtime.ts#L14)

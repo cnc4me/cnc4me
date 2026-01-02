@@ -4,16 +4,10 @@
 
 # Fanuc Macro B
 
-## References
-
-### MacroBuiltinFunctionNames
-
-Re-exports [MacroBuiltinFunctionNames](namespaces/T/type-aliases/MacroBuiltinFunctionNames.md)
-
 ## Namespaces
 
-- [CST](namespaces/CST/README.md)
-- [T](namespaces/T/README.md)
+- [CST](Fanuc-Macro-B/namespaces/CST/README.md)
+- [T](Fanuc-Macro-B/namespaces/T/README.md)
 
 ## Enumerations
 
@@ -74,3 +68,9 @@ Re-exports [MacroBuiltinFunctionNames](namespaces/T/type-aliases/MacroBuiltinFun
 - [MemoryConstants](variables/MemoryConstants.md)
 - [RegisterMap](variables/RegisterMap.md)
 - [STDLIB](variables/STDLIB.md)
+
+## References
+
+### MacroBuiltinFunctionNames
+
+Re-exports [MacroBuiltinFunctionNames](Fanuc-Macro-B/namespaces/T/type-aliases/MacroBuiltinFunctionNames.md)

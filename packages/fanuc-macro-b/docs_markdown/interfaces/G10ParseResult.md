@@ -6,7 +6,7 @@
 
 # Interface: G10ParseResult
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:32](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L32)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:32](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L32)
 
 ## Properties
 
@@ -14,7 +14,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:32](https://github.com/cnc4
 
 > **error**: [`MacroCombinedError`](../type-aliases/MacroCombinedError.md)[]
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:33](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L33)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:33](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L33)
 
 ***
 
@@ -22,4 +22,4 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:33](https://github.com/cnc4
 
 > **result**: [`PossibleG10LineValues`](../type-aliases/PossibleG10LineValues.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:34](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L34)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:34](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L34)

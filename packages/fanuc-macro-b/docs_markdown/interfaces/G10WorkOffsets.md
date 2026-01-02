@@ -6,7 +6,7 @@
 
 # Interface: G10WorkOffsets
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:17](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L17)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:17](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L17)
 
 ## Extends
 
@@ -18,7 +18,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:17](https://github.com/cnc4
 
 > `optional` **B**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:22](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L22)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:22](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L22)
 
 ***
 
@@ -26,7 +26,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:22](https://github.com/cnc4
 
 > **L**: [`ValidG10WorkOffsetGroup`](../type-aliases/ValidG10WorkOffsetGroup.md)
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:18](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L18)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:18](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L18)
 
 #### Overrides
 
@@ -38,7 +38,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:18](https://github.com/cnc4
 
 > **P**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L13)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L13)
 
 #### Inherited from
 
@@ -50,7 +50,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:13](https://github.com/cnc4
 
 > `optional` **X**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:19](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L19)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:19](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L19)
 
 ***
 
@@ -58,7 +58,7 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:19](https://github.com/cnc4
 
 > `optional` **Y**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:20](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L20)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:20](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L20)
 
 ***
 
@@ -66,4 +66,4 @@ Defined in: [packages/fanuc-macro-b/src/types/g10.ts:20](https://github.com/cnc4
 
 > `optional` **Z**: `number`
 
-Defined in: [packages/fanuc-macro-b/src/types/g10.ts:21](https://github.com/cnc4me/cnc4me/blob/2903a977713c0fa6c1a7e63bfb65cfb308906107/packages/fanuc-macro-b/src/types/g10.ts#L21)
+Defined in: [packages/fanuc-macro-b/src/types/g10.ts:21](https://github.com/cnc4me/cnc4me/blob/9fdae95fa8bf0a832b707f3a11f5c0a566fdd4ed/packages/fanuc-macro-b/src/types/g10.ts#L21)
