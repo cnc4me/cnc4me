@@ -4,9 +4,7 @@ import type { GcodeThemeName } from "@cnc4me/monaco-gcode";
 import type { EditorProps, OnChange, OnMount } from "@monaco-editor/react";
 
 const DEFAULT_EDITOR_OPTIONS = {
-  minimap: {
-    enabled: false,
-  },
+  minimap: { enabled: false },
   lineNumbers: (currLine: number) => String(currLine).padStart(4, "0"),
 } as const;
 
@@ -18,7 +16,7 @@ type Props = {
   onChange: OnChange;
 };
 
-export default function MacroEditor({
+export function MacroEditor({
   onMount,
   onChange,
   options,

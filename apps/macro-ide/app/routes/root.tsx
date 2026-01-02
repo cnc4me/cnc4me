@@ -4,7 +4,7 @@ import type { Route } from "./+types/root";
 // biome-ignore lint/correctness/noEmptyPattern: shhh
 export function meta({}: Route.MetaArgs) {
   return [
-    { title: "New React Router App" },
+    { title: "FANUC Macro B - IDE" },
     { name: "description", content: "Welcome to React Router!" },
   ];
 }

@@ -6,7 +6,7 @@ interface Props {
   locations: WorkCoordinateArray;
 }
 
-export default function Coordinates({ group, locations }: Props) {
+export function Coordinates({ group, locations }: Props) {
   return (
     <div className="flex flex-row mb-1">
       <div className="flex flex-col text-blue-400">

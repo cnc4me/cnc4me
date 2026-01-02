@@ -3,6 +3,7 @@ import { useEffect, useMemo, useRef, useState } from "react";
 import { useDebouncedCallback } from "use-debounce";
 import ErrorPane from "~/components/ErrorPane";
 import Footer from "~/components/Footer";
+import { MacroEditor } from "~/components";
 import {
   useContentSearchParam,
   useEditorTheme,
@@ -19,7 +20,6 @@ import type { IParsedLineData } from "@cnc4me/fanuc-macro-b";
 import type { OnChange, OnMount } from "@monaco-editor/react";
 import type { JSX } from "react";
 import type { MonacoCodeEditor, ViewStr } from "~/types";
-import MacroEditor from "~/components/editor/MacroEditor";
 
 /* ------------------------------------------------------------------ */
 /* Tabs configuration (Home is NOT a tab)                              */
@@ -40,9 +40,9 @@ export const TAB_CONFIG: TabConfig[] = [
 
 export const TABS: ViewStr[] = TAB_CONFIG.map((t) => t.key);
 
-/* ------------------------------------------------------------------ */
-/* Component                                                           */
-/* ------------------------------------------------------------------ */
+export function HydrateFallback() {
+  return <p>Loading IDE...</p>;
+}
 
 export default function MacroIDE(): JSX.Element {
   const runtime = useMacroRuntime();
@@ -70,13 +70,12 @@ export default function MacroIDE(): JSX.Element {
     if (activeTab === "home") {
       return HomeView;
     }
-
     return TAB_CONFIG.find((t) => t.key === activeTab)?.Panel ?? HomeView;
   }, [activeTab]);
 
-  const parseAndRun = (programText: string) => {
+  const loadAndRun = (programStr: string) => {
     try {
-      runtime.loadProgram(programText);
+      runtime.loadProgram(programStr);
       const program = runtime.run();
       if (program) setInterpreterResult(program.getLines());
       setErrors([]);
@@ -87,22 +86,17 @@ export default function MacroIDE(): JSX.Element {
     }
   };
 
-  useEffect(() => {
-    parseAndRun(editorValue);
-    setContentParam(editorValue);
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, []);
+  // useEffect(() => {
+  //   setContentParam(editorValue);
+  //   loadAndRun(editorValue);
+  //   // eslint-disable-next-line react-hooks/exhaustive-deps
+  // }, []);
 
-  const debouncedParseAndRun = useDebouncedCallback((value: string) => {
-    setContentParam(value);
-    parseAndRun(value);
+  const slowLoadAndRun = useDebouncedCallback((value?: string) => {
+    if (value) {
+      loadAndRun(value);
+    }
   }, EDITOR_ON_CHANGE_TIMEOUT);
-
-  const handleTextareaChange = (e: React.ChangeEvent<HTMLTextAreaElement>) => {
-    const value = e.target.value;
-    setEditorValue(value);
-    debouncedParseAndRun(value);
-  };
 
   const handleTabChange = (tab: ViewStr) => {
     setTabParam(tab);
@@ -117,16 +111,13 @@ export default function MacroIDE(): JSX.Element {
     setInterpreterResult([]);
   };
 
-  const handleRunClick = () => {
-    parseAndRun(editorValue);
-  };
-
   const onEditorMount: OnMount = (editor) => {
     editorRef.current = editor;
   };
 
   const onEditorChange: OnChange = (input?: string) => {
-    console.log(input);
+    setContentParam(input);
+    slowLoadAndRun(input);
   };
 
   return (
@@ -164,47 +155,33 @@ export default function MacroIDE(): JSX.Element {
       </header>
 
       <main className="flex grow">
-        <section className="flex w-1/2 flex-col border-r border-purple-600">
-          <div className="flex border-b border-gray-900 bg-[#1E1E1E]">
-            <p className="px-6 py-3 text-sm italic text-violet-100">
-              » Try editing some of the values!
-            </p>
-
-            <div className="ml-auto mr-2 flex">
-              <button
-                type="button"
-                onClick={handleReset}
-                className="my-1.5 rounded-l-md bg-red-700 px-3 text-white"
-              >
-                Reset
-              </button>
-              <button
-                type="button"
-                onClick={handleRunClick}
-                className="my-1.5 rounded-r-md bg-green-600 px-3 text-white"
-              >
-                Run
-              </button>
-            </div>
+        <div className="flex w-1/2 flex-col border-r border-purple-600">
+          <div className="join flex justify-end border-b border-gray-900 bg-[#1E1E1E]">
+            <button
+              type="button"
+              className="btn btn-link join-item"
+              onClick={handleReset}
+            >
+              Reset
+            </button>
           </div>
-
           <MacroEditor
             theme={editorTheme}
             contents={editorValue}
             onMount={onEditorMount}
             onChange={onEditorChange}
           />
-        </section>
+          <ErrorPane errors={errors} />
+        </div>
 
-        <aside className="flex flex-1 bg-neutral-800">
+        <div className="flex flex-1 bg-neutral-800">
           <div className="flex w-full flex-col">
             <div className="flex-1 overflow-auto p-3">
               <ActivePanel />
             </div>
           </div>
-        </aside>
+        </div>
       </main>
-      {errors.length > 0 && <ErrorPane errors={errors} />}
 
       <Footer />
     </div>

@@ -1,9 +1,8 @@
-import { useRef, useState, lazy, Suspense } from "react";
+import { useRef } from "react";
+import { MacroEditor } from "~/components";
+import { EXAMPLE_CODE } from "~/lib";
 import type { OnChange, OnMount } from "@monaco-editor/react";
 import type { MonacoCodeEditor } from "~/types";
-import { useExampleCode } from "~/hooks";
-
-const LazyMacroEditor = lazy(() => import("~/components/editor/MacroEditor"));
 
 export function meta() {
   return [{ title: "Macro Editor" }];
@@ -23,18 +22,16 @@ export default function route_editor() {
   const initialContent = `O0001 (Monaco Editor)
 (With Custom G-Code Syntax)
 
-${useExampleCode()}`;
+${EXAMPLE_CODE}`;
 
   return (
     <div className="container w-full h-screen">
-      <Suspense fallback={<h1>LOADING</h1>}>
-        <LazyMacroEditor
-          theme="gcode-dark"
-          contents={initialContent}
-          onChange={onEditorChange}
-          onMount={onEditorMount}
-        />
-      </Suspense>
+      <MacroEditor
+        theme="gcode-dark"
+        contents={initialContent}
+        onChange={onEditorChange}
+        onMount={onEditorMount}
+      />
     </div>
   );
 }

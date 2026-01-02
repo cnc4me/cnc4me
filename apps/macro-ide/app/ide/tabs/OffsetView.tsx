@@ -1,4 +1,4 @@
-import Coordinates from "~/components/Coordinates";
+import { Coordinates } from "~/components/Coordinates";
 import { ViewHeading } from "~/components/ViewHeading";
 import { useMacroRuntime } from "~/hooks";
 import type { WorkCoordinateArray } from "@cnc4me/fanuc-macro-b";

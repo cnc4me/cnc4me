@@ -5,8 +5,8 @@ import { useMacroRuntime } from "~/hooks";
 import { range, toFixed, zeroPad } from "~/lib/helpers";
 import type { ToolOffsetArray } from "@cnc4me/fanuc-macro-b";
 
-const DISPLAY_PRECISION = 4;
-const REGISTERS_PER_PAGE = 24;
+const displayPrecision = 4;
+const registersPerPage = 24;
 
 export default function ToolsView() {
   const runtime = useMacroRuntime();
@@ -19,16 +19,22 @@ export default function ToolsView() {
   const pageRight = () => setPageCount(pageCount + 1);
 
   const setValuesFromStart = (start: number) => {
-    const registers = range(start, start + REGISTERS_PER_PAGE - 1);
+    const registers = range(start, start + registersPerPage - 1);
     const offsets = registers.map((t) => memory.getToolOffsetArray(t));
     setValues(offsets);
   };
 
   useEffect(() => {
     const zeroIndex = pageCount - 1;
-    const offset = REGISTERS_PER_PAGE * zeroIndex;
+    const offset = registersPerPage * zeroIndex;
     setValuesFromStart(1 + offset);
   }, [pageCount, memory]);
+
+  const ValueOutputField = ({ value = 0 }) => (
+    <div className="flex-1 pr-1 text-right border-t border-l bg-slate-700 border-l-black border-t-black">
+      {toFixed(value, displayPrecision)}
+    </div>
+  );
 
   return (
     <div className="container flex flex-col h-full font-mode-nine">
@@ -56,18 +62,10 @@ export default function ToolsView() {
                 <div className="flex-shrink text-blue-400">
                   {zeroPad(index, 3)}
                 </div>
-                <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(lengthGeom, DISPLAY_PRECISION)}
-                </div>
-                <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(lengthWear, DISPLAY_PRECISION)}
-                </div>
-                <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(diamGeom, DISPLAY_PRECISION)}
-                </div>
-                <div className="flex-1 pr-1 text-right bg-white border-t border-l border-t-gray-700 border-l-gray-700">
-                  {toFixed(diamWear, DISPLAY_PRECISION)}
-                </div>
+                <ValueOutputField value={lengthGeom} />
+                <ValueOutputField value={lengthWear} />
+                <ValueOutputField value={diamGeom} />
+                <ValueOutputField value={diamWear} />
               </div>
             );
           })}
